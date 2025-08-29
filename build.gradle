@@ -148,7 +148,7 @@ tasks.withType(Checkstyle) {
 bootJar {
 
 	enabled = true          // bootJar 비활성화, 활성화
-    archiveFileName.set('kdtpjt.jar')  //
+    archiveFileName.set('kdt10_3dpjt.jar')  //
     
     // ✅ webapp 폴더 포함시키기
     /*from('src/main/webapp') {
