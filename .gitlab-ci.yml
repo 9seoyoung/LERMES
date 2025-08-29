@@ -67,15 +67,15 @@ deploy-job:
   stage: deploy
   script:
     - echo "📦 React 결과물 복사 → $env:FRONTEND_TARGET"
-    - # React 앱 종료 (Node 프로세스 종료)
+    # React 앱 종료 (Node 프로세스 종료)
     - taskkill /f /im node.exe > $null 2>&1
-    - # 덮어쓰기
+    # 덮어쓰기
     - Copy-Item -Path "$env:REACT_BUILD_DIR\*" -Destination "$env:FRONTEND_TARGET" -Recurse -Force
     - echo "📦 SpringBoot JAR 덮어쓰기 → $env:BACKEND_TARGET"
-    - # 기존 SpringBoot 프로세스 종료 (포트 8080 기준)
+    # 기존 SpringBoot 프로세스 종료 (포트 8080 기준)
     - $proc = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue | ForEach-Object { Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue }
     - if ($proc) { $proc | Stop-Process -Force; Start-Sleep -Seconds 2 }
-    - # JAR 복사
+    # JAR 복사
     - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force
     - echo "⚡ 배포용 .bat 실행"
     - Start-Process -FilePath "C:/Pack_CICD/kdt10_3dpjt/deploy.bat" -Wait
