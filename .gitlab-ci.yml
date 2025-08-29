@@ -69,25 +69,30 @@ deploy-job:
     - echo "📦 React 결과물 복사 → $env:FRONTEND_TARGET"
     # React 앱 종료 (Node 프로세스 종료, 없으면 무시)
     - taskkill /f /im node.exe > $null 2>&1 || echo "Node 프로세스 없음"
-    # 덮어쓰기
+    # React 덮어쓰기
     - Copy-Item -Path "$env:REACT_BUILD_DIR\*" -Destination "$env:FRONTEND_TARGET" -Recurse -Force
 
     - echo "📦 SpringBoot JAR 덮어쓰기 → $env:BACKEND_TARGET"
-    # 기존 SpringBoot 프로세스 종료 (포트 8080 기준, 없으면 무시)
+    # SpringBoot 프로세스 종료 (포트 8080 기준)
     - |
-      $proc = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue | ForEach-Object {
-          try {
-              Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue
-          } catch {
-              Write-Host "SpringBoot 프로세스 없음"
+      $procs = @()
+      $connections = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue
+      if ($connections) {
+          foreach ($c in $connections) {
+              try {
+                  $proc = Get-Process -Id $c.OwningProcess -ErrorAction SilentlyContinue
+                  if ($proc) { $procs += $proc }
+              } catch { Write-Host "프로세스 없음" }
           }
       }
-      if ($proc) { 
-          $proc | Stop-Process -Force
+      if ($procs.Count -gt 0) {
+          $procs | Stop-Process -Force
           Start-Sleep -Seconds 2
+      } else {
+          Write-Host "8080 포트 사용 프로세스 없음, 종료 건너뜀"
       }
 
-    # JAR 덮어쓰기
+    # SpringBoot JAR 덮어쓰기
     - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force
 
     - echo "⚡ 배포용 .bat 실행"
@@ -96,3 +101,4 @@ deploy-job:
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
+
