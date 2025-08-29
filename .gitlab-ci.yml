@@ -66,18 +66,19 @@ build-job:
 deploy-job:
   stage: deploy
   script:
-    - echo "🧹 배포 디렉토리 정리"
-    - if (Test-Path "$env:FRONTEND_TARGET") { Remove-Item -Recurse -Force "$env:FRONTEND_TARGET\*" }
-    - if (Test-Path "$env:BACKEND_TARGET") { Remove-Item -Recurse -Force "$env:BACKEND_TARGET\*" }
-
     - echo "📦 React 결과물 복사 → $env:FRONTEND_TARGET"
+    - # React 앱 종료 (Node 프로세스 종료)
+    - taskkill /f /im node.exe > $null 2>&1
+    - # 덮어쓰기
     - Copy-Item -Path "$env:REACT_BUILD_DIR\*" -Destination "$env:FRONTEND_TARGET" -Recurse -Force
-
-    - echo "📦 SpringBoot 결과물 복사 → $env:BACKEND_TARGET"
+    - echo "📦 SpringBoot JAR 덮어쓰기 → $env:BACKEND_TARGET"
+    - # 기존 SpringBoot 프로세스 종료 (포트 8080 기준)
+    - $proc = Get-NetTCPConnection -LocalPort 8080 -ErrorAction SilentlyContinue | ForEach-Object { Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue }
+    - if ($proc) { $proc | Stop-Process -Force; Start-Sleep -Seconds 2 }
+    - # JAR 복사
     - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force
-
-    #- echo "⚡ 배포용 .bat 실행"
-    #- Start-Process -FilePath "C:/Pack_CICD/kdt10_3dpjt/deploy.bat" -Wait
+    - echo "⚡ 배포용 .bat 실행"
+    - Start-Process -FilePath "C:/Pack_CICD/kdt10_3dpjt/deploy.bat" -Wait
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
