@@ -69,7 +69,9 @@ deploy-job:
     - echo "📦 React 결과물 복사 → $env:FRONTEND_TARGET"
     - Copy-Item -Path "$env:REACT_BUILD_DIR\*" -Destination "$env:FRONTEND_TARGET" -Recurse -Force
     - echo "📦 SpringBoot 결과물 복사 → $env:BACKEND_TARGET"
-    - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force 
+    - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force
+    - echo "⚡ 배포용 .bat 실행"
+    - Start-Process -FilePath "C:/Pack_CICD/kdt10_3dpjt/deploy.bat" -Wait 
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
