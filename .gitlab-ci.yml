@@ -76,8 +76,8 @@ deploy-job:
     - echo "📦 SpringBoot 결과물 복사 → $env:BACKEND_TARGET"
     - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force
 
-    - echo "⚡ 배포용 .bat 실행"
-    - Start-Process -FilePath "C:/Pack_CICD/kdt10_3dpjt/deploy.bat" -Wait
+    #- echo "⚡ 배포용 .bat 실행"
+    #- Start-Process -FilePath "C:/Pack_CICD/kdt10_3dpjt/deploy.bat" -Wait
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
