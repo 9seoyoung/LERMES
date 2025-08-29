@@ -1,0 +1,75 @@
+stages:
+  - init      # 초기 준비
+  - test      # 테스트 코드 실행
+  - build     # React & Spring Boot 빌드
+  - deploy    # 결과물 복사
+
+variables:
+  NODE_PATH: "C:/Pack_CICD/bin/node/v22.18.0"
+  REACT_BUILD_DIR: "src/main/frontend/build"
+  FRONTEND_TARGET: "C:/Pack_CICD/kdt10_3dpjt/app/frontend"
+  BACKEND_TARGET: "C:/Pack_CICD/kdt10_3dpjt/app/backend"
+
+before_script:
+  - Remove-Item Env:\CI_SERVER_TLS_CA_FILE -ErrorAction SilentlyContinue
+  - $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+  - $env:Path += ";$env:NODE_PATH"
+  - $env:Path += ";$env:APPDATA\npm"
+
+# 0️⃣ Init Job (선택사항)
+init-job:
+  stage: init
+  script:
+    - echo "Init Remove unnecessary directories"
+    - if (Test-Path "src/main/frontend/build") { Remove-Item -Recurse -Force "src/main/frontend/build" }
+    - if (Test-Path "src/main/resources/static") { Remove-Item -Recurse -Force "src/main/resources/static" }
+    - echo "Run Checkstyle"
+    - ./gradlew checkstyleMain --no-daemon
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
+
+# 1️⃣ Test Job
+test-job:
+  stage: test
+  script:
+    - echo "🧪 Spring Boot 테스트 코드 실행"
+    - ./gradlew test --no-daemon
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+      when: always
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
+
+# 2️⃣ Build Job
+build-job:
+  stage: build
+  script:
+    - echo "⚙️ React Build 시작"
+    - cd src/main/frontend
+    - npm install
+    - npm run build
+    - cd ../../../
+    - echo "🚀 SpringBoot Gradle Build 시작"
+    - ./gradlew clean build --no-daemon
+  artifacts:
+    paths:
+      - $REACT_BUILD_DIR
+      - build/libs/*.jar
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
+
+# 3️⃣ Deploy Job
+deploy-job:
+  stage: deploy
+  script:
+    - echo "📦 React 결과물 복사 → $env:FRONTEND_TARGET"
+    - Copy-Item -Path "$env:REACT_BUILD_DIR\*" -Destination "$env:FRONTEND_TARGET" -Recurse -Force
+    - echo "📦 SpringBoot 결과물 복사 → $env:BACKEND_TARGET"
+    - Copy-Item -Path "build\libs\*.jar" -Destination "$env:BACKEND_TARGET" -Force 
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
