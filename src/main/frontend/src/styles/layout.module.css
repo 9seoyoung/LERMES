@@ -1,0 +1,13 @@
+.menuContainer {
+  display: flex;
+  gap: 24px;
+}
+
+.menuContainer ul {
+  height: 100%;
+  background-color: aqua;
+}
+
+.menuContainer ul li {
+  height: 48px;
+}
