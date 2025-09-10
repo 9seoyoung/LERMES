@@ -14,6 +14,9 @@ import GeneralJoin from '../auth/loginPage/GeneralJoin';
 function AppRoutes() {
   return (
   <Routes>
+    {/*기본루트*/}
+    <Route index element={<Layout></Layout>}/>
+
     {/* 매니저님이 짜주신 샘플 코드 */}
     <Route path="/sample" element={<SampleApp />} />
 
