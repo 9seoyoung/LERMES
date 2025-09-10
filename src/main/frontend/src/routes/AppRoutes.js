@@ -9,6 +9,7 @@ import Login from '../auth/loginPage/Login';
 import Layout from '../components/layout/Layout'; //제일 먼저 만들어야 할 파일
 import NotAllowed from '../auth/NotAllowed';
 import SampleApp from '../sample/SampleApp';
+import GeneralJoin from '../auth/loginPage/GeneralJoin';
 
 function AppRoutes() {
   return (
@@ -18,6 +19,7 @@ function AppRoutes() {
 
     {/* 여기서 부터 우리페이지 */}
     <Route path="/login" element={<Login />} />
+    <Route path='/generaljoin' element={<GeneralJoin/>}/>
     <Route path="/403" element={<NotAllowed />} />
 
     {/* 기본 접근 루트 */}
