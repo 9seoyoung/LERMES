@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * InhoUserEntity → Spring Security UserDetails 어댑터
  */
-public class CustomUserDetails implements UserDetails {
+public class AuthCustomUserDetails implements UserDetails {
 
     private final Long id;
     private final String email;
@@ -20,11 +20,11 @@ public class CustomUserDetails implements UserDetails {
     private final boolean enabled;
     private final Long cohortId;
 
-    public CustomUserDetails(InhoUserEntity user) {
+    public AuthCustomUserDetails(InhoUserEntity user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.password = user.getPassword();
-        this.authority = "ROLE_" + user.getRoleType().name(); // Enum → ROLE_XXX
+        this.authority = "ROLE_" + user.getRoleType().name();
         this.enabled = user.isEnabled();
         this.cohortId = user.getCohortId();
     }

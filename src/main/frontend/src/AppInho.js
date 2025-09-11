@@ -4,7 +4,7 @@ import TenantSignup from "./pages/TenantSignup";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import "./index.css";
+import "./indexInho.css";
 
 export default function App() {
   return (

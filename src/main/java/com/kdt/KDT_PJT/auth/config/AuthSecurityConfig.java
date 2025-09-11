@@ -1,39 +1,42 @@
 package com.kdt.KDT_PJT.auth.config;
 
-import com.kdt.KDT_PJT.auth.service.CustomUserDetailsService;
+import com.kdt.KDT_PJT.auth.service.AuthCustomUserDetailsService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class AuthSecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;
+    private final AuthCustomUserDetailsService customUserDetailsService;
 
-    // 비밀번호 인코더
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    // DaoAuthenticationProvider: UserDetailsService + PasswordEncoder 연결
+    // DaoAuthenticationProvider (지금은 anyRequest().permitAll() 이라 실사용 X, 그래도 보관)
     @Bean
     public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider p = new DaoAuthenticationProvider();
@@ -42,90 +45,89 @@ public class SecurityConfig {
         return p;
     }
 
-    // AuthenticationManager (커스텀 JSON 로그인 필터 등에서 필요)
+    // 비밀번호 인코더
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    // AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // CORS (React 프론트에서 withCredentials:true 사용)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration cors = new CorsConfiguration();
-        cors.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*"));
-        cors.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        cors.setAllowedHeaders(List.of("Content-Type","X-CSRF-TOKEN","Authorization"));
-        cors.setAllowCredentials(true); // 쿠키 전달
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", cors);
-        return source;
+        CorsConfiguration c = new CorsConfiguration();
+
+        // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
+        c.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://192.168.0.14:3000"
+        ));
+        c.setAllowCredentials(true);
+        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+        c.setAllowedHeaders(List.of("*"));
+        c.setExposedHeaders(List.of("Set-Cookie"));
+
+        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+        s.registerCorsConfiguration("/**", c);
+        return s;
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 세션 기반
+                .csrf(csrf -> csrf.disable()) // 개발 중
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/auth/email/code/**",
+                                "/api/auth/signup/**",
+                                "/api/auth/login/**"
+                        ).permitAll()
+                        .requestMatchers("/api/**").authenticated()
+                )
                 .sessionManagement(sm -> sm
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
 
-                // CORS
-                .cors(Customizer.withDefaults())
 
-                // CSRF: 브라우저/쿠키 기반이면 활성화 권장.
-                // 다만 회원가입/로그인 등은 예외 처리(프론트에서 CSRF 토큰 세팅 전에도 호출 가능하도록)
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/auth/**")
-                )
-
-                // 인가 규칙
-                .authorizeHttpRequests(auth -> auth
-                        // 공개 엔드포인트
-                        .requestMatchers(
-                                "/", "/health", "/public/**",
-                                "/auth/email/code", "/auth/signup", "/auth/login", "/auth/logout"
-                        ).permitAll()
-
-                        // 권한별 예시 매핑 (원하면 경로 조정)
-                        .requestMatchers("/super/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers("/tenant/**").hasAnyRole("TENANT_ADMIN","SUPER_ADMIN")
-                        .requestMatchers("/instructor/**").hasAnyRole("INSTRUCTOR","TENANT_ADMIN","SUPER_ADMIN")
-                        .requestMatchers("/employee/**").hasAnyRole("EMPLOYEE","TENANT_ADMIN","SUPER_ADMIN")
-                        .requestMatchers("/student/**").hasAnyRole("STUDENT","TENANT_ADMIN","INSTRUCTOR","EMPLOYEE","SUPER_ADMIN")
-
-                        // 그 외는 인증 필요
-                        .anyRequest().authenticated()
-                )
-
-                // 폼 로그인 사용 안 함 (React에서 JSON 로그인 사용할 예정)
-                .formLogin(form -> form.disable())
-
-                // 로그아웃 (세션/쿠키 정리)
-                .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
-                        .deleteCookies("JSESSIONID")
-                        .clearAuthentication(true)
-                        .invalidateHttpSession(true)
+        // 폼 로그인은 페이지에만 쓰고, API는 /auth/login(JSON) 사용
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/main", true)
+                        .failureUrl("/login?error")
                         .permitAll()
                 )
 
-                // 동시 세션 제한 & 세션 고정 보호
-                .sessionManagement(sm -> sm
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true)
-                )
-                .sessionManagement(sm -> sm
-                        .sessionFixation(sessionFixation -> sessionFixation.changeSessionId())
-                )
-
-                // DaoAuthenticationProvider 등록
-                .authenticationProvider(authProvider());
-
-        // JSON 로그인 필터는 다음 단계에서 추가 (POST /auth/login {email,password})
-        // 커스텀 필터를 UsernamePasswordAuthenticationFilter 앞에 추가하면 됨.
+                .logout(l -> l.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                );
 
         return http.build();
+    }
+
+
+    @Bean
+    public HttpFirewall looseHttpFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true); // URL 인코딩된 // 허용
+        firewall.setAllowSemicolon(true);
+        firewall.setAllowBackSlash(true);
+        firewall.setAllowUrlEncodedSlash(true);
+        return firewall;
+    }
+
+    // 커스텀 Firewall 등록
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall httpFirewall) {
+        return web -> web.httpFirewall(httpFirewall);
     }
 }

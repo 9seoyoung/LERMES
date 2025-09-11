@@ -1,6 +1,6 @@
 package com.kdt.KDT_PJT.auth.service;
 
-import com.kdt.KDT_PJT.auth.CustomUserDetails;
+import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.auth.entity.InhoUserEntity;
 import com.kdt.KDT_PJT.auth.repository.InhoUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class AuthCustomUserDetailsService implements UserDetailsService {
 
     private final InhoUserRepository userRepository;
 
@@ -22,6 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         InhoUserEntity user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        return new CustomUserDetails(user);
+        return new AuthCustomUserDetails(user);
     }
 }

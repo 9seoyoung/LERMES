@@ -1,4 +1,6 @@
 package com.kdt.KDT_PJT.auth.entity;
 
-public class EnrollmentStatus {
+public enum EnrollmentStatus {
+    PENDING, IN_PROGRESS, COMPLETED
 }
+

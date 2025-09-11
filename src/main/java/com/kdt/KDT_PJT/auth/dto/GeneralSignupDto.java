@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GeneralJoinDto {
-    private String uesrname;
+public class GeneralSignupDto {
+    private String username;
     private String email;
-    private String verfication; // 인증코드 확인
+    private String verificationCode; // 인증코드 확인
     private String password;
     private String confirmPassword;
     private String phoneNumber;

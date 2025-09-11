@@ -1,4 +1,3 @@
-// src/components/ProtectedRoute.jsx
 import { useEffect, useState } from "react";
 import { fetchMe } from "../lib/auth";
 
