@@ -1,14 +1,9 @@
 import React from "react";
-import "./App.css";
-import logoImg from './1.png';
+import "../../styles/sj.css";
+// import logoImg from './1.png';
 
 function GeneralJoin() {
   return (
-    <div className="app-bg">
-      <header className="header">
-       
-      </header>
-      <span>  <img src={logoImg} alt="로고" style={{ height: "60px", marginRight: "12px" }} />     </span>
       <div className="main-container">
         <div className="panel left-panel">
           <div className="welcome-inner">
@@ -43,7 +38,6 @@ function GeneralJoin() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
