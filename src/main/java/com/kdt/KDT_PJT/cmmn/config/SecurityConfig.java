@@ -52,6 +52,7 @@ public class SecurityConfig {
                     , "/css/**"
                     , "/js/**"
                     , "/sampleReactMvc/**"
+                    ,"/api/**"
                     //, "/sampleJspMvc/**"
                     ).permitAll() // 여기에 명시된 페이지는 누구나 접근가능
                 .anyRequest().authenticated() // 나머지는 인증 필요
