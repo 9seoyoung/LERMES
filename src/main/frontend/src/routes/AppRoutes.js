@@ -10,6 +10,8 @@ import Layout from '../components/layout/Layout'; //제일 먼저 만들어야 �
 import NotAllowed from '../auth/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
+import SuperMain from '../pages/Super/SuperMain';
+import GeneralJoin from '../auth/loginPage/GeneralJoin';
 
 function AppRoutes() {
   return (
@@ -24,9 +26,10 @@ function AppRoutes() {
     <Route path="/login" element={<Login />} />
     <Route path='/generaljoin' element={<GeneralJoin/>}/>
     <Route path="/403" element={<NotAllowed />} />
-
+    <Route path='/generalJoin' element={<GeneralJoin />} />
     {/* 기본 접근 루트 */}
-    <Route path="/" element={<Layout />} />
+    <Route path="/" element={<Layout />}>
+      <Route path='superMain' element={<SuperMain/>} />
       {/* 역할별 기본 분기 (보호 X) */}
       {/* <Route index element={<HomeIndex />} /> 추후 주석 풀 예정 */}
 
@@ -35,6 +38,7 @@ function AppRoutes() {
         <Route path="main" element={<Main />} />
       </Route> */}
     {/* </Routes> */}
+    </ Route>
   </Routes>
   );
 }

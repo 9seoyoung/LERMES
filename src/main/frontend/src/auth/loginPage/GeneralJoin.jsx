@@ -4,7 +4,6 @@ import "../../styles/sj.css";
 
 function GeneralJoin() {
   return (
-    <div className="app-bg">
       <div className="main-container">
         <div className="panel left-panel">
           <div className="welcome-inner">
@@ -39,7 +38,6 @@ function GeneralJoin() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 
