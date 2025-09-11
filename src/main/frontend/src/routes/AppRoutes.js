@@ -11,7 +11,6 @@ import NotAllowed from '../auth/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
 import SuperMain from '../pages/Super/SuperMain';
-import GeneralJoin from '../auth/loginPage/GeneralJoin';
 
 function AppRoutes() {
   return (
