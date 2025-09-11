@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { registerUser } from "./services/sampleService";
+import { registerUser } from "../services/sampleService";
 
 function UserRegistForm() {
   const [employeeId, setEmployeeId] = useState('');
