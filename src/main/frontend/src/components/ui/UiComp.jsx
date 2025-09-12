@@ -12,7 +12,7 @@ export function UiComp() {
     <div>
       <FormInput />
       <FormUnderline />
-      <FormBtn />
+      <FormBtn textType="저장"className={styles.grayBtn}/>
       <DeleteBtn />
       <OptionSelect />
       <TextAreaBox />
@@ -49,7 +49,6 @@ export function FormBtn({ textType, className }) {
     </div>
   );
 }
-
 // 마이너스 버튼 (파일 삭제)
 export function DeleteBtn() {
   return (

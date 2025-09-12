@@ -18,6 +18,7 @@ import WelcomeLayout from '../components/layout/WelcomeLayout';
 import TenantSignup from '../auth/loginPage/TenantSignup';
 import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
+import UiComp from '../components/ui/UiComp';
 
 function AppRoutes() {
   return (
@@ -33,6 +34,7 @@ function AppRoutes() {
     <Route path="/login" element={<Login />} />
     <Route path="/minical" element={<MiniCal />} />
     <Route path="/bigcal" element={<BigCal />} />
+    <Route path="/ui" element={<UiComp />} />
 
 
     {/* 로그인/회원가입 레이아웃 */}
