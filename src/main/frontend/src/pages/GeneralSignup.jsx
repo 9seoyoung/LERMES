@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { requestEmailCode, signupGeneral } from '../lib/auth';
+import { requestEmailCode, signupGeneral } from '../auth/auth';
 
 export default function GeneralSignup() {
   const [form, setForm] = useState({

@@ -33,13 +33,14 @@ function AppRoutes() {
     <Route path="/" element={<Layout />}>
       <Route path='superMain' element={<SuperMain/>} />
       <Route path='adminHome' element={<AdminHome/>} />
+      <Route path='tutorHome' element={<TutorHome/>} />
       <Route path='stdHome' element={<StdHome/>} />
 
       {/* 역할별 기본 분기 (보호 X) */}
       {/* <Route index element={<HomeIndex />} /> 추후 주석 풀 예정 */}
 
       {/* <Route element={<RoleRoute roles={['1']} />}>
-        <Route path="superMain" element={<AdminHome />} />
+        <Route path="superMain" element={<SuperMain />} />
       </Route> */}
       {/* 관리자(테넌트, 직원) */}
       {/* <Route element={<RoleRoute roles={['2','3']} />}>

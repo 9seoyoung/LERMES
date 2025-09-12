@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { login } from '../lib/auth';
+import { login } from '../auth/auth';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ export default function Login() {
   };
 
   return (
-    <div className="center split">
+    <div className="container split">
       <form className="card" onSubmit={onSubmit}>
         <h2>로그인</h2>
 

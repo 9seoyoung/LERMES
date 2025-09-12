@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { requestEmailCode, signupTenant } from '../lib/auth';
+import { requestEmailCode, signupTenant } from '../auth/auth';
 
 export default function TenantSignup() {
   const [form, setForm] = useState({
