@@ -11,7 +11,11 @@ export default function Login() {
   const loc = useLocation();
   const from = loc.state?.from || '/';
 
+<<<<<<< HEAD
 //  navigate(`${인호가 보내준거}`)
+=======
+ navigate(`${인호가 보내준거}`)
+>>>>>>> sy0912
  // 유저테이브렝 수강중인 lms과정있는지 확인하는 컬럼과 값이 필요한것..  
 
   const onSubmit = async (e) => {
