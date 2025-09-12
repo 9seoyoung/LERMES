@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { requestEmailCode, signupTenant } from '../auth.js';
+import styles from "../../styles/SignUp.module.css";
 
 export default function TenantSignup() {
   const [form, setForm] = useState({
@@ -66,10 +67,22 @@ export default function TenantSignup() {
   };
 
   return (
-    <div className="center split">
-      <form className="card" onSubmit={onSubmit}>
-        <h2>테넌트 회원가입</h2>
-
+    <div className="signup-inner">
+      <div className="signup-title">비즈니스 회원가입</div>
+      <div className={styles.logo}>
+        <div className={styles.logoImg}>
+          <span>LOGO</span>
+          <button className={styles.logoAdd}>
+            <img
+                src={"#"}
+                alt="icon"
+                style={{ width: '16px', height: '16px' }}
+            />
+          </button>
+        </div>
+        <span className={styles.imgCaption}>*이미지 크기 180px X 60px</span>
+      </div>
+      <form className="signup-form" onSubmit={onSubmit}>
         <input
           name="companyName"
           placeholder="회사명"

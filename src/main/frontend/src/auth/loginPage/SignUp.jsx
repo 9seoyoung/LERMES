@@ -1,5 +1,5 @@
 import styles from '../../styles/SignUp.module.css';
-import icon from '../../webapp/img/penIcon.png';
+// import icon from '../../webapp/img/penIcon.png';
 
 function signUp() {
   return (
@@ -23,7 +23,7 @@ function signUp() {
                 <span>LOGO</span>
                 <button className={styles.logoAdd}>
                   <img
-                    src={icon}
+                    src={"#"}
                     alt="icon"
                     style={{ width: '16px', height: '16px' }}
                   />

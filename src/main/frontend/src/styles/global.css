@@ -141,6 +141,10 @@ hr {
 }
 /* 로그인/회원가입용 레이아웃 */
 .welcomeCont {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
   max-height: 100vh;
 }
 

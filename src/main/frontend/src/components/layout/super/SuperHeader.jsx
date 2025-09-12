@@ -36,7 +36,7 @@ function SuperHeader() {
               <li className={layoutStyles.subMenuList}>메뉴 1</li>
               <li className={layoutStyles.subMenuList}>메뉴 2</li>
               <li className={layoutStyles.subMenuList}>메뉴 3</li>
-              <li className={layoutStyles.subMenuList} onClick={()=> navigate('/welcome/generalJoin')}>비즈니스 가입</li>
+              <li className={layoutStyles.subMenuList} onClick={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</li>
             </ul>
           </li>
         </ul>
