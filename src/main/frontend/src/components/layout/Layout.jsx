@@ -13,13 +13,13 @@ import SuperHeader from "./super/SuperHeader"
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 function Layout() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="layout">
       <header>
         <SuperHeader />
-        <button className="joinBtn" type="button" onClick={() => navigate('/login')}>Login →</button>
+        <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
       </header>
       <div className="layout_content">
         <main className="varPage">

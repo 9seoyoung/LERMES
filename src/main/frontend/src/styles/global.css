@@ -18,15 +18,18 @@
 html {
   /* 기본사이즈 10px, 나머지는 rem 기준으로 계산 */
     font-size: clamp(8px, 0.8vw, 12px);
-  
+    width: 100%;
+    height: 100%;
+    background-color: #d9d9d9;  
+    color: #222;
 }
 
 body {
   width: 100vw;
+  min-height: 100vh;
   background-color: #d9d9d9;
   color: #222;
   padding: 0 24px;
-  min-height: 100vh;
 }
 
 a { 
@@ -38,6 +41,7 @@ a {
 span {
   display: inline-flex;
   color: inherit;
+  border-bottom: 1px solid #222;
 }
 
 table {
@@ -66,7 +70,13 @@ li {
   cursor: pointer;
 }
 
+hr {
+  border: none;
+  border-top: 1px solid #222;
+}
+
 /* 레이아웃 */
+
 .layout {
   width: 100%;
   min-height: 100vh;
@@ -128,6 +138,32 @@ li {
   margin-top: auto;
   border-radius: 16px 16px 0 0;
   box-shadow: 4px -4px 4px #00000025;
+}
+/* 로그인/회원가입용 레이아웃 */
+.welcomeCont {
+  max-height: 100vh;
+}
+
+.headerLogo{
+  height: 80px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.problemBox{
+  width: 100%;
+  height: 24px;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: -8px;
+}
+
+.findIdPw {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
 }
 
 /* Outlet, 메인콘텐츠 */
