@@ -1,0 +1,144 @@
+/* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
+
+/* 구글에서 가져온 폰트 - Noto Sans KR */ 
+
+/* 색상 클래스 */
+
+/* html 기본 태그 */
+* {
+  box-sizing: border-box;
+  font-family: "Noto Sans KR", sans-serif;
+  font-style: normal;
+  font-optical-sizing: auto;
+  margin: 0;
+  padding: 0;
+  
+}
+
+html {
+  /* 기본사이즈 10px, 나머지는 rem 기준으로 계산 */
+    font-size: clamp(8px, 0.8vw, 12px);
+  
+}
+
+body {
+  width: 100vw;
+  background-color: #d9d9d9;
+  color: #222;
+  padding: 0 24px;
+  min-height: 100vh;
+}
+
+a { 
+  display: inline-flex;
+  color: inherit;
+  text-decoration: none;
+}
+
+span {
+  display: inline-flex;
+  color: inherit;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+button {
+  cursor: pointer;
+  display: flex;
+  background-color: #ffffff00;
+  border: none;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  display: block;
+}
+
+ul {
+  list-style-type: none;
+  cursor: pointer;
+}
+
+li {
+  cursor: pointer;
+}
+
+/* 레이아웃 */
+.layout {
+  width: 100%;
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.layout_content {
+  flex: 1;
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+}
+
+.layout > header {
+  width: 100%;
+  height: 64px;
+  background-color: #fff;
+  padding: 8px 12px;
+  display: flex;
+  gap: 24px;
+  border-radius: 32px;
+  box-shadow: 4px 4px 4px #00000025 ;
+  justify-content: space-between;
+  position: relative;
+  z-index: 999999;
+}
+
+.joinBtn {
+  width: 96px;
+  height: 48px;
+  background-color: #0088FF;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 24px;
+  font-size: 1.4rem;
+}
+
+.header_L {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.layout_content footer {
+  width: 100%;
+  height: 8rem;
+  background-color: #0088FF;
+  color: #fff;
+  font-size: 3.2rem;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 4px -4px 4px #00000025;
+}
+
+/* Outlet, 메인콘텐츠 */
+
+.varPage {
+  flex: 1;
+}
+
+/* 메인화면 각종 레이아웃 */
+.mainContainer_cardGrid{
+  background-color: #0088FF;
+  display: flex;
+
+}
