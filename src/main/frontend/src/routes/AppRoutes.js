@@ -58,7 +58,7 @@ function AppRoutes() {
         <Route path="stdHome" element={<TutorHome />} />
       </Route> */}
     {/* </Routes> */}
-    </ Route>
+    </Route>
   </Routes>
   );
 }
