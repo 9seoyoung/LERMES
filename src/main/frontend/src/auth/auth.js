@@ -21,6 +21,7 @@ export const login = ({ email, password }) =>
 export const logout = () =>
   api.post("/logout");
 
+
 // 현재 로그인 사용자
 export const fetchMe = () =>
   axios.get("http://localhost:940/api/me", { withCredentials: true });

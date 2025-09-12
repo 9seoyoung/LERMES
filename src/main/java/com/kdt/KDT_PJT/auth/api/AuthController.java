@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -21,31 +21,30 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     // 인증코드 발송
-    @PostMapping(value = {"/email/code", "/email/code/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/email/code")
     public ResponseEntity<ApiResponse> emailCode(@RequestBody  EmailCodeRequest req) {
         ApiResponse res = signupService.sendCodeIfEmailAvailable(req);
         return new ResponseEntity<>(res, res.isOk() ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 
     // 일반 회원가입
-    @PostMapping(value = {"/signup", "/signup/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signupGeneral(@RequestBody GeneralSignupDto dto) {
         ApiResponse res = signupService.registerGeneral(dto);
         return new ResponseEntity<>(res, res.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     // 테넌트 회원가입
-    @PostMapping(value = {"/signup/tenant", "/signup/tenant/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/signup/tenant")
     public ResponseEntity<ApiResponse> signupTenant(@RequestBody TenantSignupDto dto) {
         ApiResponse res = signupService.registerTenant(dto);
         return new ResponseEntity<>(res, res.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping(value = {"/login", "/login/"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    // 로그인
+    @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequestDto dto,
                                              HttpServletRequest request) {
-
-
 
         String email = dto.getEmail() == null ? "" : dto.getEmail().trim().toLowerCase();
         String password = dto.getPassword() == null ? "" : dto.getPassword();
