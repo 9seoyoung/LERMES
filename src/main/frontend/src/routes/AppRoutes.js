@@ -14,6 +14,10 @@ import SuperMain from '../pages/Super/SuperMain';
 import AdminHome  from '../pages/LMS/AdminHome';
 import TutorHome from '../pages/LMS/TutorHome';
 import StdHome from '../pages/LMS/StdHome';
+import WelcomeLayout from '../components/layout/WelcomeLayout';
+import TenantSignup from '../auth/loginPage/TenantSignup';
+import MiniCal from '../components/ui/MiniCal';
+import BigCal from '../components/ui/BigCal';
 
 function AppRoutes() {
   return (
@@ -25,13 +29,21 @@ function AppRoutes() {
     <Route path="/sample" element={<SampleApp />} />
 
     {/* 여기서 부터 우리페이지 */}
-    <Route path="/login" element={<Login />} />
-    <Route path='/generaljoin' element={<GeneralJoin/>}/>
     <Route path="/403" element={<NotAllowed />} />
-    <Route path='/generalJoin' element={<GeneralJoin />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/minical" element={<MiniCal />} />
+    <Route path="/bigcal" element={<BigCal />} />
+
+
+    {/* 로그인/회원가입 레이아웃 */}
+    <Route path ='welcome' element={<WelcomeLayout/>} >
+      <Route path='generaljoin' element={<GeneralJoin/>} />
+      <Route path='login' element={<Login />} />
+    </Route>
+    
     {/* 기본 접근 루트 */}
     <Route path="/" element={<Layout />}>
-      <Route path='superMain' element={<SuperMain/>} />
+      <Route path='superMain' element={<SuperMain/>}/>
       <Route path='adminHome' element={<AdminHome/>} />
       <Route path='tutorHome' element={<TutorHome/>} />
       <Route path='stdHome' element={<StdHome/>} />
@@ -59,7 +71,7 @@ function AppRoutes() {
         <Route path="stdHome" element={<TutorHome />} />
       </Route> */}
     {/* </Routes> */}
-    </ Route>
+    </Route>
   </Routes>
   );
 }
