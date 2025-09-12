@@ -13,3 +13,5 @@ public class GeneralSignupDto {
     private String confirmPassword;
     private String phoneNumber;
 }
+
+

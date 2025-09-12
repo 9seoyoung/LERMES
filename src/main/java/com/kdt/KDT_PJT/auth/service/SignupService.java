@@ -4,10 +4,12 @@ import com.kdt.KDT_PJT.auth.dto.ApiResponse;
 import com.kdt.KDT_PJT.auth.dto.EmailCodeRequest;
 import com.kdt.KDT_PJT.auth.dto.GeneralSignupDto;
 import com.kdt.KDT_PJT.auth.dto.TenantSignupDto;
+import com.kdt.KDT_PJT.auth.entity.Company;
 import com.kdt.KDT_PJT.auth.entity.EnrollmentStatus;
-import com.kdt.KDT_PJT.auth.entity.InhoUserEntity;
+import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.auth.entity.UserRoleType;
-import com.kdt.KDT_PJT.auth.repository.InhoUserRepository;
+import com.kdt.KDT_PJT.auth.repository.CompanyRepository;
+import com.kdt.KDT_PJT.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class SignupService {
-
+    private final CompanyRepository companyRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final InhoUserRepository inhoUserRepository;
+    private final UserRepository userRepository;
     private final EmailService emailService;
     private final VerificationService verificationService;
 
@@ -26,7 +28,7 @@ public class SignupService {
     public ApiResponse sendCodeIfEmailAvailable(EmailCodeRequest req) {
         String email = req.getEmail().trim().toLowerCase();
 
-        if (inhoUserRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             return new ApiResponse(false, "이미 가입된 이메일입니다.", null);
         }
 
@@ -41,7 +43,7 @@ public class SignupService {
         String email = dto.getEmail().trim().toLowerCase();
 
         // 1) 이메일 중복
-        if (inhoUserRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             return new ApiResponse(false, "이미 가입된 이메일입니다.", null);
         }
         // 2) 비밀번호 확인
@@ -54,65 +56,69 @@ public class SignupService {
             return new ApiResponse(false, "이메일 인증 실패", null);
         }
 
-        InhoUserEntity user = new InhoUserEntityBuilder()
+        User user = User.builder()
                 .name(dto.getUsername())
                 .email(email)
-                .encodedPw(bCryptPasswordEncoder.encode(dto.getPassword()))
-                .role(UserRoleType.GENERAL)     // 일반 회원
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .enabled(true)
-                .status(EnrollmentStatus.PENDING) // 초기값(원하면 변경)
+                .roleType(6L)    // 일반 회원
+                .userTelno(dto.getPhoneNumber())
+                .companyId(null)
+                .cohortId(null)
                 .build();
 
-        inhoUserRepository.save(user);
+        userRepository.save(user);
         return new ApiResponse(true, "회원가입 완료", null);
     }
 
-    // 2) 테넌트 회원가입 (회사 생성은 이후 단계에서 처리한다고 가정, 여기선 관리자 계정만 생성)
+    // 2) 테넌트 회원가입
     @Transactional
     public ApiResponse registerTenant(TenantSignupDto dto) {
-        String email = dto.getEmail().trim().toLowerCase();
+        final String email = dto.getEmail().trim().toLowerCase();
+        final String brno  = dto.getBusinessNumber().trim();
 
-        if (inhoUserRepository.existsByEmail(email)) {
+        // 1) 중복체크
+        if (userRepository.existsByEmail(email)) {
             return new ApiResponse(false, "이미 가입된 이메일입니다.", null);
         }
+        if (companyRepository.existsByBrno(brno)) {
+            return new ApiResponse(false, "이미 등록된 사업자등록번호입니다.", null);
+        }
+
+        // 2) 비밀번호 확인 (먼저 수행: 코드 소모 방지)
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             return new ApiResponse(false, "비밀번호가 일치하지 않습니다.", null);
-        }if (!verificationService.verify(email,
+        }
+
+        // 3) 이메일 인증 확인 (true면 1회성 코드 소모)
+        if (!verificationService.verify(email,
                 dto.getVerificationCode() == null ? "" : dto.getVerificationCode().trim())) {
             return new ApiResponse(false, "이메일 인증 실패", null);
         }
 
-        InhoUserEntity user = new InhoUserEntityBuilder()
+        // 4) 회사 생성
+        Company company = companyRepository.save(
+                Company.builder()
+                        .brno(brno)
+                        .name(dto.getCompanyName())
+                        .active(true)
+                        .build()
+        );
+
+        // 5) 관리자 유저 생성 (회사 FK 연결)
+        User admin = User.builder()
                 .name(dto.getUsername())
                 .email(email)
-                .encodedPw(bCryptPasswordEncoder.encode(dto.getPassword()))
-                .role(UserRoleType.TENANT) // 테넌트 관리자
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .enabled(true)
-                .status(EnrollmentStatus.COMPLETED)
+                .roleType(2L) // 테넌트 관리자
+                .userTelno(dto.getPhoneNumber())
+                .companyId(company.getId()) // FK: TB_USER.OGDP_CO_SN
+                .cohortId(null)
                 .build();
 
-        inhoUserRepository.save(user);
+        userRepository.save(admin);
+
         return new ApiResponse(true, "테넌트 관리자 등록 완료", null);
-    }
-
-    /** 간단한 빌더 (엔티티가 롬복/생성자 없어서 세터 없이 만들기 위함) */
-    private static class InhoUserEntityBuilder {
-        private final InhoUserEntity u = new InhoUserEntity();
-
-        public InhoUserEntityBuilder name(String v){ set("name", v); return this; }
-        public InhoUserEntityBuilder email(String v){ set("email", v); return this; }
-        public InhoUserEntityBuilder encodedPw(String v){ set("password", v); return this; }
-        public InhoUserEntityBuilder role(UserRoleType v){ set("roleType", v); return this; }
-        public InhoUserEntityBuilder enabled(boolean v){ set("enabled", v); return this; }
-        public InhoUserEntityBuilder status(EnrollmentStatus v){ set("status", v); return this; }
-
-        private void set(String field, Object value) {
-            try {
-                var f = InhoUserEntity.class.getDeclaredField(field);
-                f.setAccessible(true);
-                f.set(u, value);
-            } catch (Exception e) { throw new IllegalStateException(e); }
-        }
-        public InhoUserEntity build(){ return u; }
     }
 }

@@ -1,6 +1,6 @@
 package com.kdt.KDT_PJT.auth;
 
-import com.kdt.KDT_PJT.auth.entity.InhoUserEntity;
+import com.kdt.KDT_PJT.auth.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,28 +9,53 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * InhoUserEntity → Spring Security UserDetails 어댑터
+ * User 엔티티 → Spring Security UserDetails 어댑터
  */
 public class AuthCustomUserDetails implements UserDetails {
 
     private final Long id;
-    private final String email;
-    private final String password;
-    private final String authority; // ROLE_ 접두사 포함
-    private final boolean enabled;
-    private final Long cohortId;
+    private final String name;       //  이름
+    private final String email;      //  이메일 (username)
+    private final String password;   //  비밀번호
+    private final String authority;  // ROLE_ 접두사 포함 권한
+    private final boolean enabled;   //  활성여부
+    private final Long roleType;     //  권한(숫자)
+    private final String userTelno;  //  전화번호
+    private final Long companyId;    //  회사 FK
+    private final Long cohortId;     //  기수 FK
 
-    public AuthCustomUserDetails(InhoUserEntity user) {
+    public AuthCustomUserDetails(User user) {
         this.id = user.getId();
+        this.name = user.getName();
         this.email = user.getEmail();
         this.password = user.getPassword();
-        this.authority = "ROLE_" + user.getRoleType().name();
+        this.authority = "ROLE_" + mapRoleIdToName(user.getRoleType());
         this.enabled = user.isEnabled();
+        this.roleType = user.getRoleType();
+        this.userTelno = user.getUserTelno();
+        this.companyId = user.getCompanyId();
         this.cohortId = user.getCohortId();
+    }
+
+    private String mapRoleIdToName(Long roleId) {
+        return switch (roleId.intValue()) {
+            case 1 -> "SUPER_ADMIN";
+            case 2 -> "TENANT_ADMIN";
+            case 3 -> "INSTRUCTOR";
+            case 4 -> "EMPLOYEE";
+            case 5 -> "STUDENT";
+            case 6 -> "GENERAL";
+            default -> throw new IllegalArgumentException("Unknown roleId: " + roleId);
+        };
     }
 
     // ===== 추가 정보 getter =====
     public Long getId() { return id; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public Long getRoleType() { return roleType; }
+    public String getUserTelno() { return userTelno; }
+    public Long getCompanyId() { return companyId; }
     public Long getCohortId() { return cohortId; }
 
     // ===== UserDetails 구현 =====
@@ -43,7 +68,7 @@ public class AuthCustomUserDetails implements UserDetails {
     @Override public String getUsername() { return email; } // username = email
 
     @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; } // 별도 필드 없음
+    @Override public boolean isAccountNonLocked() { return true; }
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return enabled; }
 }

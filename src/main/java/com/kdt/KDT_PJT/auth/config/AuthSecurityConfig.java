@@ -56,26 +56,26 @@ public class AuthSecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration c = new CorsConfiguration();
-
-        // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
-        c.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://127.0.0.1:3000",
-                "http://192.168.0.14:3000"
-        ));
-        c.setAllowCredentials(true);
-        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        c.setAllowedHeaders(List.of("*"));
-        c.setExposedHeaders(List.of("Set-Cookie"));
-
-        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
-        s.registerCorsConfiguration("/**", c);
-        return s;
-    }
+//
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration c = new CorsConfiguration();
+//
+//        // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
+//        c.setAllowedOrigins(List.of(
+//                "http://localhost:3000",
+//                "http://127.0.0.1:3000",
+//                "http://192.168.0.14:3000"
+//        ));
+//        c.setAllowCredentials(true);
+//        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+//        c.setAllowedHeaders(List.of("*"));
+//        c.setExposedHeaders(List.of("Set-Cookie"));
+//
+//        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+//        s.registerCorsConfiguration("/**", c);
+//        return s;
+//    }
 
 
     @Bean
