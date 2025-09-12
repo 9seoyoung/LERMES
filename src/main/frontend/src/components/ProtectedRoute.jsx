@@ -5,6 +5,5 @@ export default function ProtectedRoute({ children }) {
   const [ok, setOk] = useState(null);
   useEffect(() => { fetchMe().then(()=>setOk(true)).catch(()=>setOk(false)); }, []);
   if (ok === null) return <div className="center">로딩...</div>;
-  if (!ok) { location.href = "/login"; return null; }
   return children;
 }
