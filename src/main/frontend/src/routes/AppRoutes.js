@@ -11,6 +11,9 @@ import NotAllowed from '../auth/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
 import SuperMain from '../pages/Super/SuperMain';
+import AdminHome  from '../pages/LMS/AdminHome';
+import TutorHome from '../pages/LMS/TutorHome';
+import StdHome from '../pages/LMS/StdHome';
 
 function AppRoutes() {
   return (
@@ -29,12 +32,30 @@ function AppRoutes() {
     {/* 기본 접근 루트 */}
     <Route path="/" element={<Layout />}>
       <Route path='superMain' element={<SuperMain/>} />
+      <Route path='adminHome' element={<AdminHome/>} />
+      <Route path='stdHome' element={<StdHome/>} />
+
       {/* 역할별 기본 분기 (보호 X) */}
       {/* <Route index element={<HomeIndex />} /> 추후 주석 풀 예정 */}
 
-      {/* 역할별 분기 샘플 */}
-      {/* <Route element={<RoleRoute roles={['1' , '2']} />}>
-        <Route path="main" element={<Main />} />
+      {/* <Route element={<RoleRoute roles={['1']} />}>
+        <Route path="superMain" element={<AdminHome />} />
+      </Route> */}
+      {/* 관리자(테넌트, 직원) */}
+      {/* <Route element={<RoleRoute roles={['2','3']} />}>
+        <Route path="adminHome" element={<AdminHome />} />
+      </Route> */}
+      {/* 강사 */}
+      {/* <Route element={<RoleRoute roles={['4']} />}>
+        <Route path="tutorHome" element={<TutorHome />} />
+      </Route> */}
+      {/* 수강생 */}
+      {/* <Route element={<RoleRoute roles={['4']} />}>
+        <Route path="stdHome" element={<TutorHome />} />
+      </Route> */}
+      {/* 일반회원 */}
+      {/* <Route element={<RoleRoute roles={['4']} />}>
+        <Route path="stdHome" element={<TutorHome />} />
       </Route> */}
     {/* </Routes> */}
     </ Route>
