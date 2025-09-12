@@ -12,6 +12,7 @@
   font-optical-sizing: auto;
   margin: 0;
   padding: 0;
+  
 }
 
 html {
@@ -25,6 +26,7 @@ body {
   background-color: #d9d9d9;
   color: #222;
   padding: 0 24px;
+  min-height: 100vh;
 }
 
 a { 
@@ -67,8 +69,19 @@ li {
 /* 레이아웃 */
 .layout {
   width: 100%;
+  min-height: 100vh;
   max-width: 1440px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.layout_content {
+  flex: 1;
+  background-color: red;
+  display: flex;
+  flex-direction: column;
 }
 
 .layout > header {
@@ -81,6 +94,8 @@ li {
   border-radius: 32px;
   box-shadow: 4px 4px 4px #00000025 ;
   justify-content: space-between;
+  position: relative;
+  z-index: 999999;
 }
 
 .joinBtn {
@@ -96,8 +111,34 @@ li {
 .header_L {
   width: 100%;
   height: 100%;
-  background-color: #0088FF;
   display: flex;
   justify-content: space-between;
   gap: 24px;
+}
+
+.layout_content footer {
+  width: 100%;
+  height: 8rem;
+  background-color: #0088FF;
+  color: #fff;
+  font-size: 3.2rem;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 4px -4px 4px #00000025;
+}
+
+/* Outlet, 메인콘텐츠 */
+
+.varPage {
+  flex: 1;
+}
+
+/* 메인화면 각종 레이아웃 */
+.mainContainer_cardGrid{
+  background-color: #0088FF;
+  display: flex;
+
 }

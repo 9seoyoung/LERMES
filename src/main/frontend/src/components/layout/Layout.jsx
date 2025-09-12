@@ -21,15 +21,17 @@ function Layout() {
         <SuperHeader />
         <button className="joinBtn" type="button" onClick={() => navigate('/login')}>Login →</button>
       </header>
-      <main>
-        {/* Nav 팝업은 여기서 처리 */}
+      <div className="layout_content">
+        <main className="varPage">
+          {/* Nav 팝업은 여기서 처리 */}
 
-        {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
-        <Outlet className="varPage" />
-      </main>
-      <footer>
-
-      </footer>
+          {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
+          <Outlet />
+        </main>
+        <footer>
+          ff
+        </footer>
+      </div>
     </div>
   )
 }
