@@ -1,4 +1,4 @@
-import styles from './signUp.module.css';
+import styles from '../../styles/SignUp.module.css';
 import icon from '../../webapp/img/penIcon.png';
 
 function signUp() {
