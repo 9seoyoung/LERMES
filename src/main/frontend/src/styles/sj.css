@@ -100,9 +100,7 @@
   gap: 17px;
 }
 
-.signup-form input[type="text"],
-.signup-form input[type="email"],
-.signup-form input[type="password"] {
+.signup-form input {
   width: 100%;
   padding: 16px;
   font-size: 1.13rem;

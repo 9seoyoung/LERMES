@@ -3,7 +3,6 @@ import GeneralSignup from './pages/GeneralSignup';
 import TenantSignup from './pages/TenantSignup';
 import Login from './pages/Login';
 // import ProtectedRoute from './components/ProtectedRoute.jsx';
-import './styles/inho.css';
 // 라이브러리
 import { ToastContainer } from "react-toastify";
 

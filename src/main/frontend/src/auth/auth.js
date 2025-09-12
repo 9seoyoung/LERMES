@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api } from "./service.js";
+import { api } from "../lib/service.js";
 
 // 이메일 인증 코드 (중복검사 + 발송)
 export const requestEmailCode = (email) =>
