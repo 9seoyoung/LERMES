@@ -5,6 +5,7 @@ import com.kdt.KDT_PJT.auth.dto.*;
 import com.kdt.KDT_PJT.auth.service.LandingService;
 import com.kdt.KDT_PJT.auth.service.SignupService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +13,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -47,11 +52,12 @@ public class AuthController {
         return new ResponseEntity<>(res, res.isOk() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
-    // 로그인
+
+
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody LoginRequestDto dto,
-                                             HttpServletRequest request) {
-
+                                             HttpServletRequest request,
+                                             HttpServletResponse response) {
         String email = dto.getEmail() == null ? "" : dto.getEmail().trim().toLowerCase();
         String password = dto.getPassword() == null ? "" : dto.getPassword();
 
@@ -64,14 +70,24 @@ public class AuthController {
             UsernamePasswordAuthenticationToken token =
                     new UsernamePasswordAuthenticationToken(email, password);
 
-            Authentication auth = authenticationManager.authenticate(token); // 비번 검증 포함
-            SecurityContextHolder.getContext().setAuthentication(auth);      // 인증 저장
-            request.getSession(true);                                        // 세션 생성(JSESSIONID)
+            Authentication auth = authenticationManager.authenticate(token); // 비번 검증
+
+            // 🔹 SecurityContext 생성/설정
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(auth);
+            SecurityContextHolder.setContext(context);
+
+            // 🔹 세션에 SecurityContext 저장 (아주 중요)
+            SecurityContextRepository repo = new HttpSessionSecurityContextRepository();
+            repo.saveContext(context, request, response);
+
+            // (선택) 세션 강제 생성
+            request.getSession(true);
 
             AuthCustomUserDetails me = (AuthCustomUserDetails) auth.getPrincipal();
             String nextPath = landingService.buildNextPath(me);
 
-            return ResponseEntity.ok(new ApiResponse(true, "로그인 성공", Map.of("path",nextPath)));
+            return ResponseEntity.ok(new ApiResponse(true, "로그인 성공", Map.of("path", nextPath)));
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -79,25 +95,30 @@ public class AuthController {
         }
     }
 
+
     @GetMapping("/me")
     public ResponseEntity<?> me(@AuthenticationPrincipal AuthCustomUserDetails me) {
         if (me == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("ok", false, "message", "로그인 필요"));
         }
+        String nextPath = landingService.buildNextPath(me);
 
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("USER_SN", me.getId());               // null 허용
+        data.put("USER_NM", me.getName());
+        data.put("USER_EML_ADDR", me.getEmail());
+        data.put("USER_ACTVTN_YN", me.isEnabled());
+        data.put("USER_AUTHRT_SN", me.getRoleType());
+        data.put("USER_TELNO", me.getUserTelno());     // null이어도 OK
+        data.put("USER_OGDP_CO_SN", me.getCompanyId());// null이어도 OK
+        data.put("USER_COHORT_SN", me.getCohortId());  // null이어도 OK
+        data.put("HOME_PATH", nextPath);
 
-        Map<String, Object> data = Map.of(
-                "USER_SN", me.getId(),                 // 사용자 PK
-                "USER_NM", me.getName(),                  // 사용자 이름
-                "USER_EML_ADDR",me.getEmail(),            // 사용자 이메일
-                 "USER_ACTVTN_YN", me.isEnabled(),        // 사용자 활성여부
-                "USER_AUTHRT_SN", me.getRoleType(),       // 사용자 권한 번호
-                "USER_TELNO", me.getUserTelno(),          // 사용자 전화번호
-                "USER_OGDP_CO_SN", me.getCompanyId(),     // 소속 회사 PK(외래키)
-                "USER_COHORT_SN", me.getCohortId()        // 사용자 기수 PK(외래키)
-        );
-
-        return ResponseEntity.ok(Map.of("ok", true, "data", data));
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noStore())
+                .body(Map.of("ok", true, "data", data));
     }
+
+
 }
