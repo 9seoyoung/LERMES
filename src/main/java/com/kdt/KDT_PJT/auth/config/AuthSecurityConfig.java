@@ -81,37 +81,26 @@ public class AuthSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // 개발 중
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/email/code/**",
-                                "/api/auth/signup/**",
-                                "/api/auth/login/**"
-                        ).permitAll()
+                        .requestMatchers("/api/login", "/api/signup/**", "/api/email/code/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
                 )
-                .sessionManagement(sm -> sm
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                )
-
-
-        // 폼 로그인은 페이지에만 쓰고, API는 /auth/login(JSON) 사용
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/main", true)
-                        .failureUrl("/login?error")
-                        .permitAll()
-                )
-
-                .logout(l -> l.logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setStatus(401);
+                            res.setContentType("application/json;charset=UTF-8");
+                            res.getWriter().write("{\"ok\":false,\"message\":\"로그인 필요\"}");
+                        })
                 );
 
         return http.build();
     }
+
 
 
     @Bean

@@ -13,5 +13,5 @@ import lombok.Setter;
 public class ApiResponse {
     private boolean ok;
     private String message;
-    private Integer ttlSeconds; // 코드 유효 시간(초), 필요 없으면 null
+    private Object data; // 시간일때 코드 유효 시간(초), url일때 url 경로
 }
