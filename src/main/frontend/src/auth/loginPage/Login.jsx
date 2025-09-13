@@ -19,8 +19,7 @@ function Login() {
       try {
         await login({ email: email.trim().toLowerCase(), password });
         navigate('/superMain', { replace: true });
-#        const data = await login({ email: email.trim().toLowerCase(), password });
-#        navigate('/${data[path]}', { replace: true });
+
         toast.success("로그인 성공!")
       } catch (err) {
         toast.error(setMsg(err.message || '로그인 실패'));
