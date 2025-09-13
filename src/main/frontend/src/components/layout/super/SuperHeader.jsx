@@ -6,7 +6,6 @@ import Dropdown from "../../ui/Dropdown";
 function SuperHeader() {
   const navigate = useNavigate();
 
-  const [menuToggle1, setToggle1] = useState(false);
   const [menuToggle2, setToggle2] = useState(false);
 
   return (
@@ -21,24 +20,21 @@ function SuperHeader() {
               {menuToggle1 === true ? <div>▲</div> : <div>▼</div>}
             </div> */}
             <Dropdown label="비즈니스: 더 알아보기" trigger="hover" placement="bottom-start">
-              <li className={layoutStyles.subMenuList}>메뉴 1</li>
-              <li className={layoutStyles.subMenuList}>메뉴 2</li>
-              <li className={layoutStyles.subMenuList}>메뉴 3</li>
-              <li className={layoutStyles.subMenuList}>메뉴 4</li>
+              <div className={layoutStyles.subMenuList}>메뉴 1</div>
+              <div className={layoutStyles.subMenuList}>메뉴 2</div>
+              <div className={layoutStyles.subMenuList}>메뉴 3</div>
+              <div className={layoutStyles.subMenuList}>메뉴 4</div>
             </Dropdown>
           {/* </li>
         </ul> */}
         <ul>
           <li>
-            <div className={layoutStyles.subMenuName} onClick={() => setToggle2(!menuToggle2)}>비즈니스/제휴
-              {menuToggle2 === true ? <div>▲</div> : <div>▼</div> }
-            </div>
-            <ul style={{ display: menuToggle2 ? "block" : "none" }} onClick={() => setToggle2(false)}>
-              <li className={layoutStyles.subMenuList}>메뉴 1</li>
-              <li className={layoutStyles.subMenuList}>메뉴 2</li>
-              <li className={layoutStyles.subMenuList}>메뉴 3</li>
-              <li className={layoutStyles.subMenuList} onClick={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</li>
-            </ul>
+            <Dropdown className={layoutStyles.subMenuName} label="비즈니스/제휴" trigger="hover" placement="bottom-start">
+              <div className={layoutStyles.subMenuList}>메뉴 1</div>
+              <div className={layoutStyles.subMenuList}>메뉴 2</div>
+              <div className={layoutStyles.subMenuList}>메뉴 3</div>
+              <div className={layoutStyles.subMenuList} onCdivck={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</div>
+            </Dropdown>
           </li>
         </ul>
       </div>
