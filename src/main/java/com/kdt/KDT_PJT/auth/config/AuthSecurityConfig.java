@@ -84,9 +84,9 @@ public class AuthSecurityConfig {
                 .csrf(csrf -> csrf.disable()) // 개발 중
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/email/code/**",
-                                "/api/auth/signup/**",
-                                "/api/auth/login/**"
+                                "/api/email/code/**",
+                                "/api/signup/**",
+                                "/api/login/**"
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                 )
