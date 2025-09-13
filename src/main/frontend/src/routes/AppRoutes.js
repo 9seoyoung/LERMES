@@ -42,9 +42,8 @@ function AppRoutes() {
     {/* 로그인/회원가입 레이아웃 */}
     <Route path ='welcome' element={<WelcomeLayout/>} >
       <Route path='generaljoin' element={<GeneralJoin/>} />
-      <Route path='tenantjoin' element={<TenantSignup/>}/>
-      <Route path='login' element={<Login />} />
       <Route path='tenantjoin' element={<TenantSignup />} />
+      <Route path='login' element={<Login />} />
     </Route>
     
     {/* 기본 접근 루트 */}
