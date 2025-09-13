@@ -32,6 +32,31 @@ export default function Login() {
     }
   };
 
+  //   const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setMsg(null);
+  //   setLoading(true);
+
+  //   try {
+  //     const res = await login({
+  //       email: email.trim().toLowerCase(),
+  //       password
+  //     });
+
+  //     if (res.data.ok) {
+  //       // ✅ path 꺼내기
+  //       const nextPath = res.data.data.path;
+  //       navigate("/" + nextPath, { replace: true });
+  //     } else {
+  //       setMsg(res.data.message || "로그인 실패");
+  //     }
+  //   } catch (err) {
+  //     setMsg("로그인 오류: " + (err.response?.data?.message || err.message));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   return (
     <div className="container split">
       <form className="card" onSubmit={onSubmit}>
