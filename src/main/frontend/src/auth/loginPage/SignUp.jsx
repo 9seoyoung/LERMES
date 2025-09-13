@@ -1,7 +1,6 @@
 import styles from '../../styles/SignUp.module.css';
-// import icon from '../../webapp/img/penIcon.png';
 
-function signUp() {
+function SignUp() {
   return (
     <>
       <div className={styles.section}>
@@ -65,4 +64,4 @@ function signUp() {
   );
 }
 
-export default signUp;
+export default SignUp;
