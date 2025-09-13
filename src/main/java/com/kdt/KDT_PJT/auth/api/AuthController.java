@@ -91,8 +91,8 @@ public class AuthController {
                 "USER_SN", me.getId(),                 // 사용자 PK
                 "USER_NM", me.getName(),                  // 사용자 이름
                 "USER_EML_ADDR",me.getEmail(),            // 사용자 이메일
-                 "USER_actvtn_yn", me.isEnabled(),        // 사용자 활성여부
-                "USER_authrt_sn", me.getRoleType(),       // 사용자 권한 번호
+                 "USER_ACTVTN_YN", me.isEnabled(),        // 사용자 활성여부
+                "USER_AUTHRT_SN", me.getRoleType(),       // 사용자 권한 번호
                 "USER_TELNO", me.getUserTelno(),          // 사용자 전화번호
                 "USER_OGDP_CO_SN", me.getCompanyId(),     // 소속 회사 PK(외래키)
                 "USER_COHORT_SN", me.getCohortId()        // 사용자 기수 PK(외래키)
