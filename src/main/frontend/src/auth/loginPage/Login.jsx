@@ -17,11 +17,8 @@ function Login() {
       setMsg(null);
       setLoading(true);
       try {
-          const {data} = await login({ email: email.trim().toLowerCase(), password });
-          console.log(data);
-          navigate(`/${data.path}`, { replace: true });
-//        await login({ email: email.trim().toLowerCase(), password });
-//        navigate('/superMain', { replace: true });
+        await login({ email: email.trim().toLowerCase(), password });
+        navigate('/superMain', { replace: true });
         toast.success("로그인 성공!")
       } catch (err) {
         toast.error(setMsg(err.message || '로그인 실패'));
