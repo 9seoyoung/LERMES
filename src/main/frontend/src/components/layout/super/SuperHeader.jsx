@@ -1,6 +1,7 @@
 import layoutStyles from "../../../styles/layout.module.css"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom";
+import Dropdown from "../../ui/Dropdown";
 
 function SuperHeader() {
   const navigate = useNavigate();
@@ -14,19 +15,19 @@ function SuperHeader() {
         <img src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" />
       </button>
       <div className={layoutStyles.menuContainer}>
-        <ul>
-          <li>
-            <div className={layoutStyles.subMenuName} onClick={() => setToggle1(!menuToggle1)}>비즈니스: 더 알아보기
+        {/* <ul>
+          <li> */}
+            {/* <div className={layoutStyles.subMenuName} onClick={() => setToggle1(!menuToggle1)}>비즈니스: 더 알아보기
               {menuToggle1 === true ? <div>▲</div> : <div>▼</div>}
-            </div>
-            <ul style={{ display: menuToggle1 ? "block" : "none" }} onClick={() => setToggle1(false)}>
+            </div> */}
+            <Dropdown label="비즈니스: 더 알아보기" trigger="hover" placement="bottom-start">
               <li className={layoutStyles.subMenuList}>메뉴 1</li>
               <li className={layoutStyles.subMenuList}>메뉴 2</li>
               <li className={layoutStyles.subMenuList}>메뉴 3</li>
               <li className={layoutStyles.subMenuList}>메뉴 4</li>
-            </ul>
-          </li>
-        </ul>
+            </Dropdown>
+          {/* </li>
+        </ul> */}
         <ul>
           <li>
             <div className={layoutStyles.subMenuName} onClick={() => setToggle2(!menuToggle2)}>비즈니스/제휴

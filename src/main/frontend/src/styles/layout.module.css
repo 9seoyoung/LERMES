@@ -1,5 +1,6 @@
 .menuContainer {
   display: flex;
+  align-items: center;
   gap: 24px;
 }
 
@@ -28,4 +29,5 @@
 
 .subMenuList:hover {
   background: #00000025;
+  color: #f6f6f6;
 }

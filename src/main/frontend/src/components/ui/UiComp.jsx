@@ -2,6 +2,7 @@
 // props로 텍스트 조절할 수 있게
 
 import styles from '../../styles/UiComp.module.css';
+import Dropdown from './Dropdown';
 // [props]
 // FormInput, FormUnderline, TextAreaBox: textType(placeholder)
 // FormBtn: textType(내용), className(style)
@@ -19,6 +20,12 @@ export function UiComp() {
       <CustomCheckbox />
       <FileUpload />
       <Table />
+      {/* 드롭다운 사용 방법 */}
+      <Dropdown label="드롭다운 제목" trigger="hover" placement="bottom-start" >
+      <a className="dd__item" href="/mypage">내 정보</a>
+      <a className="dd__item" href="/settings">설정</a>
+      <button className="dd__item">로그아웃</button>
+      </Dropdown>
     </div>
   );
 }
