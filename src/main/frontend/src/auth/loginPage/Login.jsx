@@ -19,9 +19,11 @@ export default function Login() {
       const me = await signIn({ email: email.trim().toLowerCase(), password });
       toast.success("로그인 성공!");
 
-      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
-      console.log(redirectLoc);
-      navigate(redirectLoc, {replace: true});
+      const redirectLoc = me?.HOME_PATH
+        ? (me.HOME_PATH.startsWith("/") ? me.HOME_PATH : `/${me.HOME_PATH}`)
+        : "/superMain";
+      navigate(redirectLoc, { replace: true });
+
     } catch (err) {
       const msg = err?.message || "로그인 실패";
       toast.error(msg);

@@ -1,19 +1,18 @@
-// 페이지찾기 - 게시판
 import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
 
-export default function Board(){
+function FormTemp() {
     return (
-        <div className="boardPage">
-            <h2>게시판</h2>
-            <div className="filterList">
+        <div className="formTemp">
+            <h4>게시글 등록하기</h4>
+            <form className="filterList">
                 <div className="ftList_L">필터 리스트</div>
                 <div className="ftList_R">
                     <div type="button" onClick={"#"} style={{background:"#FCFEFF", padding:"0 4px", borderRadius:"4px", boxShadow:"2px 2px 2px #00000025"}}>
                         + 등록하기
                     </div>
                 </div>
-            </div>
+            </form>
             <div className="BigListBox">
                 <ul className={uiStyle.ListHeader}>
                     <li>순번</li>
@@ -26,5 +25,7 @@ export default function Board(){
                 <ListTable></ListTable>
             </div>
         </div>
-    );
+  )
 }
+
+export default FormTemp

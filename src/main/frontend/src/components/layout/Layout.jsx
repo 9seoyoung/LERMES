@@ -12,12 +12,14 @@ import layoutStyles from "../../styles/layout.module.css"
 import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
 import LmsHeader from "../ui/headerModule/LmsHeader";
-import { StdHeader, AdminHeader, TutorHeader } from "../ui/headerModule/LmsHeader";
+import Nav from "../ui/navModule/Nav";
+import { useState } from "react";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
   const navigate = useNavigate();
+  const [navToggle, setNavToggle] = useState(false);
   const { user, signOut } = useAccount();
   const curloc = useLocation();
   const navKind = curloc.pathname.split('/', 2)[1];
@@ -28,16 +30,16 @@ export default function Layout() {
 
     switch (loc) {
       case "adminHome":
-        component = <LmsHeader />;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
       case "stdHome":
-        component = <LmsHeader />;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
       case "tutorHome":
-        component = <LmsHeader />;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
       default:
-        component = <SuperHeader />;
+        component = <SuperHeader  />;
     }
 
     return component;
@@ -62,12 +64,23 @@ export default function Layout() {
       <div className="layout_content">
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
-
+          {(navToggle === false) ? ""
+            :
+            <Nav user={user} setNavToggle = {setNavToggle} />
+          } 
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>
         <footer>
-          ff
+          <h2>LERMES</h2>
+          {(user.USER_AUTHRT_SN === "1") ?
+           <>
+            <div onClick={() => navigate('/adminHome')}>관리자 홈</div>
+            <div onClick={() => navigate('/tutorHome')}>강사 홈</div>
+            <div onClick={() => navigate('/stdHome')}>수강생 홈</div>
+          </>
+          : 
+          <></>}
         </footer>
       </div>
     </div>

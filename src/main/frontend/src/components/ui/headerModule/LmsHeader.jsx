@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { ChevronLeft, ChevronRight} from "lucide-react";
+
 
 import SuperHeader from './SuperHeader';
 
 import uiStyle from "../../../styles/UiComp.module.css"
+import { useAccount } from '../../../auth/AuthContext';
 
-export default function LmsHeader() {
+
+export default function LmsHeader({navToggle, setNavToggle}) {
+    const {user} = useAccount();
     const navigate = useNavigate();
-    const [navToggle, setToggle] = useState(false);
     const curloc = useLocation();
     const navKind = curloc.pathname.split('/', 2)[1];
 
@@ -36,10 +40,11 @@ export default function LmsHeader() {
   return (
     <>
       <div className="header_L" >
-        <button type='button' onClick={() => setToggle(!navToggle)}>
-          <img src='#' />
+        <button className='navBtn' type='button' onClick={() => setNavToggle(!navToggle)}>
+          {navToggle ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
         </button>
-          <img src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" onClick={() => navigate(`/${navKind}`)}/>
+        {/* USER_OGDP_CO_SN 로 CO_NM 과 회사 로고이미지 가져오기 < 컬럼없음 */}
+          <img src={process.env.PUBLIC_URL + '/img/logo.png'}  alt="Logo" onClick={() => {navigate(`/${navKind}`); console.log(user)}}/>
       </div>
       <HeaderStatus loc={navKind}></HeaderStatus>
     </>

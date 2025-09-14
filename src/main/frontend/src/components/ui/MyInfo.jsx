@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import "../../styles/dropdown.css";
+import { UserCircle, Users, User } from "lucide-react";
 
 
 const MyInfo = forwardRef(function MyInfo(
@@ -80,15 +81,13 @@ const MyInfo = forwardRef(function MyInfo(
       <button
         ref={btnRef}
         className="joinBtn"
-        style={{gap:"8px"}}
+        style={{gap:"6px"}}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={handleButtonClick}
         disabled={disabled}
       >
-        <img src={"#"} style={{width: "32px", height: "32px", borderRadius:"50%", display: "flex", alignItems:"center", justifyContent:"center", background:"#f6f6f6"}}>
-        
-        </img>
+        <User style={{background: "#f6f6f6", borderRadius: "50%", padding: "4px"}} size={32}></User>
         {label}
       </button>
 

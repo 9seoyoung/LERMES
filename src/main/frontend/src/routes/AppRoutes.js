@@ -19,6 +19,7 @@ import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
 import NoticeList from '../components/module/NoticeList.jsx';
+import Board from '../pages/LMS/Board.jsx';
 
 function AppRoutes() {
   return (
@@ -61,6 +62,8 @@ function AppRoutes() {
       {/* 수강생 */}
       <Route element={<RoleRoute roles={[1, 5]} />}>
         <Route path="stdHome" element={<StdHome />} />
+        <Route path="stdHome/board" element={<Board />} />
+        <Route path="stdHome/studySched" element={"#"} />
       </Route>
     </Route>
   </Routes>
