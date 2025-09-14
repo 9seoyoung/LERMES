@@ -20,6 +20,7 @@ import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
+import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 
 function AppRoutes() {
   return (
@@ -54,17 +55,24 @@ function AppRoutes() {
       {/* 관리자(테넌트, 직원) */}
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
+        {/* <Route path='adminHome/createPost' element={<CreatePost/>}></Route> */}
+
       </Route>
       {/* 강사 */}
       <Route element={<RoleRoute roles={[1, 4]} />}>
         <Route path="tutorHome" element={<TutorHome />} />
+        {/* <Route path='tutorHome/createPost' element={<CreatePost/>}></Route> */}
+
       </Route>
       {/* 수강생 */}
       <Route element={<RoleRoute roles={[1, 5]} />}>
         <Route path="stdHome" element={<StdHome />} />
         <Route path="stdHome/board" element={<Board />} />
+        <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
         <Route path="stdHome/studySched" element={"#"} />
+
       </Route>
+
     </Route>
   </Routes>
   );

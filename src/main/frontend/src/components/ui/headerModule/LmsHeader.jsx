@@ -44,7 +44,9 @@ export default function LmsHeader({navToggle, setNavToggle}) {
           {navToggle ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
         </button>
         {/* USER_OGDP_CO_SN 로 CO_NM 과 회사 로고이미지 가져오기 < 컬럼없음 */}
-          <img src={process.env.PUBLIC_URL + '/img/logo.png'}  alt="Logo" onClick={() => {navigate(`/${navKind}`); console.log(user)}}/>
+        <div className="logoBox" onClick={() => {navigate(`/${navKind}`); console.log(user)}}>
+          <img src={process.env.PUBLIC_URL + '/img/logo.png'}  alt="Logo" />
+        </div>
       </div>
       <HeaderStatus loc={navKind}></HeaderStatus>
     </>

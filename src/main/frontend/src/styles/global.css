@@ -410,3 +410,13 @@ footer > div:hover {
   cursor: pointer;
   background-color: #dedede;
 }
+
+.logoBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoBox:hover {
+  cursor: pointer;
+}
