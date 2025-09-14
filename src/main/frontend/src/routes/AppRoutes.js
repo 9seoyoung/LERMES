@@ -1,10 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 
 // 권한
-// import RoleRoute from '../auth/RoleRoute'; 역할데이터 권한분기파일 생성후 주석 제거 예정
+import RoleRoute from '../auth/RoleRoute.jsx';
 
 //페이지
-// import HomeIndex from '../auth/HomeIndex'; useAccount 등 세션 생기면 추후 주석 풀 예정
 import Login from '../auth/loginPage/Login';
 import Layout from '../components/layout/Layout'; //제일 먼저 만들어야 할 파일
 import NotAllowed from '../auth/loginPage/NotAllowed';
@@ -47,32 +46,21 @@ function AppRoutes() {
     {/* 기본 접근 루트 */}
     <Route path="/" element={<Layout />}>
       <Route path='superMain' element={<SuperMain/>}/>
-      <Route path='adminHome' element={<AdminHome/>} />
-      <Route path='tutorHome' element={<TutorHome/>} />
-      <Route path='stdHome' element={<StdHome/>} />
+      
 
-      {/* 역할별 기본 분기 (보호 X) */}
-      {/* <Route index element={<HomeIndex />} /> 추후 주석 풀 예정 */}
-
-      {/* <Route element={<RoleRoute roles={['1']} />}>
-        <Route path="superMain" element={<SuperMain />} />
-      </Route> */}
       {/* 관리자(테넌트, 직원) */}
-      {/* <Route element={<RoleRoute roles={['2','3']} />}>
+      <Route element={<RoleRoute roles={['1', '2','3']} />}>
         <Route path="adminHome" element={<AdminHome />} />
-      </Route> */}
+      </Route>
       {/* 강사 */}
-      {/* <Route element={<RoleRoute roles={['4']} />}>
+      <Route element={<RoleRoute roles={['1', '4']} />}>
         <Route path="tutorHome" element={<TutorHome />} />
-      </Route> */}
+      </Route>
       {/* 수강생 */}
-      {/* <Route element={<RoleRoute roles={['4']} />}>
-        <Route path="stdHome" element={<TutorHome />} />
-      </Route> */}
+      <Route element={<RoleRoute roles={['1', '5']} />}>
+        <Route path="stdHome" element={<StdHome />} />
+      </Route>
       {/* 일반회원 */}
-      {/* <Route element={<RoleRoute roles={['4']} />}>
-        <Route path="stdHome" element={<TutorHome />} />
-      </Route> */}
     {/* </Routes> */}
     </Route>
   </Routes>

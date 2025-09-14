@@ -113,15 +113,16 @@ body {
 /* 로고 부분 */
 .logo {
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
+  position: relative;
   padding: 10px;
+  height: 76px
 }
 
 /* 로고 이미지 */
 .logoImg {
-  position: relative;
   width: 180px;
   height: 60px;
   background-color: #fff;
@@ -130,29 +131,22 @@ body {
   justify-content: center;
   align-items: center;
   border: 1px solid #bfbfbf;
-  font-size: 20px;
-  margin-top: -30px;
+  font-size: 1.4rem;
+  color: #565656;
+  object-fit: contain;
 }
 
-/* 로고 이미지 추가 버튼 */
-.logoAdd {
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  border-radius: 50%;
-  border: 1px solid #bfbfbf;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-  padding: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.logoImg:hover {
+  color: #fff;
+  background: #ACACAC;
 }
 
 /* 이미지 설명 */
 .imgCaption {
   padding-left: 10px;
-  font-size: 14px;
-  color: #a3a3a3;
+  font-size: 1rem;
+  color: #00000050;
+  position: absolute;
+  right: -76px;
+  bottom: 12px;
 }

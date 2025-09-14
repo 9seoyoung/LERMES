@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAccount } from "../AuthContext"; // ← 컨텍스트 훅
 import "../../styles/sj.css";
 import { toast } from "react-toastify";
@@ -10,7 +10,6 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const { signIn } = useAccount(); // ← login + fetchMe 묶음
   const navigate = useNavigate();
-  const loc = useLocation();
 
   const onSubmit = async (e) => {
     e.preventDefault();
