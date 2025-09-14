@@ -1,12 +1,9 @@
 import layoutStyles from "../../../styles/layout.module.css"
-import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom";
 import Dropdown from "../../ui/Dropdown";
 
 function SuperHeader() {
   const navigate = useNavigate();
-
-  const [menuToggle2, setToggle2] = useState(false);
 
   return (
     <div className="header_L" >
@@ -27,16 +24,16 @@ function SuperHeader() {
             </Dropdown>
           {/* </li>
         </ul> */}
-        <ul>
-          <li>
+        {/* <ul>
+          <li> */}
             <Dropdown label="비즈니스/제휴" trigger="hover" placement="bottom-start">
               <div className={layoutStyles.subMenuList}>메뉴 1</div>
               <div className={layoutStyles.subMenuList}>메뉴 2</div>
               <div className={layoutStyles.subMenuList}>메뉴 3</div>
-              <div className={layoutStyles.subMenuList} onCdivck={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</div>
+              <div className={layoutStyles.subMenuList} onClick={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</div>
             </Dropdown>
-          </li>
-        </ul>
+          {/* </li>
+        </ul> */}
       </div>
     </div>
     

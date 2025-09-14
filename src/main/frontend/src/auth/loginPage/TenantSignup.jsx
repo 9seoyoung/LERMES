@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { requestEmailCode, signupTenant } from '../auth.js';
+import { requestEmailCode, signupTenant } from '../authService.js';
 import styles from "../../styles/SignUp.module.css";
 
 export default function TenantSignup() {

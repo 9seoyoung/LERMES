@@ -19,7 +19,6 @@ import TenantSignup from '../auth/loginPage/TenantSignup';
 import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
-import SignUp from "../auth/loginPage/SignUp";
 
 function AppRoutes() {
   return (
@@ -29,7 +28,6 @@ function AppRoutes() {
 
     {/* 매니저님이 짜주신 샘플 코드 */}
     <Route path="/sample" element={<SampleApp />} />
-    <Route path="/sign" element={<SignUp />} />
 
     {/* 여기서 부터 우리페이지 */}
     <Route path="/403" element={<NotAllowed />} />

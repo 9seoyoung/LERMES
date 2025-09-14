@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from 'react';
-import { requestEmailCode, signupGeneral } from '../auth';
+import { requestEmailCode, signupGeneral } from '../authService.js';
 import "../../styles/sj.css";
 import { toast } from "react-toastify";
 // import logoImg from './1.png';
