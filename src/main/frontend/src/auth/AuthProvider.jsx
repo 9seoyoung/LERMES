@@ -4,6 +4,7 @@ import { authReducer, initialAuthState } from "./authReducer";
 import { AuthContext } from "./AuthContext";
 import { bindUnauthorizedHandler } from "./api";
 import { fetchMe, login, logout } from "./authService";
+import { toast } from "react-toastify";
 
 export default function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
@@ -37,7 +38,7 @@ export default function AuthProvider({ children }) {
   };
 
   const signOut = async () => {
-    try { await logout(); } catch(e) { console.error(e)}
+    try { await logout(); toast.success("로그아웃 성공")} catch(e) { console.error(e)}
     dispatch({ type: "LOGOUT" });
   };
 

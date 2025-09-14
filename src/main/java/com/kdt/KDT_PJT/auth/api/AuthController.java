@@ -123,10 +123,19 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate();   // 세션 만료
-        return ResponseEntity.ok(Map.of("ok", true, "message", "로그아웃 성공"));
-    } 
+    public ResponseEntity<?> logout(HttpServletResponse response, HttpSession session) {
+    session.invalidate(); // 세션 만료
+
+    // JSESSIONID 쿠키 만료시키기
+    ResponseCookie cookie = ResponseCookie.from("JSESSIONID", "")
+            .path("/")
+            .maxAge(0)       // 즉시 만료
+            .httpOnly(true)
+            .build();
+    response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+
+    return ResponseEntity.ok(Map.of("ok", true, "message", "로그아웃 성공"));
+}
 
 
 }
