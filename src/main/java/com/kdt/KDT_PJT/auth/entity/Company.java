@@ -30,7 +30,7 @@ public class Company {
     @Column(name = "ACTVTN_YN", nullable = false)
     private boolean active;          // 활성여부
 
-    @CreatedDate  // 👈 저장 시 자동 세팅
+    @CreatedDate
     @Column(name = "CO_REG_DT", nullable = false, updatable = false)
     private LocalDateTime registeredAt;
 }
