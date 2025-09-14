@@ -1,0 +1,42 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+
+function AdminHeader() {
+    const navigate = useNavigate();
+
+  return (
+    <div className="header_L" >
+    
+      <button type='button' onClick>
+      </button>
+        <img src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" onClick={() => navigate('/superMain')}/>
+      <div className={layoutStyles.menuContainer}>
+        {/* <ul>
+          <li> */}
+            {/* <div className={layoutStyles.subMenuName} onClick={() => setToggle1(!menuToggle1)}>비즈니스: 더 알아보기
+              {menuToggle1 === true ? <div>▲</div> : <div>▼</div>}
+            </div> */}
+            <Dropdown label="비즈니스: 더 알아보기" trigger="hover" placement="bottom-start">
+              <div className={layoutStyles.subMenuList}>메뉴 1</div>
+              <div className={layoutStyles.subMenuList}>메뉴 2</div>
+              <div className={layoutStyles.subMenuList}>메뉴 3</div>
+              <div className={layoutStyles.subMenuList}>메뉴 4</div>
+            </Dropdown>
+          {/* </li>
+        </ul> */}
+        {/* <ul>
+          <li> */}
+            <Dropdown label="비즈니스/제휴" trigger="hover" placement="bottom-start">
+              <div className={layoutStyles.subMenuList}>메뉴 1</div>
+              <div className={layoutStyles.subMenuList}>메뉴 2</div>
+              <div className={layoutStyles.subMenuList}>메뉴 3</div>
+              <div className={layoutStyles.subMenuList} onClick={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</div>
+            </Dropdown>
+          {/* </li>
+        </ul> */}
+      </div>
+    </div>
+  )
+}
+
+export default AdminHeader

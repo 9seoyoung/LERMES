@@ -1,6 +1,8 @@
-import layoutStyles from "../../../styles/layout.module.css"
 import { useNavigate } from "react-router-dom";
-import Dropdown from "../../ui/Dropdown";
+import Dropdown from "../Dropdown";
+
+import layoutStyles from "../../../styles/layout.module.css"
+
 
 function SuperHeader() {
   const navigate = useNavigate();

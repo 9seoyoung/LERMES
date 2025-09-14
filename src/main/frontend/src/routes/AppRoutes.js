@@ -18,12 +18,19 @@ import TenantSignup from '../auth/loginPage/TenantSignup';
 import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
+import NoticeList from '../components/module/NoticeList.jsx';
 
 function AppRoutes() {
   return (
   <Routes>
     {/* 매니저님이 짜주신 샘플 코드 */}
     <Route path="/sample" element={<SampleApp />} />
+
+    {/* 테스트 페이지 */}
+    <Route path="/minical" element={<MiniCal />} />
+    <Route path="/bigcal" element={<BigCal />} />
+    <Route path="/ui" element={<UiComp />} />
+    <Route path='/test' element={<NoticeList />} />
 
     {/* 에러페이지 */}
     <Route path="/403" element={<NotAllowed />} />
@@ -38,10 +45,6 @@ function AppRoutes() {
     {/*기본 레이아웃*/}
   <Route path='/' element={<Layout></Layout>} >
 
-    {/* 여기서 부터 우리페이지 */}
-    <Route path="/minical" element={<MiniCal />} />
-    <Route path="/bigcal" element={<BigCal />} />
-    <Route path="/ui" element={<UiComp />} />
     
     {/* 기본 접근 루트 */}
       <Route index path='superMain' element={<SuperMain/>}/>

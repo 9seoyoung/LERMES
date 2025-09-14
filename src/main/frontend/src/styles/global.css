@@ -75,6 +75,17 @@ hr {
   border-top: 1px solid #222;
 }
 
+/* 폰트 사이즈 */
+h4 {
+  padding: 0 0 8px;
+  font-size: 1.8rem;
+  height: 4rem;
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
 /* 레이아웃 */
 
 .layout {
@@ -89,7 +100,6 @@ hr {
 
 .layout_content {
   flex: 1;
-  background-color: red;
   display: flex;
   flex-direction: column;
 }
@@ -174,11 +184,69 @@ hr {
 
 .varPage {
   flex: 1;
+  gap: 24px;
+  margin-bottom: 64px;
 }
 
 /* 메인화면 각종 레이아웃 */
 .mainContainer_cardGrid{
   background-color: #0088FF;
   display: flex;
+}
 
+.mainCont_Lms_Row {
+  display: flex;
+  width: 100%;
+  gap: 24px;
+  padding: 8px 0;
+}
+
+.main_L, .main_R {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main_R > div{
+  background-color: #FCFEFF;
+  box-shadow: 0 4px 4px #00000025;
+  border-radius: 1.6rem;
+  padding: 20px 24px;
+}
+
+.main_L > div {
+  background-color: #0088FF;
+  padding: 20px 24px;
+}
+
+/* 공통 ui */
+/* 더보기 버튼 */
+.specificBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  padding: 0 8px;
+  font-weight: 400;
+}
+
+.specificBtn:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tableBox {
+  overflow-y: auto;
+  height: calc(100% - 4rem);
+}
+
+/* 스크롤 바 */
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
 }
