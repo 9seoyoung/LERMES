@@ -1,6 +1,6 @@
 //권한없음 페이지(임시)
 
-function NotAllowed() {
+export default function NotAllowed() {
   return (
     <>
     <h1 style={{padding:16}}>권한이 없습니다. 관리자에게 문의하세요.</h1>
@@ -11,4 +11,3 @@ function NotAllowed() {
   );
 }
 
-export default NotAllowed;

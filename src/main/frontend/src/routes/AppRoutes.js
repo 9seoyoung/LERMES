@@ -22,19 +22,11 @@ import UiComp from '../components/ui/UiComp';
 function AppRoutes() {
   return (
   <Routes>
-    {/*기본루트*/}
-    <Route index element={<Layout></Layout>}/>
-
     {/* 매니저님이 짜주신 샘플 코드 */}
     <Route path="/sample" element={<SampleApp />} />
 
-    {/* 여기서 부터 우리페이지 */}
+    {/* 에러페이지 */}
     <Route path="/403" element={<NotAllowed />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/minical" element={<MiniCal />} />
-    <Route path="/bigcal" element={<BigCal />} />
-    <Route path="/ui" element={<UiComp />} />
-
 
     {/* 로그인/회원가입 레이아웃 */}
     <Route path ='welcome' element={<WelcomeLayout/>} >
@@ -42,26 +34,31 @@ function AppRoutes() {
       <Route path='tenantjoin' element={<TenantSignup />} />
       <Route path='login' element={<Login />} />
     </Route>
+
+    {/*기본 레이아웃*/}
+  <Route path='/' element={<Layout></Layout>} >
+
+    {/* 여기서 부터 우리페이지 */}
+    <Route path="/minical" element={<MiniCal />} />
+    <Route path="/bigcal" element={<BigCal />} />
+    <Route path="/ui" element={<UiComp />} />
     
     {/* 기본 접근 루트 */}
-    <Route path="/" element={<Layout />}>
-      <Route path='superMain' element={<SuperMain/>}/>
-      
+      <Route index path='superMain' element={<SuperMain/>}/>
+      {/* <Route path="generalHome" element={<GeneralHome />} /> */}
 
       {/* 관리자(테넌트, 직원) */}
-      <Route element={<RoleRoute roles={['1', '2','3']} />}>
+      <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
       </Route>
       {/* 강사 */}
-      <Route element={<RoleRoute roles={['1', '4']} />}>
+      <Route element={<RoleRoute roles={[1, 4]} />}>
         <Route path="tutorHome" element={<TutorHome />} />
       </Route>
       {/* 수강생 */}
-      <Route element={<RoleRoute roles={['1', '5']} />}>
+      <Route element={<RoleRoute roles={[1, 5]} />}>
         <Route path="stdHome" element={<StdHome />} />
       </Route>
-      {/* 일반회원 */}
-    {/* </Routes> */}
     </Route>
   </Routes>
   );

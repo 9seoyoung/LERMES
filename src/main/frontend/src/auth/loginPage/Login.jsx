@@ -4,7 +4,7 @@ import { useAccount } from "../AuthContext"; // ← 컨텍스트 훅
 import "../../styles/sj.css";
 import { toast } from "react-toastify";
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -65,4 +65,4 @@ function Login() {
   );
 }
 
-export default Login;
+

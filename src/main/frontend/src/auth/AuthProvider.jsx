@@ -58,7 +58,8 @@ export default function AuthProvider({ children }) {
   };
 
   const hasRole = (roles) => {
-    const r = state.user?.user_authrt_no?.toString();
+    const r = state.user?.USER_AUTHRT_SN?.toString();
+    console.log(r);
     return !!r && roles.map(String).includes(r);
   };
 
