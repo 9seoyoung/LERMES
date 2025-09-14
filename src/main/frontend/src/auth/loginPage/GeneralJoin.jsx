@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { requestEmailCode, signupGeneral } from '../authService.js';
 import "../../styles/sj.css";
 import { toast } from "react-toastify";
-// import logoImg from './1.png';
 
 export default function GeneralJoin() {
   const [form, setForm] = useState({

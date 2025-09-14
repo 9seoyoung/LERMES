@@ -12,7 +12,7 @@ function SuperHeader() {
       <button>
         <img src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" />
       </button>
-      <div className={layoutStyles.menuContainer}>
+      <div className={`header_R ${layoutStyles.menuContainer}`}>
         {/* <ul>
           <li> */}
             {/* <div className={layoutStyles.subMenuName} onClick={() => setToggle1(!menuToggle1)}>비즈니스: 더 알아보기
