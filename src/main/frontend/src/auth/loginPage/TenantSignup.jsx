@@ -61,11 +61,20 @@ export default function TenantSignup() {
         companyName: form.companyName.trim(),
         businessNumber: form.businessNumber.trim(),
       };
-      await signupTenant(payload);
-      setMsg('회사 등록(테넌트) 완료! 이제 로그인하세요.');
-      await signIn(payload.email, payload.password);
-      navigate('/superMain')
       
+      await signupTenant(payload);
+
+      const loginPayload = {
+        email: payload.email,
+        password: payload.password
+      }
+
+      const me = await signIn(loginPayload);
+      
+      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
+      console.log(redirectLoc);
+      navigate(redirectLoc, {replace: true});
+
     } catch (e) {
       setMsg(e.message || '테넌트 등록 실패');
     } finally {
@@ -130,7 +139,7 @@ export default function TenantSignup() {
           />
           <button
             type="button"
-            className="btn-secondary"
+            className="verify-btn"
             onClick={sendCode}
             disabled={sending || !form.email}
           >
@@ -171,8 +180,8 @@ export default function TenantSignup() {
           required
         />
 
-        <button disabled={loading}>
-          {loading ? '등록 중...' : '테넌트 등록'}
+        <button type="button" onClick={onSubmit} disabled={loading} className='verify-btn'>
+          {loading ? '등록 중...' : '회원 가입'}
         </button>
         {msg && <p className="msg">{msg}</p>}
       </form>
