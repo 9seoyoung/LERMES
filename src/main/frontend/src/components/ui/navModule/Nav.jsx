@@ -26,7 +26,7 @@ export default function Nav({setNavToggle}) {
             <div className="navMenuList">
                 <div onClick={() => navigate('/stdHome')}>홈</div>
                 <div onClick={() => navigate('/stdHome/studySched')}>학습 일정</div>
-                <div onClick={() => navigate('/stdHome/board/createPost')}>게시판</div>
+                <div onClick={() => navigate('/stdHome/board')}>게시판</div>
             </div>
         </div>
         <div className="goSuper" onClick={() => {navigate('/superMain'); setNavToggle(false);}}>
