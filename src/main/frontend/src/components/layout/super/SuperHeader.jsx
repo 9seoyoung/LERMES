@@ -29,7 +29,7 @@ function SuperHeader() {
         </ul> */}
         <ul>
           <li>
-            <Dropdown className={layoutStyles.subMenuName} label="비즈니스/제휴" trigger="hover" placement="bottom-start">
+            <Dropdown label="비즈니스/제휴" trigger="hover" placement="bottom-start">
               <div className={layoutStyles.subMenuList}>메뉴 1</div>
               <div className={layoutStyles.subMenuList}>메뉴 2</div>
               <div className={layoutStyles.subMenuList}>메뉴 3</div>

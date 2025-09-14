@@ -6,6 +6,7 @@ import com.kdt.KDT_PJT.auth.service.LandingService;
 import com.kdt.KDT_PJT.auth.service.SignupService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api")
@@ -119,6 +121,12 @@ public class AuthController {
                 .cacheControl(CacheControl.noStore())
                 .body(Map.of("ok", true, "data", data));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+        session.invalidate();   // 세션 만료
+        return ResponseEntity.ok(Map.of("ok", true, "message", "로그아웃 성공"));
+    } 
 
 
 }

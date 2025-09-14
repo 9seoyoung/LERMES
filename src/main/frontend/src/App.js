@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 
 //페이지
 import AppRoutes from "./routes/AppRoutes";
+import AuthProvider from "./auth/AuthProvider";
 
 //스타일
 
@@ -16,6 +17,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+    <AuthProvider>
       <AppRoutes />
         <ToastContainer
               autoClose={2000}
@@ -36,16 +38,7 @@ export default function App() {
         {/* <Route path="/login" element={<Login />} /> */}
         {/* <Route path="*" element={<GeneralSignup />} /> */}
       {/* </Routes> */}
+      </AuthProvider>
     </BrowserRouter>
-//      <BrowserRouter>
-//          <AppRoutes />
-//        <ToastContainer
-//          autoClose={2000}
-//          closeOnClick={true}
-//          draggable={false}
-//          theme="light"
-//          position="top-center"
-//        />
-//      </BrowserRouter>
   );
 }

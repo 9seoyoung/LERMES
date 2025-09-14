@@ -1,6 +1,7 @@
 // 라이브러리
 import { Outlet } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { useAccount } from "../../auth/AuthContext";
 
 // 로직
 
@@ -14,12 +15,17 @@ import SuperHeader from "./super/SuperHeader"
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 function Layout() {
   const navigate = useNavigate();
+  const { user, signOut } = useAccount();
+
 
   return (
     <div className="layout">
       <header>
         <SuperHeader />
+        {user === null ? 
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
+        :
+        <button className="joinBtn" type="button" onClick={signOut}>Logout →</button>}
       </header>
       <div className="layout_content">
         <main className="varPage">

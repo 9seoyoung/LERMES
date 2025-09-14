@@ -25,6 +25,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.config.Customizer; // 서영 추가
+
 
 import java.util.List;
 
@@ -57,30 +59,32 @@ public class AuthSecurityConfig {
         return config.getAuthenticationManager();
     }
 //
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration c = new CorsConfiguration();
-//
-//        // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
-//        c.setAllowedOrigins(List.of(
-//                "http://localhost:3000",
-//                "http://127.0.0.1:3000",
-//                "http://192.168.0.14:3000"
-//        ));
-//        c.setAllowCredentials(true);
-//        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-//        c.setAllowedHeaders(List.of("*"));
-//        c.setExposedHeaders(List.of("Set-Cookie"));
-//
-//        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
-//        s.registerCorsConfiguration("/**", c);
-//        return s;
-//    }
+    //서영 주석 품
+   @Bean
+   public CorsConfigurationSource corsConfigurationSource() {
+       CorsConfiguration c = new CorsConfiguration();
+
+       // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
+       c.setAllowedOrigins(List.of(
+               "http://localhost:3000",
+               "http://127.0.0.1:3000",
+               "http://192.168.0.14:3000"
+       ));
+       c.setAllowCredentials(true);
+       c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+       c.setAllowedHeaders(List.of("*"));
+       c.setExposedHeaders(List.of("Set-Cookie"));
+
+       UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+       s.registerCorsConfiguration("/**", c);
+       return s;
+   }
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults()) //서영 추가함
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
