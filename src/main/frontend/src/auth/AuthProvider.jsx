@@ -5,9 +5,11 @@ import { AuthContext } from "./AuthContext";
 import { bindUnauthorizedHandler } from "./api";
 import { fetchMe, login, logout } from "./authService";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
+  const navigate = useNavigate();
 
   // 앱 부팅 시 한 번: 세션 유효하면 유저 로드
   useEffect(() => {
@@ -34,6 +36,7 @@ export default function AuthProvider({ children }) {
     dispatch({ type: "LOGIN_SUCCESS" });
     const { data } = await fetchMe();  // ✅ 즉시 me로 유저확정
     dispatch({ type: "ME_SUCCESS", payload: data });
+    console.log(data);
     return data; // 필요하면 호출처에서 path/role 보고 navigate
   };
 

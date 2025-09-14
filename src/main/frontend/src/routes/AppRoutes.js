@@ -7,7 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 // import HomeIndex from '../auth/HomeIndex'; useAccount 등 세션 생기면 추후 주석 풀 예정
 import Login from '../auth/loginPage/Login';
 import Layout from '../components/layout/Layout'; //제일 먼저 만들어야 할 파일
-import NotAllowed from '../auth/NotAllowed';
+import NotAllowed from '../auth/loginPage/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
 import SuperMain from '../pages/Super/SuperMain';

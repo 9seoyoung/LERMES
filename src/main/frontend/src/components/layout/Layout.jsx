@@ -25,7 +25,7 @@ function Layout() {
         {user === null ? 
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
-        <button className="joinBtn" type="button" onClick={signOut}>Logout →</button>}
+        <button className="joinBtn" type="button" onClick={()=> {signOut(); window.location.href = "/superMain";}}>Logout →</button>}
       </header>
       <div className="layout_content">
         <main className="varPage">

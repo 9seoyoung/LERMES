@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { fetchMe } from "../../auth/auth";
+import { fetchMe } from "../../auth/authService";
 
 // 스타일
 import "../../styles/sj.css";

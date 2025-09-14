@@ -20,12 +20,9 @@ function Login() {
       const me = await signIn({ email: email.trim().toLowerCase(), password });
       toast.success("로그인 성공!");
 
-      // 이전 페이지 복귀 or role 기반 분기
-      const pathByRole = { "1": "/superMain", "2": "/adminHome", "3": "/adminHome", "4": "/tutorHome", "5": "/stdHome" };
-      const fallback = pathByRole[String(me.user_authrt_no)] || "/";
-      const to = loc.state?.from?.pathname || me.path || fallback;
-
-      navigate(to, { replace: true });
+      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
+      console.log(redirectLoc);
+      navigate(redirectLoc, {replace: true});
     } catch (err) {
       const msg = err?.message || "로그인 실패";
       toast.error(msg);

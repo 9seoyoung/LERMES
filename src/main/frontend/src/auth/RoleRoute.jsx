@@ -14,5 +14,5 @@ export default function RoleRoute({ roles = [] }) {
   if (roles.length && !hasRole(roles)) {
     return <Navigate to="/403" replace />;
   }
-  return <Outlet />; // 통과!
+  return <Outlet />; // 통과
 }

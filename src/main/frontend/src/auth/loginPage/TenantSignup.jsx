@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { requestEmailCode, signupTenant } from '../authService.js';
 import styles from "../../styles/SignUp.module.css";
+import {useAccount} from "../AuthContext.jsx";
 
 export default function TenantSignup() {
+  const navigate = useNavigate();
+  const {signIn} = useAccount();
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -59,6 +63,9 @@ export default function TenantSignup() {
       };
       await signupTenant(payload);
       setMsg('회사 등록(테넌트) 완료! 이제 로그인하세요.');
+      await signIn(payload.email, payload.password);
+      navigate('/superMain')
+      
     } catch (e) {
       setMsg(e.message || '테넌트 등록 실패');
     } finally {
@@ -102,10 +109,12 @@ export default function TenantSignup() {
 
         <input
           name="username"
+          type='text'
           placeholder="관리자 이름"
           value={form.username}
           onChange={onChange}
           required
+          autocomplete="off"
         />
 
         <div className="row">
@@ -117,6 +126,7 @@ export default function TenantSignup() {
             onChange={onChange}
             required
             disabled={codeSent}
+            autocomplete="email"
           />
           <button
             type="button"
