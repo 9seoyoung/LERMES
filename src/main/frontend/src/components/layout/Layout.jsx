@@ -77,7 +77,7 @@ export default function Layout() {
           <Outlet />
         </main>
         <footer>
-          <h2>LERMES</h2>
+          <h2 onClick={() => {navigate('/superMain'); setNavToggle(false);}}>LERMES</h2>
           {}
           <div onClick={() => navigate('/adminHome')}>관리자 홈</div>
           <div onClick={() => navigate('/tutorHome')}>강사 홈</div>
