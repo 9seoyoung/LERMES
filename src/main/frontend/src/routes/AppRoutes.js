@@ -21,6 +21,7 @@ import UiComp from '../components/ui/UiComp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
+import UploadDownloadDemo from "../pages/UploadDownloadDemo";
 
 function AppRoutes() {
   return (
@@ -33,6 +34,8 @@ function AppRoutes() {
     <Route path="/bigcal" element={<BigCal />} />
     <Route path="/ui" element={<UiComp />} />
     <Route path='/test' element={<NoticeList />} />
+
+    <Route path="/files" element={<UploadDownloadDemo />} />
 
     {/* 에러페이지 */}
     <Route path="/403" element={<NotAllowed />} />
