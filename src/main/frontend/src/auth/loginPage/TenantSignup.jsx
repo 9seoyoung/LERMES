@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { requestEmailCode, signupTenant } from '../authService.js';
 import styles from "../../styles/SignUp.module.css";
 import {useAccount} from "../AuthContext.jsx";
+import FilePreview from '../../components/ui/FilePreview.jsx';
 
 export default function TenantSignup() {
   const navigate = useNavigate();
@@ -85,20 +86,11 @@ export default function TenantSignup() {
   return (
     <div className="signup-inner">
       <div className="signup-title">비즈니스 회원가입</div>
-      <div className={styles.logo}>
-        <div className={styles.logoImg}>
-          <span>LOGO</span>
-          <button className={styles.logoAdd}>
-            <img
-                src={"#"}
-                alt="icon"
-                style={{ width: '16px', height: '16px' }}
-            />
-          </button>
-        </div>
-        <span className={styles.imgCaption}>*이미지 크기 180px X 60px</span>
-      </div>
       <form className="signup-form" onSubmit={onSubmit}>
+      <div className={styles.logo}>
+        <FilePreview/>        
+        <div className={styles.imgCaption}>*이미지 크기 180px X 60px</div>
+      </div>
         <input
           name="companyName"
           placeholder="회사명"
@@ -119,18 +111,18 @@ export default function TenantSignup() {
         <input
           name="username"
           type='text'
-          placeholder="관리자 이름"
+          placeholder="이름(국문)"
           value={form.username}
           onChange={onChange}
           required
           autocomplete="off"
         />
 
-        <div className="row">
+        <div className="input-with-btn">
           <input
             name="email"
             type="email"
-            placeholder="관리자 이메일"
+            placeholder="이메일을 입력하세요. ex) abc123@example.com"
             value={form.email}
             onChange={onChange}
             required
@@ -174,13 +166,13 @@ export default function TenantSignup() {
 
         <input
           name="phoneNumber"
-          placeholder="관리자 휴대폰번호"
+          placeholder="휴대폰번호"
           value={form.phoneNumber}
           onChange={onChange}
           required
         />
 
-        <button type="button" onClick={onSubmit} disabled={loading} className='verify-btn'>
+        <button type="button" onClick={onSubmit} disabled={loading} className='signup-btn'>
           {loading ? '등록 중...' : '회원 가입'}
         </button>
         {msg && <p className="msg">{msg}</p>}

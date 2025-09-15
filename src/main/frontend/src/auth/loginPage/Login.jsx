@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAccount } from "../AuthContext"; // ← 컨텍스트 훅
 import "../../styles/sj.css";
 import { toast } from "react-toastify";
 
-function Login() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn } = useAccount(); // ← login + fetchMe 묶음
   const navigate = useNavigate();
-  const loc = useLocation();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -20,9 +19,11 @@ function Login() {
       const me = await signIn({ email: email.trim().toLowerCase(), password });
       toast.success("로그인 성공!");
 
-      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
-      console.log(redirectLoc);
-      navigate(redirectLoc, {replace: true});
+      const redirectLoc = me?.HOME_PATH
+        ? (me.HOME_PATH.startsWith("/") ? me.HOME_PATH : `/${me.HOME_PATH}`)
+        : "/superMain";
+      navigate(redirectLoc, { replace: true });
+
     } catch (err) {
       const msg = err?.message || "로그인 실패";
       toast.error(msg);
@@ -66,4 +67,4 @@ function Login() {
   );
 }
 
-export default Login;
+

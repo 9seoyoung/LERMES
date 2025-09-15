@@ -1,10 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 
 // 권한
-// import RoleRoute from '../auth/RoleRoute'; 역할데이터 권한분기파일 생성후 주석 제거 예정
+import RoleRoute from '../auth/RoleRoute.jsx';
 
 //페이지
-// import HomeIndex from '../auth/HomeIndex'; useAccount 등 세션 생기면 추후 주석 풀 예정
 import Login from '../auth/loginPage/Login';
 import Layout from '../components/layout/Layout'; //제일 먼저 만들어야 할 파일
 import NotAllowed from '../auth/loginPage/NotAllowed';
@@ -19,23 +18,24 @@ import TenantSignup from '../auth/loginPage/TenantSignup';
 import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
+import NoticeList from '../components/module/NoticeList.jsx';
+import Board from '../pages/LMS/Board.jsx';
+import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 
 function AppRoutes() {
   return (
   <Routes>
-    {/*기본루트*/}
-    <Route index element={<Layout></Layout>}/>
-
     {/* 매니저님이 짜주신 샘플 코드 */}
     <Route path="/sample" element={<SampleApp />} />
 
-    {/* 여기서 부터 우리페이지 */}
-    <Route path="/403" element={<NotAllowed />} />
-    <Route path="/login" element={<Login />} />
+    {/* 테스트 페이지 */}
     <Route path="/minical" element={<MiniCal />} />
     <Route path="/bigcal" element={<BigCal />} />
     <Route path="/ui" element={<UiComp />} />
+    <Route path='/test' element={<NoticeList />} />
 
+    {/* 에러페이지 */}
+    <Route path="/403" element={<NotAllowed />} />
 
     {/* 로그인/회원가입 레이아웃 */}
     <Route path ='welcome' element={<WelcomeLayout/>} >
@@ -43,37 +43,36 @@ function AppRoutes() {
       <Route path='tenantjoin' element={<TenantSignup />} />
       <Route path='login' element={<Login />} />
     </Route>
+
+    {/*기본 레이아웃*/}
+  <Route path='/' element={<Layout></Layout>} >
+
     
     {/* 기본 접근 루트 */}
-    <Route path="/" element={<Layout />}>
-      <Route path='superMain' element={<SuperMain/>}/>
-      <Route path='adminHome' element={<AdminHome/>} />
-      <Route path='tutorHome' element={<TutorHome/>} />
-      <Route path='stdHome' element={<StdHome/>} />
+      <Route index path='superMain' element={<SuperMain/>}/>
+      {/* <Route path="generalHome" element={<GeneralHome />} /> */}
 
-      {/* 역할별 기본 분기 (보호 X) */}
-      {/* <Route index element={<HomeIndex />} /> 추후 주석 풀 예정 */}
-
-      {/* <Route element={<RoleRoute roles={['1']} />}>
-        <Route path="superMain" element={<SuperMain />} />
-      </Route> */}
       {/* 관리자(테넌트, 직원) */}
-      {/* <Route element={<RoleRoute roles={['2','3']} />}>
+      <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
-      </Route> */}
+        {/* <Route path='adminHome/createPost' element={<CreatePost/>}></Route> */}
+
+      </Route>
       {/* 강사 */}
-      {/* <Route element={<RoleRoute roles={['4']} />}>
+      <Route element={<RoleRoute roles={[1, 4]} />}>
         <Route path="tutorHome" element={<TutorHome />} />
-      </Route> */}
+        {/* <Route path='tutorHome/createPost' element={<CreatePost/>}></Route> */}
+
+      </Route>
       {/* 수강생 */}
-      {/* <Route element={<RoleRoute roles={['4']} />}>
-        <Route path="stdHome" element={<TutorHome />} />
-      </Route> */}
-      {/* 일반회원 */}
-      {/* <Route element={<RoleRoute roles={['4']} />}>
-        <Route path="stdHome" element={<TutorHome />} />
-      </Route> */}
-    {/* </Routes> */}
+      <Route element={<RoleRoute roles={[1, 5]} />}>
+        <Route path="stdHome" element={<StdHome />} />
+        <Route path="stdHome/board" element={<Board />} />
+        <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
+        <Route path="stdHome/studySched" element={"#"} />
+
+      </Route>
+
     </Route>
   </Routes>
   );

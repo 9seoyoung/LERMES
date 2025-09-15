@@ -1,6 +1,8 @@
-import layoutStyles from "../../../styles/layout.module.css"
 import { useNavigate } from "react-router-dom";
-import Dropdown from "../../ui/Dropdown";
+import Dropdown from "../Dropdown";
+
+import layoutStyles from "../../../styles/layout.module.css"
+
 
 function SuperHeader() {
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ function SuperHeader() {
       <button>
         <img src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" />
       </button>
-      <div className={layoutStyles.menuContainer}>
+      <div className={`header_R ${layoutStyles.menuContainer}`}>
         {/* <ul>
           <li> */}
             {/* <div className={layoutStyles.subMenuName} onClick={() => setToggle1(!menuToggle1)}>비즈니스: 더 알아보기

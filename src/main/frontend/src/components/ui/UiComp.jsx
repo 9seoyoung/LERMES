@@ -3,6 +3,7 @@
 
 import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
+import FilePreview from './FilePreview';
 // [props]
 // FormInput, FormUnderline, TextAreaBox: textType(placeholder)
 // FormBtn: textType(내용), className(style)
@@ -26,6 +27,7 @@ export function UiComp() {
       <a className="dd__item" href="/settings">설정</a>
       <button className="dd__item">로그아웃</button>
       </Dropdown>
+      <FilePreview/>
     </div>
   );
 }
