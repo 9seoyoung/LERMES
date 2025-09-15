@@ -1,31 +1,19 @@
 .menuContainer {
   display: flex;
-  gap: 24px;
-}
-
-/* .menuContainer ul {
-} */
-
-.menuContainer ul li {
-  padding: 4px 12px;
-}
-.menuContainer ul li ul {
-  width: 100%;
-  background-color: #f6f6f6;
-}
-
-.subMenuName {
-  height: 44px;
-  display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
 }
 
 .subMenuList {
   height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: pointer;
   background-color: #f6f6f6;
 }
 
 .subMenuList:hover {
   background: #00000025;
+  color: #f6f6f6;
 }

@@ -25,6 +25,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.config.Customizer; // 서영 추가
+
 
 import java.util.List;
 
@@ -57,61 +59,52 @@ public class AuthSecurityConfig {
         return config.getAuthenticationManager();
     }
 //
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration c = new CorsConfiguration();
-//
-//        // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
-//        c.setAllowedOrigins(List.of(
-//                "http://localhost:3000",
-//                "http://127.0.0.1:3000",
-//                "http://192.168.0.14:3000"
-//        ));
-//        c.setAllowCredentials(true);
-//        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-//        c.setAllowedHeaders(List.of("*"));
-//        c.setExposedHeaders(List.of("Set-Cookie"));
-//
-//        UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
-//        s.registerCorsConfiguration("/**", c);
-//        return s;
-//    }
+    //서영 주석 품
+   @Bean
+   public CorsConfigurationSource corsConfigurationSource() {
+       CorsConfiguration c = new CorsConfiguration();
+
+       // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
+       c.setAllowedOrigins(List.of(
+               "http://localhost:3000",
+               "http://127.0.0.1:3000",
+               "http://192.168.0.14:3000"
+       ));
+       c.setAllowCredentials(true);
+       c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+       c.setAllowedHeaders(List.of("*"));
+       c.setExposedHeaders(List.of("Set-Cookie"));
+
+       UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
+       s.registerCorsConfiguration("/**", c);
+       return s;
+   }
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // 개발 중
+                .cors(Customizer.withDefaults()) //서영 추가함
+                .csrf(csrf -> csrf.disable())
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/email/code/**",
-                                "/api/auth/signup/**",
-                                "/api/auth/login/**"
-                        ).permitAll()
+                        .requestMatchers("/api/login", "/api/signup/**", "/api/email/code/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll()
                 )
-                .sessionManagement(sm -> sm
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                )
-
-
-        // 폼 로그인은 페이지에만 쓰고, API는 /auth/login(JSON) 사용
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/main", true)
-                        .failureUrl("/login?error")
-                        .permitAll()
-                )
-
-                .logout(l -> l.logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                        .permitAll()
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setStatus(401);
+                            res.setContentType("application/json;charset=UTF-8");
+                            res.getWriter().write("{\"ok\":false,\"message\":\"로그인 필요\"}");
+                        })
                 );
 
         return http.build();
     }
+
 
 
     @Bean

@@ -11,6 +11,13 @@ export default function Login() {
   const loc = useLocation();
   const from = loc.state?.from || '/';
 
+<<<<<<< HEAD
+//  navigate(`${인호가 보내준거}`)
+=======
+ navigate(`${인호가 보내준거}`)
+>>>>>>> sy0912
+ // 유저테이브렝 수강중인 lms과정있는지 확인하는 컬럼과 값이 필요한것..  
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setMsg(null);
@@ -24,6 +31,31 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  //   const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setMsg(null);
+  //   setLoading(true);
+
+  //   try {
+  //     const res = await login({
+  //       email: email.trim().toLowerCase(),
+  //       password
+  //     });
+
+  //     if (res.data.ok) {
+  //       // ✅ path 꺼내기
+  //       const nextPath = res.data.data.path;
+  //       navigate("/" + nextPath, { replace: true });
+  //     } else {
+  //       setMsg(res.data.message || "로그인 실패");
+  //     }
+  //   } catch (err) {
+  //     setMsg("로그인 오류: " + (err.response?.data?.message || err.message));
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="container split">

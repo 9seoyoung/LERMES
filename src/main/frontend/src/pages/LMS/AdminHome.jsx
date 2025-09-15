@@ -1,1 +1,3 @@
-// 페이지찾기 - 관리자 메인
+export default function AdminHome(){
+    return
+}

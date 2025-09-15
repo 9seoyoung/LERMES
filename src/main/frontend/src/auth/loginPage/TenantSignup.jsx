@@ -1,7 +1,13 @@
 import { useState } from 'react';
-import { requestEmailCode, signupGeneral } from '../auth/auth';
+import { useNavigate } from 'react-router-dom';
+import { requestEmailCode, signupTenant } from '../authService.js';
+import styles from "../../styles/SignUp.module.css";
+import {useAccount} from "../AuthContext.jsx";
+import FilePreview from '../../components/ui/FilePreview.jsx';
 
- {
+export default function TenantSignup() {
+  const navigate = useNavigate();
+  const {signIn} = useAccount();
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -9,6 +15,8 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
     password: '',
     confirmPassword: '',
     phoneNumber: '',
+    companyName: '',
+    businessNumber: '', // <-- 이름 통일 (백엔드와 동일)
   });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -17,24 +25,18 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const getErrMsg = (e) =>
-    e?.response?.data?.message ||
-    e?.response?.data?.error ||
-    e?.message ||
-    '알 수 없는 오류가 발생했습니다.';
-
   const sendCode = async () => {
     const normEmail = form.email.trim().toLowerCase();
-    if (!normEmail) return setMsg('이메일을 입력하세요.');
+    if (!normEmail) return setMsg('관리자 이메일을 입력하세요.');
     setSending(true);
     setMsg(null);
     try {
-      await requestEmailCode(normEmail); // 200 OK or 409 CONFLICT 등
+      await requestEmailCode(normEmail);
       setForm((f) => ({ ...f, email: normEmail }));
       setCodeSent(true);
       setMsg('인증코드를 전송했습니다.');
     } catch (e) {
-      setMsg(getErrMsg(e)); // 예: "이미 가입된 이메일입니다."
+      setMsg(e.message || '인증코드 전송 실패');
     } finally {
       setSending(false);
     }
@@ -42,8 +44,13 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setMsg(null);
+
+    if (form.password !== form.confirmPassword) {
+      return setMsg('비밀번호가 일치하지 않습니다.');
+    }
+
+    setLoading(true);
     try {
       const payload = {
         username: form.username.trim(),
@@ -52,42 +59,79 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
         password: form.password,
         confirmPassword: form.confirmPassword,
         phoneNumber: form.phoneNumber.trim(),
+        companyName: form.companyName.trim(),
+        businessNumber: form.businessNumber.trim(),
       };
-      const res = await signupGeneral(payload); // 성공 시 200 OK
-      setMsg(res?.data?.message || '회원가입 완료! 이제 로그인하세요.');
+      
+      await signupTenant(payload);
+
+      const loginPayload = {
+        email: payload.email,
+        password: payload.password
+      }
+
+      const me = await signIn(loginPayload);
+      
+      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
+      console.log(redirectLoc);
+      navigate(redirectLoc, {replace: true});
+
     } catch (e) {
-      setMsg(getErrMsg(e)); // 예: "이메일 인증 실패", "비밀번호가 일치하지 않습니다."
+      setMsg(e.message || '테넌트 등록 실패');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="center split">
-      <form className="card" onSubmit={onSubmit} noValidate>
-        <h2>일반 회원가입</h2>
-
+    <div className="signup-inner">
+      <div className="signup-title">비즈니스 회원가입</div>
+      <form className="signup-form" onSubmit={onSubmit}>
+      <div className={styles.logo}>
+        <FilePreview/>        
+        <div className={styles.imgCaption}>*이미지 크기 180px X 60px</div>
+      </div>
         <input
-          name="username"
-          placeholder="이름"
-          value={form.username}
+          name="companyName"
+          placeholder="회사명"
+          value={form.companyName}
+          onChange={onChange}
+          required
+        />
+        <input
+          name="businessNumber" // <-- 입력 name도 통일
+          placeholder="사업자등록번호"
+          minLength={10}
+          maxLength={10}
+          value={form.businessNumber}
           onChange={onChange}
           required
         />
 
-        <div className="row">
+        <input
+          name="username"
+          type='text'
+          placeholder="이름(국문)"
+          value={form.username}
+          onChange={onChange}
+          required
+          autocomplete="off"
+        />
+
+        <div className="input-with-btn">
           <input
             name="email"
             type="email"
-            placeholder="이메일"
+            placeholder="이메일을 입력하세요. ex) abc123@example.com"
             value={form.email}
             onChange={onChange}
             required
             disabled={codeSent}
+            autocomplete="email"
           />
           <button
             type="button"
-            className="btn-secondary"
+            className="verify-btn"
             onClick={sendCode}
             disabled={sending || !form.email}
           >
@@ -102,6 +146,7 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
           onChange={onChange}
           required
         />
+
         <input
           name="password"
           type="password"
@@ -118,6 +163,7 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
           onChange={onChange}
           required
         />
+
         <input
           name="phoneNumber"
           placeholder="휴대폰번호"
@@ -126,10 +172,9 @@ import { requestEmailCode, signupGeneral } from '../auth/auth';
           required
         />
 
-        <button type="submit" disabled={loading}>
-          {loading ? '가입 중...' : '회원가입'}
+        <button type="button" onClick={onSubmit} disabled={loading} className='signup-btn'>
+          {loading ? '등록 중...' : '회원 가입'}
         </button>
-
         {msg && <p className="msg">{msg}</p>}
       </form>
     </div>
