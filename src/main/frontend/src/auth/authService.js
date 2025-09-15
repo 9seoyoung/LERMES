@@ -2,7 +2,7 @@
 import { api } from "./api";
 
 // 공통 헬퍼: axios 응답에서 data만 꺼내는 래퍼
-const ok = (p) => p.then(({ data }) => data);
+const ok = (p) => p.then(({ data }) => data.data);
 
 // 이메일 인증 코드 (중복검사 + 발송)
 export const requestEmailCode = (email) =>  ok(api.post("/email/code", { email }));
