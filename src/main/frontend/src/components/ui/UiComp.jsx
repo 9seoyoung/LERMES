@@ -1,5 +1,6 @@
 // 상호작용 컴포넌트
 // props로 텍스트 조절할 수 있게
+import { useState, useRef } from 'react';
 
 import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
@@ -59,9 +60,9 @@ export function FormBtn({ textType, className }) {
   );
 }
 // 마이너스 버튼 (파일 삭제)
-export function DeleteBtn() {
+export function DeleteBtn({onClick}) {
   return (
-    <button className={styles.deleteBtn}>
+    <button type="button" onClick={onClick} className={styles.deleteBtn}>
       <span className={styles.delete} />
     </button>
   );
@@ -102,13 +103,74 @@ export function CustomCheckbox({ className }) {
 }
 
 // 파일 첨부
-export function FileUpload() {
+export function FileUpload({ files, setFiles }) {
+  const inputRef = useRef(null);
+
+  // 파일 추가
+  const handleFiles = (fileList) => {
+    const newFiles = Array.from(fileList);
+    setFiles((prev) => [...prev, ...newFiles]);
+  };
+
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+
+  const handleChange = (e) => {
+    if (e.target.files) {
+      handleFiles(e.target.files);
+      e.target.value = "";
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files) {
+      handleFiles(e.dataTransfer.files);
+    }
+  };
+
   return (
-    <div className={styles.fileUpload}>
+    <div
+      className={styles.fileUpload}
+      onClick={handleClick}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       이곳에 파일을 드래그하거나, 클릭하여 <br />
       파일을 첨부하세요
-      <input type="file" style={{ display: 'none' }} />
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        style={{ display: "none" }}
+        onChange={handleChange}
+      />
     </div>
+  );
+}
+
+// 파일 목록
+export function FileList({ files, setFiles }) {
+  const removeFile = (idx) => {
+    setFiles((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  return (
+    <ul className="addfileList">
+      {files.map((file, idx) => (
+        <li key={idx}>
+          <span>
+            {file.name} <DeleteBtn onClick={() => removeFile(idx)} />
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 

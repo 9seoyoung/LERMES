@@ -597,11 +597,17 @@ footer > div:hover {
 
 .addfileList {
   align-items: center;
-  border: none
+  border: none;
+  display: flex;
+  gap: 12px;
+  overflow-x: scroll;
 }
 
 .addfileList li span{
   border-bottom: 1px solid #acacac;
+  /* max-width: 180px; */
+  text-wrap: nowrap;
+  /* overflow: hidden; */
   padding: 0 px;
   display: flex;
   align-items: center;
