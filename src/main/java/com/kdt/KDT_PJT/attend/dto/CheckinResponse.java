@@ -2,11 +2,13 @@ package com.kdt.KDT_PJT.attend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class SimpleResponse {
+public class CheckinResponse {
     private final boolean ok;
     private final String message;
+    private final LocalDateTime checkinTime;
 }

@@ -41,8 +41,8 @@ public class AuthCustomUserDetails implements UserDetails {
         return switch (roleId.intValue()) {
             case 1 -> "SUPER_ADMIN";
             case 2 -> "TENANT_ADMIN";
-            case 3 -> "INSTRUCTOR";
-            case 4 -> "EMPLOYEE";
+            case 3 -> "EMPLOYEE";
+            case 4 -> "INSTRUCTOR";
             case 5 -> "STUDENT";
             case 6 -> "GENERAL";
             default -> throw new IllegalArgumentException("Unknown roleId: " + roleId);

@@ -24,6 +24,9 @@ public class Attend {
     @Column(name = "CO_SN", nullable = false)
     private Long coSn;          // 회사 PK
 
+    @Column(name = "COHORT_SN", nullable = false)
+    private Long cohortSn;          // 기수 PK
+
     @Column(name = "INOUT_YN", nullable = false)
     private Boolean inoutYn;    // 출석 여부(TINYINT(1) 매핑)
 
