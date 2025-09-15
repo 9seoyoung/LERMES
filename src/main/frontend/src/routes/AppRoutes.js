@@ -52,7 +52,7 @@ function AppRoutes() {
 
     
     {/* 기본 접근 루트 */}
-      <Route index path='superMain' element={<SuperMain/>}/>
+      <Route path='superMain' element={<SuperMain/>}/>
       {/* <Route path="generalHome" element={<GeneralHome />} /> */}
 
       {/* 관리자(테넌트, 직원) */}

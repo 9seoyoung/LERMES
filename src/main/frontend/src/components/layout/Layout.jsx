@@ -13,7 +13,7 @@ import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
 import LmsHeader from "../ui/headerModule/LmsHeader";
 import Nav from "../ui/navModule/Nav";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
@@ -24,10 +24,14 @@ export default function Layout() {
   const curloc = useLocation();
   const navKind = curloc.pathname.split('/', 2)[1];
 
-  useEffect(() => {
-
-  const Toggle = (navToggle === false) ? "hidden" : "flex";
-  },[navToggle]);
+    const handleLogout = useCallback(async () => {
+      try {
+        await signOut(); // ★ 서버 세션 종료 + 컨텍스트 초기화가 끝날 때까지 대기
+        navigate("/superMain", { replace: true }); // ★ SPA 네비게이션
+      } catch (e) {
+        console.error(e);
+      }
+    }, [signOut, navigate]);
 
 // 헤더 종류 고르기
   function HeaderStatus({ loc }) {
@@ -55,7 +59,6 @@ export default function Layout() {
       <header>
         {/* 페이지 별 헤더 변경 */}
         <HeaderStatus loc={navKind} />
-        {/* <SuperHeader /> */}
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ? 
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>

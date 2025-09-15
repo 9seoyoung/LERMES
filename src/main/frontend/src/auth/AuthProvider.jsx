@@ -17,7 +17,7 @@ export default function AuthProvider({ children }) {
     (async () => {
       dispatch({ type: "ME_LOADING" });
       try {
-        const { data } = await fetchMe();
+        const  data = await fetchMe();
         dispatch({ type: "ME_SUCCESS", payload: data });
       } catch {
         dispatch({ type: "ME_ANON" });
@@ -49,7 +49,7 @@ export default function AuthProvider({ children }) {
   const refreshMe = async () => {
     dispatch({ type: "ME_LOADING" });
     try {
-      const { data } = await fetchMe();
+      const data = await fetchMe();
       dispatch({ type: "ME_SUCCESS", payload: data });
       return data;
     } catch (e) {
