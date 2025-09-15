@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter @Setter
 public class CreateAttendCodeRequest {
     @NotBlank
-    private String code;        // 반드시 입력(예: 6자리)
+    private String code;        // 반드시 입력(예: 2자리)
     private String allowedIp;   // 미입력 시 요청자의 공인IP 사용, 공인IP 못쓰겠으면 @NotBlank 추가
 }
