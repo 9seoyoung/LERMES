@@ -75,6 +75,24 @@ hr {
   border-top: 1px solid #222;
 }
 
+textarea {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  resize: none;
+  padding: 16px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  outline: none;
+  color: #acacac;
+}
+
+textarea:focus {
+  border: 2px solid #222;
+  color: #222;
+}
+
+
 /* 폰트 사이즈 */
 h2 {
   padding: 0 0 8px;
@@ -292,6 +310,42 @@ footer > div:hover {
   cursor: pointer;
 }
 
+.save_box {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+.basicBtn {
+  padding: 2px 12px;
+  border-radius: 4px;
+}
+
+.saveBtn {
+  color: #f6f6f6;
+  background-color: #ACACAC;
+}
+
+.tempBtn {
+  color: #222;
+  background-color: #d9d9d9;
+}
+
+.basicBtn:active {
+  scale: 0.95;
+}
+
+.saveBtn:hover {
+  background-color: #565656;
+}
+
+.tempBtn:hover {
+  background-color: #565656;
+  color: #f6f6f6;
+}
+
+
 /* 더보기 버튼 */
 .specificBtn {
   display: flex;
@@ -439,12 +493,15 @@ footer > div:hover {
 .formAreaRow {
   display: flex;
   flex: 1;
+  gap: 12px;
 }
 
 .formArea_L {
   flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 16px
+  ;
 }
 
 .formArea_R {
@@ -456,6 +513,15 @@ footer > div:hover {
   padding: 16px 12px;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+}
+
+.selectBoxArea {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+  flex: 1;
 }
 
 .dropSet {
@@ -464,7 +530,6 @@ footer > div:hover {
   height: 40px;
   align-items: center;
   justify-content: center;
-  gap: 24px;
   gap: 12px;
 }
 
@@ -487,6 +552,67 @@ footer > div:hover {
   flex: 1;
 }
 
+.formHeader {
+  display: flex;
+  flex: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #222;
+}
+
 .inputSet {
-  
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.formLabel{
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f6f6;
+  border-radius: 8px;
+  width: 80px;
+  display: flex;
+  height: 36px;
+}
+
+.formInput, .addfileList {
+  display: flex;
+  flex: 1;
+  height: 32px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  color: #acacac;
+  outline: none;
+  padding: 0 12px;
+}
+
+.formInput:focus {
+  color: #222;
+  border: 2px solid #222;
+}
+
+.addfileList {
+  align-items: center;
+  border: none
+}
+
+.addfileList li span{
+  border-bottom: 1px solid #acacac;
+  padding: 0 px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.r_bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
