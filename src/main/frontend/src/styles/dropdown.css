@@ -11,6 +11,7 @@
   padding: .6rem .9rem;
   border-radius: .6rem;
   /* border: 1px solid #d0d5dd; */
+  width: 100%;
   background: #fff;
   cursor: pointer;
 }
@@ -24,6 +25,7 @@
 .dd__menu {
   position: absolute;
   top: calc(100% + 8px);
+  width: 100%;
   min-width: max-content;
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -51,6 +53,7 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  width: 100%;
 }
 
 /* 항목 스타일 */
