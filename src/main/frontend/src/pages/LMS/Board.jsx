@@ -15,7 +15,7 @@ export default function Board(){
             <div className="filterList">
                 <div className="ftList_L">필터 리스트</div>
                 <div className="ftList_R">
-                    <div onClick={() => navigate('\createPost')} style={{background:"#FCFEFF", padding:"0 4px", borderRadius:"4px", boxShadow:"2px 2px 2px #00000025"}}>
+                    <div className="createBtn" onClick={() => navigate('\createPost')}>
                         + 등록하기
                     </div>
                 </div>

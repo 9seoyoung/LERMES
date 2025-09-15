@@ -10,9 +10,9 @@ export function authReducer(state, action) {
     case "ME_LOADING":
       return { ...state, loading: true };
     case "ME_SUCCESS":
-      return { user: action.payload, loading: false, fetchedOnce: true };
+      return { ...state, loading: false, user: action.payload, fetchedOnce: true };
     case "ME_ANON":
-      return { user: null, loading: false, fetchedOnce: true };
+      return { ...state, user: null, loading: false, fetchedOnce: true };
     case "LOGIN_SUCCESS":
       // 로그인은 성공했지만 유저는 fetchMe에서 확정
       return { ...state, loading: true };

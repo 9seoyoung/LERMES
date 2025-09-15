@@ -15,7 +15,7 @@ export function UiComp() {
       <FormInput />
       <FormUnderline />
       <FormBtn textType="저장"className={styles.grayBtn}/>
-      <DeleteBtn />
+      <DeleteBtn  />
       <OptionSelect />
       <TextAreaBox />
       <CustomCheckbox />
