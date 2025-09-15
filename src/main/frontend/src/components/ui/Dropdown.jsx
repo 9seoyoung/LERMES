@@ -44,6 +44,8 @@ const Dropdown = forwardRef(function Dropdown(
     return () => document.removeEventListener("keydown", onKey);
   }, []);
 
+  
+
   // hover 핸들러 (디바운스 느낌으로 부드럽게)
   const startHoverOpen = () => {
     if (trigger === "hover" || trigger === "both") {
@@ -69,6 +71,16 @@ const Dropdown = forwardRef(function Dropdown(
   const placementClass =
     placement === "bottom-end" ? "dd__menu--end" : "dd__menu--start";
 
+    const handleMenuClickCapture = (e) => {
+      // 선택으로 취급할 요소 규칙: data-dd-select 달린 가장 가까운 조상
+      const selectable = e.target.closest("[data-dd-select]");
+      if (!selectable) return;              // 선택 항목이 아니면 무시
+      if (selectable.hasAttribute("disabled")) return; // 비활성화 항목 무시
+      if (selectable.hasAttribute("data-keep-open")) return; // 열어둬야 하면 무시
+      setOpen(false);
+    };
+    
+
   return (
     <div
       className={`dd ${className}`}
@@ -93,6 +105,7 @@ const Dropdown = forwardRef(function Dropdown(
       <div
         className={`dd__menu ${placementClass} ${open ? "is-open" : ""}`}
         role="menu"
+        onClickCapture={handleMenuClickCapture}
       >
         {children}
       </div>
