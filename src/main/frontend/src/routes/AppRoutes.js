@@ -23,7 +23,11 @@ import SchedListPopUp from '../components/ui/SchedListPopUp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
-import UploadDownloadDemo from "../pages/UploadDownloadDemo";
+import UploadDownloadDemo from "../pages/UploadDownloadDemo.jsx";
+import DocxSet from '../pages/LMS/DocxSet.jsx';
+import AccountSet from '../pages/LMS/AccountSet.jsx';
+import GroupSet from '../components/ui/navModule/GroupSet.jsx';
+import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 
 function AppRoutes() {
   return (
@@ -55,19 +59,24 @@ function AppRoutes() {
   <Route path='/' element={<Layout></Layout>} >
     
     {/* 기본 접근 루트 */}
-      <Route path='superMain' element={<SuperMain/>}/>
-      {/* <Route path="generalHome" element={<GeneralHome />} /> */}
+      <Route index element={<SuperMain/>}/>
+      <Route path="visitorHome" element={<VisitorHome />} />
 
       {/* 관리자(테넌트, 직원) */}
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
-        {/* <Route path='adminHome/createPost' element={<CreatePost/>}></Route> */}
+        <Route path="adminHome/boardSet" element={<Board />} />
+        <Route path="adminHome/groupSet" element={<GroupSet />} />
+        <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
+        <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
+        <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
 
       </Route>
       {/* 강사 */}
       <Route element={<RoleRoute roles={[1, 4]} />}>
         <Route path="tutorHome" element={<TutorHome />} />
-        {/* <Route path='tutorHome/createPost' element={<CreatePost/>}></Route> */}
+        <Route path="tutorHome/board" element={<Board />} />
+        <Route path='tutorHome/createPost' element={<CreatePost/>}></Route>
 
       </Route>
       {/* 수강생 */}
