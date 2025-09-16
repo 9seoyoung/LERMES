@@ -49,7 +49,9 @@ export default function LmsHeader({navToggle, setNavToggle}) {
         {/* USER_OGDP_CO_SN 로 CO_NM 과 회사 로고이미지 가져오기 < 컬럼없음 */}
         <div className="logoBox" onClick={() => {navigate(`/${navKind}`); console.log(user)}}>
           {/* <img src={process.env.PUBLIC_URL + '/img/logo.png'}  alt="Logo" /> */}
-          <h2>{user.CO_NM}</h2>
+          { user?.USER_AUTHRT_SN === 2 || user?.USER_AUTHRT_SN === 1 ? <button className='tempBtn basicBtn'>로고 변경</button>: ""}
+
+          <h2>{user?.CO_NM || user?.CO_SN}</h2>
         </div>
       </div>
       <HeaderStatus loc={navKind}></HeaderStatus>
@@ -96,7 +98,6 @@ export function AdminHeader() {
     
   return(
     <>
-      { user?.USER_AUTHRT_SN === 2 ? <button>로고 변경</button>: ""}
     </>
   );
 }
@@ -104,5 +105,5 @@ export function AdminHeader() {
 export function VisitorHeader() {
   const {user} = useAccount();
     
-  return
+  return <></>
 }
