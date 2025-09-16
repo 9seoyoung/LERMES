@@ -18,7 +18,7 @@ function WelcomeLayout() {
 
   return (
     <div className="welcomeCont">
-      <header className="headerLogo" onClick={() => navigate('/SuperMain')}>
+      <header className="headerLogo" onClick={() => navigate('/')}>
         <img  src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" />
       </header>
       <div className="main-container">
