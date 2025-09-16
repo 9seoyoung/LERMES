@@ -1,20 +1,17 @@
 package com.kdt.KDT_PJT.file.service;
 
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class FileService {
     private final CmmnDao cmmnDao;
     private final FileStorageService storage;
-
-    public FileService(CmmnDao cmmnDao, FileStorageService storage) {
-        this.cmmnDao = cmmnDao;
-        this.storage = storage;
-    }
 
     public com.kdt.KDT_PJT.file.dto.UploadResultDTO save(MultipartFile file, Integer userSn, Integer coSn) {
         if (file == null || file.isEmpty()) throw new IllegalArgumentException("file is required");

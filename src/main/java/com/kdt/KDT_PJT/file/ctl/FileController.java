@@ -4,6 +4,7 @@ import com.kdt.KDT_PJT.file.dto.UploadResultDTO;
 import com.kdt.KDT_PJT.file.service.FileService;
 import com.kdt.KDT_PJT.file.service.FileStorageService;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/files")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -27,12 +29,13 @@ public class FileController {
     private final FileStorageService storage;
     private final FileService fileService;
 
-    public FileController(FileStorageService storage, FileService fileService) {
-        this.storage = storage;
-        this.fileService = fileService;
-    }
+//    public FileController(FileStorageService storage, FileService fileService) {
+//        this.storage = storage;
+//        this.fileService = fileService;
+//    } //@RequiredArgsConstructor로 대치
 
     // 단일 업로드: 파일을 user.home/LERMES/files 폴더에 저장하고 저장된 파일명을 반환
+    // TODO me로 me.getCompanyId() 이런거 가져와서 파일에 사용자 소속 company 넣어버리기
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public UploadResultDTO upload(@AuthenticationPrincipal AuthCustomUserDetails me,
                                   @RequestPart("file") MultipartFile file) {
@@ -41,6 +44,7 @@ public class FileController {
     }
 
     // 다중 업로드
+    // TODO me로 me.getCompanyId() 이런거 가져와서 파일에 사용자 소속 company 넣어버리기
     @PostMapping(path = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<UploadResultDTO> uploadBatch(@AuthenticationPrincipal AuthCustomUserDetails me,
                                               @RequestPart("files") List<MultipartFile> files) {
