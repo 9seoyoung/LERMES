@@ -21,7 +21,7 @@ import UiComp from '../components/ui/UiComp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
-import UploadDownloadDemo from "../pages/UploadDownloadDemo";
+import UploadDownloadDemo from "../pages/UploadDownloadDemo.jsx";
 
 function AppRoutes() {
   return (
