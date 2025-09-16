@@ -1,14 +1,6 @@
-// 라이브러리
 import { Outlet, useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useAccount } from "../../auth/AuthContext";
-
-// 로직
-
-// 스타일
-import layoutStyles from "../../styles/layout.module.css"
-
-// 페이지
 import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
 import LmsHeader from "../ui/headerModule/LmsHeader";
@@ -41,6 +33,11 @@ export default function Layout() {
       case "tutorHome":
         component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
+
+      case "visitorHome":
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
+        break;
+
       default:
         component = <SuperHeader  />;
     }
@@ -78,8 +75,8 @@ export default function Layout() {
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
         <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
-          <div className={layoutStyles.subMenuList}>마이페이지</div>
-          <div className={layoutStyles.subMenuList} onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
+          <div className= "subMenuList" onClick={() => {navigate(`${navKind}/myPage`);}}>마이페이지</div>
+          <div className= "subMenuList" onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
         </MyInfo>
         }
       </header>

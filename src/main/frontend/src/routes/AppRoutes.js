@@ -26,6 +26,7 @@ import DocxSet from '../pages/LMS/DocxSet.jsx';
 import AccountSet from '../pages/LMS/AccountSet.jsx';
 import GroupSet from '../components/ui/navModule/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
+import Mypage from '../pages/Mypage.jsx';
 
 function AppRoutes() {
   return (
@@ -58,6 +59,8 @@ function AppRoutes() {
     {/* 기본 접근 루트 */}
       <Route index element={<SuperMain/>}/>
       <Route path="visitorHome" element={<VisitorHome />} />
+      <Route path=':home/myPage' element={<Mypage/>}/>
+
 
       {/* 관리자(테넌트, 직원) */}
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
@@ -67,6 +70,7 @@ function AppRoutes() {
         <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
         <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
         <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
       {/* 강사 */}
@@ -74,6 +78,7 @@ function AppRoutes() {
         <Route path="tutorHome" element={<TutorHome />} />
         <Route path="tutorHome/board" element={<Board />} />
         <Route path='tutorHome/createPost' element={<CreatePost/>}></Route>
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
       {/* 수강생 */}
@@ -82,6 +87,7 @@ function AppRoutes() {
         <Route path="stdHome/board" element={<Board />} />
         <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
         <Route path="stdHome/studySched" element={"#"} />
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
 
