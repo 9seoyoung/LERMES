@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { requestEmailCode, signupTenant } from '../authService.js';
-import styles from "../../styles/SignUp.module.css";
-import {useAccount} from "../AuthContext.jsx";
+import styles from '../../styles/SignUp.module.css';
+import { useAccount } from '../AuthContext.jsx';
 import FilePreview from '../../components/ui/FilePreview.jsx';
 
 export default function TenantSignup() {
   const navigate = useNavigate();
-  const {signIn} = useAccount();
+  const { signIn } = useAccount();
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -16,18 +16,21 @@ export default function TenantSignup() {
     confirmPassword: '',
     phoneNumber: '',
     companyName: '',
-    businessNumber: '', // <-- 이름 통일 (백엔드와 동일)
+    businessNumber: '',
   });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
 
+  const emailRef = useRef(null);
+
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const sendCode = async () => {
+    if (!emailRef.current?.reportValidity()) return;
+
     const normEmail = form.email.trim().toLowerCase();
-    if (!normEmail) return setMsg('관리자 이메일을 입력하세요.');
     setSending(true);
     setMsg(null);
     try {
@@ -62,20 +65,13 @@ export default function TenantSignup() {
         companyName: form.companyName.trim(),
         businessNumber: form.businessNumber.trim(),
       };
-      
+
       await signupTenant(payload);
 
-      const loginPayload = {
-        email: payload.email,
-        password: payload.password
-      }
-
+      const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      
-      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
-      console.log(redirectLoc);
-      navigate(redirectLoc, {replace: true});
-
+      const redirectLoc = `/${me?.HOME_PATH}` || '/';
+      navigate(redirectLoc, { replace: true });
     } catch (e) {
       setMsg(e.message || '테넌트 등록 실패');
     } finally {
@@ -87,10 +83,11 @@ export default function TenantSignup() {
     <div className="signup-inner">
       <div className="signup-title">비즈니스 회원가입</div>
       <form className="signup-form" onSubmit={onSubmit}>
-      <div className={styles.logo}>
-        <FilePreview/>        
-        <div className={styles.imgCaption}>*이미지 크기 180px X 60px</div>
-      </div>
+        <div className={styles.logo}>
+          <FilePreview />
+          <div className={styles.imgCaption}>*이미지 크기 180px X 60px</div>
+        </div>
+
         <input
           name="companyName"
           placeholder="회사명"
@@ -99,7 +96,7 @@ export default function TenantSignup() {
           required
         />
         <input
-          name="businessNumber" // <-- 입력 name도 통일
+          name="businessNumber"
           placeholder="사업자등록번호"
           minLength={10}
           maxLength={10}
@@ -110,16 +107,17 @@ export default function TenantSignup() {
 
         <input
           name="username"
-          type='text'
+          type="text"
           placeholder="이름(국문)"
           value={form.username}
           onChange={onChange}
           required
-          autocomplete="off"
+          autoComplete="off"
         />
 
         <div className="input-with-btn">
           <input
+            ref={emailRef}
             name="email"
             type="email"
             placeholder="이메일을 입력하세요. ex) abc123@example.com"
@@ -127,7 +125,7 @@ export default function TenantSignup() {
             onChange={onChange}
             required
             disabled={codeSent}
-            autocomplete="email"
+            autoComplete="email"
           />
           <button
             type="button"
@@ -144,6 +142,8 @@ export default function TenantSignup() {
           placeholder="인증코드"
           value={form.verificationCode}
           onChange={onChange}
+          minLength={6}
+          maxLength={6}
           required
         />
 
@@ -169,12 +169,16 @@ export default function TenantSignup() {
           placeholder="휴대폰번호"
           value={form.phoneNumber}
           onChange={onChange}
+          minLength={11}
+          maxLength={11}
           required
         />
 
-        <button type="button" onClick={onSubmit} disabled={loading} className='signup-btn'>
+        {/* ✔ 전체 required 검사 사용하려면 submit 버튼 권장 */}
+        <button type="submit" disabled={loading} className="signup-btn">
           {loading ? '등록 중...' : '회원 가입'}
         </button>
+
         {msg && <p className="msg">{msg}</p>}
       </form>
     </div>

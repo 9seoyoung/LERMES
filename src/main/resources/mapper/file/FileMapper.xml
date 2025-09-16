@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdt.mapper.file.FileMapper">
+
+    <resultMap id="FileResultMap" type="com.kdt.KDT_PJT.file.dto.FileDTO">
+        <id     property="fileSn"       column="FILE_SN"/>
+        <result property="orgnlFileNm"  column="ORGNL_FILE_NM"/>
+        <result property="strgFileNm"   column="STRG_FILE_NM"/>
+        <result property="strgFilePath" column="STRG_FILE_PATH"/>
+        <result property="delYn"        column="DEL_YN"/>
+        <result property="strgDt"       column="STRG_DT"/>
+        <result property="userSn"       column="USER_SN"/>
+        <result property="coSn"         column="CO_SN"/>
+        <result property="fileSz"       column="FILE_SZ"/>
+        <result property="fileMimeType" column="FILE_MIME_TYPE"/>
+        <result property="fileExtnNm"   column="FILE_EXTN_NM"/>
+    </resultMap>
+
+    <insert id="insertTbFile" parameterType="com.kdt.KDT_PJT.file.dto.FileDTO" useGeneratedKeys="true" keyProperty="fileSn">
+        INSERT INTO TB_FILE (
+            ORGNL_FILE_NM, STRG_FILE_NM, STRG_FILE_PATH, DEL_YN, STRG_DT,
+            USER_SN, CO_SN, FILE_SZ, FILE_MIME_TYPE, FILE_EXTN_NM
+        ) VALUES (
+            #{orgnlFileNm}, #{strgFileNm}, #{strgFilePath}, #{delYn}, #{strgDt},
+            #{userSn}, #{coSn}, #{fileSz}, #{fileMimeType}, #{fileExtnNm}
+        )
+    </insert>
+
+    <select id="selectTbFileBySn" parameterType="int" resultMap="FileResultMap">
+        SELECT * FROM TB_FILE WHERE FILE_SN = #{fileSn}
+    </select>
+
+    <update id="updateTbFileDelYn" parameterType="map">
+        UPDATE TB_FILE SET DEL_YN = #{delYn} WHERE FILE_SN = #{fileSn}
+    </update>
+
+</mapper>
