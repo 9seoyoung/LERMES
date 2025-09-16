@@ -1,26 +1,35 @@
 // 상호작용 컴포넌트
 // props로 텍스트 조절할 수 있게
+import { useState, useRef } from 'react';
 
 import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
 import FilePreview from './FilePreview';
-// [props]
-// FormInput, FormUnderline, TextAreaBox: textType(placeholder)
-// FormBtn: textType(내용), className(style)
-// CustomCheckbox: className(style)
-// 그 외: X
+
 export function UiComp() {
   return (
     <div>
-      <FormInput />
-      <FormUnderline />
-      <FormBtn textType="저장"className={styles.grayBtn}/>
-      <DeleteBtn />
-      <OptionSelect />
-      <TextAreaBox />
-      <CustomCheckbox />
-      <FileUpload />
-      <Table />
+       <FormInput />
+            <FormUnderline />
+            <WhiteBtn />
+            <BlueBtn />
+            <GrayBtn />
+            <SaveBtn />
+            <CancelBtn />
+            <TempSaveBtn />
+            <CheckInBtn />
+            <CheckOutBtn  />
+            <BackBtn />
+            <NavBtn  />
+            <DeleteBtn />
+            <ActionBtn />
+            <AddBtn />
+            <OptionSelect />
+            <TextAreaBox />
+            <BlueCheckbox />
+            <OrangeCheckbox />
+            <FileUpload />
+            <Table />
       {/* 드롭다운 사용 방법 */}
       <Dropdown label="드롭다운 제목" trigger="hover" placement="bottom-start" >
       <a className="dd__item" href="/mypage">내 정보</a>
@@ -50,23 +59,118 @@ export function FormUnderline({ textType }) {
   );
 }
 
-// 버튼
-export function FormBtn({ textType, className }) {
+// 흰색 버튼
+export function WhiteBtn({ textType }) {
   return (
     <div>
-      <button className={className}>{textType}</button>
+      <button className={styles.btn}>{textType}</button>
+    </div>
+  );
+}
+// 파란색 버튼
+export function BlueBtn({ textType }) {
+  return (
+    <div>
+      <button className={styles.blueBtn}>{textType}</button>
+    </div>
+  );
+}
+// 회색 버튼
+export function GrayBtn({ textType }) {
+  return (
+    <div>
+      <button className={styles.grayBtn}>{textType}</button>
+    </div>
+  );
+}
+// 저장 버튼
+export function SaveBtn({ textType }) {
+  return (
+    <div>
+      <button className={`${styles.smallBtn} ${styles.saveBtn}`}>
+        {textType}
+      </button>
+    </div>
+  );
+}
+// 취소 버튼
+export function CancelBtn({ textType }) {
+  return (
+    <div>
+      <button className={`${styles.smallBtn} ${styles.cancelBtn}`}>
+        {textType}
+      </button>
+    </div>
+  );
+}
+// 임시저장 버튼
+export function TempSaveBtn({ textType }) {
+  return (
+    <div>
+      <button className={styles.tempSaveBtn}>{textType}</button>
+    </div>
+  );
+}
+// 입실 버튼
+export function CheckInBtn({ textType }) {
+  return (
+    <div>
+      <button className={`${styles.statusBtn} ${styles.checkInBtn}`}>
+        {textType}
+      </button>
+    </div>
+  );
+}
+// 퇴실 버튼
+export function CheckOutBtn({ textType }) {
+  return (
+    <div>
+      <button className={`${styles.statusBtn} ${styles.checkOutBtn}`}>
+        {textType}
+      </button>
+    </div>
+  );
+}
+// 입•퇴실 취소 버튼
+export function BackBtn({ textType }) {
+  return (
+    <div>
+      <button className={`${styles.statusBtn} ${styles.backBtn}`}>{textType}</button>
+    </div>
+  );
+}
+// nav 영역 버튼
+export function NavBtn({ textType }) {
+  return (
+    <div>
+      <button className={styles.navBtn}>{textType}</button>
     </div>
   );
 }
 // 마이너스 버튼 (파일 삭제)
-export function DeleteBtn() {
+export function DeleteBtn({onClick}) {
   return (
-    <button className={styles.deleteBtn}>
+    <button type="button" onClick={onClick} className={styles.deleteBtn}>
       <span className={styles.delete} />
     </button>
   );
 }
-
+// 서식 저장, 질문 추가 버튼
+export function ActionBtn({ textType }) {
+  return (
+    <div>
+      <button className={styles.actionBtn}>{textType}</button>
+    </div>
+  );
+}
+// 항목 추가 버튼
+export function AddBtn({ textType }) {
+  return (
+    <div>
+      <button className={styles.addBtn}>{textType}</button>
+    </div>
+  );
+}
 // 드롭박스
 export function OptionSelect() {
   return (
@@ -81,7 +185,6 @@ export function OptionSelect() {
     </div>
   );
 }
-
 // 장문 작성
 export function TextAreaBox({ textType }) {
   return (
@@ -90,25 +193,93 @@ export function TextAreaBox({ textType }) {
     </div>
   );
 }
-
-// 체크박스
-export function CustomCheckbox({ className }) {
+// 파란색 체크박스
+export function BlueCheckbox() {
   return (
-    <label className={className}>
+    <label className={`${styles.checkBox} ${styles.blueCheck}`}>
       <input type="checkbox" />
       <span className={styles.checkmark} />
     </label>
   );
 }
-
-// 파일 첨부
-export function FileUpload() {
+// 주황색 체크박스
+export function OrangeCheckbox() {
   return (
-    <div className={styles.fileUpload}>
+    <label className={`${styles.checkBox} ${styles.orangeCheck}`}>
+      <input type="checkbox" />
+      <span className={styles.checkmark} />
+    </label>
+  );
+}
+// 파일 첨부
+export function FileUpload({ files, setFiles }) {
+  const inputRef = useRef(null);
+
+  // 파일 추가
+  const handleFiles = (fileList) => {
+    const newFiles = Array.from(fileList);
+    setFiles((prev) => [...prev, ...newFiles]);
+  };
+
+  const handleClick = () => {
+    inputRef.current?.click();
+  };
+
+  const handleChange = (e) => {
+    if (e.target.files) {
+      handleFiles(e.target.files);
+      e.target.value = "";
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.dataTransfer.files) {
+      handleFiles(e.dataTransfer.files);
+    }
+  };
+
+  return (
+    <div
+      className={styles.fileUpload}
+      onClick={handleClick}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
       이곳에 파일을 드래그하거나, 클릭하여 <br />
       파일을 첨부하세요
-      <input type="file" style={{ display: 'none' }} />
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        style={{ display: "none" }}
+        onChange={handleChange}
+      />
     </div>
+  );
+}
+
+// 파일 목록
+export function FileList({ files, setFiles }) {
+  const removeFile = (idx) => {
+    setFiles((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  return (
+    <ul className="addfileList">
+      {files.map((file, idx) => (
+        <li key={idx}>
+          <span>
+            {file.name} <DeleteBtn onClick={() => removeFile(idx)} />
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -118,12 +289,12 @@ export function Table() {
     <table className={styles.table}>
       <thead>
         <tr>
-          <td>순번</td>
-          <td>유형</td>
-          <td>사유</td>
-          <td>신청일</td>
-          <td>승인여부</td>
-          <td>첨부파일</td>
+          <th>순번</th>
+          <th>유형</th>
+          <th>사유</th>
+          <th>신청일</th>
+          <th>승인여부</th>
+          <th>첨부파일</th>
         </tr>
       </thead>
       <tbody>
@@ -141,4 +312,3 @@ export function Table() {
 }
 
 export default UiComp;
-
