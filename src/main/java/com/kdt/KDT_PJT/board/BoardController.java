@@ -1,19 +1,18 @@
-package com.kdt.KDT_PJT.domain.board;
+package com.kdt.KDT_PJT.board;
 
+import com.kdt.KDT_PJT.board.Board;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.type.NStringTypeHandler;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-
-import java.awt.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 @RequestMapping("/boards")
 @RequiredArgsConstructor
-@Profile("sample")
 public class BoardController {
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
