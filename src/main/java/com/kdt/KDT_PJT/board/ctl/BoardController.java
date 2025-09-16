@@ -16,7 +16,7 @@ public class BoardController {
 
     @PostMapping(value = "/create")
     public PostRequestDto createBoard(@ModelAttribute PostRequestDto postRequestDto){
-
+        System.out.println(postRequestDto);
         return postRequestDto; // DTO 자체를 반환 → JSON 응답
         }
 
