@@ -10,10 +10,12 @@ import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.auth.entity.UserRoleType;
 import com.kdt.KDT_PJT.auth.repository.CompanyRepository;
 import com.kdt.KDT_PJT.auth.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
