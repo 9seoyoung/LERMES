@@ -58,7 +58,7 @@ setSelectedDate(today.getDate());
     setSelectedDate(day);
   };
 
- /*  const onAddEvent = () => {
+  const onAddEvent = () => {
     if (!selectedDate) {
       alert('일정을 추가할 날짜를 먼저 선택하세요.');
       return;
@@ -76,7 +76,7 @@ setSelectedDate(today.getDate());
         };
       });
     }
-  }; */
+  };
 
   // 캘린더 전체 높이 고정 (원하는 값으로 조절 가능)
   const totalCalendarHeight = 500;
@@ -84,25 +84,20 @@ setSelectedDate(today.getDate());
   const weekHeight = totalCalendarHeight / weekCount;
 
   return (
-    <div style={{ width: 400, margin: '0 auto' }}>
+    <div className={styles.cal}>
      {/* 상단 네비게이션 */}
-     {/*  <div className={styles.month}>
+     <div className={styles.month}>
         <button onClick={prevMonth}>◀</button>
         <h3>
           {year}년 {month + 1}월
         </h3>
         <button onClick={nextMonth}>▶</button>
-      </div> */}
+        <div className=''></div>
+      </div> 
 
       {/* 요일 헤더 */}
       <div
-        className={styles.day}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(7, 1fr)',
-          textAlign: 'center',
-        }}
-      >
+        className={styles.day}>
         {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => {
           const color = idx === 0 ? 'red' : idx === 6 ? 'blue' : 'black';
           return (
@@ -179,11 +174,11 @@ setSelectedDate(today.getDate());
       ))}
 
       {/* 일정 추가 버튼 */}
-      {/* <div className={styles.addEventBtn}>
+       <div className={styles.addEventBtn}>
         <button onClick={onAddEvent} className={styles.addEvent}>
           일정 추가
         </button>
-      </div> */}
+      </div>
     </div>
   );
 };
