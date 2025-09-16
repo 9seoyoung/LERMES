@@ -20,7 +20,7 @@ export default function Nav({setNavToggle}) {
                     <div>{user.USER_EML_ADDR}</div>
                 </div>
                 <button type="button" className="lmsMyInfoBtn"  style={{fontSize: "14px"}}>
-                    마이 페이지
+                    내 정보
                 </button> 
             </div>
             <div className="navMenuList">
@@ -29,7 +29,7 @@ export default function Nav({setNavToggle}) {
                 <div onClick={() => navigate('/stdHome/board')}>게시판</div>
             </div>
         </div>
-        <div className="goSuper" onClick={() => {navigate('/superMain'); setNavToggle(false);}}>
+        <div className="goSuper" onClick={() => {navigate('/'); setNavToggle(false);}}>
             <div>
                 LERMES로 돌아가기
             </div>

@@ -29,6 +29,9 @@ export default function LmsHeader({navToggle, setNavToggle}) {
         case "tutorHome":
           component = <TutorHeader />;
           break;
+        case "visitorHome":
+          component = <VisitorHeader />;
+          break;
         default:
           component = <SuperHeader />;
       }
@@ -45,7 +48,8 @@ export default function LmsHeader({navToggle, setNavToggle}) {
         </button>
         {/* USER_OGDP_CO_SN 로 CO_NM 과 회사 로고이미지 가져오기 < 컬럼없음 */}
         <div className="logoBox" onClick={() => {navigate(`/${navKind}`); console.log(user)}}>
-          <img src={process.env.PUBLIC_URL + '/img/logo.png'}  alt="Logo" />
+          {/* <img src={process.env.PUBLIC_URL + '/img/logo.png'}  alt="Logo" /> */}
+          <h2>{user.CO_NM}</h2>
         </div>
       </div>
       <HeaderStatus loc={navKind}></HeaderStatus>
@@ -87,5 +91,18 @@ export function TutorHeader() {
 }
 
 export function AdminHeader() {
+  const {user} = useAccount();
+  const [chgLogo, setLogo] = useState("");
+    
+  return(
+    <>
+      { user?.USER_AUTHRT_SN === 2 ? <button>로고 변경</button>: ""}
+    </>
+  );
+}
+
+export function VisitorHeader() {
+  const {user} = useAccount();
+    
   return
 }
