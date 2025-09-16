@@ -70,7 +70,7 @@ export default function TenantSignup() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
+      const redirectLoc = `/${me?.HOME_PATH}` || '/';
       navigate(redirectLoc, { replace: true });
     } catch (e) {
       setMsg(e.message || '테넌트 등록 실패');
