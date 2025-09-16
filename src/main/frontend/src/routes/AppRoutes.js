@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+ import { Routes, Route } from 'react-router-dom';
 
 // 권한
 import RoleRoute from '../auth/RoleRoute.jsx';
@@ -18,10 +18,17 @@ import TenantSignup from '../auth/loginPage/TenantSignup';
 import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
+import SchedList from '../components/ui/SchedList';
+import SchedListPopUp from '../components/ui/SchedListPopUp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
-import UploadDownloadDemo from "../pages/UploadDownloadDemo";
+import UploadDownloadDemo from "../pages/UploadDownloadDemo.jsx";
+import DocxSet from '../pages/LMS/DocxSet.jsx';
+import AccountSet from '../pages/LMS/AccountSet.jsx';
+import GroupSet from '../components/ui/navModule/GroupSet.jsx';
+import VisitorHome from '../pages/LMS/VisitorHome.jsx';
+import Mypage from '../pages/Mypage.jsx';
 
 function AppRoutes() {
   return (
@@ -34,6 +41,8 @@ function AppRoutes() {
     <Route path="/bigcal" element={<BigCal />} />
     <Route path="/ui" element={<UiComp />} />
     <Route path='/test' element={<NoticeList />} />
+    <Route path="schedlist" element={<SchedList/>} />
+    <Route path="schedlistpopup" element={<SchedListPopUp />} />
 
     <Route path="/files" element={<UploadDownloadDemo />} />
 
@@ -49,22 +58,30 @@ function AppRoutes() {
 
     {/*기본 레이아웃*/}
   <Route path='/' element={<Layout></Layout>} >
-
     
     {/* 기본 접근 루트 */}
-      <Route path='superMain' element={<SuperMain/>}/>
-      {/* <Route path="generalHome" element={<GeneralHome />} /> */}
+      <Route index element={<SuperMain/>}/>
+      <Route path="visitorHome" element={<VisitorHome />} />
+      <Route path=':home/myPage' element={<Mypage/>}/>
+
 
       {/* 관리자(테넌트, 직원) */}
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
-        {/* <Route path='adminHome/createPost' element={<CreatePost/>}></Route> */}
+        <Route path="adminHome/boardSet" element={<Board />} />
+        <Route path="adminHome/groupSet" element={<GroupSet />} />
+        <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
+        <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
+        <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
       {/* 강사 */}
       <Route element={<RoleRoute roles={[1, 4]} />}>
         <Route path="tutorHome" element={<TutorHome />} />
-        {/* <Route path='tutorHome/createPost' element={<CreatePost/>}></Route> */}
+        <Route path="tutorHome/board" element={<Board />} />
+        <Route path='tutorHome/createPost' element={<CreatePost/>}></Route>
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
       {/* 수강생 */}
@@ -73,6 +90,7 @@ function AppRoutes() {
         <Route path="stdHome/board" element={<Board />} />
         <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
         <Route path="stdHome/studySched" element={"#"} />
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
 

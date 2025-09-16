@@ -23,7 +23,7 @@ export default function Login() {
       // 1순위: 보호 페이지에서 온 경로, 2순위: 서버가 주는 HOME_PATH, 3순위: 디폴트
       const from = location.state?.from?.pathname;
       const byHome = me?.HOME_PATH ? (me.HOME_PATH.startsWith("/") ? me.HOME_PATH : `/${me.HOME_PATH}`) : null;
-      navigate(from ?? byHome ?? "/superMain", { replace: true });
+      navigate(from ?? byHome ?? "/", { replace: true });
     } catch (err) {
       toast.error(err?.message || "로그인 실패");
     } finally {

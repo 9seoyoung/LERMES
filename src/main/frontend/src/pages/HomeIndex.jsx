@@ -18,7 +18,7 @@ function HomeIndex() {
     const userActvtnYn = user.userActvtnYn ?? user.user_actvtn_yn;
 
     if (userAuthrtSn === 1 && userActvtnYn === 1) { //슈퍼관리자
-      navigate("/superMain", { replace: true });       
+      navigate("/", { replace: true });       
     } else if (userAuthrtSn === 2 && userActvtnYn === 1 || userAuthrtSn === 3 && userActvtnYn === 1) { //테넌트, 직원
       navigate("/AdminHome", { replace: true });
     } else if (userAuthrtSn === 4 && userActvtnYn === 1 ){ //강사
