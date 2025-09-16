@@ -13,6 +13,7 @@
 .underline {
   width: 400px;
   height: 32px;
+  padding: 8px 12px;
   border: none;
   outline: none;
   font-size: 14px;
@@ -119,6 +120,15 @@
 
 /* 입•퇴실, 취소 버튼 공통 */
 .statusBtn {
+width: 180px;
+  height: 32px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/*.statusBtn {
   min-width: max-content;
   height: 3.6rem;
   border-radius: 2rem;
@@ -134,10 +144,14 @@
 .statusBtn > div:first-child {
   padding: 0 1.2rem 0 0;
   border-right: 1px solid #d9d9d9;
+}*/
+
+/* 입실 버튼 */
+.checkInBtn {
+  background-color: #62b6ff;
 }
 
-/* 입실버튼 */
-.checkInBtn {
+/*.checkInBtn {
   background-color: #62b6ff;
   border-radius: 18px;
   width: 80px;
@@ -149,7 +163,7 @@
   font-weight: 400;
   font-size: 1.4rem;
   outline: none;
-}
+}*/
 
 .checkInBtn:hover {
   background-color: #4d8fc9;
@@ -216,7 +230,7 @@
 .deleteBtn:hover,
 .deleteBtn:focus,
 .deleteBtn:active {
-  border: 1px solid #e9623a;
+  border: none;
   outline: none;
 }
 
@@ -225,14 +239,16 @@
   width: 8px;
   height: 2px;
   border-radius: 6px;
+  box-shadow:none;
+  border:none;
 }
 
 /* 서식 저장, 질문 추가 버튼 */
 .actionBtn {
   width: 640px;
   height: 45px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   background-color: #e1f1ff;
   font-size: 14px;
   font-weight: bold;
@@ -296,6 +312,9 @@
   font-size: 14px;
   box-sizing: border-box;
   padding: 5px 5px;
+  width: 840px;
+  height: 340px;
+
 }
 
 /* 체크박스 공통 */
@@ -357,7 +376,7 @@
 /* 표 */
 .table {
   border-collapse: separate;
-  border-spacing: 0 8px;
+  border-spacing: 0px 7px;
   font-size: 14px;
   width: 650px;
 }
@@ -368,8 +387,9 @@
   text-align: center;
 }
 
-.table thead {
-  background-color: #e1f1ff;
+.table thead th{
+  background-color: #E1F1FF !important;
+
 }
 
 .row td {
@@ -384,24 +404,25 @@
   color: #fff;
 }
 
-.table td:first-child,
+.table th:first-child,
 .row td:first-child {
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
 }
 
-.table td:last-child,
+.table th:last-child,
 .row td:last-child {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-/* ListTable */
+ /* ListTable */
+/*
 .ListTbBg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px; /* 행 간격 */
+  gap: 4px; *//* 행 간격 *//*
   padding: 0;
   margin: 0;
   list-style: none;
@@ -410,7 +431,7 @@
 .ListHeader {
   background-color: #e1f1ff;
   display: flex;
-  gap: 16px;        /* 열 간격 */
+  gap: 16px;       *//* 열 간격 *//*
   padding: 8px 12px;
   border-radius: 6px;
   align-items: center;
@@ -437,8 +458,10 @@
 
 .cell {
   display: flex;
-  flex: 1;          /* 같은 비율로 늘리기 */
+  flex: 1;        */
+/* 같은 비율로 늘리기 *//*
+
   font-size: 14px;
   align-items: center;
   justify-content: center;
-}
+  }*/
