@@ -26,10 +26,10 @@ public class LandingService {
                 return "/";
 
             case 2:  // TENANT_ADMIN
-            case 4:  // EMPLOYEE
+            case 3:  // EMPLOYEE
                 return "adminHome";
 
-            case 3:  // INSTRUCTOR
+            case 4:  // INSTRUCTOR
                 return "tutorHome";
 
             case 5:  // STUDENT
