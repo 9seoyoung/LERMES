@@ -1,10 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { requestEmailCode, signupGeneral } from '../authService.js';
 import '../../styles/sj.css';
 import { toast } from 'react-toastify';
+import { useAccount } from '../AuthContext.jsx';
 
 export default function GeneralJoin() {
+  const { signIn } = useAccount();
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -18,6 +21,7 @@ export default function GeneralJoin() {
   const [sending, setSending] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
   const emailRef = useRef(null);
+  const navigate = useNavigate();
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -59,10 +63,14 @@ export default function GeneralJoin() {
         confirmPassword: form.confirmPassword,
         phoneNumber: form.phoneNumber.trim(),
       };
-      const res = await signupGeneral(payload); // 성공 시 200 OK
-      toast.success(
-        setMsg(res?.data?.message || '회원가입 완료! 이제 로그인하세요.')
-      );
+
+      await signupGeneral(payload);
+
+      const loginPayload = { email: payload.email, password: payload.password };
+      const me = await signIn(loginPayload);
+      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
+      alert('회원가입이 완료되었습니다!');
+      navigate(redirectLoc, { replace: true });
     } catch (e) {
       toast.error(getErrMsg(e)); // 예: "이메일 인증 실패", "비밀번호가 일치하지 않습니다."
     } finally {
