@@ -120,12 +120,11 @@
 
 /* 입•퇴실, 취소 버튼 공통 */
 .statusBtn {
-width: 180px;
+  min-width: 180px;
   height: 32px;
   border-radius: 4px;
   color: #fff;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .statusBtn {
