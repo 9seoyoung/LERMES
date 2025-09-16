@@ -1,0 +1,48 @@
+.container {
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 400px;
+  height: 350px;
+  background-color: #FCFEFF;
+  border-radius: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.memo {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.optionsToggle {
+  margin-top: 10px;
+  user-select: none;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+}
+
+.arrow {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+
+  transition: transform 0.3s ease;
+  /* 기본 화살표 아래 방향 */
+  border: none;
+}
+
+.arrowOpen {
+  transform: rotate(180deg); /* 화살표 위 방향 */
+}
+
+.optionsContent {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}

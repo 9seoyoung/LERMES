@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+ import { Routes, Route } from 'react-router-dom';
 
 // 권한
 import RoleRoute from '../auth/RoleRoute.jsx';
@@ -18,6 +18,8 @@ import TenantSignup from '../auth/loginPage/TenantSignup';
 import MiniCal from '../components/ui/MiniCal';
 import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
+import SchedList from '../components/ui/SchedList';
+import SchedListPopUp from '../components/ui/SchedListPopUp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
@@ -34,6 +36,8 @@ function AppRoutes() {
     <Route path="/bigcal" element={<BigCal />} />
     <Route path="/ui" element={<UiComp />} />
     <Route path='/test' element={<NoticeList />} />
+    <Route path="schedlist" element={<SchedList/>} />
+    <Route path="schedlistpopup" element={<SchedListPopUp />} />
 
     <Route path="/files" element={<UploadDownloadDemo />} />
 
@@ -49,7 +53,6 @@ function AppRoutes() {
 
     {/*기본 레이아웃*/}
   <Route path='/' element={<Layout></Layout>} >
-
     
     {/* 기본 접근 루트 */}
       <Route path='superMain' element={<SuperMain/>}/>
