@@ -13,6 +13,9 @@ import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
 import LmsHeader from "../ui/headerModule/LmsHeader";
 import Nav from "../ui/navModule/Nav";
+import StdNav from "../ui/navModule/StdNav";
+import AdminNav from "../ui/navModule/AdminNav";
+import TutorNav from "../ui/navModule/TutorNav";
 import { useEffect, useState, useCallback } from "react";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
@@ -23,15 +26,6 @@ export default function Layout() {
   const { user, signOut } = useAccount();
   const curloc = useLocation();
   const navKind = curloc.pathname.split('/', 2)[1];
-
-    const handleLogout = useCallback(async () => {
-      try {
-        await signOut(); // ★ 서버 세션 종료 + 컨텍스트 초기화가 끝날 때까지 대기
-        navigate("/superMain", { replace: true }); // ★ SPA 네비게이션
-      } catch (e) {
-        console.error(e);
-      }
-    }, [signOut, navigate]);
 
 // 헤더 종류 고르기
   function HeaderStatus({ loc }) {
@@ -54,6 +48,26 @@ export default function Layout() {
     return component;
   }
 
+  function NavStatus({ loc }) {
+    let component;
+
+    switch (loc) {
+      case "adminHome":
+        component = <AdminNav />;
+        break;
+      case "stdHome":
+        component = <StdNav  />;
+        break;
+      case "tutorHome":
+        component = <TutorNav />;
+        break;
+      default:
+        component = <Nav/>;
+    }
+
+    return component;
+  }
+
   return (
     <div className="layout">
       <header>
@@ -65,7 +79,7 @@ export default function Layout() {
         :
         <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
           <div className={layoutStyles.subMenuList}>마이페이지</div>
-          <div className={layoutStyles.subMenuList} onClick={()=> {signOut(); window.location.href = "/superMain";}} >로그아웃</div>
+          <div className={layoutStyles.subMenuList} onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
         </MyInfo>
         }
       </header>
@@ -74,21 +88,25 @@ export default function Layout() {
           {/* Nav 팝업은 여기서 처리 */}
           {(navToggle === false) ? ""
             :
-            <Nav user={user} setNavToggle = {setNavToggle} />
+            <NavStatus loc={navKind} />
           } 
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>
         <footer>
-          <h2 onClick={() => {navigate('/superMain'); setNavToggle(false);}}>LERMES</h2>
-          {}
-          <div onClick={() => navigate('/adminHome')}>관리자 홈</div>
-          <div onClick={() => navigate('/tutorHome')}>강사 홈</div>
-          <div onClick={() => navigate('/stdHome')}>수강생 홈</div>
+          {user?.USER_AUTHRT_SN === 1 ?          
+          <>
+            <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
+            <div onClick={() => navigate('/adminHome')} style={{cursor:"pointer"}}>관리자 홈</div>
+            <div onClick={() => navigate('/tutorHome')} style={{cursor:"pointer"}}>강사 홈</div>
+            <div onClick={() => navigate('/stdHome')} style={{cursor:"pointer"}}>수강생 홈</div>
+            <div onClick={() => navigate('/visitorHome')} style={{cursor:"pointer"}}>방문자 홈</div>
+          </>
+          :
+          <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
+          }
         </footer>
       </div>
     </div>
-    // onClick={()=> {signOut(); window.location.href = "/superMain";}}
-    
   )
 }
