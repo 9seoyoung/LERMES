@@ -10,7 +10,7 @@ import NotAllowed from '../auth/loginPage/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
 import SuperMain from '../pages/Super/SuperMain';
-import AdminHome  from '../pages/LMS/AdminHome';
+import AdminHome from '../pages/LMS/AdminHome';
 import TutorHome from '../pages/LMS/TutorHome';
 import StdHome from '../pages/LMS/StdHome';
 import WelcomeLayout from '../components/layout/WelcomeLayout';
@@ -23,7 +23,7 @@ import SchedListPopUp from '../components/ui/SchedListPopUp';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
-import UploadDownloadDemo from "../pages/UploadDownloadDemo.jsx";
+import UploadDownloadDemo from '../pages/UploadDownloadDemo.jsx';
 import DocxSet from '../pages/LMS/DocxSet.jsx';
 import AccountSet from '../pages/LMS/AccountSet.jsx';
 import GroupSet from '../components/ui/navModule/GroupSet.jsx';
@@ -33,29 +33,29 @@ import BoardManage from '../pages/LMS/BoardManage.jsx'
 
 function AppRoutes() {
   return (
-  <Routes>
-    {/* 매니저님이 짜주신 샘플 코드 */}
-    <Route path="/sample" element={<SampleApp />} />
+    <Routes>
+      {/* 매니저님이 짜주신 샘플 코드 */}
+      <Route path="/sample" element={<SampleApp />} />
 
-    {/* 테스트 페이지 */}
-    <Route path="/minical" element={<MiniCal />} />
-    <Route path="/bigcal" element={<BigCal />} />
-    <Route path="/ui" element={<UiComp />} />
-    <Route path='/test' element={<NoticeList />} />
-    <Route path="schedlist" element={<SchedList/>} />
-    <Route path="schedlistpopup" element={<SchedListPopUp />} />
+      {/* 테스트 페이지 */}
+      <Route path="/minical" element={<MiniCal />} />
+      <Route path="/bigcal" element={<BigCal />} />
+      <Route path="/ui" element={<UiComp />} />
+      <Route path="/test" element={<NoticeList />} />
+      <Route path="schedlist" element={<SchedList />} />
+      <Route path="schedlistpopup" element={<SchedListPopUp />} />
 
-    <Route path="/files" element={<UploadDownloadDemo />} />
+      <Route path="/files" element={<UploadDownloadDemo />} />
 
-    {/* 에러페이지 */}
-    <Route path="/403" element={<NotAllowed />} />
+      {/* 에러페이지 */}
+      <Route path="/403" element={<NotAllowed />} />
 
-    {/* 로그인/회원가입 레이아웃 */}
-    <Route path ='welcome' element={<WelcomeLayout/>} >
-      <Route path='generaljoin' element={<GeneralJoin/>} />
-      <Route path='tenantjoin' element={<TenantSignup />} />
-      <Route path='login' element={<Login />} />
-    </Route>
+      {/* 로그인/회원가입 레이아웃 */}
+      <Route path="welcome" element={<WelcomeLayout />}>
+        <Route path="generaljoin" element={<GeneralJoin />} />
+        <Route path="tenantjoin" element={<TenantSignup />} />
+        <Route path="login" element={<Login />} />
+      </Route>
 
     {/*기본 레이아웃*/}
   <Route path='/' element={<Layout></Layout>} >

@@ -10,6 +10,8 @@ public class CohortDto {
 
     private Long cohortSn;  // 수정, 조회 응답용
 
+    private String cohortNm;
+
     private String crclmNm;
 
     private String crclmCn;

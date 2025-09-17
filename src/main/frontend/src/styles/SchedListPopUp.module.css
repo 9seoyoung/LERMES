@@ -2,15 +2,29 @@
   border: 1px solid #ccc;
   padding: 20px;
   width: 400px;
-  height: 350px;
   background-color: #FCFEFF;
   border-radius: 16px;
+  transition: height 0.3s ease;
+  overflow: hidden;
+}
+
+.containerExpanded {
+  height: 370px;
+}
+
+.containerCollapsed {
+  height: 220px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.popUpBtn {
+display: flex;
+gap: 5px;
 }
 
 .memo {
@@ -46,3 +60,28 @@
   border: 1px solid #ddd;
   padding: 10px;
 }
+
+.content {
+display: flex;
+justify-content: space-between;
+padding: 2px;
+}
+
+.content input {
+width: 220px;
+padding: 0 3px;
+box-sizing: border-box;
+}
+
+/* 시간 설정 */
+.timeInput {
+display: flex;
+align-items: center;
+gap: 1px;
+}
+
+.timeInput  input{
+width: 105px;
+}
+
+

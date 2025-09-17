@@ -17,6 +17,9 @@ public class Cohort {
     @Column(name = "COHORT_SN")
     private Long cohortSn;
 
+    @Column(name = "COHORT_NM")
+    private String cohortNm;
+
     @Column(name = "CRCLM_NM")
     private String crclmNm;
 
@@ -43,6 +46,7 @@ public class Cohort {
 
     @Column(name = "COHORT_CATE")
     private String cohortCate;
+
 
     // Getter, Setter 생략 (롬복 사용 가능)
 
