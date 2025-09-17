@@ -1,14 +1,6 @@
-// 라이브러리
 import { Outlet, useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useAccount } from "../../auth/AuthContext";
-
-// 로직
-
-// 스타일
-import layoutStyles from "../../styles/layout.module.css"
-
-// 페이지
 import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
 import LmsHeader from "../ui/headerModule/LmsHeader";
@@ -17,15 +9,23 @@ import StdNav from "../ui/navModule/StdNav";
 import AdminNav from "../ui/navModule/AdminNav";
 import TutorNav from "../ui/navModule/TutorNav";
 import { useEffect, useState, useCallback } from "react";
+import { saveProfile } from "../../auth/authService";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
-  const { user, signOut } = useAccount();
+  const { user, signOut, patchUser, setUser } = useAccount();
   const curloc = useLocation();
-  const navKind = curloc.pathname.split('/', 2)[1];
+  const navKind = curloc.pathname.split('/', 2)[1] || '';
+  const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];
+  const [selectedItem, setItem] = useState(0);
+
+  // const onSaveProfile = async (form) => {
+  //   const saved = await saveProfile(form);
+  //   setUser(saved);           // 서버 결과로 전역 user 교체
+  // };
 
 // 헤더 종류 고르기
   function HeaderStatus({ loc }) {
@@ -41,6 +41,11 @@ export default function Layout() {
       case "tutorHome":
         component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
+
+      case "visitorHome":
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
+        break;
+
       default:
         component = <SuperHeader  />;
     }
@@ -78,8 +83,8 @@ export default function Layout() {
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
         <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
-          <div className={layoutStyles.subMenuList}>마이페이지</div>
-          <div className={layoutStyles.subMenuList} onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
+          <div className= "subMenuList" onClick={() => {navigate(`${navKind}/myPage`);}}>마이페이지</div>
+          <div className= "subMenuList" onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
         </MyInfo>
         }
       </header>
@@ -94,7 +99,7 @@ export default function Layout() {
           <Outlet />
         </main>
         <footer>
-          {user?.USER_AUTHRT_SN === 1 ?          
+          {(user?.USER_AUTHRT_SN === 1) ?          
           <>
             <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
             <div onClick={() => navigate('/adminHome')} style={{cursor:"pointer"}}>관리자 홈</div>
@@ -105,6 +110,21 @@ export default function Layout() {
           :
           <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
           }
+          <p className="testBox">
+            <div style={{fontSize: "1.4rem", color: "#444"}}>권한</div>
+            {(user?.USER_EML_ADDR === "hash@com") ? 
+              testAuthLv.map((item, idx)=> 
+                <div
+                  style={{cursor: "pointer"}}
+                  onClick={() => {patchUser({USER_AUTHRT_SN: idx + 1}); setItem(idx)}}
+                  className={`testBtn ${ selectedItem === idx ? "testClicked" : ""}`}
+                >
+                  {item}
+                </div>
+              )
+              : ""
+            }
+          </p>
         </footer>
       </div>
     </div>

@@ -87,9 +87,8 @@ public class AuthController {
             request.getSession(true);
 
             AuthCustomUserDetails me = (AuthCustomUserDetails) auth.getPrincipal();
-            String nextPath = landingService.buildNextPath(me);
 
-            return ResponseEntity.ok(new ApiResponse(true, "로그인 성공", Map.of("path", nextPath)));
+            return ResponseEntity.ok(new ApiResponse(true, "로그인 성공", null));
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
