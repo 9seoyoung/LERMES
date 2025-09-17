@@ -7,24 +7,22 @@ function getTodayString() {
   return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
 }
 
-function SchedListPopUp() {
+function SchedListPopUp({onClose, title}) {
   const [showOptions, setShowOptions] = useState(false);
   const [memo, setMemo] = useState("");
   const today = new Date().toLocaleDateString();
   const [startDate, setStartDate] = useState(getTodayString());
 
   return (
+  <div className={styles.overlay}>
     <div
-      className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}
-    >
+      className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}>
       {/* 상단 날짜 + 버튼 */}
       <div className={styles.header}>
-        <div>{today}</div>
-        {/* <button onClick={() => alert("추가 버튼 클릭")}>+</button> */}
+        <h3>{title}</h3>
         <div className={styles.popUpBtn}>
             <SaveBtn textType="저장" />
-           <CancelBtn textType="취소" />
-            {/* <button>X</button> */}
+           <CancelBtn onClick={onClose} textType="취소" />
         </div>
       </div>
       <hr style={{width: "330px", marginTop:"10px" }} />
@@ -77,6 +75,7 @@ function SchedListPopUp() {
         </div>
       )}
     </div>
+  </div>
   );
 }
 
