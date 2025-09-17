@@ -22,10 +22,10 @@ export default function Layout() {
   const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];
   const [selectedItem, setItem] = useState(0);
 
-  const onSaveProfile = async (form) => {
-    const saved = await saveProfile(form);
-    setUser(saved);           // 서버 결과로 전역 user 교체
-  };
+  // const onSaveProfile = async (form) => {
+  //   const saved = await saveProfile(form);
+  //   setUser(saved);           // 서버 결과로 전역 user 교체
+  // };
 
 // 헤더 종류 고르기
   function HeaderStatus({ loc }) {
