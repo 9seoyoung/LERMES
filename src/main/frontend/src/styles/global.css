@@ -193,6 +193,7 @@ h4 {
   border-radius: 16px 16px 0 0;
   box-shadow: 4px -4px 4px #00000025;
   gap: 24px;
+  position: relative;
 }
 
 footer > div {
@@ -491,6 +492,24 @@ footer > div:hover {
 #ftClicked {
   background-color: #0088FF;
   color: #FCFEFF;
+}
+
+.testBox {
+  display: flex;
+  gap: 12px;
+  position: absolute;
+  right: 24px;
+  justify-content: flex-end;
+}
+.testBtn {
+  font-size: 1rem;
+  padding: 4px 12px;
+}
+
+.testClicked {
+  background-color: #222;
+  color: #FCFEFF;
+  border-radius: 50%;
 }
 
 .goSuper{

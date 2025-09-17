@@ -18,6 +18,8 @@ export default function Layout() {
   const { user, signOut, patchUser } = useAccount();
   const curloc = useLocation();
   const navKind = curloc.pathname.split('/', 2)[1] || '';
+  const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];
+  const [selectedItem, setItem] = useState(0);
 
 // 헤더 종류 고르기
   function HeaderStatus({ loc }) {
@@ -91,7 +93,7 @@ export default function Layout() {
           <Outlet />
         </main>
         <footer>
-          {(user?.USER_AUTHRT_SN === 1 || user?.USER_EML_ADDR === "hash@com") ?          
+          {(user?.USER_AUTHRT_SN === 1) ?          
           <>
             <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
             <div onClick={() => navigate('/adminHome')} style={{cursor:"pointer"}}>관리자 홈</div>
@@ -102,15 +104,21 @@ export default function Layout() {
           :
           <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
           }
-          {user?.USER_EML_ADDR === "hash@com" ? <>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 1})} style={{cursor:"pointer"}}>권한 1</div>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 2})} style={{cursor:"pointer"}}>권한 2</div>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 3})} style={{cursor:"pointer"}}>권한 3</div>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 4})} style={{cursor:"pointer"}}>권한 4</div>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 5})} style={{cursor:"pointer"}}>권한 5</div>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 6})} style={{cursor:"pointer"}}>권한 6</div>
-            <div onClick={() => patchUser({USER_AUTHRT_SN: 7})} style={{cursor:"pointer"}}>권한 7</div>
-          </> : <></> }
+          <p className="testBox">
+            <div style={{fontSize: "1.4rem", color: "#444"}}>권한</div>
+            {(user?.USER_EML_ADDR === "hash@com") ? 
+              testAuthLv.map((item, idx)=> 
+                <div
+                  style={{cursor: "pointer"}}
+                  onClick={() => {patchUser({USER_AUTHRT_SN: idx + 1}); setItem(idx)}}
+                  className={`testBtn ${ selectedItem === idx ? "testClicked" : ""}`}
+                >
+                  {item}
+                </div>
+              )
+              : ""
+            }
+          </p>
         </footer>
       </div>
     </div>
