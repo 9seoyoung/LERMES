@@ -18,7 +18,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequiredArgsConstructor
 public class CompanyPath {
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    // private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     CmmnDao dao;
@@ -32,10 +32,12 @@ public class CompanyPath {
      * Description 	 :
      */
 
-    @GetMapping("/cplogo")
-    public List<CmmnMap> getCpNmAndImgOneByOgdpCpSn(CmmnMap params) {
-        log.info("MaterialsController getMaterialsList() Called >>>>>>>>");
-        String queryId = "com.kdt.KDT_PJT.path.mapper";
-        dao.selectOne(queryId, params.OGDP_CO_SN);
-    }
+    // @GetMapping("/cplogo")
+    // public List<CmmnMap> getCpNmAndImgOneByOgdpCpSn(CmmnMap params) {
+    //     log.info("MaterialsController getMaterialsList() Called >>>>>>>>");
+    //     String queryId = "com.kdt.KDT_PJT.path.mapper";
+    //     dao.selectOne(queryId, params.OgCOSN);
+
+    //     
+    // }
 }
