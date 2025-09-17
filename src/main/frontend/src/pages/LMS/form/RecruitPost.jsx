@@ -15,20 +15,20 @@ function SurveyPost({formId, handleChange, formData, FileList, files, setFiles})
           />
         </div>
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${formId}_surveyPeriod`}>모집기간</label>
-          <input id={`${formId}_surveyStart`}
+          <label className='formLabel' htmlFor={`${formId}_recruitPeriod`}>모집기간</label>
+          <input id={`${formId}_recruitStart`}
             type="date"
             className='formInput' 
-            name='surveyStart' 
-            value={formData.surveyStart} 
+            name='recruitStart' 
+            value={formData.recruitStart} 
             onChange={handleChange}
           />
           <p>-</p>
-          <input id={`${formId}_surveyEnd`}
+          <input id={`${formId}_recruitEnd`}
             type="date"
             className='formInput' 
-            name='surveyEnd' 
-            value={formData.surveyEnd} 
+            name='recruitEnd' 
+            value={formData.recruitEnd} 
             onChange={handleChange}
           />
         </div>

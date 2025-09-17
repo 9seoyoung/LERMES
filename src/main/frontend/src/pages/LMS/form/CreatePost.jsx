@@ -5,6 +5,7 @@ import {FileUpload, FileList } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
+import SurveyPost from './SurveyPost';
 
 function CreatePost() {
   const formId = useId();
@@ -54,15 +55,46 @@ function CreatePost() {
       })();
     }, []);
 
+    function PostStatus({type}){
+      let component = <ArticlePost/>; //기본값
+    
+      switch (type){
+        case "공지사항":
+          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+          break;
+        case "자료실":
+        return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+        break;
+        case "학습일지":
+          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+          break;
+        case "FAQ":
+          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+          break;
+        case "공지사항":
+          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+          break;
+        case "설문조사":
+          return component = <SurveyPost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+          break;
+        default :
+          component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+      }
+    
+      return
+    }
+
+
 
   return (
     <div className="boardPage">
       <h2>게시판</h2>
       <div className="BigListBox">
-        <h4 style={{fontWeight: "400"}}>게시글 등록하기</h4>
+        <h4 style={{fontWeight: "500"}}>{formData.type} 등록하기</h4>
         <form className='formAreaRow' onSubmit={handleSubmit}>
           <div className='formArea_L'>
-            <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles} ></ArticlePost>
+            <PostStatus type={formData.type}/>
+            {/* <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles} ></ArticlePost> */}
           </div>
           <div className='formArea_R'>
             <div className='selectBoxArea' style={{position:"relative"}}>
@@ -75,12 +107,12 @@ function CreatePost() {
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"설문조사"}))} >설문조사</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"FAQ"}))} >FAQ</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"일정"}))} >일정</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담기록"}))} >면담 기록</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담기록"}))} >면담기록</p>
                   {(userAuth === 4 || userAuth === 5 )?
                   <>
                     <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"학습일지"}))} >학습일지</p>
                     <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"문의"}))} >문의</p>
-                    <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담신청"}))} >면담 신청</p>
+                    <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담신청"}))} >면담신청</p>
                   </> : ""}
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
@@ -124,28 +156,3 @@ function CreatePost() {
 }
 
 export default CreatePost
-
-
-export function PostStatus({type}){
-  const component = <ArticlePost/>;
-
-  switch (type){
-    case "공지사항":
-      return <ArticlePost />
-      break;
-    case "자료실":
-    return <ArticlePost />
-    break;
-    case "학습일지":
-      return <ArticlePost />
-      break;
-    case "FAQ":
-      return <ArticlePost />
-      break;
-    case "공지사항":
-      return <ArticlePost />
-      break;
-  }
-
-  return
-}

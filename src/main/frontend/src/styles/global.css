@@ -637,6 +637,7 @@ footer > div:hover {
   flex-direction: row;
   justify-content: space-between;
   color: #222;
+  gap: 12px;
 }
 
 .inputSet {
@@ -646,6 +647,10 @@ footer > div:hover {
   align-items: center;
   gap: 4px;
   width: 100%;
+}
+
+.inputFlex1{
+  flex: 1;
 }
 
 .formLabel{
