@@ -1,3 +1,5 @@
+// 일정 등록 팝업창
+
 import React, { useState } from "react";
 import {SaveBtn, CancelBtn} from './UiComp.jsx';
 import styles from "../../styles/SchedListPopUp.module.css";
@@ -19,7 +21,7 @@ function SchedListPopUp({onClose, title}) {
       className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}>
       {/* 상단 날짜 + 버튼 */}
       <div className={styles.header}>
-        <h3>{title}</h3>
+        <input placeholder="제목 입력" className={styles.schedTitle} />
         <div className={styles.popUpBtn}>
             <SaveBtn textType="저장" />
            <CancelBtn onClick={onClose} textType="취소" />

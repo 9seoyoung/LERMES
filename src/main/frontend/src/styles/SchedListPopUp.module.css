@@ -27,7 +27,7 @@
 }
 
 .containerExpanded {
-  height: 375px;
+  height: 380px;
 }
 
 .containerCollapsed {
@@ -38,6 +38,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.schedTitle {
+border: none;
+padding: 0 5px;
+}
+
+.schedTitle:focus {
+border: 1px solid #000;
+
 }
 
 .popUpBtn {

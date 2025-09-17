@@ -1,4 +1,5 @@
-// SchedList.jsx
+// 일정 목록
+
 import React, { useState } from "react";
 import {  SchedAddBtn } from './UiComp.jsx';
 import SchedListPopUp from './SchedListPopUp.jsx';
@@ -19,13 +20,14 @@ function SchedList() {
 
   return (
     <div className={styles.sched}>
-      <div className={styles.selectedDateBox}>
-        <input
+      <div className={styles.schedDateBox}>
+        {/* <input
         placeholder="등록된 일정 (xx월 xx일)"
         className={styles.schedTitle}
          value={input}
          onChange={(e) => setInput(e.target.value)}
-         />
+         /> */}
+         <div className={styles.schedDate}>등록된 일정 (xx월 xx일)</div>
         <SchedAddBtn textType="+ 일정등록" onClick={() => setShowPopup(true)} />
       </div>
 
