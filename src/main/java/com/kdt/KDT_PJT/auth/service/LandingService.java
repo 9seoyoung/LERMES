@@ -11,32 +11,32 @@ import org.springframework.stereotype.Service;
 public class LandingService {
     /**
      * 로그인 성공 시 프론트 라우트 path 반환
-     * - SUPER_ADMIN, GENERAL → superMain
+     * - SUPER_ADMIN, GENERAL → /
      * - TENANT_ADMIN, EMPLOYEE → adminHome
      * - INSTRUCTOR → tutorHome
      * - STUDENT → stdHome
      */
     public String buildNextPath(AuthCustomUserDetails me) {
         Long roleType = me.getRoleType();
-        if (roleType == null) return "superMain";
+        if (roleType == null) return "/";
 
         switch (roleType.intValue()) {
             case 1:  // SUPER_ADMIN
             case 6:  // GENERAL
-                return "superMain";
+                return "/";
 
             case 2:  // TENANT_ADMIN
-            case 4:  // EMPLOYEE
+            case 3:  // EMPLOYEE
                 return "adminHome";
 
-            case 3:  // INSTRUCTOR
+            case 4:  // INSTRUCTOR
                 return "tutorHome";
 
             case 5:  // STUDENT
                 return "stdHome";
 
             default:
-                return "superMain";
+                return "/";
         }
     }
 }

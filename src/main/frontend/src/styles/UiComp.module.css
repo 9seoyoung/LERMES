@@ -57,9 +57,10 @@
   width: 100px;
   height: 35px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: bold;
   color: #fff;
-  background-color: #acacac;
+  background-color: #ACACAC;
 }
 
 .grayBtn:hover,
@@ -120,12 +121,11 @@
 
 /* 입•퇴실, 취소 버튼 공통 */
 .statusBtn {
-width: 180px;
+  min-width: 180px;
   height: 32px;
   border-radius: 4px;
   color: #fff;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .statusBtn {
@@ -314,7 +314,6 @@ width: 180px;
   padding: 5px 5px;
   width: 840px;
   height: 340px;
-
 }
 
 /* 체크박스 공통 */
