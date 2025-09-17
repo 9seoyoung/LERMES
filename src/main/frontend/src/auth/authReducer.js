@@ -18,6 +18,8 @@ export function authReducer(state, action) {
       return { ...state, loading: true };
     case "LOGOUT":
       return { ...initialAuthState, loading: false, fetchedOnce: true };
+    case 'PATCH_USER':
+      return { ...state, user: state.user ? { ...state.user, ...action.payload } : state.user };    
     default:
       return state;
   }

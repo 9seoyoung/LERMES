@@ -193,6 +193,7 @@ h4 {
   border-radius: 16px 16px 0 0;
   box-shadow: 4px -4px 4px #00000025;
   gap: 24px;
+  position: relative;
 }
 
 footer > div {
@@ -308,6 +309,8 @@ footer > div:hover {
 
 .createBtn:hover {
   cursor: pointer;
+  background: #ebeff4; 
+  color: #333;
 }
 
 .save_box {
@@ -463,6 +466,52 @@ footer > div:hover {
   justify-content: space-between;
 }
 
+.ftList_L {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ftList_L li {
+  min-width: 60px;
+  height: 24px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #FCFEFF;
+  padding: 2px 6px;
+}
+
+.ftList_L li:hover {
+  background: #ebeff4; 
+  color: #333;
+}
+
+#ftClicked {
+  background-color: #0088FF;
+  color: #FCFEFF;
+}
+
+.testBox {
+  display: flex;
+  gap: 12px;
+  position: absolute;
+  right: 24px;
+  justify-content: flex-end;
+}
+.testBtn {
+  font-size: 1rem;
+  padding: 4px 12px;
+}
+
+.testClicked {
+  background-color: #222;
+  color: #FCFEFF;
+  border-radius: 50%;
+}
+
 .goSuper{
   background-color: #d9d9d9;
   color: #fff;
@@ -552,6 +601,12 @@ footer > div:hover {
 
 .dropset_dd {
   flex: 1;
+}
+
+.dropSet p:hover {
+  cursor: pointer;
+  background: #00000025;
+  color: #f6f6f6;
 }
 
 .menuContainer {

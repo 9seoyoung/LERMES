@@ -159,7 +159,7 @@ color: #000;
   gap: 1.2rem;
 }
 
-.statusBtn > div:first-child {
+.statusBtn>div:first-child {
   padding: 0 1.2rem 0 0;
   border-right: 1px solid #d9d9d9;
 }
@@ -172,7 +172,7 @@ color: #000;
 .checkInBtn {
   background-color: #62b6ff;
   border-radius: 18px;
-  width: 80px;
+  width: 180px;
   height: 36px;
   display: flex;
   align-items: center;
@@ -188,7 +188,7 @@ color: #000;
   outline: none;
 }
 
-.checkInBtn:active{
+.checkInBtn:active {
   scale: 0.97;
   background-color: #1c476d;
 }
@@ -257,8 +257,8 @@ color: #000;
   width: 8px;
   height: 2px;
   border-radius: 6px;
-  box-shadow:none;
-  border:none;
+  box-shadow: none;
+  border: none;
 }
 
 /* 서식 저장, 질문 추가 버튼 */
@@ -316,10 +316,12 @@ color: #000;
   position: absolute;
   top: 50%;
   right: 8px;
-  pointer-events: none; /* 클릭 안 되게 */
+  pointer-events: none;
+  /* 클릭 안 되게 */
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 10px solid #000; /* 역삼각형 */
+  border-top: 10px solid #000;
+  /* 역삼각형 */
   transform: translateY(-50%);
 }
 
@@ -416,6 +418,7 @@ color: #000;
 .row:hover td {
   background-color: #d9d9d9;
 }
+
 .row:active td {
   background-color: #acacac;
   color: #fff;
