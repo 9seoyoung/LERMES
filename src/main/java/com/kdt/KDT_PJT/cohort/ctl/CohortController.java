@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.cohort.ctl;
 
 
+import com.kdt.KDT_PJT.cohort.dto.CohortListDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
 import com.kdt.KDT_PJT.cohort.service.CohortService;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,26 @@ public class CohortController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    //회사 조회
+    @GetMapping("/company/{coSn}")
+    public ResponseEntity<List<Cohort>> getCohortsByCompanyId(@PathVariable Long coSn) {
+        List<Cohort> cohorts = cohortService.findByCoSn(coSn);
+        if (cohorts.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(cohorts);
+    }
+
+    @GetMapping("/company/{coSn}/names")
+    public ResponseEntity<List<CohortListDto>> getCohortNamesByCompanyId(@PathVariable Long coSn) {
+        List<CohortListDto> names = cohortService.findNamesByCoSn(coSn);
+        if (names.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(names);
+    }
+
+
 
     // 생성
     @PostMapping
