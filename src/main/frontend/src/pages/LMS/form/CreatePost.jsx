@@ -69,22 +69,22 @@ function CreatePost() {
               <div className='dropSet' style={{zIndex:"4"}} >
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"공지사항"}))} onCli>공지사항</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"자료실"}))} onCli>자료실</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"학습일지"}))} onCli>학습일지</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"FAQ"}))} onCli>FAQ</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"Q&A"}))} onCli>Q&A</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"공지사항"}))} >공지사항</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"자료실"}))} >자료실</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"학습일지"}))} >학습일지</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"FAQ"}))} >FAQ</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"Q&A"}))} >Q&A</p>
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
               </div>
               <div className='dropSet' style={{zIndex: "2"}}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"전체"}))} onCli>전체</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"소속그룹"}))} onCli>소속 그룹</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"관리자"}))} onCli>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"강사"}))} onCli>강사</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"비공개"}))} onCli>비공개</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"전체"}))} >전체</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"소속그룹"}))} >소속 그룹</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"관리자"}))} >관리자</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"강사"}))} >강사</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"비공개"}))} >비공개</p>
                 </Dropdown>
                 <input type="hidden" name="scope" value={formData.scope} />
               </div>

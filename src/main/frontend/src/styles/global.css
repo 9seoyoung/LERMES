@@ -472,6 +472,7 @@ footer > div:hover {
 .ftList_L li {
   min-width: 60px;
   height: 24px;
+  flex: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -479,6 +480,12 @@ footer > div:hover {
   background-color: #FCFEFF;
   padding: 2px 6px;
 }
+
+.ftList_L li:hover {
+  background: #ebeff4; 
+  color: #333;
+}
+
 #ftClicked {
   background-color: #0088FF;
   color: #FCFEFF;
@@ -556,7 +563,7 @@ footer > div:hover {
   gap: 12px;
 }
 
-.dropSet p {
+.dropSet dro p {
   width: 100%;
   display: flex;
   height: 100%;
@@ -573,6 +580,12 @@ footer > div:hover {
 
 .dropset_dd {
   flex: 1;
+}
+
+.dropSet p:hover {
+  cursor: pointer;
+  background: #00000025;
+  color: #f6f6f6;
 }
 
 .menuContainer {

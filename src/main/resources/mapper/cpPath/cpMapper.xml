@@ -5,5 +5,6 @@
 
 <mapper namespace="com.kdt.KDT_PJT.path.mapper.CpPathMapper">
 
-    <resultMap id="SupplierMap" type="com.kdt.KDT_PJT.domain.supplier.dto.SupplierResponse">
-    </resultMap>
+<!--    <resultMap id="SupplierMap" type="com.kdt.KDT_PJT.domain.supplier.dto.SupplierResponse">-->
+<!--    </resultMap>-->
+</mapper>
