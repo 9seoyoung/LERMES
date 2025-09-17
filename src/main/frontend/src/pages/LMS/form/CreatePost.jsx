@@ -3,6 +3,7 @@ import Dropdown from '../../../components/ui/Dropdown'
 import layoutStyles from "../../../styles/layout.module.css"
 import {FileUpload, FileList } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
+import { ArticlePost } from './ArticlePost';
 
 function CreatePost() {
   const formId = useId();
@@ -42,31 +43,7 @@ function CreatePost() {
         <h4 style={{fontWeight: "400"}}>게시글 등록하기</h4>
         <form className='formAreaRow' onSubmit={handleSubmit}>
           <div className='formArea_L'>
-            <div className='formHeader'>
-              <div className='inputSet'>
-                <label className='formLabel' htmlFor={`${formId}_title`}>제목</label>
-                <input id={`${formId}_title`}
-                  className='formInput' 
-                  name='title' 
-                  placeholder='제목을 입력하세요.' 
-                  value={formData.title} 
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            {/* 본문 */}
-            <textarea                 
-                id={`${formId}_content`}
-                name="content"
-                className='formTextarea'
-                placeholder='본문을 입력하세요.'
-                value={formData.content}
-                onChange={handleChange}>
-            </textarea>
-            <div className='inputSet'>
-              <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-              <FileList files={files} setFiles={setFiles}></FileList>
-            </div>
+            <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles} ></ArticlePost>
           </div>
           <div className='formArea_R'>
             <div className='selectBoxArea' style={{position:"relative"}}>

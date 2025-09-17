@@ -21,3 +21,5 @@ export const logout = () =>  ok(api.post("/logout"));
 
 // 현재 로그인 사용자
 export const fetchMe = () =>  ok(api.get("/me"));
+
+export const saveProfile = (form) => ok(api.put("/profile", form));
