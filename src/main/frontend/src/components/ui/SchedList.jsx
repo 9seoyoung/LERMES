@@ -13,14 +13,26 @@ function SchedList() {
     "일정 5",
     "일정 6",
   ]);
-  const [input, setInput] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");     // 날짜 선택용 상태
+  const [input, setInput] = useState("");   // 일정 텍스트
 
-  const addSchedule = () => {
+    const addSchedule = () => {
+      if (input.trim() !== "" && selectedDate) {
+        setSchedules([...schedules, `${selectedDate}: ${input}`]);
+        setInput("");
+      }
+    };
+
+     const handleDateSelect = (date) => {
+        setSelectedDate(date); // ex: "09월 17일"
+      };
+
+  /* const addSchedule = () => {
     if (input.trim() !== "") {
       setSchedules([...schedules, input]);
       setInput("");
     }
-  };
+  }; */
 
   return (
     <div className={styles.sched}>

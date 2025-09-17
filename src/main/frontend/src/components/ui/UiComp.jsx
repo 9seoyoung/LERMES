@@ -86,11 +86,9 @@ export function GrayBtn({ textType }) {
 // 저장 버튼
 export function SaveBtn({ textType }) {
   return (
-    <div>
       <button className={`${styles.smallBtn} ${styles.saveBtn}`}>
         {textType}
       </button>
-    </div>
   );
 }
 // 취소 버튼
