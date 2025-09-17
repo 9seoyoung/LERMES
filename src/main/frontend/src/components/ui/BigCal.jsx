@@ -183,4 +183,3 @@ setSelectedDate(today.getDate());
 };
 
 export default BigCal;
-
