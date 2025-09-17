@@ -1,5 +1,5 @@
 // src/auth/AuthProvider.jsx
-import { useEffect, useReducer, useMemo } from 'react';
+import { useEffect, useReducer, useMemo, useCallback } from 'react';
 import { authReducer, initialAuthState } from './authReducer';
 import { AuthContext } from './AuthContext';
 import { bindUnauthorizedHandler } from './api';
@@ -67,6 +67,10 @@ export default function AuthProvider({ children }) {
     return !!r && roles.map(String).includes(r);
   };
 
+  const patchUser = useCallback((partial) => {
+    dispatch({ type: 'PATCH_USER', payload: partial });
+  }, []);
+
   const value = useMemo(
     () => ({
       user: state.user,
@@ -76,6 +80,7 @@ export default function AuthProvider({ children }) {
       signOut,
       refreshMe,
       hasRole,
+      patchUser
     }),
     [state]
   );

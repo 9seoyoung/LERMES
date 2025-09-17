@@ -1,19 +1,29 @@
 import React, { useState } from "react";
-import {SaveBtn} from './UiComp.jsx';
+import {SaveBtn, CancelBtn} from './UiComp.jsx';
 import styles from "../../styles/SchedListPopUp.module.css";
 
-function SchedListPopUp() {
+function getTodayString() {
+  const today = new Date();
+  return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
+}
+
+function SchedListPopUp({onClose, title}) {
   const [showOptions, setShowOptions] = useState(false);
   const [memo, setMemo] = useState("");
   const today = new Date().toLocaleDateString();
+  const [startDate, setStartDate] = useState(getTodayString());
 
   return (
-    <div className={styles.container}>
+  <div className={styles.overlay}>
+    <div
+      className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}>
       {/* 상단 날짜 + 버튼 */}
       <div className={styles.header}>
-        <div>{today}</div>
-        {/* <button onClick={() => alert("추가 버튼 클릭")}>+</button> */}
-        <SaveBtn textType="저장" />
+        <h3>{title}</h3>
+        <div className={styles.popUpBtn}>
+            <SaveBtn textType="저장" />
+           <CancelBtn onClick={onClose} textType="취소" />
+        </div>
       </div>
       <hr style={{width: "330px", marginTop:"10px" }} />
 
@@ -36,31 +46,36 @@ function SchedListPopUp() {
         <span className={`${styles.arrow} ${showOptions ? styles.arrowOpen : ""}`}>
           ▼
         </span>
-        더 많은 옵션
+        상세보기
       </div>
 
       {/* 옵션 내용 */}
       {showOptions && (
         <div className={styles.optionsContent}>
-            <div>
+            <div className={styles.content}>
                 <label>시작일</label>
-                <input />
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
             </div>
-            <div>
+            <div className={styles.content}>
                 <label>종료일</label>
-                <input />
+                <input type="date" />
             </div>
-            <div>
+            <div className={styles.content}>
                 <label>시간</label>
-                <input />
+                <div className={styles.timeInput}>
+                <input type="time" />
+                <div>~</div>
+                <input type="time" />
+                </div>
             </div>
-            <div>
+            <div className={styles.content}>
                 <label>장소</label>
-                <input />
+                <input type="text" />
             </div>
         </div>
       )}
     </div>
+  </div>
   );
 }
 

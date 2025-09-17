@@ -14,6 +14,7 @@ export function UiComp() {
             <WhiteBtn />
             <BlueBtn />
             <GrayBtn />
+            <SchedAddBtn />
             <SaveBtn />
             <CancelBtn />
             <TempSaveBtn />
@@ -83,21 +84,29 @@ export function GrayBtn({ textType }) {
     </div>
   );
 }
+
+// 일정등록 버튼
+export function SchedAddBtn({ textType, onClick }) {
+    return (
+        <div>
+            <button onClick={onClick} className={styles.schedAddBtn}>{textType}</button>
+        </div>
+    );
+}
+
 // 저장 버튼
 export function SaveBtn({ textType }) {
   return (
-    <div>
       <button className={`${styles.smallBtn} ${styles.saveBtn}`}>
         {textType}
       </button>
-    </div>
   );
 }
 // 취소 버튼
-export function CancelBtn({ textType }) {
+export function CancelBtn({ textType, onClick }) {
   return (
     <div>
-      <button className={`${styles.smallBtn} ${styles.cancelBtn}`}>
+      <button onClick={onClick} className={`${styles.smallBtn} ${styles.cancelBtn}`}>
         {textType}
       </button>
     </div>

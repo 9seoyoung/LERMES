@@ -1,16 +1,48 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* 반투명 검정 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+}
+
 .container {
   border: 1px solid #ccc;
   padding: 20px;
   width: 400px;
-  height: 350px;
   background-color: #FCFEFF;
   border-radius: 16px;
+  transition: height 0.3s ease;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* 다른 요소 위에 뜨게 */
+}
+
+.containerExpanded {
+  height: 375px;
+}
+
+.containerCollapsed {
+  height: 220px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.popUpBtn {
+display: flex;
+gap: 5px;
 }
 
 .memo {
@@ -45,4 +77,27 @@
   margin-top: 10px;
   border: 1px solid #ddd;
   padding: 10px;
+}
+
+.content {
+display: flex;
+justify-content: space-between;
+padding: 2px;
+}
+
+.content input {
+width: 220px;
+padding: 0 3px;
+box-sizing: border-box;
+}
+
+/* 시간 설정 */
+.timeInput {
+display: flex;
+align-items: center;
+gap: 1px;
+}
+
+.timeInput  input{
+width: 105px;
 }

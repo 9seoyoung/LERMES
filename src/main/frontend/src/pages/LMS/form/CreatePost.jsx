@@ -2,9 +2,14 @@ import React, { useEffect, useId, useState } from 'react'
 import Dropdown from '../../../components/ui/Dropdown'
 import layoutStyles from "../../../styles/layout.module.css"
 import {FileUpload, FileList } from '../../../components/ui/UiComp';
+import { useAccount } from '../../../auth/AuthContext';
+import { ArticlePost } from './ArticlePost';
 
 function CreatePost() {
   const formId = useId();
+  const {user} = useAccount();
+  const userAuth = user.USER_AUTHRT_SN;
+
   const handleSubmit = (e) => {
     e.preventDefault(); // 새로고침 막음
   };
@@ -38,53 +43,37 @@ function CreatePost() {
         <h4 style={{fontWeight: "400"}}>게시글 등록하기</h4>
         <form className='formAreaRow' onSubmit={handleSubmit}>
           <div className='formArea_L'>
-            <div className='formHeader'>
-              <div className='inputSet'>
-                <label className='formLabel' htmlFor={`${formId}_title`}>제목</label>
-                <input id={`${formId}_title`}
-                  className='formInput' 
-                  name='title' 
-                  placeholder='제목을 입력하세요.' 
-                  value={formData.title} 
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            {/* 본문 */}
-            <textarea                 
-                id={`${formId}_content`}
-                name="content"
-                className='formTextarea'
-                placeholder='본문을 입력하세요.'
-                value={formData.content}
-                onChange={handleChange}>
-            </textarea>
-            <div className='inputSet'>
-              <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-              <FileList files={files} setFiles={setFiles}></FileList>
-            </div>
+            <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles} ></ArticlePost>
           </div>
           <div className='formArea_R'>
             <div className='selectBoxArea' style={{position:"relative"}}>
               <div className='dropSet' style={{zIndex:"4"}} >
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"공지사항"}))} onCli>공지사항</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"자료실"}))} onCli>자료실</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"학습일지"}))} onCli>학습일지</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"FAQ"}))} onCli>FAQ</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"Q&A"}))} onCli>Q&A</p>
+                  {userAuth === 2 || userAuth === 3}
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"공지사항"}))} >공지사항</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"자료실"}))} >자료실</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"학습일지"}))} >학습일지</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"설문조사"}))} >설문조사</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"FAQ"}))} >FAQ</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"문의"}))} >문의</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"일정"}))} >일정</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담기록"}))} >면담 기록</p>
+                  {(userAuth === 4 || userAuth === 5 )?
+                  <>
+                    <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담신청"}))} >면담 신청</p>
+                  </> : ""}
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
               </div>
               <div className='dropSet' style={{zIndex: "2"}}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"전체"}))} onCli>전체</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"소속그룹"}))} onCli>소속 그룹</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"관리자"}))} onCli>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"강사"}))} onCli>강사</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"비공개"}))} onCli>비공개</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"전체"}))} >전체</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"소속그룹"}))} >소속 그룹</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"관리자"}))} >관리자</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"강사"}))} >강사</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"비공개"}))} >비공개</p>
                 </Dropdown>
                 <input type="hidden" name="scope" value={formData.scope} />
               </div>
