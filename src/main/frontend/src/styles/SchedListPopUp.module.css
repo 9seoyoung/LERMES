@@ -1,3 +1,16 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4); /* 반투명 검정 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+}
+
 .container {
   border: 1px solid #ccc;
   padding: 20px;
@@ -6,10 +19,15 @@
   border-radius: 16px;
   transition: height 0.3s ease;
   overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* 다른 요소 위에 뜨게 */
 }
 
 .containerExpanded {
-  height: 370px;
+  height: 375px;
 }
 
 .containerCollapsed {
@@ -83,5 +101,3 @@ gap: 1px;
 .timeInput  input{
 width: 105px;
 }
-
-
