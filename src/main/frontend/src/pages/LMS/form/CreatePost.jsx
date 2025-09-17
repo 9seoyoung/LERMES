@@ -7,6 +7,8 @@ import { useAccount } from '../../../auth/AuthContext';
 function CreatePost() {
   const formId = useId();
   const {user} = useAccount();
+  const userAuth = user.USER_AUTHRT_SN;
+
   const handleSubmit = (e) => {
     e.preventDefault(); // 새로고침 막음
   };
@@ -71,16 +73,19 @@ function CreatePost() {
               <div className='dropSet' style={{zIndex:"4"}} >
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
-                  {user.USER_AUTHRT_SN === 2 || user.USER_AUTHRT_SN === 3}
+                  {userAuth === 2 || userAuth === 3}
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"공지사항"}))} >공지사항</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"자료실"}))} >자료실</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"학습일지"}))} >학습일지</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"설문조사"}))} >설문조사</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"FAQ"}))} >FAQ</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"문의"}))} >문의</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"일정"}))} >일정</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담신청"}))} >면담 신청</p>
-
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담기록"}))} >면담 기록</p>
+                  {(userAuth === 4 || userAuth === 5 )?
+                  <>
+                    <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, type:"면담신청"}))} >면담 신청</p>
+                  </> : ""}
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
               </div>

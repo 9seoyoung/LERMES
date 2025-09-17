@@ -25,7 +25,7 @@ export default function Board(){
                     <li>임시 저장</li>
                 </ul>
                 <div className="ftList_R">
-                    <div className="createBtn" onClick={() => navigate('\createPost')}>
+                    <div className="createBtn " onClick={() => navigate('\createPost')}>
                         + 등록하기
                     </div>
                 </div>

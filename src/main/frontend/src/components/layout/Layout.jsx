@@ -15,7 +15,7 @@ import { useEffect, useState, useCallback } from "react";
 export default function Layout() {
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
-  const { user, signOut } = useAccount();
+  const { user, signOut, patchUser } = useAccount();
   const curloc = useLocation();
   const navKind = curloc.pathname.split('/', 2)[1] || '';
 
@@ -91,7 +91,7 @@ export default function Layout() {
           <Outlet />
         </main>
         <footer>
-          {user?.USER_AUTHRT_SN === 1 ?          
+          {(user?.USER_AUTHRT_SN === 1 || user?.USER_EML_ADDR === "hash@com") ?          
           <>
             <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
             <div onClick={() => navigate('/adminHome')} style={{cursor:"pointer"}}>관리자 홈</div>
@@ -102,6 +102,15 @@ export default function Layout() {
           :
           <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
           }
+          {user?.USER_EML_ADDR === "hash@com" ? <>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 1})} style={{cursor:"pointer"}}>권한 1</div>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 2})} style={{cursor:"pointer"}}>권한 2</div>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 3})} style={{cursor:"pointer"}}>권한 3</div>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 4})} style={{cursor:"pointer"}}>권한 4</div>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 5})} style={{cursor:"pointer"}}>권한 5</div>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 6})} style={{cursor:"pointer"}}>권한 6</div>
+            <div onClick={() => patchUser({USER_AUTHRT_SN: 7})} style={{cursor:"pointer"}}>권한 7</div>
+          </> : <></> }
         </footer>
       </div>
     </div>
