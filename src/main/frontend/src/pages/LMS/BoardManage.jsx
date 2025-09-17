@@ -7,20 +7,27 @@ import Dropdown from "../../components/ui/Dropdown";
 import { useEffect, useState } from "react";
 import {hortlistByCpSn} from "../../services/cohortService"
 import FilterList from "../../components/ui/FilterList";
+import { toast } from "react-toastify";
 
 export default function Board(){
     const navigate = useNavigate();
     const {user} = useAccount();
     const [hortlist, setHortList] = useState([]);
 
-    // useEffect(async () => {
-    //     // >>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출
-    //     const data = await  hortlistByCpSn(user.OGDP_CO_SN);
-    //     // <<<<<<<<<<<<<<<<< data에 반환
-    //     console.log(`>>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출`)
-    //     console.log(`<<<<<<<<<<<<<<< 반환 ${data}`)
-    //     setHortList(data)
-    // }, [hortlist] );
+    useEffect(() => {
+        (async () => {
+            const coSn = user.USER_OGDP_CO_SN
+          try {
+            console.log(coSn);
+            console.log(`>>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출`)
+            const data = await hortlistByCpSn(coSn);
+            console.log(`<<<<<<<<<<<<<<< 반환 ${data}`)
+            setHortList(data);
+          } catch (e) {
+            console.log(e.message);
+          }
+        })();
+      }, []);
     
 
     return (
