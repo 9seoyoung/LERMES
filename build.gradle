@@ -93,6 +93,9 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 }
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-parameters"
+}
 
 tasks.named('test') {
 	useJUnitPlatform()
@@ -174,3 +177,4 @@ bootJar {
     enabled = false           		 // bootWar 활성화 (기본값은 true)
     archiveFileName.set('ROOT.war')  // ROOT로 지정해야 컨텍스트패스가 '/'로 됩니다. (권장)
 }*/
+
