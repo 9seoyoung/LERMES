@@ -62,7 +62,7 @@ function AppRoutes() {
     {/* 기본 접근 루트 */}
       <Route index element={<SuperMain/>}/>
       <Route path="visitorHome" element={<VisitorHome />} />
-      <Route path=':home/myPage' element={<Mypage/>}/>
+      <Route path='/myPage' element={<Mypage/>}/>
 
 
       {/* 관리자(테넌트, 직원) */}

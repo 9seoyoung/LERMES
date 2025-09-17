@@ -17,7 +17,7 @@ export default function Layout() {
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut } = useAccount();
   const curloc = useLocation();
-  const navKind = curloc.pathname.split('/', 2)[1];
+  const navKind = curloc.pathname.split('/', 2)[1] || '';
 
 // 헤더 종류 고르기
   function HeaderStatus({ loc }) {
