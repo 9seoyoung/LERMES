@@ -3,27 +3,38 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
 import { useAccount } from "../../auth/AuthContext";
+import Dropdown from "../../components/ui/Dropdown";
 import { useEffect, useState } from "react";
+import {hortlistByCpSn} from "../../services/cohortService"
+import FilterList from "../../components/ui/FilterList";
 
 export default function Board(){
     const navigate = useNavigate();
     const {user} = useAccount();
+    const [hortlist, setHortList] = useState([]);
+
+    // useEffect(async () => {
+    //     // >>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출
+    //     const data = await  hortlistByCpSn(user.OGDP_CO_SN);
+    //     // <<<<<<<<<<<<<<<<< data에 반환
+    //     console.log(`>>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출`)
+    //     console.log(`<<<<<<<<<<<<<<< 반환 ${data}`)
+    //     setHortList(data)
+    // }, [hortlist] );
+    
 
     return (
         <div className="boardPage">
             <h2>게시판</h2>
             <div className="filterList">
-                <ul className="ftList_L">
-                    <li>전체</li>
-                    <li>공지</li>
-                    <li>일정</li>
-                    <li>자료실</li>
-                    <li>설문</li>
-                    <li>FAQ</li>
-                    <li>문의</li>
-                    <li>면담</li>
-                    <li>임시 저장</li>
-                </ul>
+                <div className="ftList_L">
+                    <Dropdown label="그룹" >
+                        { hortlist.map((group) => (
+                            <div className="subMenulist">{group.COHORT_NM}</div>
+                        ))}
+                    </Dropdown>
+                    <FilterList></FilterList>
+                </div>
                 <div className="ftList_R">
                     <div className="createBtn" onClick={() => navigate('\createPost')}>
                         + 등록하기

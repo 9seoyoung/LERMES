@@ -29,6 +29,7 @@ import AccountSet from '../pages/LMS/AccountSet.jsx';
 import GroupSet from '../components/ui/navModule/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';
+import BoardManage from '../pages/LMS/BoardManage.jsx'
 
 function AppRoutes() {
   return (
@@ -68,7 +69,7 @@ function AppRoutes() {
       {/* 관리자(테넌트, 직원) */}
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
-        <Route path="adminHome/boardSet" element={<Board />} />
+        <Route path="adminHome/boardSet" element={<BoardManage />} />
         <Route path="adminHome/groupSet" element={<GroupSet />} />
         <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
         <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>

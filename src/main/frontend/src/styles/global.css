@@ -463,6 +463,27 @@ footer > div:hover {
   justify-content: space-between;
 }
 
+.ftList_L {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ftList_L li {
+  min-width: 60px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #FCFEFF;
+  padding: 2px 6px;
+}
+#ftClicked {
+  background-color: #0088FF;
+  color: #FCFEFF;
+}
+
 .goSuper{
   background-color: #d9d9d9;
   color: #fff;
