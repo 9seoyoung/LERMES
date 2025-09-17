@@ -77,23 +77,27 @@ export function StdHeader() {
   const [inTime, setInTime] = useState(null);
   const [outTime, setOutTime] = useState(null);
   const [loading, setLoading] = useState(true);
+  const {user} = useAccount();
+  console.log(user.USER_EML_ADDR);
 
   // 오늘 상태 갱신
-  const refreshStatus = useCallback(async () => {
-    try {
-      setLoading(true);
-      const r = await getTodayStatus(); // { ok, checkinTime, checkoutTime }
-      if (r?.ok) {
-        setInTime(r.checkinTime ?? null);
-        setOutTime(r.checkoutTime ?? null);
-      } else {
-        setInTime(null);
-        setOutTime(null);
+  const refreshStatus = 
+  useCallback(async () => {
+    if (!user.USER_EML_ADDR === "hash@com") {
+      try {
+        setLoading(true);
+        const r = await getTodayStatus(); // { ok, checkinTime, checkoutTime }
+        if (r?.ok) {
+          setInTime(r.checkinTime ?? null);
+          setOutTime(r.checkoutTime ?? null);
+        } else {
+          setInTime(null);
+          setOutTime(null);
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  }}, []);
 
   useEffect(() => {
     refreshStatus();
