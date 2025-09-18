@@ -4,10 +4,9 @@
 
     <!-- 캘린더 저장 -->
     <insert id="saveCalendar"
-            parameterType="map"
+            parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
             useGeneratedKeys="true"
-            keyProperty="CAL_SN"
-            keyColumn="CAL_SN">
+            keyProperty="CAL_SN">
         /*
         QueryID      : com.kdt.mapper.calendar.saveCalendar
         Description  : 캘린더 일정 등록
