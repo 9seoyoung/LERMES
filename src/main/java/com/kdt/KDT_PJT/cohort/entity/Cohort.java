@@ -45,7 +45,7 @@ public class Cohort {
     private String cohortSttsNm;
 
     @Column(name = "COHORT_CATE")
-    private String cohortCate;
+    private QuestionType cohortCate;
 
 
     // Getter, Setter 생략 (롬복 사용 가능)
