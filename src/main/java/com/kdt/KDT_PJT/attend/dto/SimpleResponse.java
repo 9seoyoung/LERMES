@@ -9,4 +9,5 @@ import lombok.Setter;
 public class SimpleResponse {
     private final boolean ok;
     private final String message;
+    private final Object data;
 }

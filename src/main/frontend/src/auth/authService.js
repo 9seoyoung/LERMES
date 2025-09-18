@@ -8,16 +8,20 @@ const ok = (p) => p.then(({ data }) => data.data);
 export const requestEmailCode = (email) =>  ok(api.post("/email/code", { email }));
 
 // 일반 회원가입
-export const signupGeneral = (payload) =>  ok(api.post("/signup", payload));
+export const signupGeneral = (payload) => ok(api.post('/signup', payload));
 
 // 테넌트 회원가입
-export const signupTenant = (payload) =>  ok(api.post("/signup/tenant", payload));
+export const signupTenant = (payload) =>
+  ok(api.post('/signup/tenant', payload));
 
 // 로그인 (세션 수립)
-export const login = ({ email, password }) =>  ok(api.post("/login", { email, password }));
+export const login = ({ email, password }) =>
+  ok(api.post('/login', { email, password }));
 
 // 로그아웃
-export const logout = () =>  ok(api.post("/logout"));
+export const logout = () => ok(api.post('/logout'));
 
 // 현재 로그인 사용자
-export const fetchMe = () =>  ok(api.get("/me"));
+export const fetchMe = () => ok(api.get('/me'));
+
+export const saveProfile = (form) => ok(api.put("/profile", form));

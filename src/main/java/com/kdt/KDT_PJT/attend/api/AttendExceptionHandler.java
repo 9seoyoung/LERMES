@@ -48,4 +48,12 @@ public class AttendExceptionHandler {
                         .build()
         );
     }
+//
+//    @RestControllerAdvice
+//    public class GlobalAdvice {
+//        @ExceptionHandler(IllegalArgumentException.class)
+//        ResponseEntity<?> bad(IllegalArgumentException e){
+//            return ResponseEntity.badRequest().body(Map.of("ok", false, "message", e.getMessage()));
+//        }
+//    }
 }

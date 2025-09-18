@@ -11,14 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class CodeStore {
 
-    public record CodeData(String hashedCode, String allowedIp, Instant expiresAt) {}
+    public record CodeData(String hashedCode, String allowedIp, Instant expiresAt, String displayCode) {}
 
     private final Map<String, CodeData> map = new ConcurrentHashMap<>();
 
     /** ttlMinutes 분 동안 유효 */
-    public void put(String key, String hashedCode, String allowedIp, int ttlMinutes) {
+    public void put(String key, String hashedCode, String allowedIp, int ttlMinutes, String displayCode) {
         Instant exp = Instant.now().plusSeconds(ttlMinutes * 60L);
-        map.put(key, new CodeData(hashedCode, allowedIp, exp));
+        map.put(key, new CodeData(hashedCode, allowedIp, exp, displayCode));
     }
 
     /** 만료 확인 후 반환 */

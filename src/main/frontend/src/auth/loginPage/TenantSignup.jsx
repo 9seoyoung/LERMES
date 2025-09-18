@@ -70,6 +70,7 @@ export default function TenantSignup() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
+      alert('회원가입이 완료되었습니다!');
       const redirectLoc = `/${me?.HOME_PATH}` || '/';
       navigate(redirectLoc, { replace: true });
     } catch (e) {
