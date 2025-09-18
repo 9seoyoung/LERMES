@@ -40,6 +40,7 @@ function AppRoutes() {
 
       {/* 테스트 페이지 */}
       <Route path="/bigcal" element={<BigCal />} />
+      <Route path="/minical" element={<MiniCal />} />
       <Route path="/ui" element={<UiComp />} />
       <Route path="/test" element={<NoticeList />} />
       <Route path="/schedlist" element={<SchedList />} />
