@@ -20,6 +20,7 @@ import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
 import SchedList from '../components/ui/SchedList';
 import SchedListPopUp from '../components/ui/SchedListPopUp';
+import CalSched from '../components/ui/CalSched';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
@@ -29,6 +30,7 @@ import AccountSet from '../pages/LMS/AccountSet.jsx';
 import GroupSet from '../components/ui/navModule/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';
+import BoardManage from '../pages/LMS/BoardManage.jsx'
 
 function AppRoutes() {
   return (
@@ -37,12 +39,13 @@ function AppRoutes() {
       <Route path="/sample" element={<SampleApp />} />
 
       {/* 테스트 페이지 */}
-      <Route path="/minical" element={<MiniCal />} />
       <Route path="/bigcal" element={<BigCal />} />
+      <Route path="/minical" element={<MiniCal />} />
       <Route path="/ui" element={<UiComp />} />
       <Route path="/test" element={<NoticeList />} />
-      <Route path="schedlist" element={<SchedList />} />
-      <Route path="schedlistpopup" element={<SchedListPopUp />} />
+      <Route path="/schedlist" element={<SchedList />} />
+      <Route path="/schedlistpopup" element={<SchedListPopUp />} />
+      <Route path="/calsched" element={<CalSched />} />
 
       <Route path="/files" element={<UploadDownloadDemo />} />
 
@@ -56,48 +59,46 @@ function AppRoutes() {
         <Route path="login" element={<Login />} />
       </Route>
 
-      {/*기본 레이아웃*/}
-      <Route path="/" element={<Layout></Layout>}>
-        {/* 기본 접근 루트 */}
-        <Route index element={<SuperMain />} />
-        <Route path="visitorHome" element={<VisitorHome />} />
-        <Route path=":home/myPage" element={<Mypage />} />
+    {/*기본 레이아웃*/}
+  <Route path='/' element={<Layout></Layout>} >
+    
+    {/* 기본 접근 루트 */}
+      <Route index element={<SuperMain/>}/>
+      <Route path="visitorHome" element={<VisitorHome />} />
+      <Route path='/myPage' element={<Mypage/>}/>
 
-        {/* 관리자(테넌트, 직원) */}
-        <Route element={<RoleRoute roles={[1, 2, 3]} />}>
-          <Route path="adminHome" element={<AdminHome />} />
-          <Route path="adminHome/boardSet" element={<Board />} />
-          <Route path="adminHome/groupSet" element={<GroupSet />} />
-          <Route
-            path="adminHome/boardSet/createPost"
-            element={<CreatePost />}
-          ></Route>
-          <Route path="adminHome/docuSet" element={<DocxSet />}></Route>
-          <Route path="adminHome/accountSet" element={<AccountSet />}></Route>
-          <Route path=":home/myPage" element={<Mypage />} />
-        </Route>
 
-        {/* 강사 */}
-        <Route element={<RoleRoute roles={[1, 4]} />}>
-          <Route path="tutorHome" element={<TutorHome />} />
-          <Route path="tutorHome/board" element={<Board />} />
-          <Route path="tutorHome/createPost" element={<CreatePost />}></Route>
-          <Route path=":home/myPage" element={<Mypage />} />
-        </Route>
+      {/* 관리자(테넌트, 직원) */}
+      <Route element={<RoleRoute roles={[1, 2, 3]} />}>
+        <Route path="adminHome" element={<AdminHome />} />
+        <Route path="adminHome/boardSet" element={<BoardManage />} />
+        <Route path="adminHome/groupSet" element={<GroupSet />} />
+        <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
+        <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
+        <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
+        <Route path=':home/myPage' element={<Mypage/>}/>
 
-        {/* 수강생 */}
-        <Route element={<RoleRoute roles={[1, 5]} />}>
-          <Route path="stdHome" element={<StdHome />} />
-          <Route path="stdHome/board" element={<Board />} />
-          <Route
-            path="stdHome/board/createPost"
-            element={<CreatePost />}
-          ></Route>
-          <Route path="stdHome/studySched" element={'#'} />
-          <Route path=":home/myPage" element={<Mypage />} />
-        </Route>
       </Route>
-    </Routes>
+      {/* 강사 */}
+      <Route element={<RoleRoute roles={[1, 4]} />}>
+        <Route path="tutorHome" element={<TutorHome />} />
+        <Route path="tutorHome/board" element={<Board />} />
+        <Route path='tutorHome/createPost' element={<CreatePost/>}></Route>
+        <Route path=':home/myPage' element={<Mypage/>}/>
+
+      </Route>
+      {/* 수강생 */}
+      <Route element={<RoleRoute roles={[1, 5]} />}>
+        <Route path="stdHome" element={<StdHome />} />
+        <Route path="stdHome/board" element={<Board />} />
+        <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
+        <Route path="stdHome/studySched" element={"#"} />
+        <Route path=':home/myPage' element={<Mypage/>}/>
+
+      </Route>
+
+    </Route>
+  </Routes>
   );
 }
 

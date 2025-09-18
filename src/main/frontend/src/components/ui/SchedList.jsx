@@ -1,59 +1,52 @@
-//  등록된 일정 확인
+// 일정 목록
 
-import React, { useState } from "react";
-import {GrayBtn} from './UiComp.jsx';
+import React, { useState, useEffect } from "react";
+import {  SchedAddBtn } from './UiComp.jsx';
+import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
 
-function SchedList() {
-  const [schedules, setSchedules] = useState([
-    "일정 1",
-    "일정 2",
-    "일정 3",
-    "일정 4",
-    "일정 5",
-    "일정 6",
-  ]);
-  const [selectedDate, setSelectedDate] = useState("");     // 날짜 선택용 상태
-  const [input, setInput] = useState("");   // 일정 텍스트
+function SchedList({selectedDate}) {
+  const [schedules, setSchedules] = useState(["일정 1", "일정 2", "일정 3"]);
+  /* const [selectedDate, setSelectedDate] = useState(""); */
+  const [input, setInput] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // 💡 팝업 상태 추가
+  const [displayDate, setDisplayDate] = useState('');
 
-    const addSchedule = () => {
-      if (input.trim() !== "" && selectedDate) {
-        setSchedules([...schedules, `${selectedDate}: ${input}`]);
-        setInput("");
-      }
-    };
+  useEffect(() => {
+    if (selectedDate) {
+      // selectedDate는 'YYYY-MM-DD' 문자열
+      const [year, month, day] = selectedDate.split('-').map(Number);
+      const dateObj = new Date(year, month - 1, day);
+      setDisplayDate(`${month}월 ${day}일`);
+    } else {
+      setDisplayDate('선택된 날짜 없음');
+    }
+  }, [selectedDate]);
 
-     const handleDateSelect = (date) => {
-        setSelectedDate(date); // ex: "09월 17일"
-      };
-
-  /* const addSchedule = () => {
-    if (input.trim() !== "") {
-      setSchedules([...schedules, input]);
+  const addSchedule = () => {
+    if (input.trim() !== "" && selectedDate) {
+      setSchedules([...schedules, `${displayDate}: ${input}`]);
       setInput("");
     }
-  }; */
+  };
 
   return (
     <div className={styles.sched}>
-      {/* 상단 입력창 + 버튼 */}
-      <div className={styles.schedInput}>
-        <input
-          type="text"
-          placeholder="등록된 일정 (xx월 xx일)"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        {/* <button onClick={addSchedule}>+ 일정등록</button> */}
-        <GrayBtn onClick={addSchedule} textType="+ 일정등록" />
+      <div className={styles.schedDateBox}>
+         <div className={styles.schedDate}>등록된 일정 ({displayDate})</div>
+        <SchedAddBtn textType="+ 일정등록" onClick={() => setShowPopup(true)} />
       </div>
 
-      {/* 일정 목록 */}
       <ul className={styles.schedList}>
         {schedules.map((item, index) => (
           <li key={index}>{item}</li>
         ))}
       </ul>
+
+      {showPopup && <SchedListPopUp onClose={() => setShowPopup(false)}
+       title={input}
+       selectedDate={selectedDate}
+       />}
     </div>
   );
 }

@@ -92,8 +92,7 @@ setSelectedDate(today.getDate());
           {year}년 {month + 1}월
         </h3>
         <button onClick={nextMonth}>▶</button>
-        <div className=''></div>
-      </div> 
+      </div>
 
       {/* 요일 헤더 */}
       <div
@@ -184,4 +183,3 @@ setSelectedDate(today.getDate());
 };
 
 export default BigCal;
-

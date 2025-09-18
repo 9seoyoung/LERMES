@@ -1,7 +1,7 @@
 package com.kdt.KDT_PJT.cohort.ctl;
 
 
-import com.kdt.KDT_PJT.cohort.dto.CohortListDto;
+// import com.kdt.KDT_PJT.cohort.dto.CohortListDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
 import com.kdt.KDT_PJT.cohort.service.CohortService;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +42,14 @@ public class CohortController {
         return ResponseEntity.ok(cohorts);
     }
 
-    @GetMapping("/company/{coSn}/names")
-    public ResponseEntity<List<CohortListDto>> getCohortNamesByCompanyId(@PathVariable Long coSn) {
-        List<CohortListDto> names = cohortService.findNamesByCoSn(coSn);
-        if (names.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(names);
-    }
+    // @GetMapping("/company/{coSn}/names")
+    // public ResponseEntity<List<CohortListDto>> getCohortNamesByCompanyId(@PathVariable Long coSn) {
+    //     List<CohortListDto> names = cohortService.findNamesByCoSn(coSn);
+    //     if (names.isEmpty()) {
+    //         return ResponseEntity.noContent().build();
+    //     }
+    //     return ResponseEntity.ok(names);
+    // }
 
 
 

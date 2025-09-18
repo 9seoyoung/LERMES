@@ -1,3 +1,5 @@
+// 일정 등록 팝업창
+
 import React, { useState } from "react";
 import {SaveBtn, CancelBtn} from './UiComp.jsx';
 import styles from "../../styles/SchedListPopUp.module.css";
@@ -7,24 +9,28 @@ function getTodayString() {
   return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
 }
 
-function SchedListPopUp() {
+function SchedListPopUp({onClose, title, selectedDate}) {
   const [showOptions, setShowOptions] = useState(false);
   const [memo, setMemo] = useState("");
   const today = new Date().toLocaleDateString();
-  const [startDate, setStartDate] = useState(getTodayString());
+
+  // selectedDate가 없으면 오늘 날짜 사용
+   const getInitialDate = () => {
+     return selectedDate || new Date().toISOString().split('T')[0];
+   };
+
+  const [startDate, setStartDate] = useState(getInitialDate());
 
   return (
+  <div className={styles.overlay}>
     <div
-      className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}
-    >
+      className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}>
       {/* 상단 날짜 + 버튼 */}
       <div className={styles.header}>
-        <div>{today}</div>
-        {/* <button onClick={() => alert("추가 버튼 클릭")}>+</button> */}
+        <input placeholder="제목 입력" className={styles.schedTitle} />
         <div className={styles.popUpBtn}>
             <SaveBtn textType="저장" />
-           <CancelBtn textType="취소" />
-            {/* <button>X</button> */}
+           <CancelBtn onClick={onClose} textType="취소" />
         </div>
       </div>
       <hr style={{width: "330px", marginTop:"10px" }} />
@@ -77,6 +83,7 @@ function SchedListPopUp() {
         </div>
       )}
     </div>
+  </div>
   );
 }
 

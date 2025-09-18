@@ -1,45 +1,48 @@
 .sched {
-  width: 450px;
-  height: 420px;
+  width: 440px;
+  height: 410px;
   background-color:#626262;
   color: white;
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 16px;
   box-sizing: border-box;
 }
 
-.schedInput {
+.schedDateBox {
   display: flex;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.schedInput input {
-  flex: 1;
-  padding: 6px 8px;
-  border-radius: 4px;
-  border: none;
-  outline: none;
-  color: black;
+.schedDate {
+width: 380px;
+height: 35px;
+background-color: #fff;
+border-radius: 4px;
+padding: 6px 5px;
+font-size: 14px;
 }
 
-.schedInput button {
-  margin-left: 8px;
-  padding: 6px 12px;
-  background-color: #e5e7eb;
-  color: black;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.schedTitle {
+  width: 370px;
+  height: 35px;
+  padding: 10px;
+  border: 1px solid #ccc;           /* 기본 테두리 */
+    border-radius: 4px;             /* 둥글게 */
+    outline: none;                  /* 기본 아웃라인 제거 */
+    font-size: 14px;
 }
 
-.schedInput button:hover {
-  background-color: #d1d5db;
+.schedTitle:focus {
+  border: 1px solid #000;         /* 포커스 시 테두리 색상 */
+  background-color: #fff;         /* 선택 사항: 포커스 시 배경 */
+  color: #000;                    /* 선택 사항: 포커스 시 텍스트 색 */
 }
 
 .schedList {
   list-style-type: disc;
   padding-left: 24px;
-
+  margin-top: 15px;
 }
 
 .schedList li {
@@ -47,4 +50,3 @@
   color: #fff;
   font-size: 18px;
 }
-
