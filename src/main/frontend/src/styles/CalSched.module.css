@@ -2,6 +2,21 @@
 display: flex;
 flex-direction: column;
 align-items: center;
-gap: 2rem;
 
+position: relative;
+width: 450px;
+height: 700px;
+background-color: #fff;
+border-radius: 16px;
+}
+
+.miniCalWrapper {
+position: relative;
+z-index: 1;
+}
+
+.schedListWrapper {
+position: relative;
+margin-top: -6px;
+/* z-index: 0; */   /* 이거 하니까 팝업창이 캘린더 아래로 뜸 */
 }

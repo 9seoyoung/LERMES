@@ -3,15 +3,19 @@ import MiniCal from './MiniCal';
 import SchedList from './SchedList';
 import styles from '../../styles/CalSched.module.css';
 
-const CalendarContainer = () => {
+const CalSched = () => {
   const [selectedDate, setSelectedDate] = useState(null); // 공유할 상태
 
   return (
-    <div className={styles.container}>
+  <div className={styles.container}>
+    <div className={styles.miniCalWrapper}>
       <MiniCal selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-      <SchedList selectedDate={selectedDate} />
     </div>
+    <div className={styles.schedListWrapper}>
+      <SchedList selectedDate={selectedDate}/>
+    </div>
+  </div>
   );
 };
 
-export default CalendarContainer;
+export default CalSched;
