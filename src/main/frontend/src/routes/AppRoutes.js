@@ -20,6 +20,7 @@ import BigCal from '../components/ui/BigCal';
 import UiComp from '../components/ui/UiComp';
 import SchedList from '../components/ui/SchedList';
 import SchedListPopUp from '../components/ui/SchedListPopUp';
+import CalSched from '../components/ui/CalSched';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
@@ -44,6 +45,7 @@ function AppRoutes() {
       <Route path="/test" element={<NoticeList />} />
       <Route path="schedlist" element={<SchedList />} />
       <Route path="schedlistpopup" element={<SchedListPopUp />} />
+      <Route path="calsched" element={<CalSched />} />
 
       <Route path="/files" element={<UploadDownloadDemo />} />
 
