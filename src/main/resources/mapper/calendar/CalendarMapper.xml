@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdt.mapper.calendar">
+
+    <!-- 캘린더 저장 -->
+    <insert id="saveCalendar"
+            parameterType="map"
+            useGeneratedKeys="true"
+            keyProperty="CAL_SN"
+            keyColumn="CAL_SN">
+        /*
+        QueryID      : com.kdt.mapper.calendar.saveCalendar
+        Description  : 캘린더 일정 등록
+        Expect Params: COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM,
+        RMRK_CN, DEL_YN, USER_SN, EVENT_REG_DT, PRVT_YN
+        */
+        INSERT INTO TB_CALENDAR (
+            COHORT_SN,
+            EVENT_BGNG_DT,
+            EVENT_END_DT,
+            EVENT_NM,
+            RMRK_CN,
+            DEL_YN,
+            USER_SN,
+            EVENT_REG_DT,
+            PRVT_YN
+        ) VALUES (
+            #{COHORT_SN},
+            #{EVENT_BGNG_DT},
+            #{EVENT_END_DT},
+            #{EVENT_NM},
+            #{RMRK_CN},
+            #{DEL_YN},
+            #{USER_SN},
+            #{EVENT_REG_DT},
+            #{PRVT_YN}
+        )
+    </insert>
+
+    <!-- (선택) 생성 직후 PK로 상세 조회가 필요할 때 쓰는 쿼리 -->
+    <select id="findById" parameterType="int"
+            resultType="com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO">
+        SELECT
+        CAL_SN           AS calSn,
+        COHORT_SN        AS cohortSn,
+        EVENT_BGNG_DT    AS eventBgngDt,
+        EVENT_END_DT     AS eventEndDt,
+        EVENT_NM         AS eventNm,
+        RMRK_CN          AS rmrkCn,
+        USER_SN          AS userSn,
+        EVENT_REG_DT     AS eventRegDt,
+        PRVT_YN          AS prvtYn
+        FROM TB_CALENDAR
+        WHERE CAL_SN = #{calSn}
+    </select>
+
+</mapper>
