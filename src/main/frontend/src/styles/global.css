@@ -640,6 +640,13 @@ footer > div:hover {
   gap: 12px;
 }
 
+.formContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: #0088FF;
+}
+
 .inputSet {
   display: flex;
   flex-direction: row;

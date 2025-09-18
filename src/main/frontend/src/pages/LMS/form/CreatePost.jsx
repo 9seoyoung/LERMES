@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState } from 'react'
+import React, { useEffect, useId, useState, useRef } from 'react'
 import Dropdown from '../../../components/ui/Dropdown'
 import layoutStyles from "../../../styles/layout.module.css"
 import {FileUpload, FileList } from '../../../components/ui/UiComp';
@@ -6,20 +6,31 @@ import { useAccount } from '../../../auth/AuthContext';
 import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import SurveyPost from './SurveyPost';
+import {v4 as uuidv4} from "uuid";
 
 function CreatePost() {
-  const formId = useId();
+  const domFormId = useId();
+  const postId = useRef(uuidv4());
   const {user} = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const userAuth = user.USER_AUTHRT_SN;
   const [hortlist, setHortList] = useState([]);
   const [groupFilter, setGroupFilter] = useState(null)
   const handleSubmit = (e) => {
-    e.preventDefault(); // 새로고침 막음
+    e.preventDefault(); // 기본동작 막음
   };
 
+  // 설문 폼 (초기 페이지 하나 생성 권장)
+  const [surveyForm, setSurveyForm] = useState({
+    id: postId.current,               
+    pages: [{ id: uuidv4(), questions: [] }]
+  });
+
   const [files, setFiles] = useState([]);
+
+  // 일반 게시글
   const [formData, setFormData] = useState({
+    id: postId.current,        
     username: "",
     email: "",
     title: "",
@@ -28,6 +39,7 @@ function CreatePost() {
     scope: "",
     detailScope: ""
   });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;  
@@ -55,34 +67,53 @@ function CreatePost() {
       })();
     }, []);
 
+
     function PostStatus({type}){
-      let component = <ArticlePost/>; //기본값
-    
       switch (type){
         case "공지사항":
-          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
-          break;
         case "자료실":
-        return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
-        break;
         case "학습일지":
-          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
-          break;
         case "FAQ":
-          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
-          break;
-        case "공지사항":
-          return component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
-          break;
+          return (
+            <ArticlePost
+              postId={postId.current}
+              domFormId={domFormId}
+              handleChange={handleChange}
+              formData={formData}
+              FileList={FileList}
+              files={files}
+              setFiles={setFiles}
+            />
+          );
         case "설문조사":
-          return component = <SurveyPost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
-          break;
-        default :
-          component = <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles}/>
+          return (
+            <SurveyPost
+              postId={postId.current}
+              domFormId={domFormId}
+              handleChange={handleChange}
+              formData={formData}
+              surveyForm={surveyForm}
+              setSurveyForm={setSurveyForm}
+              FileList={FileList}
+              files={files}
+              setFiles={setFiles}
+            />
+          );
+        default:
+          return (
+            <ArticlePost
+              postId={postId.current}
+              domFormId={domFormId}
+              handleChange={handleChange}
+              formData={formData}
+              FileList={FileList}
+              files={files}
+              setFiles={setFiles}
+            />
+          );
       }
-    
-      return
     }
+  
 
 
 
@@ -94,7 +125,7 @@ function CreatePost() {
         <form className='formAreaRow' onSubmit={handleSubmit}>
           <div className='formArea_L'>
             <PostStatus type={formData.type}/>
-            {/* <ArticlePost formId={formId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles} ></ArticlePost> */}
+            {/* <ArticlePost domFormId={domFormId} handleChange={handleChange} formData={formData} FileList={FileList} files={files} setFiles={setFiles} ></ArticlePost> */}
           </div>
           <div className='formArea_R'>
             <div className='selectBoxArea' style={{position:"relative"}}>
@@ -121,7 +152,7 @@ function CreatePost() {
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"전체"}))} >전체</p>
-                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"소속그룹"}))} >소속 그룹</p>
+                  <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"소속그룹"}))} >소속그룹</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"관리자"}))} >관리자</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"강사"}))} >강사</p>
                   <p className={layoutStyles.subMenuList} onClick={()=>setFormData(s=>({...s, scope:"비공개"}))} >비공개</p>
@@ -136,7 +167,7 @@ function CreatePost() {
                   <p className={layoutStyles.subMenuList} key={idx} onClick={()=>setFormData(s=>({...s, detailScope:`${hortlist.cohortNm}`}))} >{hortlist.cohortNm}</p>
                 ))}
                 </Dropdown>
-                <input type="hidden" name="detailScope" value={formData.scope} />
+                <input type="hidden" name="detailScope" value={formData.detailScope} />
               </div>
               :
               <></>}
