@@ -6,50 +6,52 @@
 <mapper namespace="com.kdt.KDT_PJT.survey.mapper.SurveyMapper">
 
     <!-- 설문 등록 -->
-    <insert id="insertSurvey" parameterType="com.kdt.KDT_PJT.survey.dto.SurveyDto"
-            useGeneratedKeys="true" keyProperty="srvySn">
+    <insert id="insertSurvey" parameterType="com.kdt.KDT_PJT.survey.dto.SurveyDto">
         INSERT INTO TB_SURVEY
-        (
-        SRVY_QITEM,
-        SRVY_RSPNS,
-        CO_SN
-        )
+        (SRVY_QITEM, CO_SN, COHORT_SN, SRVY_BGNG_DT, SRVY_END_DT)
         VALUES
-        (
-        #{srvyQitem},
-        #{srvyRspns},
-        #{coSn}
-        )
+        (#{srvyQitem}, #{coSn}, #{cohortSn}, #{srvyBgngDt}, #{srvyEndDt})
     </insert>
 
     <!-- 단건 조회 -->
-    <select id="selectSurveyById" parameterType="long"
-            resultType="com.kdt.KDT_PJT.survey.dto.SurveyDto">
-        SELECT
-        SRVY_SN as srvySn,
-        SRVY_QITEM as srvyQitem,
-        SRVY_RSPNS as srvyRspns,
-        CO_SN as coSn
+    <select id="selectSurveyById" resultType="com.kdt.KDT_PJT.survey.dto.SurveyDto">
+        SELECT SRVY_SN  AS srvySn,
+        SRVY_QITEM      AS srvyQitem,
+        CO_SN           AS coSn,
+        COHORT_SN       AS cohortSn,
+        SRVY_BGNG_DT    AS srvyBgngDt,
+        SRVY_END_DT     AS srvyEndDt
         FROM TB_SURVEY
         WHERE SRVY_SN = #{id}
     </select>
 
-    <!-- 회사별 설문 목록 조회 -->
-    <select id="selectSurveyListByCompany" parameterType="long"
-            resultType="map">
-        /**
-        *진령 제작 - 회사별 설문 목록 조회 API
-        /
 
-        SELECT
-        SRVY_SN as srvySn,
-        SRVY_QITEM as srvyQitem,
-        SRVY_RSPNS as srvyRspns,
-        CO_SN as coSn
+    <!-- 회사별 설문 목록 조회 -->
+    <select id="selectSurveyListByCompany" resultType="com.kdt.KDT_PJT.survey.dto.SurveyDto">
+        SELECT SRVY_SN  AS srvySn,
+        SRVY_QITEM      AS srvyQitem,
+        CO_SN           AS coSn,
+        COHORT_SN       AS cohortSn,
+        SRVY_BGNG_DT    AS srvyBgngDt,
+        SRVY_END_DT     AS srvyEndDt
         FROM TB_SURVEY
         WHERE CO_SN = #{coSn}
         ORDER BY SRVY_SN DESC
     </select>
+
+
+
+    <!--설문 수정-->
+    <update id="updateSurvey" parameterType="com.kdt.KDT_PJT.survey.dto.SurveyDto">
+        UPDATE TB_SURVEY
+        SET SRVY_QITEM   = #{srvyQitem},
+        CO_SN        = #{coSn},
+        COHORT_SN    = #{cohortSn},
+        SRVY_BGNG_DT = #{srvyBgngDt},
+        SRVY_END_DT  = #{srvyEndDt}
+        WHERE SRVY_SN = #{srvySn}
+    </update>
+
 
 
 

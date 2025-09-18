@@ -41,4 +41,14 @@ public class SurveyController {
     public ResponseEntity<List<SurveyDto>> getSurveyList(@PathVariable("coSn") Long coSn) {
         return ResponseEntity.ok(surveyService.getSurveyList(coSn));
     }
+
+//    수정
+// Controller
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateSurvey(@PathVariable("id") Long id,
+                                               @RequestBody SurveyDto surveyDto) {
+        surveyService.updateSurvey(id, surveyDto);
+        return ResponseEntity.ok("수정 성공");
+    }
+
 }

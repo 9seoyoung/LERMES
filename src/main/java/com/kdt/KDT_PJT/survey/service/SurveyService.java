@@ -19,10 +19,25 @@ public class SurveyService {
     }
 //
     public SurveyDto getSurvey(Long id) {
-        return surveyMapper.selectSurveyById(id);
+    SurveyDto survey = surveyMapper.selectSurveyById(id);
+    if (survey == null) {
+        throw new IllegalArgumentException("존재하지 않거나 삭제된 설문조사입니다. id=" + id);
+    }
+    return survey;
     }
 
     public List<SurveyDto> getSurveyList(Long coSn) {
         return surveyMapper.selectSurveyListByCompany(coSn);
+    }
+    // 설문 수정
+    public void updateSurvey(Long id, SurveyDto surveyDto) {
+        // DB에 있는지 먼저 확인
+        SurveyDto existing = surveyMapper.selectSurveyById(id);
+        if (existing == null) {
+            throw new IllegalArgumentException("존재하지 않는 설문조사입니다. id=" + id);
+        }
+        // 안전하게 PK 세팅
+        surveyDto.setSrvySn(id);
+        surveyMapper.updateSurvey(surveyDto);
     }
 }

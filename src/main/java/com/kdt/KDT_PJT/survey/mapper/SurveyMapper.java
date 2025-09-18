@@ -12,4 +12,7 @@ public interface SurveyMapper {
     SurveyDto selectSurveyById(Long id);
     List<SurveyDto> selectSurveyListByCompany(@Param("coSn")Long coSn);
 
+    SurveyDto findById(Long id);
+    void updateSurvey(SurveyDto surveyDto);
+
 }
