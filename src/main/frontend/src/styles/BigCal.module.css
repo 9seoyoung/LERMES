@@ -6,7 +6,7 @@ margin: 0 auto;
 /* 현재 연도,월 */
 .month {
   display: flex;
-  justify-content: space-between;
+justify-content: space-around;
   margin-bottom: 10px;
 }
 

@@ -39,13 +39,12 @@ function AppRoutes() {
       <Route path="/sample" element={<SampleApp />} />
 
       {/* 테스트 페이지 */}
-      <Route path="/minical" element={<MiniCal />} />
       <Route path="/bigcal" element={<BigCal />} />
       <Route path="/ui" element={<UiComp />} />
       <Route path="/test" element={<NoticeList />} />
-      <Route path="schedlist" element={<SchedList />} />
-      <Route path="schedlistpopup" element={<SchedListPopUp />} />
-      <Route path="calsched" element={<CalSched />} />
+      <Route path="/schedlist" element={<SchedList />} />
+      <Route path="/schedlistpopup" element={<SchedListPopUp />} />
+      <Route path="/calsched" element={<CalSched />} />
 
       <Route path="/files" element={<UploadDownloadDemo />} />
 

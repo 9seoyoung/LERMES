@@ -15,7 +15,10 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
     const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
       today.getDate()
     ).padStart(2, '0')}`;
-    setSelectedDate(dateKey);
+
+    if (setSelectedDate) {
+        setSelectedDate(dateKey);
+    }
   }, []);
 
   const year = currentDate.getFullYear();
@@ -68,6 +71,7 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
   const weekHeight = totalCalendarHeight / weekCount;
 
   return (
+  <div className={styles.calContainer}>
     <div className={styles.cal}>
       {/* 상단 네비게이션 */}
       <div className={styles.month}>
@@ -132,7 +136,7 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
                 {day || ''}
 
                 {/* 일정 모두 표시 */}
-                {dateKey && events[dateKey] && events[dateKey].length > 0 && (
+                {/* {dateKey && events[dateKey] && events[dateKey].length > 0 && (
                   <div className={styles.eventCell}>
                     {events[dateKey].map((event, i) => (
                       <div key={i} className={styles.event}>
@@ -140,19 +144,14 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
                       </div>
                     ))}
                   </div>
-                )}
+                )} */}
               </div>
             );
           })}
         </div>
       ))}
 
-      {/* 일정 추가 버튼 (필요시 활성화) */}
-      {/* <div className={styles.addEventBtn}>
-        <button onClick={onAddEvent} className={styles.addEvent}>
-          일정 추가
-        </button>
-      </div> */}
+    </div>
     </div>
   );
 };
