@@ -3,7 +3,7 @@ import FilePreview from "../../../components/ui/FilePreview";
 import { DeleteBtn } from "../../../components/ui/UiComp";
 import Dropdown from "../../../components/ui/Dropdown";
 
-export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, ref) {
+export const QuestionType = forwardRef(function QuestionType({ q, dispatch, questions}, ref) {
   const setType = (t) => dispatch({ type: "SET_TYPE", qid: q.qid, value: t });
 
   const changeTypeName = (value) => {
@@ -44,13 +44,13 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
       {/* 타입 변경 UI (임시 버튼들) */}
 
       {/* 공통 필드 */}
-      <div style={{ display: "grid", gap: 8 }} >
-        <p>{}</p>
+      <div className="questionBox">
+        {/* <p>{questions}</p> */}
         <input
           placeholder="제목을 입력하세요."
           value={q.title}
           onChange={(e) =>
-            dispatch({ type: "SET_TITLE", qid: q.qid, value: e.target.value })
+            dispatch({ type: "SET_TITLE", qid: q.qid, value: e.target.value, qNumber: questions.length})
           }
         />
         <textarea
