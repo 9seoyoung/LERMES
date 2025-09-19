@@ -1,13 +1,37 @@
 import { forwardRef } from "react";
 import FilePreview from "../../../components/ui/FilePreview";
+import { DeleteBtn } from "../../../components/ui/UiComp";
+import Dropdown from "../../../components/ui/Dropdown";
 
 export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, ref) {
   const setType = (t) => dispatch({ type: "SET_TYPE", qid: q.qid, value: t });
 
+  const changeTypeName = (value) => {
+    switch (value){
+      case "single":
+        return "객관식";
+        break;
+
+      case "text":
+        return "주관식";
+        break;
+
+      case "image":
+        return "이미지";
+        break;
+    }
+  }
+
   return (
-    <div ref={ref} style={{ border: "1px solid #ddd", padding: 12, marginBottom: 12 }}>
-      <div style={{ marginBottom: 8 }}>
-        <strong>질문 타입:</strong> {q.type}
+    <div ref={ref} className="questionBox">
+      <div className="questionTypeBox">
+        <p>질문 유형</p>
+      <Dropdown label={changeTypeName(q.type)} className="dropSet">
+        <p onClick={() => setType("single")}>객관식(단일)</p>
+        <p onClick={() => setType("multiple")}>객관식(중복)</p>
+        <p onClick={() => setType("text")}>주관식</p>
+        <p onClick={() => setType("image")}>이미지</p>
+      </Dropdown>
         <button
           type="button"
           style={{ color: "red" }}
@@ -18,17 +42,12 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
       </div>
 
       {/* 타입 변경 UI (임시 버튼들) */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-        <button type="button" onClick={() => setType("single")}>객관식(단일)</button>
-        <button type="button" onClick={() => setType("multiple")}>객관식(중복)</button>
-        <button type="button" onClick={() => setType("text")}>주관식</button>
-        <button type="button" onClick={() => setType("image")}>이미지</button>
-      </div>
 
       {/* 공통 필드 */}
-      <div style={{ display: "grid", gap: 8 }}>
+      <div style={{ display: "grid", gap: 8 }} >
+        <p></p>
         <input
-          placeholder="질문 제목"
+          placeholder="제목을 입력하세요."
           value={q.title}
           onChange={(e) =>
             dispatch({ type: "SET_TITLE", qid: q.qid, value: e.target.value })
@@ -50,7 +69,7 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
       </>)}
       {/* 객관식일 때만 옵션 */}
       {(q.type === "single" || q.type === "multiple") && (
-        <div style={{ marginTop: 12 }}>
+        <div className="multipleSet">
           <div style={{ marginBottom: 8, fontWeight: 600 }}>옵션</div>
           {q.options.map((opt) => {
             const inputId = `q-${q.qid}-opt-${opt.id}`;
@@ -90,7 +109,7 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
                     dispatch({ type: "REMOVE_OPTION", qid: q.qid, id: opt.id })
                   }
                 >
-                  삭제
+                  <DeleteBtn></DeleteBtn>
                 </button>
               </div>
             );

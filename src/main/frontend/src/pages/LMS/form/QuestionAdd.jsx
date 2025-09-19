@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { v4 as uuid } from "uuid";
 import { QuestionType } from "./QuestionType";
+import { Plus } from "lucide-react";
 
 // 질문 하나의 기본 스키마
 const makeQuestion = () => ({
@@ -102,17 +103,16 @@ export default function QuestionAdd() {
 
   return (
     <>
-      <div>질문추가되는지 확인하는 페이지</div>
-
       {questions.map((q) => (
         <QuestionType key={q.qid} q={q} dispatch={dispatch} />
       ))}
 
-      <button type="button" className="basicBtn" onClick={addQuestion}>
-        질문추가
+      {`현재 문항 수 : ${questions.length}`}
+      <button type="button" className="questionAdd" onClick={addQuestion}>
+        <Plus color="#0088FF" strokeWidth={4} ></Plus>
+        <p>질문추가</p>
       </button>
 
-      {`현재 문항 수 : ${questions.length}`}
     </>
   );
 }

@@ -32,7 +32,6 @@ import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';
 import BoardManage from '../pages/LMS/BoardManage.jsx'
 import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
-import MakeForm from '../pages/LMS/form/MakeForm.jsx';
 
 function AppRoutes() {
   return (
@@ -49,7 +48,6 @@ function AppRoutes() {
       <Route path="/schedlistpopup" element={<SchedListPopUp />} />
       <Route path="/calsched" element={<CalSched />} />
       <Route path="/testQuestion" element={<QuestionAdd />} />
-      <Route path="/testform" element={<MakeForm />} />
 
       <Route path="/files" element={<UploadDownloadDemo />} />
 
