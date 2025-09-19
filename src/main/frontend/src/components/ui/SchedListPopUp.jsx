@@ -22,9 +22,25 @@ function SchedListPopUp({onClose, onSave, selectedDate}) {
 
   const [startDate, setStartDate] = useState(getInitialDate());
 
-    const handleSave = () => {
-      onSave(title);  // ⬅️ 제목을 부모 컴포넌트에 전달
-    };
+const handleSave = () => {
+  // 제목 유효성 검사
+  if (typeof title !== 'string' || !title.trim()) {
+    alert("제목을 입력해주세요.");
+    return;
+  }
+
+  // 시작일 유효성 검사
+  if (!startDate) {
+    alert("시작일을 선택해주세요.");
+    return;
+  }
+
+  // 저장 (부모 컴포넌트로 제목, 시작일 전달)
+  onSave({
+    title: title.trim(),
+    startDate,
+  });
+};
 
   return (
   <div className={styles.overlay}>
@@ -67,7 +83,7 @@ function SchedListPopUp({onClose, onSave, selectedDate}) {
         <div className={styles.optionsContent}>
             <div className={styles.content}>
                 <label>시작일</label>
-                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </div>
             <div className={styles.content}>
                 <label>종료일</label>

@@ -1,7 +1,7 @@
 // 일정 목록
 
 import React, { useState, useEffect } from "react";
-import {  SchedAddBtn } from './UiComp.jsx';
+import { SchedAddBtn } from './UiComp.jsx';
 import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
 
@@ -20,8 +20,8 @@ function SchedList({selectedDate}) {
     }
   }, [selectedDate]);
 
-    // ⬇️ 팝업에서 제목 받아서 일정 추가
-    const handleSaveSchedule = (title) => {
+    // 팝업창에서 제목, 시작일 받아서 일정 추가
+    const handleSaveSchedule = ({ title, startDate }) => {
       if (title.trim() !== "" && selectedDate) {
         setSchedules(prev => {
           const prevList = prev[selectedDate] || [];
