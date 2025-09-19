@@ -1,12 +1,17 @@
+import SurveyModel from "../../../utils/SurveyModel";
+import QuestionAdd from "./MakeForm";
 
 
-function SurveyPost({formId, handleChange, formData, FileList, files, setFiles}) {
+function RecruitPost({domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, postId}) {
+
+
+
   return (
     <>
       <div className='formHeader'>
         <div className='inputSet'>
-          <label className='formLabel' htmlFor={`${formId}_title`}>제목</label>
-          <input id={`${formId}_title`}
+          <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
+          <input id={`${domFormId}_title`}
             className='formInput' 
             name='title' 
             placeholder='제목을 입력하세요.' 
@@ -15,39 +20,36 @@ function SurveyPost({formId, handleChange, formData, FileList, files, setFiles})
           />
         </div>
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${formId}_recruitPeriod`}>모집기간</label>
-          <input id={`${formId}_recruitStart`}
+          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>모집기간</label>
+          <input id={`${domFormId}_surveyStart`}
             type="date"
             className='formInput' 
-            name='recruitStart' 
-            value={formData.recruitStart} 
+            name='surveyStart' 
+            value={formData.surveyStart} 
             onChange={handleChange}
           />
           <p>-</p>
-          <input id={`${formId}_recruitEnd`}
+          <input id={`${domFormId}_surveyEnd`}
             type="date"
             className='formInput' 
-            name='recruitEnd' 
-            value={formData.recruitEnd} 
+            name='surveyEnd' 
+            value={formData.surveyEnd} 
             onChange={handleChange}
           />
         </div>
       </div>
-      {/* 본문 */}
-      <textarea                 
-          id={`${formId}_content`}
-          name="content"
-          className='formTextarea'
-          placeholder='본문을 입력하세요.'
-          value={formData.content}
-          onChange={handleChange}>
-      </textarea>
+      <div className="formContent">
+      {/* 본문 - 설문 에디터 */}
+      <QuestionAdd></QuestionAdd>
+      </div>
+
+      {/* 첨부파일 리스트 */}
       <div className='inputSet'>
-        <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-        <FileList files={files} setFiles={setFiles}></FileList>
+        <label className='formLabel' htmlFor={`${domFormId}_file`}>파일</label>
+        <FileList files={files} setFiles={setFiles} />
       </div>
     </>
   )
 }
 
-export default SurveyPost
+export default RecruitPost

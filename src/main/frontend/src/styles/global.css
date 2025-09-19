@@ -640,6 +640,13 @@ footer > div:hover {
   gap: 12px;
 }
 
+.formContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-radius:4px;
+}
+
 .inputSet {
   display: flex;
   flex-direction: row;
@@ -707,3 +714,75 @@ footer > div:hover {
   gap: 16px;
 }
 
+
+/* 폼 */
+.questionBox {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  flex: 1;
+  border: 2px solid #dedede;
+  border-radius: 8px;
+  gap: 16px;
+}
+
+.questionAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E1F1FF;
+  height: 46px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 800;
+  gap: 4px;
+}
+
+.questionAdd:hover {
+  background-color: #c6e4ff;
+  font-size: 1.2rem;
+}
+
+.questionAdd:active {
+  font-size: 1.0rem;
+}
+
+.multipleSet {
+  width: 60%;
+}
+
+.questionTypeBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.questionTitle {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 2.4rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #dedede;
+  outline: none;
+  
+}
+
+.questionTitle:focus {
+  color: #333;
+}
+
+.questionTypeBox .dropSet, .questionTypeBox .dropSet button{
+  width: 12rem;
+  height: 2.4rem;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+}
+
+.questionTypeBox .dropSet button:active {
+  border: 1px solid #0088FF
+}
+
+.questionTypeBox .dropSet p {
+  padding: 4px 12px;
+}

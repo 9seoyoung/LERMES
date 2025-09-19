@@ -22,14 +22,9 @@ export default function StdHome() {
         <div style={{ height: '232px' }}>
           <NoticeList></NoticeList>
         </div>
-        <div style={{ height: '232px' }}>
+        <div style={{ height: '470px' }}>
           <h4>
-            자료실<div className="specificBtn">+ 더보기</div>
-          </h4>
-        </div>
-        <div style={{ height: '232px' }}>
-          <h4>
-            FAQ<div className="specificBtn">+ 더보기</div>
+            출결현황<div className="specificBtn">+ 더보기</div>
           </h4>
         </div>
       </div>
