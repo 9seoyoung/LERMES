@@ -5,8 +5,10 @@ import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,14 @@ public class InterviewService {
      */
     @Transactional
     public CmmnMap createInterviewRequest(AuthCustomUserDetails me, CmmnMap params) {
+        // 0) 인증 확인
+        if (me == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");
+        }
+
+        // 1) 기본 유효성
+
+
         CmmnMap result = new CmmnMap();
         return result;
     }
