@@ -96,15 +96,17 @@ function questionsReducer(state, action) {
 
 export default function QuestionAdd() {
   const [questions, dispatch] = useReducer(questionsReducer, [makeQuestion()]);
-
+  
+  const qNum = 1;
   const addQuestion = () => {
     dispatch({ type: "ADD_QUESTION" });
   };
 
+
   return (
     <>
       {questions.map((q) => (
-        <QuestionType key={q.qid} q={q} dispatch={dispatch} />
+        <QuestionType key={q.qid} q={q} dispatch={dispatch} qNum={qNum}/>
       ))}
 
       {`현재 문항 수 : ${questions.length}`}
