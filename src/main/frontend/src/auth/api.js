@@ -1,8 +1,13 @@
 // src/auth/api.js
 import axios from 'axios';
 
+// 배포용
+
+const deployURL = 'onopco2.iptime.org:8080'
+const developURL = 'localhost:940'
+
 export const api = axios.create({
-  baseURL: 'http://localhost:940/api',
+  baseURL: `http://${deployURL}/api`,
   withCredentials: true, // 세션쿠키 자동 전송
   xsrfCookieName: 'XSRF-TOKEN', // 시큐리티 쿠키 기본 토큰
   xsrfHeaderName: 'X-XSRF-TOKEN', //시큐리티
