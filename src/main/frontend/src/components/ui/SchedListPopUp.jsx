@@ -9,11 +9,17 @@ function getTodayString() {
   return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
 }
 
-function SchedListPopUp({onClose, title}) {
+function SchedListPopUp({onClose, title, selectedDate}) {
   const [showOptions, setShowOptions] = useState(false);
   const [memo, setMemo] = useState("");
   const today = new Date().toLocaleDateString();
-  const [startDate, setStartDate] = useState(getTodayString());
+
+  // selectedDate가 없으면 오늘 날짜 사용
+   const getInitialDate = () => {
+     return selectedDate || new Date().toISOString().split('T')[0];
+   };
+
+  const [startDate, setStartDate] = useState(getInitialDate());
 
   return (
   <div className={styles.overlay}>
