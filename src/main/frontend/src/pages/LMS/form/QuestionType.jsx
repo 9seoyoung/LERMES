@@ -34,10 +34,10 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
       </Dropdown>
         <button
           type="button"
-          style={{ color: "red" }}
+          style={{ background: "#E9623A", color: "#fff", padding: "4px 12px", borderRadius:"4px" }}
           onClick={() => dispatch({ type: "REMOVE_QUESTION", qid: q.qid })}
         >
-          질문 삭제
+          삭제
         </button>
       </div>
 
@@ -45,7 +45,7 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
 
       {/* 공통 필드 */}
       <div style={{ display: "grid", gap: 8 }} >
-        <p></p>
+        <p>{q.length}</p>
         <input
           placeholder="제목을 입력하세요."
           value={q.title}
