@@ -74,7 +74,8 @@ export default function StdAttendModal({ onClose }) {
           <div style={styles.label}>코드 입력</div>
 
           {/* 중앙 큰 코드(읽기전용) */}
-          <div style={styles.bigCode}>{activeCode || '--'}</div>
+          {/* <div style={styles.bigCode}>{activeCode || '--'}</div> */}
+          <div style={styles.bigCode}>출석 코드 입력해라 이자식아</div>
 
           {/* 입력창(중앙 코드는 이 값과 무관) */}
           <input
