@@ -45,7 +45,7 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
 
       {/* 공통 필드 */}
       <div style={{ display: "grid", gap: 8 }} >
-        <p>{q.length}</p>
+        <p>{}</p>
         <input
           placeholder="제목을 입력하세요."
           value={q.title}
