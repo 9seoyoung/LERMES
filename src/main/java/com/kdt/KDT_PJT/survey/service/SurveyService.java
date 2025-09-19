@@ -1,9 +1,9 @@
 package com.kdt.KDT_PJT.survey.service;
 
-import com.kdt.KDT_PJT.survey.dto.SurveyDto;
+import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
+import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
 import com.kdt.KDT_PJT.survey.mapper.SurveyMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,30 +14,25 @@ public class SurveyService {
 
     private final SurveyMapper surveyMapper;
 //
-    public void createSurvey(SurveyDto surveyDto) {
-        surveyMapper.insertSurvey(surveyDto);
-    }
-//
-    public SurveyDto getSurvey(Long id) {
-    SurveyDto survey = surveyMapper.selectSurveyById(id);
-    if (survey == null) {
-        throw new IllegalArgumentException("존재하지 않거나 삭제된 설문조사입니다. id=" + id);
-    }
-    return survey;
+// 설문 등록
+public ResponseSurveyDto createSurvey(RequestSurveyDto requestDto) {
+    surveyMapper.insertSurvey(requestDto);
+    // 방금 저장한 PK로 다시 SELECT 해서 최종 데이터 반환
+    return surveyMapper.findSurveyById(requestDto.getSrvySn());
+}
+
+    // 설문 단건 조회
+    public ResponseSurveyDto getSurvey(Long srvySn) {
+        return surveyMapper.findSurveyById(srvySn);
     }
 
-    public List<SurveyDto> getSurveyList(Long coSn) {
-        return surveyMapper.selectSurveyListByCompany(coSn);
+    // 설문 전체/회사별 조회
+    public List<ResponseSurveyDto> getSurveyList(Long coSn) {
+        return surveyMapper.findSurveyListByCompany(coSn);
     }
+
     // 설문 수정
-    public void updateSurvey(Long id, SurveyDto surveyDto) {
-        // DB에 있는지 먼저 확인
-        SurveyDto existing = surveyMapper.selectSurveyById(id);
-        if (existing == null) {
-            throw new IllegalArgumentException("존재하지 않는 설문조사입니다. id=" + id);
-        }
-        // 안전하게 PK 세팅
-        surveyDto.setSrvySn(id);
-        surveyMapper.updateSurvey(surveyDto);
+    public void updateSurvey(Long id, RequestSurveyDto requestDto) {
+        surveyMapper.updateSurvey(id, requestDto);
     }
 }
