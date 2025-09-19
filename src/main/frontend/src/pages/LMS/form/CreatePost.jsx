@@ -7,7 +7,6 @@ import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import SurveyPost from './SurveyPost';
 import {v4 as uuidv4} from "uuid";
-import QuestionAdd from './QuestionAdd';
 
 // CreatePost.jsx
 // ...import 생략
