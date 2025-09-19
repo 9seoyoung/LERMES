@@ -3,11 +3,13 @@
   width: 385px;
   height: 32px;
   border: 1px solid #d9d9d9;
+  border-radius: 4px;
   padding: 8px 12px;
-  font-size: 14px;
+  font-size: 1.8rem;
   box-sizing: border-box;
   outline: none;
 }
+
 
 /* 밑줄 */
 .underline {
@@ -274,13 +276,16 @@ color: #000;
 
 /* 항목 추가 버튼 */
 .addBtn {
-  width: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 24px;
+  min-width: 64px;
+  padding: 8px 12px;
   border-radius: 16px;
-  padding: 0 4px;
   background-color: #e1f1ff;
   color: #0088ff;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -290,7 +295,6 @@ color: #000;
 .addBtn:hover,
 .addBtn:focus,
 .addBtn:active {
-  border: 1px solid #0088ff;
   outline: none;
 }
 
