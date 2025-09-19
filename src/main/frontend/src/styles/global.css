@@ -720,6 +720,7 @@ footer > div:hover {
   display: flex;
   flex-direction: column;
   padding: 16px 12px;
+  flex: 1;
   border: 2px solid #dedede;
   border-radius: 8px;
   gap: 16px;
@@ -771,9 +772,17 @@ footer > div:hover {
   color: #333;
 }
 
-.questionTypeBox .dropSet{
+.questionTypeBox .dropSet, .questionTypeBox .dropSet button{
   width: 12rem;
   height: 2.4rem;
   border: 1px solid #dedede;
   border-radius: 4px;
+}
+
+.questionTypeBox .dropSet button:active {
+  border: 1px solid #0088FF
+}
+
+.questionTypeBox .dropSet p {
+  padding: 4px 12px;
 }
