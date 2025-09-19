@@ -9,12 +9,16 @@ export default function ListTable({tableHead,apiData, columnData}) {
 
     return (
     <ul className={styles.ListTbBg}>
+        {tableHead?.length > 0 ? 
                 <li key="tableHead" className="list-th">
         {            tableHead.map((col, idx) => (
                     <div key={`th-${idx}`} className={styles.cell}>{col}</div>
                 ))
             }
                 </li>
+            :
+            ""
+        }
         {apiData.map((row, i) => (
             <li key={i} className={styles.row}>
                 {columnData.map((col, j) => (
