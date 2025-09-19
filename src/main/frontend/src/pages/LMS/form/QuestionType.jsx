@@ -10,15 +10,15 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
     switch (value){
       case "single":
         return "객관식";
-        break;
 
       case "text":
         return "주관식";
-        break;
 
       case "image":
         return "이미지";
-        break;
+        
+      default:
+        return "객관식"
     }
   }
 

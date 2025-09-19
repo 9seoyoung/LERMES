@@ -1,9 +1,7 @@
 // src/App.js
 
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import About from "../About";
-import LoginForm from "./UserRegistForm";  // 👈 LoginForm import 추가
+import { useNavigate } from "react-router-dom";
 
 import { fetchCurrentTime, registerUser } from "../services/sampleService";
 

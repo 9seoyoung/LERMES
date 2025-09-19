@@ -5,7 +5,6 @@ import uiStyle from "../../styles/UiComp.module.css"
 import { useAccount } from "../../auth/AuthContext";
 import FilterList from "../../components/ui/FilterList";
 import GroupDropdown from "../../components/ui/GroupDropdown";
-import { useState } from "react";
 
 export default function Board(){
     const navigate = useNavigate();

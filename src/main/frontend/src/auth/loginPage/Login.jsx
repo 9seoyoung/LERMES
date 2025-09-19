@@ -1,4 +1,4 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAccount } from '../AuthContext'; // ← 컨텍스트 훅
 import '../../styles/sj.css';
