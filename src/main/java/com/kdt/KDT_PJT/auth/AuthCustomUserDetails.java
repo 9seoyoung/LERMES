@@ -33,8 +33,8 @@ public class AuthCustomUserDetails implements UserDetails {
         this.enabled = user.isEnabled();
         this.roleType = user.getRoleType();
         this.userTelno = user.getUserTelno();
-        this.companyId = user.getCompanyId();
-        this.cohortId = user.getCohortId();
+        this.companyId = user.getCompanySn();
+        this.cohortId = user.getCohortSn();
     }
 
     private String mapRoleIdToName(Long roleId) {

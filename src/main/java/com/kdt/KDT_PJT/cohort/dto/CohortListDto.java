@@ -1,24 +1,20 @@
 package com.kdt.KDT_PJT.cohort.dto;
 
-import com.kdt.KDT_PJT.cohort.entity.QuestionType;
-import com.kdt.KDT_PJT.cohort.entity.cohortSttsNm;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Data @Getter
-public class CohortDto {
+@Setter
+public class CohortListDto {
 
     private Long cohortSn;  // 수정, 조회 응답용
 
     private String cohortNm;
 
     private String crclmNm;
-
-    private String crclmCn;
-
-    private Long coSn;
 
     private LocalDate recruitBgngDt;
 
@@ -28,9 +24,7 @@ public class CohortDto {
 
     private LocalDate crclmEndYmd;
 
-    private cohortSttsNm cohortSttsNm;
-
-    private QuestionType cohortCate;
+    private String cohortSttsNm;
 
     // 기본 생성자, getter/setter 생략 가능 (롬복 사용 가능)
 }

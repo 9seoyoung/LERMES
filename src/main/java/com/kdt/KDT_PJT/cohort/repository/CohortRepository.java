@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface CohortRepository extends JpaRepository<Cohort, Long> {
 
     List<Cohort> findByCoSn(Long coSn);
+    Optional<Cohort> findById(Long id);
     // 추가 쿼리가 필요하면 작성
 }
