@@ -12,16 +12,21 @@
   font-optical-sizing: auto;
   margin: 0;
   padding: 0;
+  color: #222;
 }
 
 html {
   /* 기본사이즈 10px, 나머지는 rem 기준으로 계산 */
     font-size: clamp(8px, 0.8vw, 12px);
-  
+    width: 100%;
+    height: 100%;
+    background-color: #d9d9d9;  
+    color: #222;
 }
 
 body {
   width: 100vw;
+  min-height: 100vh;
   background-color: #d9d9d9;
   color: #222;
   padding: 0 24px;
@@ -36,6 +41,7 @@ a {
 span {
   display: inline-flex;
   color: inherit;
+  border-bottom: 1px solid #222;
 }
 
 table {
@@ -64,11 +70,62 @@ li {
   cursor: pointer;
 }
 
+hr {
+  border: none;
+  border-top: 1px solid #222;
+}
+
+textarea {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  resize: none;
+  padding: 16px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  outline: none;
+  color: #acacac;
+}
+
+textarea:focus {
+  border: 2px solid #222;
+  color: #222;
+}
+
+
+/* 폰트 사이즈 */
+h2 {
+  padding: 0 0 8px;
+  font-size: 4.4rem;
+
+}
+
+h4 {
+  padding: 0 0 8px;
+  font-size: 1.8rem;
+  height: 4rem;
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
 /* 레이아웃 */
+
 .layout {
   width: 100%;
+  min-height: 100vh;
   max-width: 1440px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.layout_content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .layout > header {
@@ -81,9 +138,12 @@ li {
   border-radius: 32px;
   box-shadow: 4px 4px 4px #00000025 ;
   justify-content: space-between;
+  position: relative;
+  z-index: 999999;
 }
 
 .joinBtn {
+  min-width: max-content;
   width: 96px;
   height: 48px;
   background-color: #0088FF;
@@ -91,13 +151,638 @@ li {
   font-weight: 500;
   border-radius: 24px;
   font-size: 1.4rem;
+  padding: 0 0.2rem;
 }
 
 .header_L {
   width: 100%;
   height: 100%;
+  display: flex;
+  gap: 24px;
+}
+
+.header_R {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+  gap: 12px;
+  align-items: center;
+}
+
+.navBtn {
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0 auto 1.2rem;
+}
+
+.layout_content footer {
+  width: 100%;
+  height: 8rem;
+  background-color: #0088FF;
+  color: #fff;
+  font-size: 3.2rem;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 4px -4px 4px #00000025;
+  gap: 24px;
+  position: relative;
+}
+
+footer > div {
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 12px 4px;
+}
+
+footer > div:hover {
+  background-color: #00000025;
+  cursor: pointer;
+}
+
+/* 로그인/회원가입용 레이아웃 */
+.welcomeCont {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  max-height: 100vh;
+}
+
+.headerLogo{
+  height: 80px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.problemBox{
+  width: 100%;
+  height: 24px;
+  display: flex;
+  flex-direction: row-reverse;
+  margin-top: -8px;
+}
+
+.findIdPw {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* Outlet, 메인콘텐츠 */
+
+.varPage {
+  flex: 1;
+  gap: 24px;
+  margin-bottom: 64px;
+  min-height: 702px;
+  display: flex;
+}
+
+/* 메인화면 각종 레이아웃 */
+.mainContainer_cardGrid{
   background-color: #0088FF;
   display: flex;
-  justify-content: space-between;
+}
+
+.mainCont_Lms_Row {
+  display: flex;
+  width: 100%;
   gap: 24px;
+  padding: 8px 0;
+}
+
+.main_L, .main_R {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main_R > div{
+  background-color: #FCFEFF;
+  box-shadow: 0 4px 4px #00000025;
+  border-radius: 1.6rem;
+  padding: 20px 24px;
+}
+
+.main_L > div {
+  background-color: #0088FF;
+  padding: 20px 24px;
+}
+
+/* 공통 ui */
+.BigListBox{
+  width: 100%;
+  display: flex;
+  background-color: #FCFEFF;
+  flex-direction: column;
+  padding: 20px 12px;
+  border-radius: 16px;
+  flex: 1;
+}
+
+.boardPage{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.createBtn {
+  background: #FCFEFF;
+  padding :0 4px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px #00000025;
+}
+
+.createBtn:hover {
+  cursor: pointer;
+  background: #ebeff4; 
+  color: #333;
+}
+
+.save_box {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+.basicBtn {
+  padding: 2px 12px;
+  border-radius: 4px;
+}
+
+.saveBtn {
+  color: #f6f6f6;
+  background-color: #ACACAC;
+}
+
+.tempBtn {
+  color: #222;
+  background-color: #d9d9d9;
+}
+
+.basicBtn:active {
+  scale: 0.95;
+}
+
+.saveBtn:hover {
+  background-color: #565656;
+}
+
+.tempBtn:hover {
+  background-color: #565656;
+  color: #f6f6f6;
+}
+
+
+/* 더보기 버튼 */
+.specificBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  padding: 0 8px;
+  font-weight: 400;
+}
+
+.specificBtn:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tableBox {
+  overflow-y: auto;
+  height: calc(100% - 4rem);
+}
+
+/* 스크롤 바 */
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+
+/* nav */
+.navCont{
+  display: flex;
+  width: 216px;
+  height: 702px;
+  background-color: #f6f6f6;
+  box-shadow: 2px 2px 2px #00000025;
+  padding: 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 16px;
+}
+
+.navMyInfo{
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navMyInfo > img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dedede;
+}
+
+.infoWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.navMenuCont{
+  width: 200px;
+  height: 56px;
+}
+
+.lmsMyInfoBtn {
+  width: 120px;
+  height: 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d9d9d9;
+  font-size: 1.6rem;
+}
+
+.navMenuList{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.navMenuList > div {
+  width: 100%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.navMenuList > div:hover {
+  background-color: #dedede;
+}
+
+.filterList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ftList_L {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ftList_L li {
+  min-width: 60px;
+  height: 24px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: #FCFEFF;
+  padding: 2px 6px;
+}
+
+.ftList_L li:hover {
+  background: #ebeff4; 
+  color: #333;
+}
+
+#ftClicked {
+  background-color: #0088FF;
+  color: #FCFEFF;
+}
+
+.testBox {
+  display: flex;
+  gap: 12px;
+  position: absolute;
+  right: 24px;
+  justify-content: flex-end;
+}
+.testBtn {
+  font-size: 1rem;
+  padding: 4px 12px;
+}
+
+.testClicked {
+  background-color: #222;
+  color: #FCFEFF;
+  border-radius: 50%;
+}
+
+.goSuper{
+  background-color: #d9d9d9;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.goSuper:hover {
+  cursor: pointer;
+  background-color: #dedede;
+}
+
+.logoBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoBox:hover {
+  cursor: pointer;
+}
+
+/* 폼 */
+.formAreaRow {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+}
+
+.formArea_L {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+  ;
+}
+
+.formArea_R {
+  width: 300px;
+  display: flex;
+  height: 100%;
+  background-color: #f6f6f6;
+  border-radius: 8px;
+  padding: 16px 12px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/* 드롭 다운 */
+.selectBoxArea {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+  flex: 1;
+}
+
+.dropSet {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dropSet p {
+  width: 100%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: first baseline;
+}
+
+.dropSet > p {
+  min-width: max-content;
+  justify-content: center;
+  width: 64px;
+  height: 100%;
+}
+
+.dropset_dd {
+  flex: 1;
+}
+
+.dropSet p:hover {
+  cursor: pointer;
+  background: #00000025;
+  color: #f6f6f6;
+}
+
+.menuContainer {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.subMenuList {
+  height: 36px;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: #f6f6f6;
+}
+
+.subMenuList:hover {
+  background: #00000025;
+  color: #f6f6f6;
+}
+
+.formHeader {
+  display: flex;
+  flex: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  color: #222;
+  gap: 12px;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-radius:4px;
+}
+
+.inputSet {
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.inputFlex1{
+  flex: 1;
+}
+
+.formLabel{
+  justify-content: center;
+  align-items: center;
+  background-color: #f6f6f6;
+  border-radius: 8px;
+  width: 80px;
+  display: flex;
+  height: 36px;
+}
+
+.formInput, .addfileList {
+  display: flex;
+  flex: 1;
+  height: 32px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  color: #acacac;
+  outline: none;
+  padding: 0 12px;
+}
+
+.formInput:focus {
+  color: #222;
+  border: 2px solid #222;
+}
+
+.addfileList {
+  align-items: center;
+  border: none;
+  display: flex;
+  gap: 12px;
+  overflow-x: scroll;
+}
+
+.addfileList li span{
+  border-bottom: 1px solid #acacac;
+  /* max-width: 180px; */
+  text-wrap: nowrap;
+  /* overflow: hidden; */
+  padding: 0 px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.r_bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+
+/* 폼 */
+.questionBox {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  flex: 1;
+  border: 2px solid #dedede;
+  border-radius: 8px;
+  gap: 16px;
+}
+
+.questionAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E1F1FF;
+  height: 46px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 800;
+  gap: 4px;
+}
+
+.questionAdd:hover {
+  background-color: #c6e4ff;
+  font-size: 1.2rem;
+}
+
+.questionAdd:active {
+  font-size: 1.0rem;
+}
+
+.multipleSet {
+  width: 60%;
+}
+
+.questionTypeBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.questionTitle {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 2.4rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #dedede;
+  outline: none;
+  
+}
+
+.questionTitle:focus {
+  color: #333;
+}
+
+.questionTypeBox .dropSet, .questionTypeBox .dropSet button{
+  width: 12rem;
+  height: 2.4rem;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+}
+
+.questionTypeBox .dropSet button:active {
+  border: 1px solid #0088FF
+}
+
+.questionTypeBox .dropSet p {
+  padding: 4px 12px;
 }

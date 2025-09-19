@@ -1,0 +1,34 @@
+// 페이지찾기 - 게시글 등록
+import React from 'react'
+
+export const ArticlePost = ({formId, handleChange, formData, FileList, files, setFiles}) => {
+  return (
+    <>
+    <div className='formHeader'>
+              <div className='inputSet'>
+                <label className='formLabel' htmlFor={`${formId}_title`}>제목</label>
+                <input id={`${formId}_title`}
+                  className='formInput' 
+                  name='title' 
+                  placeholder='제목을 입력하세요.' 
+                  value={formData.title} 
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            {/* 본문 */}
+            <textarea                 
+                id={`${formId}_content`}
+                name="content"
+                className='formTextarea'
+                placeholder='본문을 입력하세요.'
+                value={formData.content}
+                onChange={handleChange}>
+            </textarea>
+            <div className='inputSet'>
+              <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
+              <FileList files={files} setFiles={setFiles}></FileList>
+            </div>
+    </>
+  )
+}

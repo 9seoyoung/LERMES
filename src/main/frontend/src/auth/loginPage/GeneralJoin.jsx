@@ -1,46 +1,155 @@
-import React from "react";
-import "../../styles/sj.css";
-// import logoImg from './1.png';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import { requestEmailCode, signupGeneral } from '../authService.js';
+import '../../styles/sj.css';
+import { toast } from 'react-toastify';
+import { useAccount } from '../AuthContext.jsx';
 
-function GeneralJoin() {
+export default function GeneralJoin() {
+  const { signIn } = useAccount();
+  const [form, setForm] = useState({
+    username: '',
+    email: '',
+    verificationCode: '',
+    password: '',
+    confirmPassword: '',
+    phoneNumber: '',
+  });
+  const [msg, setMsg] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [codeSent, setCodeSent] = useState(false);
+  const emailRef = useRef(null);
+  const navigate = useNavigate();
+
+  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const getErrMsg = (e) =>
+    e?.response?.data?.message ||
+    e?.response?.data?.error ||
+    e?.message ||
+    '알 수 없는 오류가 발생했습니다.';
+
+  const sendCode = async () => {
+    if (!emailRef.current?.reportValidity()) return;
+
+    const normEmail = form.email.trim().toLowerCase();
+    if (!normEmail) return setMsg('이메일을 입력하세요.');
+    setSending(true);
+    setMsg(null);
+    try {
+      await requestEmailCode(normEmail); // 200 OK or 409 CONFLICT 등
+      setForm((f) => ({ ...f, email: normEmail }));
+      setCodeSent(true);
+      setMsg('인증코드를 전송했습니다.');
+    } catch (e) {
+      setMsg(getErrMsg(e)); // 예: "이미 가입된 이메일입니다."
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setMsg(null);
+    try {
+      const payload = {
+        username: form.username.trim(),
+        email: form.email.trim().toLowerCase(),
+        verificationCode: form.verificationCode.trim(),
+        password: form.password,
+        confirmPassword: form.confirmPassword,
+        phoneNumber: form.phoneNumber.trim(),
+      };
+
+      await signupGeneral(payload);
+
+      const loginPayload = { email: payload.email, password: payload.password };
+      const me = await signIn(loginPayload);
+      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
+      alert('회원가입이 완료되었습니다!');
+      navigate(redirectLoc, { replace: true });
+    } catch (e) {
+      toast.error(getErrMsg(e)); // 예: "이메일 인증 실패", "비밀번호가 일치하지 않습니다."
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="app-bg">
-      <div className="main-container">
-        <div className="panel left-panel">
-          <div className="welcome-inner">
-            <div className="welcome-title">
-              <b>LMS에 오신 것을<br />환영합니다 ~</b>
-            </div>
-            <div className="welcome-desc">글</div>
-            <div className="welcome-sub">
-              더욱 체계적인, 맞춤화 된 환경으로<br />
-              교육의 질을 높여보세요!
-            </div>
-            <button className="start-btn">시작하기</button>
-          </div>
-        </div>
-        <div className="panel right-panel">
-          <div className="signup-inner">
-            <div className="signup-title">
-              <b>회원가입</b>
-            </div>
-            <form className="signup-form">
-              <input type="text" placeholder="이름을 입력하세요. (국문 표기)" />
-              <div className="input-with-btn">
-                <input type="email" placeholder="이메일을 입력하세요. ex) abc123@example.com" />
-                <button type="button" className="verify-btn">인증</button>
-              </div>
-              <input type="text" placeholder="인증 번호를 입력하세요." />
-              <input type="password" placeholder="비밀번호 입력" />
-              <input type="password" placeholder="비밀번호 확인" />
-              <input type="text" placeholder="휴대폰 번호를 입력하세요. 010-xxxx-xxxx" />
-              <button className="signup-btn" type="submit">회원 가입</button>
-            </form>
-          </div>
-        </div>
+    <div className="signup-inner">
+      <div className="signup-title">
+        <b>회원가입</b>
       </div>
+      <form className="signup-form" onSubmit={onSubmit}>
+        <input
+          name="username"
+          placeholder="이름(국문)"
+          value={form.username}
+          onChange={onChange}
+          required
+        />
+        <div className="input-with-btn">
+          <input
+            ref={emailRef}
+            name="email"
+            type="email"
+            placeholder="이메일을 입력하세요. ex) abc123@example.com"
+            value={form.email}
+            onChange={onChange}
+            required
+            disabled={codeSent}
+          />
+          <button
+            type="button"
+            className="verify-btn"
+            onClick={sendCode}
+            disabled={sending || !form.email}
+          >
+            {sending ? '전송중...' : '인증'}
+          </button>
+        </div>
+        <input
+          name="verificationCode"
+          placeholder="인증번호를 입력하세요."
+          value={form.verificationCode}
+          onChange={onChange}
+          minLength={6}
+          maxLength={6}
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="비밀번호"
+          value={form.password}
+          onChange={onChange}
+          required
+        />
+        <input
+          name="confirmPassword"
+          type="password"
+          placeholder="비밀번호 확인"
+          value={form.confirmPassword}
+          onChange={onChange}
+          required
+        />
+        <input
+          name="phoneNumber"
+          placeholder="휴대폰번호"
+          value={form.phoneNumber}
+          onChange={onChange}
+          minLength={11}
+          maxLength={11}
+          required
+        />
+        <button className="signup-btn" type="submit" disabled={loading}>
+          {loading ? '가입 중...' : '회원가입'}
+        </button>
+        {msg && <p className="msg">{msg}</p>}
+      </form>
     </div>
   );
 }
-
-export default GeneralJoin;

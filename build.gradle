@@ -78,8 +78,23 @@ dependencies {
 	// Spring Boot Security
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	
 
+	// JPA (Hibernate 포함)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// 유효성 검증
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// 메일 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// redis 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+}
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-parameters"
 }
 
 tasks.named('test') {
@@ -162,3 +177,4 @@ bootJar {
     enabled = false           		 // bootWar 활성화 (기본값은 true)
     archiveFileName.set('ROOT.war')  // ROOT로 지정해야 컨텍스트패스가 '/'로 됩니다. (권장)
 }*/
+
