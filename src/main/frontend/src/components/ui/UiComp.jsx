@@ -179,9 +179,9 @@ export function ActionBtn({ textType }) {
 // 항목 추가 버튼
 export function AddBtn({ textType }) {
   return (
-    <div>
+    <>
       <button className={styles.addBtn}>{textType}</button>
-    </div>
+    </>
   );
 }
 // 드롭박스

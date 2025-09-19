@@ -13,6 +13,7 @@ import {v4 as uuidv4} from "uuid";
 
 function CreatePost() {
   const domFormId = useId();
+  const domId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
@@ -174,6 +175,15 @@ function CreatePost() {
 
             <div className="r_bottom">
               <FileUpload files={files} setFiles={setFiles} />
+              <ul>
+                {surveyForm?.pages.map((p, idx)=>(
+                  <>
+                    {surveyForm.pages[idx].questions.map((q, idx)=> (
+                      <li key={`${domId}-${idx}`}>{q}</li>
+                    ))}
+                  </>
+                ))}
+              </ul>
               <div className="save_box">
                 <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button>
                 <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>저장</button>

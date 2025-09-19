@@ -75,6 +75,12 @@ hr {
   border-top: 1px solid #222;
 }
 
+.hrSt2 {
+  border: none;
+  border-top: 1px solid #acacac;
+  width: 100%;
+}
+
 textarea {
   display: flex;
   width: 100%;
@@ -605,8 +611,6 @@ footer > div:hover {
 
 .dropSet p:hover {
   cursor: pointer;
-  background: #00000025;
-  color: #f6f6f6;
 }
 
 .menuContainer {
@@ -645,6 +649,7 @@ footer > div:hover {
   flex-direction: column;
   flex: 1;
   border-radius:4px;
+  gap: 16px;
 }
 
 .inputSet {
@@ -721,7 +726,7 @@ footer > div:hover {
   flex-direction: column;
   padding: 16px 12px;
   flex: 1;
-  border: 2px solid #dedede;
+  border: 1px solid #d9d9d9;
   border-radius: 8px;
   gap: 16px;
 }
@@ -756,6 +761,13 @@ footer > div:hover {
   gap: 12px;
 }
 
+.questionTypeBox > p:first-child {
+  display: flex;
+  align-items: center;
+  grid-area: 12px;
+  font-weight: bold;
+}
+
 .questionTitle {
   display: flex;
   align-items: center;
@@ -763,7 +775,7 @@ footer > div:hover {
   height: 2.4rem;
   font-size: 2.2rem;
   font-weight: bold;
-  color: #dedede;
+  color: #d9d9d9;
   outline: none;
   
 }
@@ -779,12 +791,57 @@ footer > div:hover {
   border-radius: 4px;
 }
 
-.questionTypeBox .dropSet button:active {
-  border: 1px solid #0088FF
-}
 
 .questionTypeBox .dropSet p {
   padding: 4px 12px;
+}
+
+.qTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  color: #d9d9d9;
+}
+
+.qTitle p {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #0088FF;
+}
+
+.questionCont{
+  color: #d9d9d9;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.qCont > .qTitle > input {
+  font-size: 2.2rem;
+  padding: 4px 12px;
+  flex: 1;
+  border: none;
+  font-weight: 600;
+  border-radius: 4px;
+  color: #d9d9d9;
+}
+
+.qTitle input:focus {
+  border: 2px solid #222;
+  outline: none;
+}
+
+.qCont {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.qTitle > hr {
+  flex: 1;
+  border: 1px solid #d9d9d9;
 }
 
 /* 테이블 */

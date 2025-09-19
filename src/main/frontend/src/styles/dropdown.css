@@ -28,7 +28,7 @@
   top: calc(100% + 8px);
   width: 100%;
   min-width: max-content;
-  background: #fff;
+  background: #f6f6f6;
   border: 1px solid #e5e7eb;
   border-radius: .6rem;
   box-shadow: 0 8px 24px rgba(0,0,0,.08);
@@ -68,7 +68,7 @@
   font: inherit;
   font-size: 1.6rem;
 }
-.dd__item:hover { background: #f3f4f6; }
+.dd__item:hover { background: #00000025; }
 
 /* 모션 최소화 환경 */
 @media (prefers-reduced-motion: reduce) {
