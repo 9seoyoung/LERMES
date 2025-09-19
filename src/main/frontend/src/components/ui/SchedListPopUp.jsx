@@ -9,10 +9,11 @@ function getTodayString() {
   return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
 }
 
-function SchedListPopUp({onClose, title, selectedDate}) {
+function SchedListPopUp({onClose, onSave, selectedDate}) {
   const [showOptions, setShowOptions] = useState(false);
   const [memo, setMemo] = useState("");
   const today = new Date().toLocaleDateString();
+  const [title, setTitle] = useState(""); // ⬅️ 제목 상태 추가
 
   // selectedDate가 없으면 오늘 날짜 사용
    const getInitialDate = () => {
@@ -21,15 +22,19 @@ function SchedListPopUp({onClose, title, selectedDate}) {
 
   const [startDate, setStartDate] = useState(getInitialDate());
 
+    const handleSave = () => {
+      onSave(title);  // ⬅️ 제목을 부모 컴포넌트에 전달
+    };
+
   return (
   <div className={styles.overlay}>
     <div
       className={`${styles.container} ${showOptions ? styles.containerExpanded : styles.containerCollapsed}`}>
       {/* 상단 날짜 + 버튼 */}
       <div className={styles.header}>
-        <input placeholder="제목 입력" className={styles.schedTitle} />
+        <input placeholder="제목 입력" className={styles.schedTitle} value={title} onChange={(e) => setTitle(e.target.value)} />
         <div className={styles.popUpBtn}>
-            <SaveBtn textType="저장" />
+            <SaveBtn onClick={handleSave} textType="저장" />
            <CancelBtn onClick={onClose} textType="취소" />
         </div>
       </div>
