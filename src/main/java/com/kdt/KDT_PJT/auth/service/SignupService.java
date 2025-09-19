@@ -5,17 +5,13 @@ import com.kdt.KDT_PJT.auth.dto.EmailCodeRequest;
 import com.kdt.KDT_PJT.auth.dto.GeneralSignupDto;
 import com.kdt.KDT_PJT.auth.dto.TenantSignupDto;
 import com.kdt.KDT_PJT.auth.entity.Company;
-import com.kdt.KDT_PJT.auth.entity.EnrollmentStatus;
 import com.kdt.KDT_PJT.auth.entity.User;
-import com.kdt.KDT_PJT.auth.entity.UserRoleType;
 import com.kdt.KDT_PJT.auth.repository.CompanyRepository;
 import com.kdt.KDT_PJT.auth.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @RequiredArgsConstructor
@@ -65,8 +61,8 @@ public class SignupService {
                 .enabled(true)
                 .roleType(6L)    // 일반 회원
                 .userTelno(dto.getPhoneNumber())
-                .companyId(null)
-                .cohortId(null)
+                .companySn(null)
+                .cohortSn(null)
                 .build();
 
         userRepository.save(user);
@@ -115,8 +111,8 @@ public class SignupService {
                 .enabled(true)
                 .roleType(2L) // 테넌트 관리자
                 .userTelno(dto.getPhoneNumber())
-                .companyId(company.getId()) // FK: TB_USER.OGDP_CO_SN
-                .cohortId(null)
+                .companySn(company.getId()) // FK: TB_USER.OGDP_CO_SN
+                .cohortSn(null)
                 .build();
 
         userRepository.save(admin);

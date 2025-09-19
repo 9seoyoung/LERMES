@@ -95,9 +95,9 @@ export function SchedAddBtn({ textType, onClick }) {
 }
 
 // 저장 버튼
-export function SaveBtn({ textType }) {
+export function SaveBtn({ textType, onClick }) {
   return (
-      <button className={`${styles.smallBtn} ${styles.saveBtn}`}>
+      <button className={`${styles.smallBtn} ${styles.saveBtn}`} onClick={onClick}>
         {textType}
       </button>
   );

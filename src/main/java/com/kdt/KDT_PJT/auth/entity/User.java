@@ -44,9 +44,9 @@ public class User {
 
     // 회사 번호(FK) - nullable
     @Column(name = "OGDP_CO_SN")
-    private Long companyId;
+    private Long companySn;
 
     // 기수 번호(FK) - nullable
     @Column(name = "OGDP_COHORT_SN")
-    private Long cohortId;
+    private Long cohortSn;
 }

@@ -65,8 +65,8 @@ function SurveyPost({
 
       {/* 첨부파일 리스트 */}
       <div className='inputSet'>
-        <label className='formLabel' htmlFor={`${domFormId}_file`}>파일</label>
-        <FileList files={files} setFiles={setFiles} />
+        <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
+        <FileList files={files} setFiles={setFiles}></FileList>
       </div>
     </>
   );
