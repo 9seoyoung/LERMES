@@ -786,3 +786,12 @@ footer > div:hover {
 .questionTypeBox .dropSet p {
   padding: 4px 12px;
 }
+
+/* 테이블 */
+.list-th {
+  display: flex;
+  background-color: #E1F1FF;
+  border-radius: 8px;
+  width: 100%
+  ;
+}

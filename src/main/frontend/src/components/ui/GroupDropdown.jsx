@@ -20,7 +20,7 @@ function GroupDropdown({coSn}) {
           console.log(e.message);
         }
       })();
-    }, []);
+    }, [coSn]);
   return (
     <div className="dropSet" style={{minWidth: "80px"}}>
       <Dropdown className="dropset_dd" label={groupFilter || "All"} >

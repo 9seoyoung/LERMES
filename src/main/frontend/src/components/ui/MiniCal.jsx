@@ -6,7 +6,7 @@ import styles from '../../styles/MiniCal.module.css';
 const MiniCal = ({selectedDate, setSelectedDate}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   /* const [selectedDate, setSelectedDate] = useState(null); */
-  const [events, setEvents] = useState({}); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
+  // const [events, setEvents] = useState({}); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
 
   // 새로고침하면 오늘 날짜 선택 (selectedDate도 문자열 'YYYY-MM-DD' 형태로 초기화)
   useEffect(() => {
@@ -19,7 +19,7 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
     if (setSelectedDate) {
         setSelectedDate(dateKey);
     }
-  }, []);
+  }, [setSelectedDate]); //setSelectedDate 의존성 추가
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();

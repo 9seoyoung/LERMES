@@ -1,25 +1,35 @@
 import styles from "../../styles/UiComp.module.css";
 
 // @apiData api 호출해서 구조분해할당한 것., 백에서 객체 배열로 보내줘야됨
-export default function ListTable({apiData, columnData}) {
+export default function ListTable({tableHead,apiData, columnData}) {
     //백에서 넘겨받은 데이터의 길이를 부정해서 0이면(하나라도 담기면 패스) 데이터 없음 리턴
     if(!apiData?.length) {
         return <div className={styles.ListTbBg}>-</div>;
     }
+
     return (
     <ul className={styles.ListTbBg}>
+                <li key="tableHead" className="list-th">
+        {            tableHead.map((col, idx) => (
+                    <div key={`th-${idx}`} className={styles.cell}>{col}</div>
+                ))
+            }
+                </li>
         {apiData.map((row, i) => (
             <li key={i} className={styles.row}>
                 {columnData.map((col, j) => (
-                <div key={j} className={styles.cell }>
-                {row[col]}
-                </div>
+                    <>
+                        <div key={j} className={styles.cell }>
+                        {row[col]}
+                        </div>
+                    </>
                 ))}
             </li>
         ))}
     </ul>
     );
 }
+
 
 // 아 api로 받아온 객체배열형태인 데이터 apiData를
 /**

@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import {SaveBtn, CancelBtn} from './UiComp.jsx';
 import styles from "../../styles/SchedListPopUp.module.css";
 
-function getTodayString() {
-  const today = new Date();
-  return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
-}
+// function getTodayString() {
+//   const today = new Date();
+//   return today.toISOString().split('T')[0]; // yyyy-mm-dd 형식
+// }
 
 function getInitialDate(selectedDate) {
   return selectedDate || new Date().toISOString().split("T")[0];
@@ -15,7 +15,7 @@ function getInitialDate(selectedDate) {
 
 function SchedListPopUp({onClose, onSave, selectedDate}) {
   const [showOptions, setShowOptions] = useState(false);
-  const today = new Date().toLocaleDateString();
+  // const today = new Date().toLocaleDateString();
   const [title, setTitle] = useState(""); // ⬅️ 제목 상태 추가
   const [memo, setMemo] = useState(""); // 메모
   const [startDate, setStartDate] = useState(() => getInitialDate(selectedDate)); // 시작일
