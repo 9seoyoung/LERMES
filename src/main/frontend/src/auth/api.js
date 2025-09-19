@@ -4,7 +4,7 @@ import axios from 'axios';
 // 배포용
 
 const deployURL = 'onopco2.iptime.org:8080'
-const developURL = 'localhost:940'
+// const developURL = 'localhost:940'
 
 export const api = axios.create({
   baseURL: `http://${deployURL}/api`,
