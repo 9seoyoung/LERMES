@@ -83,8 +83,6 @@ export default function QuestionAdd() {
 
   return (
     <>
-      <div>질문추가되는지 확인하는 페이지</div>
-
       {questions.map(q => (
         <QuestionType
           key={q.qid}       // key는 자식에게 전달되지 않음

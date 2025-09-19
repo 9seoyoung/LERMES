@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import FilePreview from "../../../components/ui/FilePreview";
 
 export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, ref) {
   const setType = (t) => dispatch({ type: "SET_TYPE", qid: q.qid, value: t });
@@ -41,7 +42,12 @@ export const QuestionType = forwardRef(function QuestionType({ q, dispatch }, re
           }
         />
       </div>
-
+      {/* 이미지일 때만 옵션 */}
+      {(q.type === "image") && (<>
+        <div>
+            <FilePreview></FilePreview>
+        </div>
+      </>)}
       {/* 객관식일 때만 옵션 */}
       {(q.type === "single" || q.type === "multiple") && (
         <div style={{ marginTop: 12 }}>

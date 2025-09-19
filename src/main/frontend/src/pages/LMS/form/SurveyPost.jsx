@@ -1,4 +1,5 @@
 import SurveyModel from "../../../utils/SurveyModel";
+import QuestionAdd from "./MakeForm";
 
 
 function SurveyPost({domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, postId}) {
@@ -19,7 +20,7 @@ function SurveyPost({domFormId, handleChange, formData, FileList, files, setFile
           />
         </div>
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>모집기간</label>
+          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>설문 기간</label>
           <input id={`${domFormId}_surveyStart`}
             type="date"
             className='formInput' 
@@ -39,14 +40,7 @@ function SurveyPost({domFormId, handleChange, formData, FileList, files, setFile
       </div>
       <div className="formContent">
       {/* 본문 - 설문 에디터 */}
-      <SurveyModel
-        postId={postId}
-        domFormId={domFormId}
-        surveyForm={surveyForm}
-        setSurveyForm={setSurveyForm}
-        files={files}             
-        setFiles={setFiles}        
-      />
+      <QuestionAdd></QuestionAdd>
       </div>
 
       {/* 첨부파일 리스트 */}

@@ -714,3 +714,10 @@ footer > div:hover {
   gap: 16px;
 }
 
+
+/* 폼 */
+.questionBox {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+}
