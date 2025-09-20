@@ -13,18 +13,20 @@ export default function StdHome() {
           <CalSched></CalSched>
       </div>
       <div className="main_R" style={{ flex: '1', gap: '16px' }}>
-        <div style={{ height: '232px' }}>
-          <NoticeList></NoticeList>
-        </div>
-        <div style={{ height: '232px' }}>
-          <h4>
-            자료실<div className="specificBtn">+ 더보기</div>
-          </h4>
-        </div>
-        <div style={{ height: '232px' }}>
-          <h4>
-            FAQ<div className="specificBtn">+ 더보기</div>
-          </h4>
+        <div className='max_height'>
+          <div className='dashBoardModule' style={{ height: '232px' }}>
+            <NoticeList></NoticeList>
+          </div>
+          <div className='dashBoardModule' style={{ height: '232px' }}>
+            <h4>
+              자료실<div className="specificBtn">+ 더보기</div>
+            </h4>
+          </div>
+          <div className='dashBoardModule' style={{ height: '232px' }}>
+            <h4>
+              FAQ<div className="specificBtn">+ 더보기</div>
+            </h4>
+          </div>
         </div>
       </div>
     </div>
