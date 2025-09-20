@@ -1,7 +1,6 @@
 package com.kdt.KDT_PJT.survey.ctl;
 
 import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
-//import com.kdt.KDT_PJT.survey.service.SurveyService;
 import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
 import com.kdt.KDT_PJT.survey.service.SurveyService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/bbsSurvey")
 @RequiredArgsConstructor
 public class SurveyController {
 
