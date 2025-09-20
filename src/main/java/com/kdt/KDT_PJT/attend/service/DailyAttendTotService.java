@@ -1,24 +1,37 @@
 package com.kdt.KDT_PJT.attend.service;
 
+import com.kdt.KDT_PJT.attend.entity.Attend;
 import com.kdt.KDT_PJT.attend.entity.AttendDtlTypeNm;
 import com.kdt.KDT_PJT.attend.entity.DailyAttendTot;
+import com.kdt.KDT_PJT.attend.repository.AttendRepository;
 import com.kdt.KDT_PJT.attend.repository.DailyAttendTotRepository;
 import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.auth.repository.UserRepository;
+import com.kdt.KDT_PJT.cohort.entity.Cohort;
+import com.kdt.KDT_PJT.cohort.repository.CohortRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 public class DailyAttendTotService {
 
+    private static final ZoneId ZONE = ZoneId.of("Asia/Seoul");
     private final UserRepository userRepository;
+    private final AttendRepository attendRepository;
     private final DailyAttendTotRepository dailyAttendTotRepository;
+    private final CohortRepository cohortRepository;
 
     // 매일 새벽: 모든 학생 기본값 결석 처리
     @Transactional
@@ -50,5 +63,54 @@ public class DailyAttendTotService {
     // 퇴실
     @Transactional
     public void recompute(LocalDate date) {
+    }
+
+    public void updateDailyAttendTot(Long userSn, Long cohortSn, LocalDateTime time) {
+        Optional<DailyAttendTot> stdDaily = dailyAttendTotRepository.findByUserSnAndCohortSnAndDate(userSn, cohortSn, time.toLocalDate());
+
+        Optional<Cohort> cohort = cohortRepository.findById(cohortSn);
+        Cohort c = cohort.orElseThrow(() -> new IllegalStateException("cohort not found: " + cohortSn));
+
+        // 기수, 입퇴실 시간 없을때 기본값 + 조퇴 기준 시간
+        LocalTime defaultStartTm = LocalTime.of(8, 30);
+        LocalTime defaultEndTm = LocalTime.of(17, 30);
+        LocalTime defaultEarlyLeaveTm = LocalTime.of(12, 30);
+
+        // 기수, 입퇴실 시간 있으면 기수입퇴실 시간
+        LocalTime attendStartTm =
+                cohort.get().getAttendStartTm() != null
+                        ? cohort.get().getAttendStartTm() : defaultStartTm;
+        LocalTime attendEndTm =
+                cohort.get().getAttendEndTm() != null
+                        ? cohort.get().getAttendEndTm() : defaultEndTm;
+
+        // 금일 데이터 갖고 오기 위한 변수
+            LocalDate date = time.toLocalDate();
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end   = start.plusDays(1);
+        
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("HH:mm");
+        
+        // 첫 입실(LocalTime)
+            LocalTime checkIn = attendRepository
+                    .findByUserSnAndInoutYnAndAttendTmBetween(userSn, true, start, end)
+                    .map(a -> a.getAttendTm().toLocalTime())
+                    .orElse(null);
+        
+        //  마지막 퇴실(LocalTime)
+            LocalTime checkOut = attendRepository
+                    .findByUserSnAndInoutYnAndAttendTmBetween(userSn, false, start, end)
+                    .map(a -> a.getAttendTm().toLocalTime())
+                    .orElse(null);
+
+        if ( checkIn != null && checkOut != null) {
+            if (checkIn.isBefore(attendStartTm)) {
+                if (checkOut.isAfter(defaultEarlyLeaveTm) && checkOut.isBefore(attendEndTm)) {
+                    
+                }
+            } else {
+
+            }
+        }
     }
 }

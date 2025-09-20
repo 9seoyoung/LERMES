@@ -3,6 +3,7 @@ package com.kdt.KDT_PJT.attend.service;
 import com.kdt.KDT_PJT.attend.dto.*;
 import com.kdt.KDT_PJT.attend.entity.Attend;
 import com.kdt.KDT_PJT.attend.repository.AttendRepository;
+import com.kdt.KDT_PJT.attend.repository.DailyAttendTotRepository;
 import com.kdt.KDT_PJT.attend.support.CodeStore;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import jakarta.persistence.EntityManager;
@@ -24,9 +25,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AttendService {
 
-    private final CodeStore codeStore;                 // 메모리 캐시(표시용 포함)
-    private final PasswordEncoder passwordEncoder;     // BCrypt
+    private final CodeStore codeStore;                              // 메모리 캐시(표시용 포함)
+    private final PasswordEncoder passwordEncoder;                  // BCrypt
     private final AttendRepository attendRepository;
+    private final DailyAttendTotService dailyAttendTotService;
 
     @PersistenceContext
     private EntityManager em;                          // 네이티브 쿼리 (exists)
@@ -130,9 +132,13 @@ public class AttendService {
                 .build();
         attendRepository.save(att);
 
+        LocalDateTime attendTm = att.getAttendTm(); // 학생의 퇴실시간
+
+        dailyAttendTotService.updateDailyAttendTot(userSn, cohortSn, attendTm);
+
         return CheckoutResponse.builder()
                 .ok(true)
-                .message("퇴실")
+                .message("퇴실 성공")
                 .checkoutTime(att.getAttendTm())
                 .build();
     }
