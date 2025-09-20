@@ -269,7 +269,15 @@ footer > div:hover {
   padding: 8px 0;
 }
 
-.main_L, .main_R {
+.main_L {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main_R {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -284,7 +292,6 @@ footer > div:hover {
 }
 
 .main_L > div {
-  background-color: #0088FF;
   padding: 20px 24px;
 }
 

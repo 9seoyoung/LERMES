@@ -1,8 +1,6 @@
 import { useState } from 'react';
 
 import NoticeList from '../../components/module/NoticeList';
-import SchedList from '../../components/ui/SchedList';
-import MiniCal from '../../components/ui/MiniCal';
 import CalSched from '../../components/ui/CalSched';
 
 // 페이지찾기 - 수강생 메인
@@ -12,13 +10,7 @@ export default function StdHome() {
   return (
     <div className="mainCont_Lms_Row">
       <div className="main_L" style={{ width: '40%' }}>
-        {/* <div style={{ height: '280px' }}>
-          <MiniCal selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        </div>
-        <div style={{ height: '422px' }}>
-          <SchedList selectedDate={selectedDate}/>
-        </div> */}
-        <CalSched></CalSched>
+          <CalSched></CalSched>
       </div>
       <div className="main_R" style={{ flex: '1', gap: '16px' }}>
         <div style={{ height: '232px' }}>

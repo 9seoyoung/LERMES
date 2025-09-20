@@ -1,6 +1,5 @@
 // SurveyPost.jsx
 import QuestionAdd from "./QuestionAdd"; // 위에서 export default로 바꿨으므로 경로/이름 확인
-// ...기타 import
 
 function SurveyPost({
   domFormId, handleChange, formData,
