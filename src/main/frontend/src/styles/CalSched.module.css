@@ -2,10 +2,9 @@
 display: flex;
 flex-direction: column;
 align-items: center;
-
+gap: 16px;
 position: relative;
-width: 450px;
-height: 700px;
+width: 100%;
 background-color: #fff;
 border-radius: 16px;
 }

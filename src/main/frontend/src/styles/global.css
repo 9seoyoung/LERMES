@@ -265,26 +265,44 @@ footer > div:hover {
 .mainCont_Lms_Row {
   display: flex;
   width: 100%;
+  height: 100%;
   gap: 24px;
-  padding: 8px 0;
 }
 
-.main_L, .main_R {
+.main_L {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main_R {
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.main_R > div{
-  background-color: #FCFEFF;
+.max_height{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 702px;
+  max-height: 800px;
+  background-color: yellow;
+}
+
+.dashBoardModule {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.6rem;
   box-shadow: 0 4px 4px #00000025;
+  background-color: #FCFEFF;
   border-radius: 1.6rem;
   padding: 20px 24px;
 }
 
 .main_L > div {
-  background-color: #0088FF;
   padding: 20px 24px;
 }
 
