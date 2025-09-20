@@ -3,6 +3,8 @@ import axios from 'axios';
 
 // 배포용
 
+// 아이피타임 포트포워드인가 그것도 맞춰줘야하는듯? 그것도 맞췄음.
+// 배치파일도 포트번호 맞춰줘야되는듯? 일단 맞췃음.
 const deployURL = 'onopco2.iptime.org:940'
 // const developURL = 'localhost:940'
 
