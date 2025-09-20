@@ -5,11 +5,12 @@ import axios from 'axios';
 
 // 아이피타임 포트포워드인가 그것도 맞춰줘야하는듯? 그것도 맞췄음.
 // 배치파일도 포트번호 맞춰줘야되는듯? 일단 맞췃음.
-const deployURL = 'onopco2.iptime.org:940'
-// const developURL = 'localhost:940'
+// 배포는 https로 443
+const deployURL = 'https://onopco2.iptime.org:940'
+// const developURL = 'http://localhost:940'
 
 export const api = axios.create({
-  baseURL: `http://${deployURL}/api`,
+  baseURL: `${deployURL}/api`,
   withCredentials: true, // 세션쿠키 자동 전송
   xsrfCookieName: 'XSRF-TOKEN', // 시큐리티 쿠키 기본 토큰
   xsrfHeaderName: 'X-XSRF-TOKEN', //시큐리티
