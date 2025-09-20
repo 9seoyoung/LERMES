@@ -14,17 +14,27 @@
         <result property="fileSz"       column="FILE_SZ"/>
         <result property="fileMimeType" column="FILE_MIME_TYPE"/>
         <result property="fileExtnNm"   column="FILE_EXTN_NM"/>
+        <result property="formUuid"     column="FORM_UUID"/>
     </resultMap>
 
     <insert id="insertTbFile" parameterType="com.kdt.KDT_PJT.file.dto.FileDTO" useGeneratedKeys="true" keyProperty="fileSn">
         INSERT INTO TB_FILE (
             ORGNL_FILE_NM, STRG_FILE_NM, STRG_FILE_PATH, DEL_YN, STRG_DT,
-            USER_SN, CO_SN, FILE_SZ, FILE_MIME_TYPE, FILE_EXTN_NM
+            USER_SN, CO_SN, FILE_SZ, FILE_MIME_TYPE, FILE_EXTN_NM, FORM_UUID
         ) VALUES (
             #{orgnlFileNm}, #{strgFileNm}, #{strgFilePath}, #{delYn}, #{strgDt},
-            #{userSn}, #{coSn}, #{fileSz}, #{fileMimeType}, #{fileExtnNm}
+            #{userSn}, #{coSn}, #{fileSz}, #{fileMimeType}, #{fileExtnNm}, #{formUuid}
         )
     </insert>
+
+    <select id="selectTbFilesByFormUuid" parameterType="string" resultMap="FileResultMap">
+    /*
+    QueryID : com.kdt.mapper.file.FileMapper.selectTbFilesByFormUuid
+    Description : FormUuid로 파일리스트 조회
+    작성자 : 김동식
+    */
+        SELECT * FROM TB_FILE WHERE FORM_UUID = #{formUuid} AND (DEL_YN IS NULL OR DEL_YN = 0)
+    </select>
 
     <select id="selectTbFileBySn" parameterType="int" resultMap="FileResultMap">
         SELECT * FROM TB_FILE WHERE FILE_SN = #{fileSn}
