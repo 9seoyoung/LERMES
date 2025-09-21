@@ -67,7 +67,6 @@ function PostStatus(props) {
 
 function CreatePost() {
   const domFormId = useId();
-  const domId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
@@ -109,25 +108,40 @@ function CreatePost() {
   const saveSubmit = async (e) => {
     e.preventDefault();
 
-  const payload = structuredClone
+  // const payload = structuredClone
+  //   ? structuredClone({ surveyForm, formData })
+  //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
+
+  const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
     : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
-  console.groupCollapsed("[CreatePost] createSurvey payload");
-  console.table(
-    payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
-      idx: i + 1, qid: q.qid, type: q.type,
-      title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
-    })) || []
-  );
-  console.groupEnd();
+  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  console.time("[CreatePost] createSurvey");
+  // console.groupCollapsed("[RecruitPost] createGroup payload");
+  // console.table(
+  //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
+  //     idx: i + 1, qid: q.qid, type: q.type,
+  //     title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
+  //   })) || []
+  // );
+  // console.groupEnd();
+
+  // console.log("[payload snapshot]", snapshot);
+  // console.log("[formData]", snapshot.formData);
+  // console.log("[surveyForm]", snapshot.surveyForm);
+  console.log("[will send to server]", JSON.stringify(body, null, 2));
+  console.table(snapshot.formData);
+
+  console.time("[RecruitPost] createGroup");
   try {
-    const res = await createSurvey(payload);
-    console.log("[CreatePost] createSurvey response:", res);
+    // const res = await createGroup(payload);
+    const res = await createSurvey(body);
+    console.log(Object.keys(snapshot)); 
+    console.log(Object.keys(snapshot.formData));
+    console.log("[RecruitPost] createGroup response:", res);
   } catch (err) {
-    console.error("[CreatePost] createSurvey error:", err);
+    console.error("[RecruitPost] createGroup error:", err);
   }
 };
 

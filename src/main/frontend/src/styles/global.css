@@ -634,6 +634,7 @@ footer > div:hover {
   min-width: max-content;
   justify-content: center;
   width: 64px;
+  min-width: max-content;
   height: 100%;
 }
 

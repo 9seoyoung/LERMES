@@ -2,14 +2,12 @@
 import QuestionAdd from "./QuestionAdd"; 
 
 import React, { useEffect, useId, useState, useRef } from 'react'
-import Dropdown from '../../../components/ui/Dropdown'
-import layoutStyles from "../../../styles/layout.module.css"
-import {FileUpload, FileList, FormInput } from '../../../components/ui/UiComp';
+import {FileList, FormInput, DateTimeInput } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import {v4 as uuidv4} from "uuid";
 
-import { createSurvey } from '../../../services/postService';
+import { createGroup } from '../../../services/postService';
 
 
 // CreatePost.jsx
@@ -44,7 +42,9 @@ function RecruitPost() {
     type: "모집공고",
     scope: "전체",
     surveyStart: "",     // 모집시작
-    surveyEnd: "",   //  모집종료
+    surveyEnd: "",
+    startDate:"",
+    endDate:"",   //  모집종료
     classStart: "", //수업시작시간
     classEnd: "", //수업종료시간
   });
@@ -53,31 +53,47 @@ function RecruitPost() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log("[change]", name, value);
   };
 
   const tempSubmit = () => {};
   const saveSubmit = async (e) => {
     e.preventDefault();
 
-  const payload = structuredClone
+  // const payload = structuredClone
+  //   ? structuredClone({ surveyForm, formData })
+  //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
+
+  const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
     : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
-  console.groupCollapsed("[RecruitPost] createSurvey payload");
-  console.table(
-    payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
-      idx: i + 1, qid: q.qid, type: q.type,
-      title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
-    })) || []
-  );
-  console.groupEnd();
+  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  console.time("[RecruitPost] createSurvey");
+  // console.groupCollapsed("[RecruitPost] createGroup payload");
+  // console.table(
+  //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
+  //     idx: i + 1, qid: q.qid, type: q.type,
+  //     title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
+  //   })) || []
+  // );
+  // console.groupEnd();
+
+  // console.log("[payload snapshot]", snapshot);
+  // console.log("[formData]", snapshot.formData);
+  // console.log("[surveyForm]", snapshot.surveyForm);
+  console.log("[will send to server]", JSON.stringify(body, null, 2));
+  console.table(snapshot.formData);
+
+  console.time("[RecruitPost] createGroup");
   try {
-    const res = await createSurvey(payload);
-    console.log("[RecruitPost] createSurvey response:", res);
+    // const res = await createGroup(payload);
+    const res = await createGroup(body);
+    console.log(Object.keys(snapshot)); 
+    console.log(Object.keys(snapshot.formData));
+    console.log("[RecruitPost] createGroup response:", res);
   } catch (err) {
-    console.error("[RecruitPost] createSurvey error:", err);
+    console.error("[RecruitPost] createGroup error:", err);
   }
 };
 
@@ -108,6 +124,7 @@ function RecruitPost() {
                 domFormId={domFormId}
                 handleChange={handleChange}
                 formData={formData}
+                setFormData={setFormData}
                 surveyForm={surveyForm}
                 setSurveyForm={setSurveyForm}
                 FileList={FileList}
@@ -120,43 +137,11 @@ function RecruitPost() {
 
           <div className="formArea_R">
             <div className="selectBoxArea" style={{ position: "relative" }}>
-              <div className="dropSet" style={{ zIndex: "8" }}>
-                <p>그룹명</p>
-                <FormInput type="text" name="groupName" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
-              </div>
-
-              <div className="dropSet" style={{ zIndex: "2" }}>
-                <p>공개 범위</p>
-                <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체" }))}>전체</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
-                </Dropdown>
-                <input type="hidden" name="scope" value={formData.scope} />
-              </div>
-
-              {formData.scope === "소속그룹" && (
-                <div className="dropSet" style={{ zIndex: "1" }}>
-                  <p>하위 그룹</p>
-                  <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
-                    {hortlist.map((h, idx) => (
-                      <p
-                        className={layoutStyles.subMenuList}
-                        key={idx}
-                        onClick={() => {
-                          setFormData(s => ({ ...s, detailScope: h.cohortSn, detailScopeNm: String(h.cohortNm) }));
-
-                        }}
-                      >
-                        {h.cohortNm}
-                      </p>
-                    ))}
-                  </Dropdown>
-                  <input type="hidden" name="detailScope" value={formData.detailScope} />
-                </div>
-              )}
+                <FormInput labelNm="그룹명" type="text" name="groupName" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
+                <DateTimeInput labelNm="개강일" type="date" name="startDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
+                <DateTimeInput labelNm="종강일" type="date" name="endDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
+                <DateTimeInput labelNm="수업 시작" type="time" name="classStart" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
+                <DateTimeInput labelNm="수업 종료" type="time" name="classEnd" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
             </div>
 
             <div className="r_bottom">
@@ -226,24 +211,8 @@ function RecruitForm({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>모집기간</label>
-          <input
-            id={`${domFormId}_surveyStart`}
-            type="date"
-            className='formInput'
-            name='surveyStart'
-            value={formData.surveyStart || ""}
-            onChange={handleChange}
-          />
-          <p>-</p>
-          <input
-            id={`${domFormId}_surveyEnd`}
-            type="date"
-            className='formInput'
-            name='surveyEnd'
-            value={formData.surveyEnd || ""}
-            onChange={handleChange}
-          />
+          <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} ></DateTimeInput>
+          <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
         </div>
       </div>
 

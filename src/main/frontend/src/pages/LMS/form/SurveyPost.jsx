@@ -1,4 +1,5 @@
 // SurveyPost.jsx
+import { DateTimeInput } from "../../../components/ui/UiComp";
 import QuestionAdd from "./QuestionAdd"; // 위에서 export default로 바꿨으므로 경로/이름 확인
 import { useRef } from "react";
 
@@ -25,24 +26,8 @@ function SurveyPost({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>설문기간</label>
-          <input
-            id={`${domFormId}_surveyStart`}
-            type="date"
-            className='formInput'
-            name='surveyStart'
-            value={formData.surveyStart || ""}
-            onChange={handleChange}
-          />
-          <p>-</p>
-          <input
-            id={`${domFormId}_surveyEnd`}
-            type="date"
-            className='formInput'
-            name='surveyEnd'
-            value={formData.surveyEnd || ""}
-            onChange={handleChange}
-          />
+          <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} ></DateTimeInput>
+          <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
         </div>
       </div>
 
