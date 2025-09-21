@@ -21,8 +21,8 @@ function RecruitPost() {
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
-  const userAuth = user.USER_AUTHRT_SN;
   const qAddRef = useRef(null);
+    const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
 
   const [hortlist, setHortList] = useState([]);
@@ -97,7 +97,7 @@ function RecruitPost() {
   return (
     <div className="boardPage">
       <h2>과정 관리</h2>
-      <div className="limitedHeightBox">
+      <div className="limitedHeightBox" ref={scrollRef}>
         <h4 style={{ fontWeight: "500" }}>{formData.type} 등록하기</h4>
 
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
@@ -113,6 +113,7 @@ function RecruitPost() {
                 FileList={FileList}
                 files={files}
                 setFiles={setFiles}
+                containerRef={scrollRef}
                 questionAddRef={qAddRef}
             />
           </div>
@@ -167,7 +168,15 @@ function RecruitPost() {
                             <button
                               type="button"
                               className="specificBtn"
-                              onClick={() => qAddRef.current?.focusQuestion(q.qid)}
+                              onClick={() =>
+                              {
+                                // r_bottom 버튼 onClick 직전에 찍어봐
+                                console.log('child root?', qAddRef.current?.focusQuestion ? 'ok' : 'no');
+
+                                qAddRef.current?.focusQuestion(q.qid, {
+                                behavior: "smooth",
+                                offsetTop: 8, // 고정 헤더 있으면 px 조절
+                              })}}
                             >
                               {q.title?.trim()
                               ? `Q${i + 1} ${q.title}`
@@ -195,7 +204,7 @@ export default RecruitPost;
 
 function RecruitForm({
   domFormId, handleChange, formData,
-  surveyForm, setSurveyForm, questionAddRef
+  surveyForm, setSurveyForm, questionAddRef, containerRef 
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
   // const firstPage = surveyForm.pages[0];
@@ -242,7 +251,7 @@ function RecruitForm({
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
           <QuestionAdd
               ref={questionAddRef}
-              containerRef={qContainerRef} 
+              containerRef={containerRef}
               questions={surveyForm.pages[0].questions}
               onChange={(updaterOrQs) => {
                   setSurveyForm(prev => {

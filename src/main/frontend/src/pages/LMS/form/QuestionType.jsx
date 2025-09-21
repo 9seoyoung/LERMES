@@ -37,7 +37,7 @@ const QuestionType = forwardRef(function QuestionType(
       getRoot: () => rootRef.current,
       focusTitle: () => titleRef.current?.focus?.({ preventScroll: true }),
   }));
-
+ 
   return (
       <div ref={rootRef} className="questionBox" data-qid={q.qid}>
         <div className="questionTypeBox">
