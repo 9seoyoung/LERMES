@@ -15,7 +15,7 @@ import { createSurvey } from '../../../services/postService';
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm } = props;
+  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -44,6 +44,8 @@ function PostStatus(props) {
               FileList={FileList}
               files={files}
               setFiles={setFiles}
+              questionAddRef = {questionAddRef}
+              containerRef={containerRef}
           />
       );
     default:
@@ -70,6 +72,8 @@ function CreatePost() {
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const userAuth = user.USER_AUTHRT_SN;
+  const qAddRef = useRef(null);
+  const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
 
   const [hortlist, setHortList] = useState([]);
@@ -157,6 +161,8 @@ function CreatePost() {
                 FileList={FileList}
                 files={files}
                 setFiles={setFiles}
+                containerRef={scrollRef}
+                questionAddRef={qAddRef}
             />
           </div>
 
@@ -227,7 +233,23 @@ function CreatePost() {
                     <React.Fragment key={page.id}>
                       {page.questions.map((q, i) => (
                           <li key={q.qid}>
-                            {`Q${i + 1} ${q.title}` || `Q${i + 1} (제목 없음)`} · {q.type}
+                            <button
+                              type="button"
+                              className="specificBtn"
+                              onClick={() =>
+                              {
+                                // r_bottom 버튼 onClick 직전에 찍어봐
+                                console.log('child root?', qAddRef.current?.focusQuestion ? 'ok' : 'no');
+
+                                qAddRef.current?.focusQuestion(q.qid, {
+                                behavior: "smooth",
+                                offsetTop: 8, // 고정 헤더 있으면 px 조절
+                              })}}
+                            >
+                              {q.title?.trim()
+                              ? `Q${i + 1} ${q.title}`
+                              : `Q${i + 1} (제목 없음)`} · {q.type}
+                            </button>
                           </li>
                       ))}
                     </React.Fragment>

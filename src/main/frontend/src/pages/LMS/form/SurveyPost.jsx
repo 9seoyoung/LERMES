@@ -1,13 +1,13 @@
 // SurveyPost.jsx
 import QuestionAdd from "./QuestionAdd"; // 위에서 export default로 바꿨으므로 경로/이름 확인
+import { useRef } from "react";
 
 function SurveyPost({
   domFormId, handleChange, formData,
   FileList, files, setFiles,
-  surveyForm, setSurveyForm, postId
+  surveyForm, setSurveyForm, questionAddRef, containerRef
 }) {
-  // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
-  const firstPage = surveyForm.pages[0];
+  const qContainerRef = useRef(null);
 
   return (
     <>
@@ -46,9 +46,11 @@ function SurveyPost({
         </div>
       </div>
 
-      <div className="formContent">
+      <div className="formContent" ref={qContainerRef}>
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
           <QuestionAdd
+              ref={questionAddRef}
+              containerRef={containerRef}
               questions={surveyForm.pages[0].questions}
               onChange={(updaterOrQs) => {
                   setSurveyForm(prev => {
