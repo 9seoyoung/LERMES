@@ -25,7 +25,7 @@ function SurveyPost({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>모집기간</label>
+          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>설문기간</label>
           <input
             id={`${domFormId}_surveyStart`}
             type="date"

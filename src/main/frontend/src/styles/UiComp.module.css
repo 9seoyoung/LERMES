@@ -1,11 +1,11 @@
 /* 인풋 */
 .input {
-  width: 385px;
+  width: 100%;
   height: 32px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   padding: 8px 12px;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   box-sizing: border-box;
   outline: none;
 }

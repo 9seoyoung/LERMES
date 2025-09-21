@@ -100,9 +100,7 @@ const QuestionType = forwardRef(function QuestionType(
 
                         <label htmlFor={inputId} />
 
-                        <button type="button" onClick={() => onRemoveOption(q.qid, opt.id)}>
-                          <DeleteBtn />
-                        </button>
+                        <DeleteBtn type="button" onClick={() => onRemoveOption(q.qid, opt.id)}/>
                       </div>
                   );
                 })}

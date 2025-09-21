@@ -82,7 +82,7 @@ export default function Layout() {
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
         <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
-          <div className= "subMenuList" onClick={() => {navigate(`${navKind}/myPage`);}}>마이페이지</div>
+          <div className= "subMenuList" onClick={() => {navigate(`myPage`);}}>마이페이지</div>
           <div className= "subMenuList" onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
         </MyInfo>
         }
@@ -109,21 +109,27 @@ export default function Layout() {
           :
           <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
           }
-          <p className="testBox">
-            <div style={{fontSize: "1.4rem", color: "#444"}}>권한</div>
-            {(user?.USER_EML_ADDR === "hash@com") ? 
-              testAuthLv.map((item, idx)=> 
-                <div
-                  style={{cursor: "pointer"}}
-                  onClick={() => {patchUser({USER_AUTHRT_SN: idx + 1}); setItem(idx)}}
-                  className={`testBtn ${ selectedItem === idx ? "testClicked" : ""}`}
+          <div className="testBox">
+            <div style={{ fontSize: "1.4rem", color: "#444" }}>권한</div>
+
+            {user?.USER_EML_ADDR === "hash@com" &&
+              testAuthLv.map((item, idx) => (
+                <button
+                  key={item ?? idx}                  // ← 고유 key
+                  type="button"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => { 
+                    patchUser({ USER_AUTHRT_SN: idx + 1 }); 
+                    setItem(idx);                    // selectedItem 업데이트하는 setter
+                  }}
+                  className={`testBtn ${selectedItem === idx ? "testClicked" : ""}`}
                 >
                   {item}
-                </div>
-              )
-              : ""
+                </button>
+              ))
             }
-          </p>
+          </div>
+
         </footer>
       </div>
     </div>

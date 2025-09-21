@@ -317,6 +317,17 @@ footer > div:hover {
   flex: 1;
 }
 
+.limitedHeightBox {
+  width: 100%;
+  height: 618px;
+  display: flex;
+  background-color: #FCFEFF;
+  flex-direction: column;
+  padding: 20px 12px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 .boardPage{
   display: flex;
   flex-direction: column;
@@ -566,6 +577,8 @@ footer > div:hover {
 .formAreaRow {
   display: flex;
   flex: 1;
+  height: 100%;
+  overflow: hidden;
   gap: 12px;
 }
 
@@ -573,8 +586,9 @@ footer > div:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px
-  ;
+  height: 100%;
+  flex-wrap: nowrap;
+  gap: 16px;
 }
 
 .formArea_R {
@@ -665,7 +679,11 @@ footer > div:hover {
 .formContent {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
   border-radius:4px;
+  gap: 16px;
+  justify-content: space-between;
 }
 
 .inputSet {
@@ -741,7 +759,6 @@ footer > div:hover {
   display: flex;
   flex-direction: column;
   padding: 16px 12px;
-  flex: 1;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
   gap: 16px;
@@ -753,7 +770,7 @@ footer > div:hover {
   justify-content: center;
   background-color: #E1F1FF;
   height: 46px;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px 8px 0 0;
   font-weight: 800;
   gap: 4px;
   outline: none;
@@ -834,12 +851,13 @@ footer > div:hover {
   color: #d9d9d9;
   font-size: 1.8rem;
   font-weight: 400;
-  max-height: 10rem;
 }
 
 .questionContainer{
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  flex: 1;
   gap: 16px;
 }
 

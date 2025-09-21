@@ -27,11 +27,12 @@ import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 import UploadDownloadDemo from '../pages/UploadDownloadDemo.jsx';
 import DocxSet from '../pages/LMS/DocxSet.jsx';
 import AccountSet from '../pages/LMS/AccountSet.jsx';
-import GroupSet from '../components/ui/navModule/GroupSet.jsx';
+import GroupSet from '../pages/LMS/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';
 import BoardManage from '../pages/LMS/BoardManage.jsx'
 import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
+import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
 
 function AppRoutes() {
   return (
@@ -74,8 +75,9 @@ function AppRoutes() {
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
         <Route path="adminHome" element={<AdminHome />} />
         <Route path="adminHome/boardSet" element={<BoardManage />} />
-        <Route path="adminHome/groupSet" element={<GroupSet />} />
         <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
+        <Route path="adminHome/groupSet" element={<GroupSet />} />
+        <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
         <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
         <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
         <Route path=':home/myPage' element={<Mypage/>}/>

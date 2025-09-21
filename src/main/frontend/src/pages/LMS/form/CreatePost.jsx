@@ -70,7 +70,7 @@ function CreatePost() {
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const userAuth = user.USER_AUTHRT_SN;
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
@@ -141,7 +141,7 @@ function CreatePost() {
   return (
     <div className="boardPage">
       <h2>게시판</h2>
-      <div className="BigListBox">
+      <div className={formData?.type === "설문조사" ? "limitedHeightBox" : "BigListBox"}>
         <h4 style={{ fontWeight: "500" }}>{formData.type} 등록하기</h4>
 
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>

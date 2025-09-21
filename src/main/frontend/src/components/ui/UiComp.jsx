@@ -47,10 +47,12 @@ export function UiComp() {
 }
 
 // 인풋
-export function FormInput({ textType }) {
+export function FormInput(props) {
+  const {type, name, textType, handleChange , formData} = props;
+
   return (
     <div>
-      <input className={styles.input} type="text" placeholder={textType} />
+      <input className={styles.input} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }
@@ -180,7 +182,7 @@ export function ActionBtn({ textType }) {
 export function AddBtn({ textType }) {
   return (
     <>
-      <button className={styles.addBtn}>{textType}</button>
+      <div className={styles.addBtn}>{textType}</div>
     </>
   );
 }
