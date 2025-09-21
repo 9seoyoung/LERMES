@@ -33,6 +33,9 @@ import Mypage from '../pages/Mypage.jsx';
 import BoardManage from '../pages/LMS/BoardManage.jsx'
 import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
 import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
+import StudyManage from '../pages/LMS/menu/StudyManage.jsx';
+import StudentManage from '../pages/LMS/menu/StudentManage.jsx';
+import StudyPost from '../pages/LMS/form/StudyPost.jsx';
 
 function AppRoutes() {
   return (
@@ -88,6 +91,11 @@ function AppRoutes() {
         <Route path="tutorHome" element={<TutorHome />} />
         <Route path="tutorHome/board" element={<Board />} />
         <Route path='tutorHome/createPost' element={<CreatePost/>}></Route>
+        <Route path='tutorHome/studySched/createPost' element={<CreatePost/>}></Route>
+        <Route path='/tutorHome/studySched' element={<StudyManage/>}></Route>
+        <Route path='/tutorHome/studentManage' element={<StudentManage/>}></Route>
+        <Route path='tutorHome/studentManage/createPost' element={<StudyPost/>}></Route>
+
         <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
