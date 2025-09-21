@@ -1,13 +1,14 @@
 // SurveyPost.jsx
+import { DateTimeInput } from "../../../components/ui/UiComp";
 import QuestionAdd from "./QuestionAdd"; // 위에서 export default로 바꿨으므로 경로/이름 확인
+import { useRef } from "react";
 
 function SurveyPost({
   domFormId, handleChange, formData,
   FileList, files, setFiles,
-  surveyForm, setSurveyForm, postId
+  surveyForm, setSurveyForm, questionAddRef, containerRef
 }) {
-  // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
-  const firstPage = surveyForm.pages[0];
+  const qContainerRef = useRef(null);
 
   return (
     <>
@@ -25,41 +26,30 @@ function SurveyPost({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <label className='formLabel' htmlFor={`${domFormId}_surveyPeriod`}>모집기간</label>
-          <input
-            id={`${domFormId}_surveyStart`}
-            type="date"
-            className='formInput'
-            name='surveyStart'
-            value={formData.surveyStart || ""}
-            onChange={handleChange}
-          />
-          <p>-</p>
-          <input
-            id={`${domFormId}_surveyEnd`}
-            type="date"
-            className='formInput'
-            name='surveyEnd'
-            value={formData.surveyEnd || ""}
-            onChange={handleChange}
-          />
+          <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} ></DateTimeInput>
+          <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
         </div>
       </div>
 
-      <div className="formContent">
+      <div className="formContent" ref={qContainerRef}>
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
-        <QuestionAdd
-          initialQuestions={firstPage.questions}
-          onChange={(qs) => {
-            setSurveyForm(prev => ({
-              ...prev,
-              pages: [
-                { ...prev.pages[0], questions: qs },
-                ...prev.pages.slice(1),
-              ],
-            }));
-          }}
-        />
+          <QuestionAdd
+              ref={questionAddRef}
+              containerRef={containerRef}
+              questions={surveyForm.pages[0].questions}
+              onChange={(updaterOrQs) => {
+                  setSurveyForm(prev => {
+                      const page = prev.pages[0];
+                      const nextQs = typeof updaterOrQs === 'function'
+                          ? updaterOrQs(page.questions)
+                          : updaterOrQs;
+                      return {
+                          ...prev,
+                          pages: [{ ...page, questions: nextQs }, ...prev.pages.slice(1)],
+                      };
+                  });
+              }}
+          />
       </div>
 
       {/* 첨부파일 리스트 */}
