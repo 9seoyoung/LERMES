@@ -197,7 +197,7 @@ export function StdHeader() {
 /** 강사 헤더 */
 export function TutorHeader() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeCode, setActiveCode] = useState(null);
+  const [ , setActiveCode] = useState(null);
 
   const refreshCode = async () => {
     try {
@@ -253,11 +253,11 @@ export function TutorHeader() {
 }
 
 export function AdminHeader() {
-  const { user } = useAccount();
+  // const { user } = useAccount();
   return <></>;
 }
 
 export function VisitorHeader() {
-  const { user } = useAccount();
+  // const { user } = useAccount();
   return <></>;
 }

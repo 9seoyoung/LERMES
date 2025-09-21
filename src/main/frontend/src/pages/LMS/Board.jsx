@@ -1,13 +1,10 @@
 // 페이지찾기 - 게시판
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
-import { useAccount } from "../../auth/AuthContext";
-import { useEffect, useState } from "react";
 
 export default function Board(){
     const navigate = useNavigate();
-    const {user} = useAccount();
 
     return (
         <div className="boardPage">
@@ -25,7 +22,7 @@ export default function Board(){
                     <li>임시 저장</li>
                 </ul>
                 <div className="ftList_R">
-                    <div className="createBtn " onClick={() => navigate('\createPost')}>
+                    <div className="createBtn " onClick={() => navigate('createPost')}>
                         + 등록하기
                     </div>
                 </div>

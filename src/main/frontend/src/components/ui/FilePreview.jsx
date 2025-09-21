@@ -33,7 +33,6 @@ function FilePreview() {
             <img
                 src={preview}
                 alt="프로필 미리보기"
-                className={style.logoImg}
             />
         ) : (
           <div

@@ -8,15 +8,14 @@ import Nav from "../ui/navModule/Nav";
 import StdNav from "../ui/navModule/StdNav";
 import AdminNav from "../ui/navModule/AdminNav";
 import TutorNav from "../ui/navModule/TutorNav";
-import { useEffect, useState, useCallback } from "react";
-import { saveProfile } from "../../auth/authService";
+import { useState } from "react";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
-  const { user, signOut, patchUser, setUser } = useAccount();
+  const { user, signOut, patchUser } = useAccount();
   const curloc = useLocation();
   const navKind = curloc.pathname.split('/', 2)[1] || '';
   const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];

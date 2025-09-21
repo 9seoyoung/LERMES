@@ -1,12 +1,15 @@
 // 상호작용 컴포넌트
 // props로 텍스트 조절할 수 있게
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 
 import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
 import FilePreview from './FilePreview';
+import ListTable from './ListTable';
 
 export function UiComp() {
+  const arr1 = ["순번", "이름", "이메일"];
+  
   return (
     <div>
        <FormInput />
@@ -31,6 +34,7 @@ export function UiComp() {
             <OrangeCheckbox />
             <FileUpload />
             <Table />
+            <ListTable tableHead={arr1} columnData={["no", "name", "email","tel"]} apiData={[{no:"순번", name: "이름", email:"이메일", tel:"전화번호" }, {no:"순번", name: "이름", email:"이메일", tel:"전화번호" }, {no:"순번", name: "이름", email:"이메일", tel:"전화번호" }]}></ListTable>
       {/* 드롭다운 사용 방법 */}
       <Dropdown label="드롭다운 제목" trigger="hover" placement="bottom-start" >
       <a className="dd__item" href="/mypage">내 정보</a>
@@ -95,9 +99,9 @@ export function SchedAddBtn({ textType, onClick }) {
 }
 
 // 저장 버튼
-export function SaveBtn({ textType }) {
+export function SaveBtn({ textType, onClick }) {
   return (
-      <button className={`${styles.smallBtn} ${styles.saveBtn}`}>
+      <button className={`${styles.smallBtn} ${styles.saveBtn}`} onClick={onClick}>
         {textType}
       </button>
   );
@@ -175,9 +179,9 @@ export function ActionBtn({ textType }) {
 // 항목 추가 버튼
 export function AddBtn({ textType }) {
   return (
-    <div>
+    <>
       <button className={styles.addBtn}>{textType}</button>
-    </div>
+    </>
   );
 }
 // 드롭박스

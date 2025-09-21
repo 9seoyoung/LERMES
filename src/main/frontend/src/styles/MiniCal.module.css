@@ -1,9 +1,7 @@
 .calContainer {
 background-color: #fff;
-width: 450px;
-height: 280px;
 border-radius: 16px;
-box-shadow: 0 5px 3px rgba(0,0,0,0.5);
+display: flex;
 }
 
 .cal{
@@ -17,6 +15,7 @@ margin: 0 auto;
 justify-content: space-around;
   margin-bottom: 5px;
   margin-top: 10px;
+  font-size: 15px;
 }
 
 .day {
@@ -28,7 +27,6 @@ justify-content: space-around;
 
 /* 날짜 셀 */
 .calendarCell {
-  box-sizing: border-box;
   padding: 8px;
   height: 100%;
   background-color: #fff;
@@ -45,26 +43,3 @@ justify-content: space-around;
 .unselected {
   border: 1px solid #ddd;
 }
-
-/* 일정 표시 */
-/*.eventCell {
-  margin-top: 4px;
-  text-align: left;
-  font-size: 10px;
-  color: #555;
-}
-
-.event {
-  background-color: #d9f0ff;
-  padding: 2px 6px;
-  margin: 2px 0;
-  border-radius: 4px;
-  font-size: 10px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 100%;
-  box-sizing: border-box;
-}*/
-
-
