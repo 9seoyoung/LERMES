@@ -8,7 +8,7 @@
 // }
 
 import NoticeList from '../../components/module/NoticeList';
-import TodayAttendList from '../../components/module/TodayAttendList';
+import TodayAttendList from '../../components/layout/inho/TodayAttendList';
 
 // 페이지찾기 - 수강생 메인
 export default function StdHome() {

@@ -8,4 +8,5 @@ public enum AttendDtlTypeNm {
     EARLY_LEAVE,        // 조퇴
     SICK_LEAVE,         // 병가
     OFFICIAL_LEAVE,     // 공가
+    OUTING              // 외출
 }

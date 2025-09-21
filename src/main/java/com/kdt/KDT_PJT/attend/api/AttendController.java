@@ -2,6 +2,7 @@ package com.kdt.KDT_PJT.attend.api;
 
 import com.kdt.KDT_PJT.attend.dto.*;
 import com.kdt.KDT_PJT.attend.service.AttendService;
+import com.kdt.KDT_PJT.attend.service.DailyAttendTotService;
 import com.kdt.KDT_PJT.attend.support.ClientIpResolver;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class AttendController {
 
     private final AttendService attendService;
+    private final DailyAttendTotService dailyAttendTotService;
 
     /**
      * 강사: 출석코드 생성
@@ -122,6 +124,40 @@ public class AttendController {
                         .ok(true)
                         .message("오늘 출결 현황")
                         .data(attendanceList)
+                        .build()
+        );
+
+
+    }
+
+    /** 단위기간 별 출결 조회 (학생 마이페이지) */
+    @GetMapping("/summary")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<SimpleResponse> getMonthlySummary(
+            @AuthenticationPrincipal AuthCustomUserDetails me
+    ) {
+        AttendSummaryDto dto = dailyAttendTotService.getMonthlySummary(me.getId());
+        return ResponseEntity.ok(
+                SimpleResponse.builder()
+                        .ok(Boolean.TRUE)
+                        .message("이번 달 출석 요약")
+                        .data(dto)
+                        .build()
+        );
+    }
+
+    /** 기수별 결석 조회 (관리자용) */
+    @GetMapping("/absence/by-cohort/today")
+    public ResponseEntity<SimpleResponse> getTodayAbsenceByCohort(
+            @AuthenticationPrincipal AuthCustomUserDetails me
+    ) {
+        List<CohortAbsenceRowDto> rows =
+                dailyAttendTotService.getTodayAbsenceByCohortUsingAttendLogs(me.getCompanySn());
+        return ResponseEntity.ok(
+                SimpleResponse.builder()
+                        .ok(Boolean.TRUE)
+                        .message("오늘 교육 과정별 결석 현황")
+                        .data(rows)
                         .build()
         );
     }

@@ -1,5 +1,7 @@
 package com.kdt.KDT_PJT.attend.service;
 
+import com.kdt.KDT_PJT.attend.dto.AttendSummaryDto;
+import com.kdt.KDT_PJT.attend.dto.CohortAbsenceRowDto;
 import com.kdt.KDT_PJT.attend.entity.Attend;
 import com.kdt.KDT_PJT.attend.entity.AttendDtlTypeNm;
 import com.kdt.KDT_PJT.attend.entity.DailyAttendTot;
@@ -15,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -135,4 +135,104 @@ public class DailyAttendTotService {
             }
         }
     }
+
+    @Transactional(readOnly = true)
+    public AttendSummaryDto getMonthlySummary(Long userSn) {
+        LocalDate today = LocalDate.now(ZONE);
+        LocalDate start = today.withDayOfMonth(1);
+        LocalDate end = today.withDayOfMonth(today.lengthOfMonth());
+
+        Long present = dailyAttendTotRepository
+                .countByUserSnAndDateBetweenAndAttendDtlTypeNm(userSn, start, end, AttendDtlTypeNm.PRESENT);
+
+        Long absent = dailyAttendTotRepository
+                .countByUserSnAndDateBetweenAndAttendDtlTypeNmIn(
+                        userSn, start, end,
+                        List.of(
+                                AttendDtlTypeNm.ABSENT,
+                                AttendDtlTypeNm.VACATION,
+                                AttendDtlTypeNm.SICK_LEAVE,
+                                AttendDtlTypeNm.OFFICIAL_LEAVE
+                        )
+                );
+
+        Long lateEarlyOut = dailyAttendTotRepository
+                .countByUserSnAndDateBetweenAndAttendDtlTypeNmIn(
+                        userSn, start, end,
+                        List.of(AttendDtlTypeNm.LATE, AttendDtlTypeNm.EARLY_LEAVE)
+                );
+
+        Long requiredDays = Long.valueOf(end.getDayOfMonth()); // 우선 달력 일수
+
+        return AttendSummaryDto.builder()
+                .period(start.toString() + " ~ " + end.toString())
+                .present(present)
+                .lateEarlyOut(lateEarlyOut)
+                .absent(absent)
+                .requiredDays(requiredDays)
+                .build();
+    }
+
+    // com.kdt.KDT_PJT.attend.service.DailyAttendTotService (혹은 AttendService)
+    @Transactional(readOnly = true)
+    public List<CohortAbsenceRowDto> getTodayAbsenceByCohortUsingAttendLogs(Long companySn) {
+        LocalDate today = LocalDate.now(ZONE);
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end   = start.plusDays(1);
+
+        // 활성 학생 전체(기존 함수 사용)
+        List<User> users = userRepository.findByEnabledTrueAndCompanySnIsNotNullAndCohortSnIsNotNull();
+
+        // 회사 필터 → 코호트별 총원 계산
+        Map<Long, Long> totalByCohort = new HashMap<>();
+        for (User u : users) {
+            if (!companySn.equals(u.getCompanySn())) continue;
+            Long cohortSn = u.getCohortSn();
+            if (cohortSn == null) continue;
+            totalByCohort.put(cohortSn, totalByCohort.getOrDefault(cohortSn, 0L) + 1);
+        }
+
+        // 코호트 이름 맵 (있으면)
+        Map<Long, String> labelByCohort = new HashMap<>();
+        List<Cohort> cohorts = cohortRepository.findAll(); // 없으면 생략 가능
+        for (Cohort c : cohorts) {
+            if (!companySn.equals(c.getCoSn())) continue;
+            labelByCohort.put(c.getCohortSn(), c.getCohortNm()); // "10기" 같은 표시용
+        }
+
+        // 오늘 체크인한 사람(=present 후보) 카운트
+        Map<Long, Long> checkedInByCohort = new HashMap<>();
+        for (User u : users) {
+            if (!companySn.equals(u.getCompanySn())) continue;
+            Long cohortSn = u.getCohortSn();
+            if (cohortSn == null) continue;
+
+            // ★ 기존 함수 재사용 (Optional 로 체크)
+            boolean hasCheckIn = attendRepository
+                    .findByUserSnAndInoutYnAndAttendTmBetween(u.getId(), true, start, end)
+                    .isPresent();
+
+            if (hasCheckIn) {
+                checkedInByCohort.put(cohortSn, checkedInByCohort.getOrDefault(cohortSn, 0L) + 1);
+            }
+        }
+
+        // 응답 조립 (총원 - 체크인자 = 결석)
+        List<CohortAbsenceRowDto> rows = new ArrayList<>();
+        for (Map.Entry<Long, Long> e : totalByCohort.entrySet()) {
+            Long cohortSn = e.getKey();
+            Long total    = e.getValue();
+            Long in       = checkedInByCohort.getOrDefault(cohortSn, 0L);
+            Long absent   = Math.max(0L, total - in);
+            rows.add(CohortAbsenceRowDto.builder()
+                    .cohortSn(cohortSn)
+                    .label(labelByCohort.getOrDefault(cohortSn, cohortSn + "기"))
+                            .absent(absent)
+                            .build());
+        }
+        // 라벨/코호트 순 정렬(선택)
+        rows.sort(Comparator.comparing(CohortAbsenceRowDto::getCohortSn));
+        return rows;
+    }
+
 }

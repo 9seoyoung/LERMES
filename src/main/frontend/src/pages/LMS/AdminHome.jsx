@@ -1,7 +1,10 @@
-export default function AdminHome(){
-    return(
-        <>
-            <div>테넌트 2/ 직원 3</div>
-        </>
-    );
+import CohortAbsenceCard from '../../components/layout/inho/CohortAbsenceCard';
+
+export default function AdminHome() {
+  return (
+    <>
+      <div>테넌트 2/ 직원 3</div>
+      <CohortAbsenceCard />
+    </>
+  );
 }

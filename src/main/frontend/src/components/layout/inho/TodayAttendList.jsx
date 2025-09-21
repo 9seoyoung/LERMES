@@ -1,7 +1,7 @@
 // TodayAttendList.jsx
 import { useEffect, useState } from 'react';
-import { fetchTodayAttendance } from '../../attend/attendService';
-import '../../styles/TodayAttendanceList.css';
+import { fetchTodayAttendance } from '../../../attend/attendService';
+import '../../../styles/Attend.css';
 
 const STATUS_KO = {
   PRESENT: '출석',
