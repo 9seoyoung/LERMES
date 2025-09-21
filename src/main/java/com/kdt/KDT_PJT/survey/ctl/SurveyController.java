@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/survey")
+@RequestMapping("/api/survey")
 @RequiredArgsConstructor
 public class SurveyController {
 

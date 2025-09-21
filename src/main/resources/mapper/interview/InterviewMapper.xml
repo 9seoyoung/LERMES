@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdt.mapper.interview">
+    <insert id="insertApplyInterview" parameterType="CmmnMap" useGeneratedKeys="true" keyProperty="itvSn">
+        INSERT INTO TB_INTERVIEW (
+            ITV_DT, ITV_PLC, ITV_PIC_SN, ITV_TRPR_SN, ITV_APLCNT_SN,
+            ITV_APLY_TTL, ITV_APLY_CN, COHORT_SN, FORM_UUID, ITV_PIC_AUTHRT
+        ) VALUES (
+                     #{itvDt}, #{itvPlc}, #{itvPicSn}, #{itvTrprSn}, #{itvAplcntSn},
+                     #{itvAplyTtl}, #{itvAplyCn}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}
+                 )
+    </insert>
+</mapper>

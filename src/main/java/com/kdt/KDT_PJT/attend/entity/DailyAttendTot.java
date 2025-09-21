@@ -35,4 +35,8 @@ public class DailyAttendTot {
 
     @Column(name = "COHORT_SN", nullable = false)
     private Long cohortSn;
+
+    public void updateAttendDtlType(AttendDtlTypeNm attendDtlTypeNm) {
+        this.attendDtlTypeNm = attendDtlTypeNm;
+    }
 }
