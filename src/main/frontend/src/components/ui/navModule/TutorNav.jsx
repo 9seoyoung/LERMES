@@ -27,7 +27,7 @@ export default function TutorNav({setNavToggle}) {
                 {/* 강사 */}
                 <div onClick={() => navigate('/tutorHome')}>홈</div>
                 <div onClick={() => navigate('/tutorHome/studySched')}>학습 관리</div>
-                <div onClick={() => navigate('/tutorHome/board')}>수강생 관리</div>                
+                <div onClick={() => navigate('/tutorHome/studentManage')}>수강생 관리</div>                
                 <div onClick={() => navigate('/tutorHome/board')}>게시판</div>                
             </div>
         </div>

@@ -52,7 +52,7 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
   ref
 ) {
   const inputRef = useRef(null);
-  const {type, name, textType, icon, handleChange , formData = {}, labelNm} = props;
+  const {type, name, addStyle, textType, icon, handleChange , formData = {}, labelNm} = props;
   const inputId = useId();
 
   useImperativeHandle(ref, () => ({
@@ -75,7 +75,7 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
 
   return (
     <div className={`${styles2.field} ${styles.inputSet}`}>
-      <label htmlFor={`${inputId}-${name}`} className={styles.inputLabel}>{labelNm}</label>
+      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addStyle}`}>{labelNm}</label>
       <input
         ref={inputRef}
         type={type}
@@ -97,12 +97,12 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
 
 // 인풋
 export function FormInput(props) {
-  const {type, name, textType, handleChange , formData, labelNm} = props;
+  const {type, name, textType, handleChange , formData, labelNm, addStyle} = props;
   const inputId = useId();
 
   return (
     <div className={styles.inputSet}>
-      <label htmlFor={`${inputId}-${name}`} className={styles.inputLabel}>{labelNm}</label>
+      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addStyle}`}>{labelNm}</label>
       <input id={`${inputId}-${name}`} autoComplete='false' className={`${styles.input}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
