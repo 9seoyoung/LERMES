@@ -177,7 +177,7 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
       </div>
 
       <button type="button" className="questionAdd" onClick={addQuestionAndFocus}>
-        <Plus strokeWidth={4} />
+        <Plus color="#0088FF" strokeWidth={4} />
         <p>질문추가</p>
       </button>
     </>

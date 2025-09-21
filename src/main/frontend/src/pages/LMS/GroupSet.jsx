@@ -1,10 +1,8 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import uiStyle from "../../styles/UiComp.module.css";
 import FilterList from "../../components/ui/FilterList";
 import { useAccount } from "../../auth/AuthContext";
 import { useState, useEffect } from "react";
 import { hortlistByCpSn } from "../../services/cohortService";
-import { Plus } from "lucide-react";
 
 function GroupSet() {
   const navigate = useNavigate();
@@ -55,7 +53,7 @@ const [filterArr, setFilterArr] = useState([]);
 
       <div className="filterList">
         <FilterList arr={filterArr} loading={loading}>
-          <li onClick={() => {navigate('createGroup')}}>+</li>
+          <li className="opacityBtn" onClick={() => {navigate('createGroup')}}>+</li>
         </FilterList>
         <div className="ftList_R">
         </div>

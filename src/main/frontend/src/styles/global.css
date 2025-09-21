@@ -335,6 +335,11 @@ footer > div:hover {
   width: 100%;
 }
 
+.opacityBtn{
+  opacity: 60%;
+}
+
+
 .createBtn {
   background: #FCFEFF;
   padding :0 4px;
@@ -346,6 +351,7 @@ footer > div:hover {
   cursor: pointer;
   background: #ebeff4;
   color: #333;
+  opacity: 100%;
 }
 
 .save_box {
