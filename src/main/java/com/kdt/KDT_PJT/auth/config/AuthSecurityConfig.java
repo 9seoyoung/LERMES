@@ -68,8 +68,6 @@ public class AuthSecurityConfig {
 
        // 오리진은 "프로토콜+호스트+포트"까지만 (슬래시 금지)
        c.setAllowedOrigins(List.of(
-               "http://onopco2.iptime.org:3000", //배포 클라이언트 주소 추가 (포트 80 http)
-               "https://onopco2.iptime.org:3000", // https (포트: 443) 되는지는  모르겠음
                "http://localhost:3000",
                "http://127.0.0.1:3000",
                "http://192.168.0.14:3000"
@@ -93,15 +91,8 @@ public class AuthSecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        //프리플라이트 요청 --> 프론트 <-> 백 사이 정보 교차 검증요청
-                        // 프론트에서 백에 이런 메서드, 헤더로 보내도 되냐고 물어보고, 백에서 ㅇㅇ 됨 해야 실제 api가 날라감
-                        // 스프링 시큐티에서 OPTIONS는 무조건 통과시켜줘야 실제 요청을 진행할 수 있다고함, 보안 뚫린 건 아니니 걱정 ㄴㄴ라 함
-                        // .permitAll()은 들어오는거 막지마 정도고, 진짜 허용 범위는 CorsConfigurationSource에서 제어한다고 함
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // <- 프리플라이트 통과
-
                         .requestMatchers("/api/login", "/api/signup/**", "/api/email/code/**").permitAll()
                         .requestMatchers("/api/files/**").permitAll()
-                        //.requestMatchers("/api/public/**").permitAll() <--이거 나중에 로그인 안한 사용자가 get할꺼있으면 public으로 시작하고 주석 풀어야함
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
