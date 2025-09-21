@@ -1,5 +1,5 @@
 // RecruitPost.jsx
-import QuestionAdd from "./QuestionAdd"; // 위에서 export default로 바꿨으므로 경로/이름 확인
+import QuestionAdd from "./QuestionAdd"; 
 
 import React, { useEffect, useId, useState, useRef } from 'react'
 import Dropdown from '../../../components/ui/Dropdown'
@@ -22,6 +22,7 @@ function RecruitPost() {
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const userAuth = user.USER_AUTHRT_SN;
+  const qAddRef = useRef(null);
   // const [loading, setLoading] = useState(false);
 
   const [hortlist, setHortList] = useState([]);
@@ -95,7 +96,7 @@ function RecruitPost() {
 
   return (
     <div className="boardPage">
-      <h2>게시판</h2>
+      <h2>과정 관리</h2>
       <div className="limitedHeightBox">
         <h4 style={{ fontWeight: "500" }}>{formData.type} 등록하기</h4>
 
@@ -112,6 +113,7 @@ function RecruitPost() {
                 FileList={FileList}
                 files={files}
                 setFiles={setFiles}
+                questionAddRef={qAddRef}
             />
           </div>
 
@@ -162,7 +164,15 @@ function RecruitPost() {
                     <React.Fragment key={page.id}>
                       {page.questions.map((q, i) => (
                           <li key={q.qid}>
-                            {`Q${i + 1} ${q.title}` || `Q${i + 1} (제목 없음)`} · {q.type}
+                            <button
+                              type="button"
+                              className="specificBtn"
+                              onClick={() => qAddRef.current?.focusQuestion(q.qid)}
+                            >
+                              {q.title?.trim()
+                              ? `Q${i + 1} ${q.title}`
+                              : `Q${i + 1} (제목 없음)`} · {q.type}
+                            </button>
                           </li>
                       ))}
                     </React.Fragment>
@@ -185,11 +195,11 @@ export default RecruitPost;
 
 function RecruitForm({
   domFormId, handleChange, formData,
-  FileList, files, setFiles,
-  surveyForm, setSurveyForm, postId
+  surveyForm, setSurveyForm, questionAddRef
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
-  const firstPage = surveyForm.pages[0];
+  // const firstPage = surveyForm.pages[0];
+  const qContainerRef = useRef(null);
 
   return (
     <>
@@ -228,9 +238,11 @@ function RecruitForm({
         </div>
       </div>
 
-      <div className="formContent">
+      <div className="formContent" ref={qContainerRef}>
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
           <QuestionAdd
+              ref={questionAddRef}
+              containerRef={qContainerRef} 
               questions={surveyForm.pages[0].questions}
               onChange={(updaterOrQs) => {
                   setSurveyForm(prev => {

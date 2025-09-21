@@ -1,5 +1,7 @@
 // QuestionAdd.jsx
-import React, { useEffect } from "react";
+import React, {
+  forwardRef, useRef, useImperativeHandle, createRef, useEffect
+} from "react";
 import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
 import QuestionType from "./QuestionType";
@@ -25,7 +27,25 @@ const ensureOptions = (opts = []) => {
   return next;
 };
 
-export default function QuestionAdd({ questions = [], onChange }) {
+// export default function QuestionAdd({ questions = [], onChange }) {
+const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, containerRef }, ref) {
+  const itemRefs = useRef({});
+  const pendingFocusId = useRef(null);
+
+  const getRef = (qid) => {
+    if (!itemRefs.current[qid]) itemRefs.current[qid] = createRef();
+    return itemRefs.current[qid];
+  };
+
+function scrollToChild(container, el, { offsetTop = 0, offsetLeft = 0, behavior = "smooth" } = {}) {
+    const cRect = container.getBoundingClientRect();
+    const eRect = el.getBoundingClientRect();
+    const top  = (eRect.top  - cRect.top)  + container.scrollTop  - offsetTop;
+    const left = (eRect.left - cRect.left) + container.scrollLeft - offsetLeft;
+    container.scrollTo({ top: Math.round(top), left: Math.round(left), behavior });
+  }
+
+
   // 비어 있으면 첫 질문 하나 자동 생성
   useEffect(() => {
     if (!questions || questions.length === 0) {
@@ -35,8 +55,59 @@ export default function QuestionAdd({ questions = [], onChange }) {
   }, []);
 
   // 액션들 전부 "업데이터 함수" 패턴
-  const addQuestion = () =>
-      onChange(prev => [...prev, makeQuestion()]);
+  // const addQuestion = () =>
+  //     onChange(prev => [...prev, makeQuestion()]);
+
+  const addQuestionAndFocus = () => {
+    const newQ = makeQuestion();
+    pendingFocusId.current = newQ.qid;
+    onChange(prev => [...prev, newQ]);
+  };
+
+  // 렌더 후 포커스 처리와 ref GC
+  useEffect(() => {
+    const alive = new Set(questions.map(q => q.qid));
+    Object.keys(itemRefs.current).forEach((id) => {
+      if (!alive.has(id)) delete itemRefs.current[id];
+    });
+    const target = pendingFocusId.current;
+    if (target && itemRefs.current[target]?.current) {
+      itemRefs.current[target].current.focus?.();
+      pendingFocusId.current = null;
+    }
+  }, [questions]);
+
+  //부모에서 호출 가능한 명령형 API
+  useImperativeHandle(ref, () => ({
+    // focusQuestion(qid) {
+    //   itemRefs.current[qid]?.current?.focus?.();
+    // },
+    // addQuestionAndFocus,
+    /** 외부에서 qid로 정확히 이동 */
+    focusQuestion(qid, opts = {}) {
+      const container =
+        containerRef?.current ??
+        document.scrollingElement ??
+        document.documentElement;
+      const child = itemRefs.current[qid]?.current?.getRoot?.();
+      if (!container || !child) return;
+      scrollToChild(container, child, opts);
+      // 위치 고정 후 포커스 (스크롤 안 바꾸도록)
+      setTimeout(() => itemRefs.current[qid]?.current?.focusTitle?.(), 0);
+    },
+    addQuestionAndFocus(opts = {}) {
+      const newQ = makeQuestion();
+      pendingFocusId.current = newQ.qid;
+      onChange(prev => [...prev, newQ]);
+      // 렌더 완료 후 정확 좌표로 이동+포커스
+      requestAnimationFrame(() => {
+        const id = pendingFocusId.current;
+        if (!id) return;
+        pendingFocusId.current = null;
+        this.focusQuestion?.(id, opts);
+      });
+    },
+  }));
 
   const removeQuestion = (qid) =>
       onChange(prev => prev.filter(q => q.qid !== qid));
@@ -83,6 +154,7 @@ export default function QuestionAdd({ questions = [], onChange }) {
               <QuestionType
                   key={q.qid}
                   q={q}
+                  ref={getRef(q.qid)}
                   qNum={idx + 1}
                   onRemoveQuestion={removeQuestion}
                   onSetType={setType}
@@ -95,10 +167,12 @@ export default function QuestionAdd({ questions = [], onChange }) {
           ))}
         </div>
 
-        <button type="button" className="questionAdd" onClick={addQuestion}>
+        <button type="button" className="questionAdd" onClick={() => ref?.current?.addQuestionAndFocus?.()}>
           <Plus color="#0088FF" strokeWidth={4} />
           <p>질문추가</p>
         </button>
       </>
   );
-}
+});
+
+export default QuestionAdd;   

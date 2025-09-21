@@ -1,5 +1,5 @@
 // QuestionType.jsx
-import React, { forwardRef } from "react";
+import React, { useRef, useImperativeHandle, forwardRef } from "react";
 import FilePreview from "../../../components/ui/FilePreview";
 import { AddBtn, DeleteBtn } from "../../../components/ui/UiComp";
 import styles from "../../../styles/UiComp.module.css";
@@ -30,9 +30,16 @@ const QuestionType = forwardRef(function QuestionType(
 ) {
   const isChoice = q.type === "single" || q.type === "multiple";
   const isRadio = q.type === "single";
+  const rootRef = useRef(null);
+  const titleRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+      getRoot: () => rootRef.current,
+      focusTitle: () => titleRef.current?.focus?.({ preventScroll: true }),
+  }));
 
   return (
-      <div ref={ref} className="questionBox">
+      <div ref={rootRef} className="questionBox" data-qid={q.qid}>
         <div className="questionTypeBox">
           <p>질문 유형</p>
           <Dropdown label={changeTypeName(q.type)} className="dropSet">
@@ -55,6 +62,7 @@ const QuestionType = forwardRef(function QuestionType(
           <div className="qTitle">
             <p>{`Q${qNum}.`}</p>
             <input
+                ref={titleRef}
                 placeholder="제목을 입력하세요."
                 value={q.title}
                 onChange={(e) => onSetTitle(q.qid, e.target.value)}
