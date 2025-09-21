@@ -20,7 +20,7 @@ export default function TodayAttendList() {
   useEffect(() => {
     if(user?.USER_AUTHRT_SN === 1) return; //슈퍼 권한일 때 에러 방지
     fetchTodayAttendance().then((data) => setRows(data || []));
-  }, []);
+  }, [user?.USER_AUTHRT_SN]);
 
   return (
     <div>
