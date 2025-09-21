@@ -1,10 +1,13 @@
-// 페이지찾기 - 마이페이지
-import React from 'react'
+import React from 'react';
+import AttendanceSummaryCard from '../components/layout/inho/AttendanceSummartCard';
 
 function Mypage() {
   return (
-    <div>Mypage</div>
-  )
+    <div>
+      <div>Mypage</div>
+      <AttendanceSummaryCard />
+    </div>
+  );
 }
 
-export default Mypage
+export default Mypage;

@@ -39,7 +39,7 @@ public class InterviewService {
         }
         //params에 담긴 정보 : 면담 신청 제목, 면담 신청 내용, 면담 담당자 권한
         params.put("itvAplcntSn", me.getId());   //로그인유저 사용자SN 가져옴
-        params.put("cohortSn", me.getCohortId());  //로그인 유저의 기수SN 가져옴
+        params.put("cohortSn", me.getCohortSn());  //로그인 유저의 기수SN 가져옴
         String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid)
         params.put("formUuid", uuid);              //신청글에대한 uuid 만듦
 

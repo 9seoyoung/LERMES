@@ -78,7 +78,7 @@ export default function Layout() {
         {/* 페이지 별 헤더 변경 */}
         <HeaderStatus loc={navKind} />
         {/* 로그인 / 로그아웃 버튼 체인지 */}
-        {user === null ? 
+        {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
         <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
@@ -93,12 +93,12 @@ export default function Layout() {
           {(navToggle === false) ? ""
             :
             <NavStatus loc={navKind} />
-          } 
+          }
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>
         <footer>
-          {(user?.USER_AUTHRT_SN === 1) ?          
+          {(user?.USER_AUTHRT_SN === 1) ?
           <>
             <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
             <div onClick={() => navigate('/adminHome')} style={{cursor:"pointer"}}>관리자 홈</div>
@@ -118,8 +118,8 @@ export default function Layout() {
                   key={item ?? idx}                  // ← 고유 key
                   type="button"
                   style={{ cursor: "pointer" }}
-                  onClick={() => { 
-                    patchUser({ USER_AUTHRT_SN: idx + 1 }); 
+                  onClick={() => {
+                    patchUser({ USER_AUTHRT_SN: idx + 1 });
                     setItem(idx);                    // selectedItem 업데이트하는 setter
                   }}
                   className={`testBtn ${selectedItem === idx ? "testClicked" : ""}`}

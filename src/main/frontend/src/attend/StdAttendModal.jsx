@@ -9,7 +9,7 @@ import { getActiveAttendCode, checkin } from './attendService';
  * - 이 모달은 "입실"만 담당 (퇴실은 헤더에서 확인 모달로 처리)
  */
 export default function StdAttendModal({ onClose }) {
-  const [ ,setActiveCode] = useState('--'); // 중앙 표시(읽기전용)
+  const [, setActiveCode] = useState('--'); // 중앙 표시(읽기전용)
   const [input, setInput] = useState(''); // 입력창 값
   const [loading, setLoading] = useState(false);
 
@@ -75,7 +75,7 @@ export default function StdAttendModal({ onClose }) {
 
           {/* 중앙 큰 코드(읽기전용) */}
           {/* <div style={styles.bigCode}>{activeCode || '--'}</div> */}
-          <div style={styles.bigCode}>출석 코드 입력해라 이자식아</div>
+          <div style={styles.bigCode}>출석 코드 입력</div>
 
           {/* 입력창(중앙 코드는 이 값과 무관) */}
           <input

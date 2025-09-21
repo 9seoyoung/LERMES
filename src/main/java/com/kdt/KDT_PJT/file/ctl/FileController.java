@@ -41,7 +41,7 @@ public class FileController {
                                   @RequestPart("file") MultipartFile file,
                                   @RequestParam(value="formUuid", required=false) String formUuid) {
         Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
-        Integer coSn   = (me != null && me.getCompanyId() != null) ? Math.toIntExact(me.getCompanyId()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
+        Integer coSn   = (me != null && me.getCompanySn() != null) ? Math.toIntExact(me.getCompanySn()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
         return fileService.save(file, userSn, coSn, formUuid);
     }
 
@@ -52,7 +52,7 @@ public class FileController {
                                              @RequestPart("files") List<MultipartFile> files,
                                              @RequestParam(value="formUuid", required=false) String formUuid) {
         Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
-        Integer coSn   = (me != null && me.getCompanyId() != null) ? Math.toIntExact(me.getCompanyId()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
+        Integer coSn   = (me != null && me.getCompanySn() != null) ? Math.toIntExact(me.getCompanySn()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
         return fileService.saveBatch(files, userSn, coSn, formUuid);
     }
 

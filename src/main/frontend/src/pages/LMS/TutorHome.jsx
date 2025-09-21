@@ -8,7 +8,7 @@
 // }
 
 import NoticeList from '../../components/module/NoticeList';
-import TodayAttendList from '../../components/module/TodayAttendList';
+import TodayAttendList from '../../components/layout/inho/TodayAttendList';
 
 export default function StdHome() {
   return (
