@@ -199,12 +199,14 @@ function CreatePost() {
             <div className="r_bottom">
               <FileUpload files={files} setFiles={setFiles} />
               <ul>
-                {surveyForm?.pages.map((p, idx)=>(
-                  <>
-                    {surveyForm.pages[idx].questions.map((q, idx)=> (
-                      <li key={`${domId}-${idx}`}>{q}</li>
-                    ))}
-                  </>
+                {surveyForm.pages.map((page) => (
+                    <React.Fragment key={page.id}>
+                      {page.questions.map((q, i) => (
+                          <li key={q.qid}>
+                            {`Q${i + 1} ${q.title}` || `Q${i + 1} (제목 없음)`} · {q.type}
+                          </li>
+                      ))}
+                    </React.Fragment>
                 ))}
               </ul>
               <div className="save_box">

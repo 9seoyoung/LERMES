@@ -1,12 +1,13 @@
-import { useReducer } from "react";
+// QuestionAdd.jsx
+import React, { useEffect } from "react";
 import { v4 as uuid } from "uuid";
-import { QuestionType } from "./QuestionType";
 import { Plus } from "lucide-react";
+import QuestionType from "./QuestionType";
 
 // 질문 하나의 기본 스키마
-const makeQuestion = () => ({
+export const makeQuestion = () => ({
   qid: uuid(),
-  type: "single",
+  type: "single",       // "single" | "multiple" | "text" | "image"
   title: "",
   explain: "",
   required: false,
@@ -14,105 +15,88 @@ const makeQuestion = () => ({
     { id: uuid(), label: "" },
     { id: uuid(), label: "" },
   ],
-  answer:""
+  answer: "",
 });
 
-// 리듀서
-function questionsReducer(state, action) {
-  switch (action.type) {
-    case "ADD_QUESTION":
-      return [...state, makeQuestion()];
+// 옵션 2개 보장
+const ensureOptions = (opts = []) => {
+  const next = (opts || []).map(o => ({ id: o.id || uuid(), label: o.label ?? "" }));
+  while (next.length < 2) next.push({ id: uuid(), label: "" });
+  return next;
+};
 
-    case "REMOVE_QUESTION":
-      return state.filter((q) => q.qid !== action.qid);
-
-    case "SET_TYPE": {
-      const { qid, value } = action; // "single" | "multiple" | "text" | "image"
-      return state.map((q) => {
-        if (q.qid !== qid) return q;
-
-        // 타입 변경 시 해당 질문 값을 초기화 (qid만 유지)
-        const base = {
-          qid: q.qid,
-          type: value,
-          title: "",
-          explain: "",
-          required: false,
-        };
-
-        if (value === "single" || value === "multiple") {
-          return {
-            ...base,
-            options: [
-              { id: uuid(), label: "" },
-              { id: uuid(), label: "" },
-            ],
-          };
-        }
-        // 주관식/이미지
-        return { ...base, options: [] };
-      });
+export default function QuestionAdd({ questions = [], onChange }) {
+  // 비어 있으면 첫 질문 하나 자동 생성
+  useEffect(() => {
+    if (!questions || questions.length === 0) {
+      onChange(() => [makeQuestion()]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    case "SET_TITLE":
-      return state.map((q) =>
-        q.qid === action.qid ? { ...q, title: action.value } : q
-      );
+  // 액션들 전부 "업데이터 함수" 패턴
+  const addQuestion = () =>
+      onChange(prev => [...prev, makeQuestion()]);
 
-    case "SET_EXPLAIN":
-      return state.map((q) =>
-        q.qid === action.qid ? { ...q, explain: action.value } : q
-      );
+  const removeQuestion = (qid) =>
+      onChange(prev => prev.filter(q => q.qid !== qid));
 
-    case "ADD_OPTION":
-      return state.map((q) =>
-        q.qid === action.qid
-          ? { ...q, options: [...q.options, { id: uuid(), label: "" }] }
-          : q
-      );
+  const setType = (qid, value) =>
+      onChange(prev => prev.map(q => {
+        if (q.qid !== qid) return q;
+        if (value === "single" || value === "multiple") {
+          return { ...q, type: value, options: ensureOptions(q.options), answer: "" };
+        }
+        // text/image는 옵션 비움
+        return { ...q, type: value, options: [], answer: "" };
+      }));
 
-    case "UPDATE_OPTION":
-      return state.map((q) =>
-        q.qid === action.qid
-          ? {
-              ...q,
-              options: q.options.map((o) =>
-                o.id === action.id ? { ...o, label: action.label } : o
-              ),
-            }
-          : q
-      );
+  const setTitle = (qid, title) =>
+      onChange(prev => prev.map(q => q.qid === qid ? ({ ...q, title }) : q));
 
-    case "REMOVE_OPTION":
-      return state.map((q) =>
-        q.qid === action.qid
-          ? { ...q, options: q.options.filter((o) => o.id !== action.id) }
-          : q
-      );
+  const setExplain = (qid, explain) =>
+      onChange(prev => prev.map(q => q.qid === qid ? ({ ...q, explain }) : q));
 
-    default:
-      return state;
-  }
-}
+  const addOption = (qid) =>
+      onChange(prev => prev.map(q =>
+          q.qid === qid ? ({ ...q, options: [...q.options, { id: uuid(), label: "" }] }) : q
+      ));
 
-export default function QuestionAdd() {
-  const [questions, dispatch] = useReducer(questionsReducer, [makeQuestion()]);
+  const updateOption = (qid, id, label) =>
+      onChange(prev => prev.map(q =>
+          q.qid === qid
+              ? ({ ...q, options: q.options.map(o => o.id === id ? { ...o, label } : o) })
+              : q
+      ));
 
-  const addQuestion = () => {
-    dispatch({ type: "ADD_QUESTION" });
-  };
-
+  const removeOption = (qid, id) =>
+      onChange(prev => prev.map(q =>
+          q.qid === qid
+              ? ({ ...q, options: q.options.filter(o => o.id !== id) })
+              : q
+      ));
 
   return (
       <>
         <div className="questionContainer">
           {questions.map((q, idx) => (
-            <QuestionType key={q.qid} q={q} dispatch={dispatch} qNum={idx + 1}/>
-        ))}
+              <QuestionType
+                  key={q.qid}
+                  q={q}
+                  qNum={idx + 1}
+                  onRemoveQuestion={removeQuestion}
+                  onSetType={setType}
+                  onSetTitle={setTitle}
+                  onSetExplain={setExplain}
+                  onAddOption={addOption}
+                  onUpdateOption={updateOption}
+                  onRemoveOption={removeOption}
+              />
+          ))}
         </div>
 
         <button type="button" className="questionAdd" onClick={addQuestion}>
-          <Plus color="#0088FF" strokeWidth={4} ></Plus>
+          <Plus strokeWidth={4} />
           <p>질문추가</p>
         </button>
       </>

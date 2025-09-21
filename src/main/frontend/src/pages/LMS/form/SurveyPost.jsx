@@ -48,18 +48,21 @@ function SurveyPost({
 
       <div className="formContent">
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
-        <QuestionAdd
-          initialQuestions={firstPage.questions}
-          onChange={(qs) => {
-            setSurveyForm(prev => ({
-              ...prev,
-              pages: [
-                { ...prev.pages[0], questions: qs },
-                ...prev.pages.slice(1),
-              ],
-            }));
-          }}
-        />
+          <QuestionAdd
+              questions={surveyForm.pages[0].questions}
+              onChange={(updaterOrQs) => {
+                  setSurveyForm(prev => {
+                      const page = prev.pages[0];
+                      const nextQs = typeof updaterOrQs === 'function'
+                          ? updaterOrQs(page.questions)
+                          : updaterOrQs;
+                      return {
+                          ...prev,
+                          pages: [{ ...page, questions: nextQs }, ...prev.pages.slice(1)],
+                      };
+                  });
+              }}
+          />
       </div>
 
       {/* 첨부파일 리스트 */}
