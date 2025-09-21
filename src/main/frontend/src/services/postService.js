@@ -1,3 +1,3 @@
 import {api} from "../auth/api";
 
-export const postService = (payload) => api.post('', payload);
+export const createSurvey = (payload) => api.post('/survey/post', payload);

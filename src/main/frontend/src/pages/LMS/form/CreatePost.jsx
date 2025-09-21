@@ -8,6 +8,9 @@ import { hortlistByCpSn } from "../../../services/cohortService";
 import SurveyPost from './SurveyPost';
 import {v4 as uuidv4} from "uuid";
 
+import { createSurvey } from '../../../services/postService';
+
+
 // CreatePost.jsx
 // ...import 생략
 
@@ -67,6 +70,7 @@ function CreatePost() {
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const userAuth = user.USER_AUTHRT_SN;
+  const [loading, setLoading] = useState(false);
 
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
@@ -98,10 +102,30 @@ function CreatePost() {
   };
 
   const tempSubmit = () => {};
-  const saveSubmit = () => {
-    console.log(`게시글 데이터: `, formData);
-    console.log(`설문데이터: `,surveyForm);
-  };
+  const saveSubmit = async (e) => {
+    e.preventDefault();
+
+  const payload = structuredClone
+    ? structuredClone({ surveyForm, formData })
+    : JSON.parse(JSON.stringify({ surveyForm, formData }));
+
+  console.groupCollapsed("[CreatePost] createSurvey payload");
+  console.table(
+    payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
+      idx: i + 1, qid: q.qid, type: q.type,
+      title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
+    })) || []
+  );
+  console.groupEnd();
+
+  console.time("[CreatePost] createSurvey");
+  try {
+    const res = await createSurvey(payload);
+    console.log("[CreatePost] createSurvey response:", res);
+  } catch (err) {
+    console.error("[CreatePost] createSurvey error:", err);
+  }
+};
 
   useEffect(() => {
     (async () => {
