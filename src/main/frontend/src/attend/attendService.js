@@ -27,3 +27,9 @@ export const getTodayStatus = () => ok(api.get('/attend/status/today'));
 
 // 강사가 만든 코드, 강사랑 학생한테 보여주는 함수
 export const getActiveAttendCode = () => ok(api.get('/attend/code'));
+
+// 오늘 출결 현황 조회
+export const fetchTodayAttendance = () =>
+  api
+    .get('/attend/today/list', { withCredentials: true })
+    .then(({ data }) => data?.data ?? []);

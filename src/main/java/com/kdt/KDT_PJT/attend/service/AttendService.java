@@ -3,23 +3,23 @@ package com.kdt.KDT_PJT.attend.service;
 import com.kdt.KDT_PJT.attend.dto.*;
 import com.kdt.KDT_PJT.attend.entity.Attend;
 import com.kdt.KDT_PJT.attend.repository.AttendRepository;
-import com.kdt.KDT_PJT.attend.repository.DailyAttendTotRepository;
 import com.kdt.KDT_PJT.attend.support.CodeStore;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
+import com.kdt.KDT_PJT.auth.entity.User;
+import com.kdt.KDT_PJT.auth.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +29,7 @@ public class AttendService {
     private final PasswordEncoder passwordEncoder;                  // BCrypt
     private final AttendRepository attendRepository;
     private final DailyAttendTotService dailyAttendTotService;
+    private final UserRepository userRepository;
 
     @PersistenceContext
     private EntityManager em;                          // 네이티브 쿼리 (exists)
@@ -48,7 +49,7 @@ public class AttendService {
         }
 
         AuthCustomUserDetails me = requirePrincipal(auth);
-        Long cohortSn = requireNonNull(me.getCohortId(), "로그인 정보에 기수 번호가 없습니다.");
+        Long cohortSn = requireNonNull(me.getCohortSn(), "로그인 정보에 기수 번호가 없습니다.");
 
         String allowedIp = (req.getAllowedIp() == null || req.getAllowedIp().isBlank())
                 ? requesterIp
@@ -63,7 +64,7 @@ public class AttendService {
     /** 학생/강사 공통: 현재 활성 코드 조회(표시용 평문) */
     public Optional<String> peekActiveCode(Authentication auth) {
         AuthCustomUserDetails me = requirePrincipal(auth);
-        Long cohortSn = requireNonNull(me.getCohortId(), "기수 번호가 없습니다.");
+        Long cohortSn = requireNonNull(me.getCohortSn(), "기수 번호가 없습니다.");
         return codeStore.get(codeKey(cohortSn)).map(CodeStore.CodeData::displayCode);
     }
 
@@ -76,8 +77,8 @@ public class AttendService {
 
         AuthCustomUserDetails me = requirePrincipal(auth);
         Long userSn   = requireNonNull(me.getId(), "로그인 정보에 사용자 번호가 없습니다.");
-        Long coSn     = requireNonNull(me.getCompanyId(), "로그인 정보에 회사 번호가 없습니다.");
-        Long cohortSn = requireNonNull(me.getCohortId(), "로그인 정보에 기수 번호가 없습니다.");
+        Long coSn     = requireNonNull(me.getCompanySn(), "로그인 정보에 회사 번호가 없습니다.");
+        Long cohortSn = requireNonNull(me.getCohortSn(), "로그인 정보에 기수 번호가 없습니다.");
 
         CodeStore.CodeData data = codeStore.get(codeKey(cohortSn))
                 .orElseThrow(() -> new IllegalStateException("유효한 출석코드가 없습니다."));
@@ -113,8 +114,8 @@ public class AttendService {
     public CheckoutResponse checkout(Authentication auth) {
         AuthCustomUserDetails me = requirePrincipal(auth);
         Long userSn   = requireNonNull(me.getId(), "로그인 정보에 사용자 번호가 없습니다.");
-        Long coSn     = requireNonNull(me.getCompanyId(), "로그인 정보에 회사 번호가 없습니다.");
-        Long cohortSn = requireNonNull(me.getCohortId(), "로그인 정보에 기수 번호가 없습니다.");
+        Long coSn     = requireNonNull(me.getCompanySn(), "로그인 정보에 회사 번호가 없습니다.");
+        Long cohortSn = requireNonNull(me.getCohortSn(), "로그인 정보에 기수 번호가 없습니다.");
 
         if (!existsTodayByInout(userSn, true)) {
             throw new IllegalStateException("오늘 입실 이력이 없습니다.");
@@ -208,4 +209,109 @@ public class AttendService {
     public void invalidateCode(Long cohortSn) {
         codeStore.clear(codeKey(cohortSn));
     }
+
+    /** 금일 출석현황 조회 */
+    @Transactional(readOnly = true)
+    public List<StudentAttendanceDto> getTodayStudentAttendance(Authentication auth) {
+        // 현재 로그인 사용자
+        AuthCustomUserDetails me =  requirePrincipal(auth);
+
+        Long cohortSn = me.getCohortSn();
+        LocalDateTime startOfDay = LocalDate.now(ZONE).atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        // 오늘 출결 로그 조회
+        List<Attend> todayAttendLogs = attendRepository
+                .findByCohortSnAndAttendTmBetween(cohortSn, startOfDay, endOfDay)
+                .orElseGet(Collections::emptyList);
+
+        // 오늘 기수 학생 목록 조회
+        List<User> cohortMembers = userRepository
+                .findByCohortSn(cohortSn)
+                .orElseGet(Collections::emptyList);
+
+        List<User> cohortStudents = new ArrayList<>();
+
+        for (User cohortMember : cohortMembers) {
+            if (cohortMember.getRoleType() != 4) {
+                cohortStudents.add(cohortMember);
+            }
+        }
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        // 상태 판단 기준
+        LocalTime attendStartTm = LocalTime.of(8, 30);
+        LocalTime attendEndTm   = LocalTime.of(17, 30);
+        LocalTime earlyLeaveTm  = LocalTime.of(12, 30);
+
+        List<StudentAttendanceDto> results = new ArrayList<>();
+
+        for (User student : cohortStudents) {
+            // 오늘 학생 로그만 필터링
+            List<Attend> logs = todayAttendLogs.stream()
+                    .filter(l -> l.getUserSn().equals(student.getId()))
+                    .toList();
+
+            LocalTime checkIn = logs.stream()
+                    .filter(l -> Boolean.TRUE.equals(l.getInoutYn()))
+                    .map(l -> l.getAttendTm().toLocalTime())
+                    .findFirst()
+                    .orElse(null);
+
+            LocalTime checkOut = logs.stream()
+                    .filter(l -> Boolean.FALSE.equals(l.getInoutYn()))
+                    .map(l -> l.getAttendTm().toLocalTime())
+                    .findFirst()
+                    .orElse(null);
+
+            String checkInStr = checkIn != null ? checkIn.format(timeFormatter) : null;
+            String checkOutStr = checkOut != null ? checkOut.format(timeFormatter) : null;
+
+            // 상태 계산
+
+            Duration fullDay  = Duration.between(attendStartTm, attendEndTm);
+            Duration halfDay  = fullDay.dividedBy(2);
+
+            String status;
+            if (checkIn == null) {
+                status = "ABSENT";
+            } else if (checkOut == null) {
+                // 퇴실 전: 예정 상태
+                status = checkIn.isAfter(attendStartTm) ? "LATE_PENDING" : "PRESENT_PENDING";
+            } else {
+                Duration work = Duration.between(checkIn, checkOut);
+
+                if (work.compareTo(halfDay) < 0) {
+                    status = "ABSENT";
+                } else if (checkIn.isAfter(attendStartTm) && checkOut.isBefore(attendEndTm)) {
+                    // 지각 + 조기 퇴실 => 결석
+                    status = "ABSENT";
+                } else if (work.compareTo(fullDay) >= 0) {
+                    status = "PRESENT";
+                } else if (checkOut.isBefore(attendEndTm)) {
+                    status = "EARLY_LEAVE";
+                } else if (checkIn.isAfter(attendStartTm)) {
+                    status = "LATE";
+                } else {
+                    status = "PRESENT";
+                }
+            }
+
+            results.add(StudentAttendanceDto.builder()
+                    .userSn(student.getId())
+                    .username(student.getName())
+                    .checkInTime(checkInStr)
+                    .checkOutTime(checkOutStr)
+                    .status(status)
+                    .build());
+        }
+
+        // 이름순 정렬
+        return results.stream()
+                .sorted(Comparator.comparing(StudentAttendanceDto::getUsername,
+                        Comparator.nullsLast(String::compareTo)))
+                .toList();
+    }
+
 }

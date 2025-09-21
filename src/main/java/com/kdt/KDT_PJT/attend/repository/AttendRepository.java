@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface AttendRepository extends JpaRepository<Attend, Long> {
@@ -14,4 +15,8 @@ public interface AttendRepository extends JpaRepository<Attend, Long> {
     );
 
     Optional<Attend> findByUserSn(Long userSn);
+
+    Optional<List<Attend>> findByCohortSnAndAttendTmBetween(
+            Long cohortSn, LocalDateTime start, LocalDateTime end
+    );
 }

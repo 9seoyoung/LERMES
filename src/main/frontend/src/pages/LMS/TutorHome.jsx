@@ -8,6 +8,7 @@
 // }
 
 import NoticeList from '../../components/module/NoticeList';
+import TodayAttendList from '../../components/module/TodayAttendList';
 
 // 페이지찾기 - 수강생 메인
 export default function StdHome() {
@@ -23,9 +24,7 @@ export default function StdHome() {
           <NoticeList></NoticeList>
         </div>
         <div style={{ height: '470px' }}>
-          <h4>
-            출결현황<div className="specificBtn">+ 더보기</div>
-          </h4>
+          <TodayAttendList></TodayAttendList>
         </div>
       </div>
     </div>

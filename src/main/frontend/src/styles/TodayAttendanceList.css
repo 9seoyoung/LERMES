@@ -1,0 +1,42 @@
+.badge {
+    width: 70px;
+    justify-content: center;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+.badge--PRESENT {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.badge--LATE {
+    background: #fff8e1;
+    color: #e65100;
+}
+
+.badge--EARLY_LEAVE {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.badge--ABSENT {
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.badge--PRESENT_PENDING {
+    background: #b2c0b3;
+    color: #1b5e20;
+}
+
+.badge--LATE_PENDING {
+    background: #fbbc00;
+    color: #e65100;
+}
+
+.table-body td {
+    text-align: center;
+    padding: 3px 0px;
+}
