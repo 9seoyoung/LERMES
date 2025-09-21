@@ -1,6 +1,6 @@
 /* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
 
-/* 구글에서 가져온 폰트 - Noto Sans KR */ 
+/* 구글에서 가져온 폰트 - Noto Sans KR */
 
 /* 색상 클래스 */
 
@@ -20,7 +20,7 @@ html {
     font-size: clamp(8px, 0.8vw, 12px);
     width: 100%;
     height: 100%;
-    background-color: #d9d9d9;  
+    background-color: #d9d9d9;
     color: #222;
 }
 
@@ -32,7 +32,7 @@ body {
   padding: 0 24px;
 }
 
-a { 
+a {
   display: inline-flex;
   color: inherit;
   text-decoration: none;
@@ -344,7 +344,7 @@ footer > div:hover {
 
 .createBtn:hover {
   cursor: pointer;
-  background: #ebeff4; 
+  background: #ebeff4;
   color: #333;
 }
 
@@ -520,7 +520,7 @@ footer > div:hover {
 }
 
 .ftList_L li:hover {
-  background: #ebeff4; 
+  background: #ebeff4;
   color: #333;
 }
 
@@ -812,7 +812,7 @@ footer > div:hover {
   font-weight: bold;
   color: #d9d9d9;
   outline: none;
-  
+
 }
 
 .questionTitle:focus {

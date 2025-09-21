@@ -23,7 +23,7 @@ public class InterviewController {
 
     /**
      * @param me     : 로그인한 사용자 정보
-     * @param params : 면담 신청 정보를 담고 있는 Map (예: 면담 제목, 내용, 대상자 일련번호 등)
+     * @param params : 면담 신청 정보를 담고 있는 Map (예: 면담 제목, 내용, 면담 희망하는 계급 번호(관리자 or 강사) 등)
      * @return : 성공 여부 및 저장된 정보를 담은 Map
      * Description    : 면담을 신청하는 API. 로그인한 사용자의 정보를 자동으로 받아와 면담 신청인으로 처리합니다.
      * @methodName : applyInterview
@@ -34,8 +34,6 @@ public class InterviewController {
     public ResponseEntity<CmmnMap> applyInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,
             @RequestBody CmmnMap params){
-
-
 
          // 처리후 결과 보낼거임
         CmmnMap resp= interviewService.createInterviewRequest(me, params);

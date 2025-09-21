@@ -42,7 +42,7 @@ public class CalendarService {
         // 2) 개인/공식 분기 + 권한 & cohort 결정
         Integer cohortSnFinal;
         if (req.getPrvtYn() == 1) { // 개인 일정
-            Long userCohort = me.getCohortId();     //로그인 유저의 기수SN 가져옴
+            Long userCohort = me.getCohortSn();     //로그인 유저의 기수SN 가져옴
             Long userRoleType = me.getRoleType();   //로그인 유저의 권한 가져옴
             //개인일정이며 학생/교사일 경우
             if (userRoleType <4 ){  // 관리자인경우(1,2,3)

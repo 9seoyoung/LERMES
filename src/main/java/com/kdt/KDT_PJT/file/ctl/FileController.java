@@ -38,18 +38,22 @@ public class FileController {
     // TODO me로 me.getCompanyId() 이런거 가져와서 파일에 사용자 소속 company 넣어버리기
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public UploadResultDTO upload(@AuthenticationPrincipal AuthCustomUserDetails me,
-                                  @RequestPart("file") MultipartFile file) {
-        Integer userSn = (me != null) ? me.getId().intValue() : null;
-        return fileService.save(file, userSn, null);
+                                  @RequestPart("file") MultipartFile file,
+                                  @RequestParam(value="formUuid", required=false) String formUuid) {
+        Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
+        Integer coSn   = (me != null && me.getCompanyId() != null) ? Math.toIntExact(me.getCompanyId()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
+        return fileService.save(file, userSn, coSn, formUuid);
     }
 
     // 다중 업로드
     // TODO me로 me.getCompanyId() 이런거 가져와서 파일에 사용자 소속 company 넣어버리기
     @PostMapping(path = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<UploadResultDTO> uploadBatch(@AuthenticationPrincipal AuthCustomUserDetails me,
-                                              @RequestPart("files") List<MultipartFile> files) {
-        Integer userSn = (me != null) ? me.getId().intValue() : null;
-        return fileService.saveBatch(files, userSn, null);
+                                             @RequestPart("files") List<MultipartFile> files,
+                                             @RequestParam(value="formUuid", required=false) String formUuid) {
+        Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
+        Integer coSn   = (me != null && me.getCompanyId() != null) ? Math.toIntExact(me.getCompanyId()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
+        return fileService.saveBatch(files, userSn, coSn, formUuid);
     }
 
     // 다운로드 (attachment)
