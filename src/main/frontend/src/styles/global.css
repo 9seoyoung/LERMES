@@ -347,6 +347,20 @@ footer > div:hover {
   box-shadow: 2px 2px 2px #00000025;
 }
 
+.manageBtn {
+  padding :0 4px;
+  border-radius: 4px;
+  opacity: 60%;
+}
+
+.manageBtn:hover {
+  opacity: 100%;
+}
+
+.manageBtn:active {
+  scale: 0.96;
+}
+
 .createBtn:hover {
   cursor: pointer;
   background: #ebeff4;
@@ -369,6 +383,8 @@ footer > div:hover {
 .saveBtn {
   color: #f6f6f6;
   background-color: #ACACAC;
+  border-radius: 4px;
+  padding: 2px 12px;
 }
 
 .tempBtn {

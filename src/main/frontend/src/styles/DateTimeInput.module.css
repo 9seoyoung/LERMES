@@ -8,7 +8,7 @@
   box-sizing: border-box;
   padding-inline: 12px;          /* 좌우 기본 패딩 */
   padding-inline-end: 36px;       /* 아이콘 자리 확보 */
-  height: 32px;                   /* 필요 시 조절 */
+  height: 3.2rem;                   /* 필요 시 조절 */
   line-height: 32px;
 }
 
