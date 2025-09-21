@@ -17,4 +17,5 @@ public class FileDTO {
     private Long fileSz;               // FILE_SZ
     private String fileMimeType;       // FILE_MIME_TYPE
     private String fileExtnNm;         // FILE_EXTN_NM
+    private String formUuid;            // FORM_UUID (어떤글에대한 매칭인지)
 }

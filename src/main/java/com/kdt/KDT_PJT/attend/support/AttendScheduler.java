@@ -14,7 +14,7 @@ public class AttendScheduler {
     private final DailyAttendTotService dailyAttendTotService;
 
     // 매일 새벽 00:10 → 결석 기본값 세팅
-    @Scheduled(cron = "0 39 16 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 10 00 * * *", zone = "Asia/Seoul")
     public void seedAbsentJob() {
         dailyAttendTotService.seedAbsent(LocalDate.now());
     }

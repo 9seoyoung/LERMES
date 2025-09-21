@@ -1,7 +1,8 @@
 // 상호작용 컴포넌트
 // props로 텍스트 조절할 수 있게
-import { useRef } from 'react';
-
+import { useId, forwardRef, useRef, useImperativeHandle  } from 'react';
+import { Calendar, Clock } from "lucide-react";
+import styles2 from "../../styles/DateTimeInput.module.css";
 import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
 import FilePreview from './FilePreview';
@@ -45,12 +46,64 @@ export function UiComp() {
     </div>
   );
 }
+// 날짜 / 시간 인풋
+export const DateTimeInput = forwardRef(function DateTimeInput(
+  props,
+  ref
+) {
+  const inputRef = useRef(null);
+  const {type, name, addStyle, textType, icon, handleChange , formData = {}, labelNm} = props;
+  const inputId = useId();
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    showPicker: () => inputRef.current?.showPicker?.(),
+    get input() { return inputRef.current; }
+  }));
+
+  const IconCmp = icon
+    ? icon === "clock" ? Clock : Calendar
+    : (type === "time" ? Clock : Calendar);
+
+  const onIconClick = () => {
+    if (inputRef.current?.showPicker) {
+      inputRef.current.showPicker();
+    } else {
+      inputRef.current?.focus();
+    }
+  };
+
+  return (
+    <div className={`${styles2.field} ${styles.inputSet}`}>
+      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addStyle}`}>{labelNm}</label>
+      <input
+        ref={inputRef}
+        type={type}
+        className={styles.input}
+        id={`${inputId}-${name}`} autoComplete='false'name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+      <button
+        type="button"
+        className={styles2.iconBtn}
+        onClick={onIconClick}
+        aria-label="open picker"
+        tabIndex={-1}
+      >
+        <IconCmp size={18} strokeWidth={2} />
+      </button>
+    </div>
+  );
+});
+
 
 // 인풋
-export function FormInput({ textType }) {
+export function FormInput(props) {
+  const {type, name, textType, handleChange , formData, labelNm, addStyle} = props;
+  const inputId = useId();
+
   return (
-    <div>
-      <input className={styles.input} type="text" placeholder={textType} />
+    <div className={styles.inputSet}>
+      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addStyle}`}>{labelNm}</label>
+      <input id={`${inputId}-${name}`} autoComplete='false' className={`${styles.input}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }
@@ -180,7 +233,7 @@ export function ActionBtn({ textType }) {
 export function AddBtn({ textType }) {
   return (
     <>
-      <button className={styles.addBtn}>{textType}</button>
+      <div className={styles.addBtn}>{textType}</div>
     </>
   );
 }

@@ -54,7 +54,7 @@ public class CohortController {
 
 
     // 생성
-    @PostMapping
+    @PostMapping("/setgroup")
     public ResponseEntity<Cohort> createCohort(@RequestBody Cohort cohort) {
         Cohort saved = cohortService.save(cohort);
         return ResponseEntity.ok(saved);

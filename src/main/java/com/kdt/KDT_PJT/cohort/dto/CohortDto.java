@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data @Getter
 public class CohortDto {
@@ -31,6 +32,10 @@ public class CohortDto {
     private cohortSttsNm cohortSttsNm;
 
     private QuestionType cohortCate;
+
+    private LocalTime attendStartTm;
+
+    private LocalTime attendEndTm;
 
     // 기본 생성자, getter/setter 생략 가능 (롬복 사용 가능)
 }
