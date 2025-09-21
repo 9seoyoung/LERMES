@@ -719,7 +719,6 @@ footer > div:hover {
 }
 
 .inputFlex1{
-  gap: 12px;
   flex: 1;
 }
 
@@ -730,9 +729,7 @@ footer > div:hover {
   border-radius: 8px;
   width: 80px;
   display: flex;
-  height: 4.4rem;
-  font-size: 1.2rem;
-  gap: 4px;
+  height: 36px;
 }
 
 .formInput, .addfileList {

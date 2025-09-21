@@ -12,9 +12,3 @@ export function createGroup(body) {
     headers: { 'Content-Type': 'application/json' },
   });
 }
-
-export function createPost(body) {
-  return api.post('/board', body, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}

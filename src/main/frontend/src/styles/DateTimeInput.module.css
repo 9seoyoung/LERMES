@@ -1,8 +1,6 @@
 .field {
   position: relative;
   width: 100%;
-  display: flex;
-  gap: 4px;
 }
 
 .input {
