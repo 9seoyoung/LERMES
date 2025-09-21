@@ -8,11 +8,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: .5rem;
   padding: .6rem .9rem;
   border-radius: .6rem;
   /* border: 1px solid #d0d5dd; */
   width: 100%;
+  font-size: 1.2rem;
   background: #fff;
   cursor: pointer;
 }
@@ -68,7 +68,10 @@
   font: inherit;
   font-size: 1.6rem;
 }
-.dd__item:hover { background: #00000025; }
+.dd__menu p:hover {
+  background: #00000025;
+  cursor: pointer;
+}
 
 /* 모션 최소화 환경 */
 @media (prefers-reduced-motion: reduce) {

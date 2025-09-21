@@ -14,6 +14,7 @@ const makeQuestion = () => ({
     { id: uuid(), label: "" },
     { id: uuid(), label: "" },
   ],
+  answer:""
 });
 
 // 리듀서
@@ -96,24 +97,24 @@ function questionsReducer(state, action) {
 
 export default function QuestionAdd() {
   const [questions, dispatch] = useReducer(questionsReducer, [makeQuestion()]);
-  
+
   const addQuestion = () => {
     dispatch({ type: "ADD_QUESTION" });
   };
 
 
   return (
-    <>
-      {questions.map((q, idx) => (
-        <QuestionType key={q.qid} q={q} dispatch={dispatch} qNum={idx + 1}/>
-      ))}
+      <>
+        <div className="questionContainer">
+          {questions.map((q, idx) => (
+            <QuestionType key={q.qid} q={q} dispatch={dispatch} qNum={idx + 1}/>
+        ))}
+        </div>
 
-      {`현재 문항 수 : ${questions.length}`}
-      <button type="button" className="questionAdd" onClick={addQuestion}>
-        <Plus color="#0088FF" strokeWidth={4} ></Plus>
-        <p>질문추가</p>
-      </button>
-
-    </>
+        <button type="button" className="questionAdd" onClick={addQuestion}>
+          <Plus color="#0088FF" strokeWidth={4} ></Plus>
+          <p>질문추가</p>
+        </button>
+      </>
   );
 }

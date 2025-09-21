@@ -11,6 +11,55 @@ import {v4 as uuidv4} from "uuid";
 // CreatePost.jsx
 // ...import 생략
 
+function PostStatus(props) {
+  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm } = props;
+  switch (type) {
+    case "공지사항":
+    case "자료실":
+    case "학습일지":
+    case "FAQ":
+      return (
+          <ArticlePost
+              postId={postId.current}
+              domFormId={domFormId}
+              handleChange={handleChange}
+              formData={formData}
+              FileList={FileList}
+              files={files}
+              setFiles={setFiles}
+          />
+      );
+    case "설문조사":
+      return (
+          <SurveyPost
+              postId={postId.current}
+              domFormId={domFormId}
+              handleChange={handleChange}
+              formData={formData}
+              surveyForm={surveyForm}
+              setSurveyForm={setSurveyForm}
+              FileList={FileList}
+              files={files}
+              setFiles={setFiles}
+          />
+      );
+    default:
+      return (
+          <ArticlePost
+              postId={postId.current}
+              domFormId={domFormId}
+              handleChange={handleChange}
+              formData={formData}
+              FileList={FileList}
+              files={files}
+              setFiles={setFiles}
+          />
+      );
+  }
+}
+
+
+
 function CreatePost() {
   const domFormId = useId();
   const domId = useId();
@@ -31,15 +80,15 @@ function CreatePost() {
   // 일반 게시글
   const [formData, setFormData] = useState({
     id: postId.current,
-    username: "",
-    email: "",
+    userSn: user.USER_SN,
     title: "",
     content: "",
     type: "",
     scope: "",
     detailScope: "",
-    surveyStart: "",     // ☆ 추가
-    surveyEnd: "",       // ☆ 추가
+    detailScopeNm: "",
+    surveyStart: "",     // 설문조사
+    surveyEnd: "",   // 설문조사
   });
 
 
@@ -49,7 +98,10 @@ function CreatePost() {
   };
 
   const tempSubmit = () => {};
-  const saveSubmit = () => {};
+  const saveSubmit = () => {
+    console.log(`게시글 데이터: `, formData);
+    console.log(`설문데이터: `,surveyForm);
+  };
 
   useEffect(() => {
     (async () => {
@@ -62,52 +114,6 @@ function CreatePost() {
     })();
   }, [coSn]);
 
-  function PostStatus({ type }) {
-    switch (type) {
-      case "공지사항":
-      case "자료실":
-      case "학습일지":
-      case "FAQ":
-        return (
-          <ArticlePost
-            postId={postId.current}
-            domFormId={domFormId}
-            handleChange={handleChange}
-            formData={formData}
-            FileList={FileList}
-            files={files}
-            setFiles={setFiles}
-          />
-        );
-      case "설문조사":
-        return (
-          <SurveyPost
-            postId={postId.current}
-            domFormId={domFormId}
-            handleChange={handleChange}
-            formData={formData}
-            surveyForm={surveyForm}
-            setSurveyForm={setSurveyForm}
-            FileList={FileList}
-            files={files}
-            setFiles={setFiles}
-          />
-        );
-      default:
-        return (
-          <ArticlePost
-            postId={postId.current}
-            domFormId={domFormId}
-            handleChange={handleChange}
-            formData={formData}
-            FileList={FileList}
-            files={files}
-            setFiles={setFiles}
-          />
-        );
-    }
-  }
-
   return (
     <div className="boardPage">
       <h2>게시판</h2>
@@ -116,21 +122,35 @@ function CreatePost() {
 
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
           <div className="formArea_L">
-            <PostStatus type={formData.type} />
+            <PostStatus
+                type={formData.type}
+                postId={postId.current}
+                domFormId={domFormId}
+                handleChange={handleChange}
+                formData={formData}
+                surveyForm={surveyForm}
+                setSurveyForm={setSurveyForm}
+                FileList={FileList}
+                files={files}
+                setFiles={setFiles}
+            />
           </div>
 
           <div className="formArea_R">
             <div className="selectBoxArea" style={{ position: "relative" }}>
-              <div className="dropSet" style={{ zIndex: "4" }}>
+              <div className="dropSet" style={{ zIndex: "8" }}>
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
-                  {userAuth === 2 || userAuth === 3}
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "공지사항" }))}>공지사항</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "FAQ" }))}>FAQ</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
+                  {(userAuth === 2 || userAuth === 3) ?
+                      <>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "공지사항" }))}>공지사항</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "FAQ" }))}>FAQ</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
+                      </>
+                  : ""}
                   {(userAuth === 4 || userAuth === 5) ? (
                     <>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
@@ -157,12 +177,15 @@ function CreatePost() {
               {formData.scope === "소속그룹" && (
                 <div className="dropSet" style={{ zIndex: "1" }}>
                   <p>하위 그룹</p>
-                  <Dropdown className="dropset_dd" label={formData.detailScope || "---- 필수 선택 ----"}>
+                  <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
                     {hortlist.map((h, idx) => (
                       <p
                         className={layoutStyles.subMenuList}
                         key={idx}
-                        onClick={() => setFormData(s => ({ ...s, detailScope: String(h.cohortNm) }))}
+                        onClick={() => {
+                          setFormData(s => ({ ...s, detailScope: h.cohortSn, detailScopeNm: String(h.cohortNm) }));
+
+                        }}
                       >
                         {h.cohortNm}
                       </p>
