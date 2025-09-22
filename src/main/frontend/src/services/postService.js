@@ -14,7 +14,7 @@ export function createGroup(body) {
 }
 
 export function createPost(body) {
-  return api.post('/board', body, {
+  return api.post('/board/post', body, {
     headers: { 'Content-Type': 'application/json' },
   });
 }

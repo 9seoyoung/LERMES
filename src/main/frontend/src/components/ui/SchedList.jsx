@@ -13,7 +13,9 @@ function SchedList({selectedDate}) {
   useEffect(() => {
     if (selectedDate) {
       // selectedDate는 'YYYY-MM-DD' 문자열
-      const [ , month, day] = selectedDate.split('-').map(Number);
+      const month = 0;
+      const day = 1;
+      // const [ , month, day] = selectedDate.split('-').map(Number);
       setDisplayDate(`${month}월 ${day}일`);
     } else {
       setDisplayDate('선택된 날짜 없음');

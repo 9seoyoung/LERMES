@@ -3,10 +3,19 @@ import FilterList from "../../components/ui/FilterList";
 import { useAccount } from "../../auth/AuthContext";
 import { useState, useEffect } from "react";
 import { hortlistByCpSn } from "../../services/cohortService";
+import NoticeList from "../../components/module/NoticeList";
+import TodayAttendList from "../../components/layout/inho/TodayAttendList";
+import SchedList from "../../components/ui/SchedList";
+import BigCal from "../../components/ui/BigCal";
 
 function GroupSet() {
   const navigate = useNavigate();
   const { user } = useAccount();
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [events, setEvents] = useState({}); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
+  const [showPopup, setShowPopup] = useState(false); // 💡 팝업 상태 추가
+  const [displayDate, setDisplayDate] = useState('');
 
   // user가 없을 수 있으니 안전하게
   const coSn = user?.USER_OGDP_CO_SN;
@@ -17,6 +26,7 @@ function GroupSet() {
   useEffect(() => {
     if (!coSn) return;            // 아직 값 없으면 호출 x
     let ignore = false;
+    console.log(selectedDate);
 
     (async () => {
       try {
@@ -58,9 +68,25 @@ const [filterArr, setFilterArr] = useState([]);
         <div className="ftList_R">
         </div>
       </div>
-
-      <div className="BigListBox">
-        <Outlet></Outlet>
+      <div className="mainCont_Lms_Row">
+      <div className="main_L" style={{ width: '40%' }}>
+        <div  className='dashBoardModule' style={{ flex: 1 }}>
+          <BigCal
+            selectedDate={selectedDate} setSelectedDate={setSelectedDate} currentDate={currentDate} setCurrentDate={setCurrentDate} events={events} setEvents={setEvents}
+            />
+          </div>
+      </div>
+      <div className="main_R" style={{ flex: '1', gap: '16px' }}>
+        <div  className='dashBoardModule'style={{ height: '232px' }}>
+          <SchedList
+            selectedDate={selectedDate}
+            showPopup={showPopup} setShowPopup={setShowPopup} displayDate={displayDate} setDisplayDate={setDisplayDate}
+          ></SchedList>
+        </div>
+        <div className='dashBoardModule' style={{ height: '470px' }}>
+          <TodayAttendList></TodayAttendList>
+        </div>
+      </div>
       </div>
     </div>
   );
