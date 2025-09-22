@@ -19,7 +19,6 @@ export default function ListEditTable({
     if(!apiData?.length) {
         return <div className={styles.ListTbBg}>-</div>;
     }
-
     // 1) 배열이면 공백으로 join
     // 2) 문자열이면 그대로
     // 3) 없으면 컬럼 수 기준으로 동일 폭
@@ -32,7 +31,7 @@ export default function ListEditTable({
     <ul className={styles.ListTbBg}
         style={{ ['--cols']: resolvedTemplate, ['--gap']: gap }}
     >
-        {tableHead?.length > 0 ? 
+        {tableHead?.length > 0 ?
                 <li key="tableHead" className={`${styles.ListHeader} ${styles.gridRow}`}>
         {            tableHead.map((col, idx) => (
                     <div key={`th-${idx}`} className={styles.cell}>{col}</div>
@@ -46,18 +45,18 @@ export default function ListEditTable({
             <li key={i} className={`${styles.editRow} ${styles.gridRow}`}>
                 {columnData.map((col, j) => (
                     <>
-                        {type[j] === "date" || type[j] === "time" ? 
+                      {type[j] === "date" || type[j] === "time" ?
                         <DateTimeInput
-                            type="date" 
+                            type="date"
                             handleChange={handleChange}
                             name={nameArr[j]}
-                            formData={formData} 
+                            formData={formData}
                         ></DateTimeInput>
                         :
-                        <input 
-                            type={type[j]} 
-                            key={j} 
-                            className={styles.cell} 
+                        <input
+                            type={type[j]}
+                            key={j}
+                            className={styles.cell}
                             placeholder={row[col]}
                             autoComplete="false"
                         />

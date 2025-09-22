@@ -21,6 +21,7 @@ import UiComp from '../components/ui/UiComp';
 import SchedList from '../components/ui/SchedList';
 import SchedListPopUp from '../components/ui/SchedListPopUp';
 import CalSched from '../components/ui/CalSched';
+import TableAll from '../components/module/TableAll.jsx';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
@@ -51,6 +52,7 @@ function AppRoutes() {
       <Route path="/schedlist" element={<SchedList />} />
       <Route path="/schedlistpopup" element={<SchedListPopUp />} />
       <Route path="/calsched" element={<CalSched />} />
+      <Route path="/tableall" element={<TableAll />} />
       <Route path="/testQuestion" element={<QuestionAdd />} />
 
       <Route path="/files" element={<UploadDownloadDemo />} />

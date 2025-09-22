@@ -9,7 +9,7 @@ import GroupDropdown from "../../components/ui/GroupDropdown";
 export default function Board(){
     const navigate = useNavigate();
     const {user} = useAccount();
-
+    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담", "임시 저장"]
     
 
     return (
@@ -18,7 +18,7 @@ export default function Board(){
             <div className="filterList">
                 <div className="ftList_L">
                     <GroupDropdown coSn={user.USER_OGDP_CO_SN}></GroupDropdown>
-                    <FilterList></FilterList>
+                    <FilterList arr={filterArr}></FilterList>
                 </div>
                 <div className="ftList_R">
                     <div className="createBtn" onClick={() => navigate('createPost')}>

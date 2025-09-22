@@ -376,8 +376,8 @@ color: #000;
 }
 
 .checkBox .checkmark {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -387,7 +387,7 @@ color: #000;
 
 .checkBox input:checked + .checkmark::after {
   content: '✔';
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* 주황색 체크 */
@@ -403,7 +403,7 @@ color: #000;
 .blueCheck .checkmark {
   background-color: #fff;
   border: 1px solid #000;
-  border-radius: 5px;
+
 }
 
 .blueCheck input:checked + .checkmark::after {
@@ -541,6 +541,3 @@ color: #000;
   align-items: center;
   justify-content: center;
 }
-
-
-  
