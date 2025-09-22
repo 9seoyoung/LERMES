@@ -2,7 +2,9 @@ package com.kdt.KDT_PJT.cohort.ctl;
 
 
 // import com.kdt.KDT_PJT.cohort.dto.CohortListDto;
+import com.kdt.KDT_PJT.cohort.dto.CohortDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
+import com.kdt.KDT_PJT.cohort.mapper.CohortConverter;
 import com.kdt.KDT_PJT.cohort.service.CohortService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,8 +57,9 @@ public class CohortController {
 
     // 생성
     @PostMapping("/setgroup")
-    public ResponseEntity<Cohort> createCohort(@RequestBody Cohort cohort) {
-        Cohort saved = cohortService.save(cohort);
+    public ResponseEntity<Cohort> createCohort(@RequestBody CohortDto dto) {
+        Cohort entity = CohortConverter.toEntity(dto);
+        Cohort saved = cohortService.save(entity);
         return ResponseEntity.ok(saved);
     }
 
@@ -91,5 +94,15 @@ public class CohortController {
         cohortService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/titles")
+    public ResponseEntity<List<String>> getAllCohortTitles() {
+        List<String> titles = cohortService.getAllCohortTitles();
+        if (titles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(titles);
+    }
+
 }
 
