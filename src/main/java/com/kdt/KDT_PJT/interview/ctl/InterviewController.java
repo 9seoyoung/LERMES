@@ -46,36 +46,36 @@ public class InterviewController {
         return ResponseEntity.ok(resp);
     }
 
-    @PreAuthorize("hasAnyRole('TENANT','EMPLOYEE','INSTRUCTOR')") //컨트롤러에서 체크하겠음
-    @GetMapping({"/my-requests", "/my-requests/{cohortSn}"}) //강사인경우, 테넌트/직원인 경우
-    public List<CmmnMap> getMyInterviewRequests(
-            @AuthenticationPrincipal AuthCustomUserDetails me,
-            @PathVariable(value = "cohortSn", required = false) Integer pathCohortSn) {
-
-        if (me == null) { // 로그인 안했으면 집가라
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");
-        }
-
-        // 강사, 테넌트/직원 판단
-        if (Math.toIntExact(me.getRoleType()) == 4){ // 강사님이신지?
-            if (pathCohortSn == null && me.getCohortId() != null) {
-                pathCohortSn = Math.toIntExact(me.getCohortId()); //자신의 cohortsn 할당
-            }else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "강사는 cohortsn 포함 ㄴㄴ거나 본인의 cohortSn 비어있음");
-            }
-        } else if (Math.toIntExact(me.getRoleType()) == 2 || Math.toIntExact(me.getRoleType()) == 3) { //테넌트or직원인가
-            if (pathCohortSn == null){ // 근데 url에 기수번호 없으면 돌려보냄
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"기수번호 입력하셈 테넌트/직원은");
-            }
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한도 없으신데 어딜!");
-        }
-
-        List<CmmnMap> resp = interviewService.getMyInterviewRequests(pathCohortSn);
-
-
-        return resp;
-    }
+//    @PreAuthorize("hasAnyRole('TENANT','EMPLOYEE','INSTRUCTOR')") //컨트롤러에서 체크하겠음
+//    @GetMapping({"/my-requests", "/my-requests/{cohortSn}"}) //강사인경우, 테넌트/직원인 경우
+//    public List<CmmnMap> getMyInterviewRequests(
+//            @AuthenticationPrincipal AuthCustomUserDetails me,
+//            @PathVariable(value = "cohortSn", required = false) Integer pathCohortSn) {
+//
+//        if (me == null) { // 로그인 안했으면 집가라
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");
+//        }
+//
+//        // 강사, 테넌트/직원 판단
+//        if (Math.toIntExact(me.getRoleType()) == 4){ // 강사님이신지?
+//            if (pathCohortSn == null && me.getCohortId() != null) {
+//                pathCohortSn = Math.toIntExact(me.getCohortId()); //자신의 cohortsn 할당
+//            }else {
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "강사는 cohortsn 포함 ㄴㄴ거나 본인의 cohortSn 비어있음");
+//            }
+//        } else if (Math.toIntExact(me.getRoleType()) == 2 || Math.toIntExact(me.getRoleType()) == 3) { //테넌트or직원인가
+//            if (pathCohortSn == null){ // 근데 url에 기수번호 없으면 돌려보냄
+//                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"기수번호 입력하셈 테넌트/직원은");
+//            }
+//        } else {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한도 없으신데 어딜!");
+//        }
+//
+//        List<CmmnMap> resp = interviewService.getMyInterviewRequests(pathCohortSn);
+//
+//
+//        return resp;
+//    }
 
 
 
