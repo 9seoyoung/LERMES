@@ -19,7 +19,6 @@ export default function ListEditTable({
     if(!apiData?.length) {
         return <div className={styles.ListTbBg}>-</div>;
     }
-
     // 1) 배열이면 공백으로 join
     // 2) 문자열이면 그대로
     // 3) 없으면 컬럼 수 기준으로 동일 폭
