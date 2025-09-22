@@ -16,7 +16,9 @@ public class CohortListDto {
 
     private String cohortNm;
 
-    private Map<String, Object> surveyForm;
+    private Map<String, Object> crclmCn;
+
+    private String crclmNm;
 
     private LocalDate recruitBgngDt;
 

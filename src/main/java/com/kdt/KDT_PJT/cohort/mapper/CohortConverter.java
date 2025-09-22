@@ -35,7 +35,7 @@ public class CohortConverter {
         if (dto.getSurveyForm() != null) {
             try {
                 String jsonStr = objectMapper.writeValueAsString(dto.getSurveyForm());
-                entity.setSurveyForm(jsonStr);
+                entity.setCrclmCn(jsonStr);
             } catch (Exception e) {
                 throw new RuntimeException("surveyForm 직렬화 실패", e);
             }
@@ -73,9 +73,9 @@ public class CohortConverter {
         dto.setEndDate(entity.getCrclmEndYmd());
         dto.setScope(entity.getCohortSttsNm());
 //        추가
-        if (entity.getSurveyForm() != null) {
+        if (entity.getCrclmCn() != null) {
             try {
-                JsonNode node = objectMapper.readTree(entity.getSurveyForm());
+                JsonNode node = objectMapper.readTree(entity.getCrclmCn());
                 dto.setSurveyForm(node);
             } catch (Exception e) {
                 throw new RuntimeException("surveyForm 역직렬화 실패", e);

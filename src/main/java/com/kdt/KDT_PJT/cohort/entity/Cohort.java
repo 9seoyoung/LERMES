@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Map;
 
 @Entity
 @Setter
@@ -27,12 +26,8 @@ public class Cohort {
 
 //    @Column(name = "CRCLM_CN")
 //    private String crclmCn;
-// JPA는 객체 안되나봄?
-//    @Column(name = "CRCLM_CN")
-//    private Map<String, Object> crclmCn;
-    @Column(name = "json")
-    private String surveyForm;
-
+    @Column(name = "CRCLM_CN", columnDefinition = "json")
+    private String crclmCn;
 
     @Column(name = "CO_SN")
     private Long coSn;
@@ -60,6 +55,5 @@ public class Cohort {
 
     @Column(name = "ATTEND_END_TM")
     private LocalTime attendEndTm;
-
 
 }

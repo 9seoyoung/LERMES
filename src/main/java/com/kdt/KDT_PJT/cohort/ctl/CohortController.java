@@ -70,7 +70,7 @@ public class CohortController {
                 .map(existing -> {
                     // 업데이트 할 필드 설정 (id 제외)
                     existing.setCrclmNm(cohort.getCrclmNm());
-//                    existing.setCrclmCn(cohort.getCrclmCn());
+                    existing.setCrclmCn(cohort.getCrclmCn());
                     existing.setCoSn(cohort.getCoSn());
                     existing.setRecruitBgngDt(cohort.getRecruitBgngDt());
                     existing.setRecruitEndDt(cohort.getRecruitEndDt());
