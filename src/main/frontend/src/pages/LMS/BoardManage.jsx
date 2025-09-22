@@ -5,6 +5,7 @@ import uiStyle from "../../styles/UiComp.module.css"
 import { useAccount } from "../../auth/AuthContext";
 import FilterList from "../../components/ui/FilterList";
 import GroupDropdown from "../../components/ui/GroupDropdown";
+import { StudySched_Tb } from "../../components/module/TableAll";
 
 export default function Board(){
     const navigate = useNavigate();
@@ -27,15 +28,7 @@ export default function Board(){
                 </div>
             </div>
             <div className="BigListBox">
-                <ul className={uiStyle.ListHeader}>
-                    <li>순번</li>
-                    <li>유형</li>
-                    <li>제목</li>
-                    <li>작성일</li>
-                    <li>작성자</li>
-                    <li>조회수</li>
-                </ul>
-                <ListTable></ListTable>
+                <StudySched_Tb ></StudySched_Tb>
             </div>
         </div>
     );

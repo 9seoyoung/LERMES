@@ -6,6 +6,7 @@ import {Settings} from "lucide-react";
 import ListEditTable from '../../components/ui/ListEditTable';
 import { BlueCheckbox } from '../../components/ui/UiComp';
 import styles from '../../styles/TableAll.module.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function TableAll() {
   /* const [manageState, setManageState] = useState(false);
@@ -52,7 +53,7 @@ export default function TableAll() {
 }
 
 // 학습 일정 테이블
-export function StudySched_Tb (){
+export function StudySched_Tb ({whereTogo}){
   const [manageState, setManageState] = useState(false);
   const [formData, setFormData] = useState({});
 
@@ -62,8 +63,7 @@ export function StudySched_Tb (){
   };
 
   return (
-    <div className="boardPage">
-      <div className="BigListBox">
+    <>
         {manageState ?
           <ListEditTable
             tableHead={['순번', '유형', '제목', '시작일', '종료일', '작성일', '작성자', '조회수']}
@@ -82,10 +82,10 @@ export function StudySched_Tb (){
             gridTemplate="1fr 1fr 5fr 1fr 1fr 1fr 1fr 1fr "
             gap="12px"
             handleChange = {handleChange}
+            whereTogo = {whereTogo}
           />
         }
-      </div>
-    </div>
+    </>
   );
 }
 

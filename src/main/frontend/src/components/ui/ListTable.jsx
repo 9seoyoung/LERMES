@@ -7,7 +7,8 @@ export default function ListTable({
     apiData = [],
     columnData = [],
     gridTemplate,
-    gap = 0
+    gap = 0,
+    whereTogo//클릭 시 페이지 이동 될 함수
 }) {
     // 선언부-------------------------------------------------------------
     //백에서 넘겨받은 데이터의 길이를 부정해서 0이면(하나라도 담기면 패스) 데이터 없음 리턴
