@@ -35,7 +35,7 @@ import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
 import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
 import StudyManage from '../pages/LMS/menu/StudyManage.jsx';
 import StudentManage from '../pages/LMS/menu/StudentManage.jsx';
-import StudyPost from '../pages/LMS/form/StudyPost.jsx';
+import InterviewPost from '../pages/LMS/form/InterviewPost.jsx';
 
 function AppRoutes() {
   return (
@@ -94,7 +94,7 @@ function AppRoutes() {
         <Route path='tutorHome/studySched/createPost' element={<CreatePost/>}></Route>
         <Route path='/tutorHome/studySched' element={<StudyManage/>}></Route>
         <Route path='/tutorHome/studentManage' element={<StudentManage/>}></Route>
-        <Route path='tutorHome/studentManage/createPost' element={<StudyPost/>}></Route>
+        <Route path='tutorHome/studentManage/interviewPost' element={<InterviewPost/>}></Route>
 
         <Route path=':home/myPage' element={<Mypage/>}/>
 
@@ -104,7 +104,9 @@ function AppRoutes() {
         <Route path="stdHome" element={<StdHome />} />
         <Route path="stdHome/board" element={<Board />} />
         <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
-        <Route path="stdHome/studySched" element={"#"} />
+        <Route path="stdHome/studySched" element={<StudentManage/>} />
+        <Route path='stdHome/studySched/interviewPost' element={<InterviewPost/>}></Route>
+
         <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>

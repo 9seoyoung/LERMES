@@ -19,7 +19,7 @@ function StudentManage() {
                     </FilterList>
                 </ul>
                 <div className="ftList_R">
-                    <div className="createBtn " onClick={() => navigate('createPost')}>
+                    <div className="createBtn " onClick={() => navigate('interviewPost')}>
                         + 등록하기
                     </div>
                 </div>
