@@ -22,7 +22,6 @@ function InterviewPost() {
   const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
 
-  const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
 
   // 일반 게시글
@@ -89,16 +88,6 @@ function InterviewPost() {
   }
 };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await hortlistByCpSn(coSn);
-        setHortList(data.data);
-      } catch (e) {
-        console.log(e.message);
-      }
-    })();
-  }, [coSn]);
 
   return (
     <div className="boardPage">
