@@ -18,3 +18,9 @@ export function createPost(body) {
     headers: { 'Content-Type': 'application/json' },
   });
 }
+
+export function createInterview(body) {
+  return api.post('/interview/apply', body, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}

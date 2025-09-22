@@ -5,7 +5,7 @@ import {FileUpload, FileList, FormInput } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from "../../../services/cohortService"; //서비스 나중에 교체 ㄱㄱ
 import {v4 as uuidv4} from "uuid";
-import { createPost } from '../../../services/postService';
+import { createInterview } from '../../../services/postService';
 
 import { DateTimeInput } from '../../../components/ui/UiComp';
 
@@ -27,16 +27,19 @@ function InterviewPost() {
 
   // 일반 게시글
   const [formData, setFormData] = useState({
+    __note: "id: 게시글uuid, userSn: 작성자 유저SN, title: 제목, content: textarea 내용, type: 면담신청 or 면담요청 or 면담기록, scope: 공개범위, interviewDate: 면담확정일, interviewTime: 면담예정시간, author: 작성자 유저이름, mento: 담당자, comment: 수신측 기타요청메모",
     id: postId.current,
     userSn: user.USER_SN,
     title: "",
     content: "",
     type: "",
     scope: "",
-    detailScope: "",
-    detailScopeNm: "",
-    surveyStart: "",     // 설문조사
-    surveyEnd: "",   // 설문조사
+    interviewDate: "",     // 면담확정일
+    interviewTime: "", //면담예정시간
+    author: user?.USER_NM, // 작성자
+    mento: "-", // 담당자
+    place: "", //장소
+    comment: "" //기타 요청(수신측)
   });
 
 
@@ -77,7 +80,7 @@ function InterviewPost() {
   console.time("[RecruitPost] createGroup");
   try {
     // const res = await createGroup(payload);
-    const res = await createPost(body);
+    const res = await createInterview(body);
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
@@ -176,14 +179,14 @@ export default InterviewPost;
 function InterviewForm({
   domFormId, handleChange, formData, files, formId, setFiles,
 }) {
-  // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
+  // pages[0]이 항상 존재하도록 보장(상위 createInterview에서 초기화함)
   // const firstPage = surveyForm.pages[0];
   const qContainerRef = useRef(null);
 
   return (
     <>
       <div className='formHeader'>
-        <div className='inputSet'>
+        <div className='inputSet inputTitleSet'>
           <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
           <input
             id={`${domFormId}_title`}
@@ -196,8 +199,8 @@ function InterviewForm({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <DateTimeInput type="date" labelNm="작성자" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
-          <DateTimeInput type="date" labelNm="담당자" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" ></DateTimeInput>
+          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="menoto" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
         </div>
       </div>
 
@@ -214,10 +217,10 @@ function InterviewForm({
           </div>
           <div className='inputSet'>
             <div className='inputSet inputFlex1'>
-              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
-              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" ></DateTimeInput>
-              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></FormInput>
-              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" ></FormInput>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel" disabled={true}></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" disabled={true}></DateTimeInput>
+              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
+              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
               
             </div>
           </div>
