@@ -7,11 +7,7 @@ const BigCal = (props) => {
   const {selectedDate, setSelectedDate = () => {}, currentDate, setCurrentDate = () => {}, events, setEvents = () => {}} = props;
 
 // 새로고침하면 오늘 날짜 선택
-useEffect(() => {
-const today = new Date();
-setCurrentDate(today);
-setSelectedDate(today.getDate());
-}, []);
+
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
