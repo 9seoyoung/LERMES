@@ -8,7 +8,7 @@ export function createSurvey(body) {
 
 // export const createGroup = (payload) => api.post('/cohort/setgroup', payload)
 export function createGroup(body) {
-  return api.post('/cohort/setgroup', body, {
+  return api.post('/cohorts/setgroup', body, {
     headers: { 'Content-Type': 'application/json' },
   });
 }

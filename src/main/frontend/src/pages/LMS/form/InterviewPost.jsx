@@ -3,18 +3,16 @@ import Dropdown from '../../../components/ui/Dropdown'
 import layoutStyles from "../../../styles/layout.module.css"
 import {FileUpload, FileList, FormInput } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
-import { ArticlePost } from './ArticlePost';
-import { hortlistByCpSn } from "../../../services/cohortService";
+import { hortlistByCpSn } from "../../../services/cohortService"; //서비스 나중에 교체 ㄱㄱ
 import {v4 as uuidv4} from "uuid";
 import { createPost } from '../../../services/postService';
 
-import SurveyPost from './SurveyPost';
 import { DateTimeInput } from '../../../components/ui/UiComp';
 
 
-// StudyPost.jsx
+// InterviewPost.jsx
 
-function StudyPost() {
+function InterviewPost() {
   const domFormId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
@@ -149,35 +147,13 @@ function StudyPost() {
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "대표" }))}>대표</p>
+                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "직원" }))}>직원</p>
                 </Dropdown>
                 <input type="hidden" name="scope" value={formData.scope} />
               </div> 
               :
               null}
-
-              {formData.scope === "관리자" && (
-                <div className="dropSet" style={{ zIndex: "1" }}>
-                  <p>하위 그룹</p>
-                  <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
-                    {hortlist.map((h, idx) => ( //hortList대신 관리자 list
-                      <p
-                        className={layoutStyles.subMenuList}
-                        key={idx}
-                        onClick={() => {
-                          setFormData(s => ({ ...s, detailScope: h.cohortSn, detailScopeNm: String(h.cohortNm) }));
-
-                        }}
-                      >
-                        {h.cohortNm //관리자 이름 표시 
-                        }
-                      </p>
-                    ))}
-                  </Dropdown>
-                  <input type="hidden" name="detailScope" value={formData.detailScope} />
-                </div>
-              )}
             </div>
 
             <div className="r_bottom">
@@ -194,7 +170,7 @@ function StudyPost() {
   );
 }
 
-export default StudyPost;
+export default InterviewPost;
 
 
 function InterviewForm({
@@ -245,8 +221,10 @@ function InterviewForm({
               
             </div>
           </div>
+          <div className='inputSet'>
               <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
               <FileList files={files} setFiles={setFiles}></FileList>
+          </div>
       </div>
       </>
   );
