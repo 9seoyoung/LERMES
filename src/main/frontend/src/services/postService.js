@@ -24,3 +24,9 @@ export function createInterview(body) {
     headers: { 'Content-Type': 'application/json' },
   });
 }
+
+export function createInterviewMemo(body) {
+  return api.post('/interview/memo', body, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
