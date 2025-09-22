@@ -8,6 +8,8 @@ import { hortlistByCpSn } from "../../../services/cohortService";
 import {v4 as uuidv4} from "uuid";
 
 import { createGroup } from '../../../services/postService';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 // CreatePost.jsx
@@ -20,6 +22,7 @@ function RecruitPost() {
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const qAddRef = useRef(null);
+  const navigate = useNavigate();
     const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
 
@@ -35,7 +38,7 @@ function RecruitPost() {
   // 일반 게시글
   const [formData, setFormData] = useState({
     id: postId.current,
-    userSn: user.USER_SN,
+    userSn: user.USER_OGDP_CO_SN, //유저같지만 회사임
     title: "",
     content: "",
     groupName: "",
@@ -92,8 +95,11 @@ function RecruitPost() {
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
+    toast.success("게시 성공");
+    navigate(-1);
   } catch (err) {
     console.error("[RecruitPost] createGroup error:", err);
+    toast.error(err.message);
   }
 };
 
@@ -204,7 +210,7 @@ function RecruitForm({
             id={`${domFormId}_title`}
             className='formInput'
             name='title'
-            placeholder='제목을 입력하세요.'
+            placeholder='과정명을 입력하세요.'
             value={formData.title}
             onChange={handleChange}
           />

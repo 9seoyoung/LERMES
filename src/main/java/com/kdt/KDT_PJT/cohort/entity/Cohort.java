@@ -53,4 +53,5 @@ public class Cohort {
 
     @Column(name = "ATTEND_END_TM")
     private LocalTime attendEndTm;
+
 }

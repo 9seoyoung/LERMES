@@ -124,6 +124,7 @@ h4 {
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
+  padding: 16px 0 0 0;
   flex-direction: column;
   gap: 16px;
 }
@@ -328,6 +329,11 @@ footer > div:hover {
   overflow: hidden;
 }
 
+.limitedInput {
+  width: 30px;
+  max-width: 80px;
+}
+
 .boardPage{
   display: flex;
   flex-direction: column;
@@ -525,6 +531,7 @@ footer > div:hover {
 
 .ftList_L {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 12px;
 }
@@ -721,6 +728,7 @@ footer > div:hover {
 
 .inputFlex1{
   display: flex;
+  min-width: fit-content;
   gap: 12px;
   flex: 1;
 }

@@ -1,19 +1,13 @@
 // 학습관리용 큰 캘린더
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from '../../styles/BigCal.module.css';
 
-const BigCal = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState({}); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
+const BigCal = (props) => {
+  const {selectedDate, setSelectedDate = () => {}, currentDate, setCurrentDate = () => {}, events, setEvents = () => {}} = props;
 
 // 새로고침하면 오늘 날짜 선택
-useEffect(() => {
-const today = new Date();
-setCurrentDate(today);
-setSelectedDate(today.getDate());
-}, []);
+
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -173,11 +167,11 @@ setSelectedDate(today.getDate());
       ))}
 
       {/* 일정 추가 버튼 */}
-       <div className={styles.addEventBtn}>
+       {/* <div className={styles.addEventBtn}>
         <button onClick={onAddEvent} className={styles.addEvent}>
           일정 추가
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

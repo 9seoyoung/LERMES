@@ -16,11 +16,12 @@ export const buildDownloadUrl = (storedFileName, originalName = "") =>
     `${API_BASE}/${encodeURIComponent(storedFileName)}/download?original=${encodeURIComponent(originalName)}`;
 
 // ---- 업로드 (단일/다중 공용)
-export async function uploadFiles(files, { onProgress, path } = {}) {
+export async function uploadFiles(files, { onProgress, path, formUuid } = {}) {
     // path: 서버가 STRG_FILE_PATH로 받도록 선택(없으면 루트)
     const form = new FormData();
     files.forEach((f) => form.append("files", f));
     if (path) form.append("path", path);
+    if (formUuid) form.append("formUuid", formUuid);
 
     const { data } = await api.post("/batch", form, {
         onUploadProgress: (e) => {
@@ -80,3 +81,21 @@ export async function listFiles(params = {}) {
     const { data } = await api.get("/", { params });
     return data; // 예: 페이지네이션 응답
 }
+
+
+// 원샷: post(JSON) + files(FormData) 동시 전송
+export async function createPostWithFiles(postJson, files, { onProgress } = {}) {
+    const fd = new FormData();
+    // @RequestPart("post")
+    fd.append("post", new Blob([JSON.stringify(postJson)], { type: "application/json" }));
+    // @RequestPart("files")
+    (files || []).forEach((f) => fd.append("files", f));
+  
+    const { data } = await api.post("/files/with-files", fd, {
+      onUploadProgress: (e) => {
+        if (onProgress && e.total) onProgress(Math.round((e.loaded * 100) / e.total));
+      },
+      // 절대 Content-Type 수동 지정 X (boundary 자동)
+    });
+    return data; // PostResponse
+  }

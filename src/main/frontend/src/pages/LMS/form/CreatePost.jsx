@@ -7,8 +7,9 @@ import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import SurveyPost from './SurveyPost';
 import {v4 as uuidv4} from "uuid";
-
-import { createSurvey } from '../../../services/postService';
+import { createSurvey, createPost } from '../../../services/postService';
+import { uploadFiles } from '../../../services/fileService';
+import { toast } from 'react-toastify';
 
 
 // CreatePost.jsx
@@ -96,9 +97,11 @@ function CreatePost() {
     detailScopeNm: "",
     surveyStart: "",     // 설문조사
     surveyEnd: "",   // 설문조사
+    files: files
   });
 
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -108,9 +111,34 @@ function CreatePost() {
   const saveSubmit = async (e) => {
     e.preventDefault();
 
-  // const payload = structuredClone
-  //   ? structuredClone({ surveyForm, formData })
-  //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
+    const formUuid = postId.current || uuidv4();
+
+    const uploads = files.length
+    ? await uploadFiles(files, {
+        onProgress: (pct) => console.log("upload:", pct + "%"),
+        formUuid
+      })
+    : [];
+
+  // 2) 게시글 JSON (File 객체 넣지 말기!)
+  const postJson = {
+    id: formData.id,
+    userSn: formData.userSn,
+    title: formData.title,
+    content: formData.content,
+    type: formData.type,
+    scope: formData.scope,
+    detailScope: formData.detailScope,
+    detailScopeNm: formData.detailScopeNm,
+    attachments: uploads.map(u => ({
+      storedFileName: u.storedFileName,
+      originalFileName: u.originalFileName,
+      size: u.size,
+      // fileSn 내려오면 그걸 써도 OK
+    })),
+    ...(formData.type === "설문조사" ? { surveyForm } : {}),
+    formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
+  };
 
   const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
@@ -118,30 +146,22 @@ function CreatePost() {
 
   const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  // console.groupCollapsed("[RecruitPost] createGroup payload");
-  // console.table(
-  //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
-  //     idx: i + 1, qid: q.qid, type: q.type,
-  //     title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
-  //   })) || []
-  // );
-  // console.groupEnd();
-
-  // console.log("[payload snapshot]", snapshot);
-  // console.log("[formData]", snapshot.formData);
-  // console.log("[surveyForm]", snapshot.surveyForm);
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.table(snapshot.formData);
 
   console.time("[RecruitPost] createGroup");
+  // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
   try {
-    // const res = await createGroup(payload);
-    const res = await createSurvey(body);
-    console.log(Object.keys(snapshot)); 
-    console.log(Object.keys(snapshot.formData));
-    console.log("[RecruitPost] createGroup response:", res);
+    const res = await (formData.type === "설문조사"
+      ? createSurvey(postJson)
+      : createPost(postJson)); // createPost는 너희 규약대로
+    console.log("saved:", res);
+    alert("저장 완료!");
   } catch (err) {
-    console.error("[RecruitPost] createGroup error:", err);
+    console.error(err);
+    toast.error(err.message);
+    alert("저장 실패");
+    // 옵션) 실패 시 formUuid로 업로드 롤백 API가 있으면 호출
   }
 };
 
