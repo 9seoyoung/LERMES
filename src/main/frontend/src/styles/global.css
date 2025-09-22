@@ -329,6 +329,11 @@ footer > div:hover {
   overflow: hidden;
 }
 
+.limitedInput {
+  width: 30px;
+  max-width: 80px;
+}
+
 .boardPage{
   display: flex;
   flex-direction: column;

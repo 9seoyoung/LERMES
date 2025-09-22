@@ -36,9 +36,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   min-width: max-content;
 }
 
-.inputSet .limitedInput {
+.inputSet .limitedInput input {
   width: 30px;
   max-width: max-content;
+}
+
+.inputSet .inputLabel {
+  font-size: 1.2rem;
 }
 
 /* 밑줄 */

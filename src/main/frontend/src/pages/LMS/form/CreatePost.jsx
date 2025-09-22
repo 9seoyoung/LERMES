@@ -96,6 +96,7 @@ function CreatePost() {
     detailScopeNm: "",
     surveyStart: "",     // 설문조사
     surveyEnd: "",   // 설문조사
+    files: files
   });
 
 
