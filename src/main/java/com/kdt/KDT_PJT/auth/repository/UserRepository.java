@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String username);
 
+    Optional<List<User>> findByCohortSn(Long cohortSn);
 
     List<User> findByEnabledTrueAndCohortSnIsNotNull();
     List<User> findByEnabledTrueAndCompanySnIsNotNullAndCohortSnIsNotNull();

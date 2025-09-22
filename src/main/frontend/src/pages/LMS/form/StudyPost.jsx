@@ -1,71 +1,20 @@
 import React, { useEffect, useId, useState, useRef } from 'react'
 import Dropdown from '../../../components/ui/Dropdown'
 import layoutStyles from "../../../styles/layout.module.css"
-import {FileUpload, FileList } from '../../../components/ui/UiComp';
+import {FileUpload, FileList, FormInput } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
-import SurveyPost from './SurveyPost';
 import {v4 as uuidv4} from "uuid";
+import { createPost } from '../../../services/postService';
 
-import { createSurvey } from '../../../services/postService';
-
-
-// CreatePost.jsx
-// ...import 생략
-
-function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef } = props;
-  switch (type) {
-    case "공지사항":
-    case "자료실":
-    case "학습일지":
-    case "FAQ":
-      return (
-          <ArticlePost
-              postId={postId.current}
-              domFormId={domFormId}
-              handleChange={handleChange}
-              formData={formData}
-              FileList={FileList}
-              files={files}
-              setFiles={setFiles}
-          />
-      );
-    case "설문조사":
-      return (
-          <SurveyPost
-              postId={postId.current}
-              domFormId={domFormId}
-              handleChange={handleChange}
-              formData={formData}
-              surveyForm={surveyForm}
-              setSurveyForm={setSurveyForm}
-              FileList={FileList}
-              files={files}
-              setFiles={setFiles}
-              questionAddRef = {questionAddRef}
-              containerRef={containerRef}
-          />
-      );
-    default:
-      return (
-          <ArticlePost
-              postId={postId.current}
-              domFormId={domFormId}
-              handleChange={handleChange}
-              formData={formData}
-              FileList={FileList}
-              files={files}
-              setFiles={setFiles}
-          />
-      );
-  }
-}
+import SurveyPost from './SurveyPost';
+import { DateTimeInput } from '../../../components/ui/UiComp';
 
 
+// StudyPost.jsx
 
-function CreatePost() {
+function StudyPost() {
   const domFormId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
@@ -77,12 +26,6 @@ function CreatePost() {
 
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
-
-  // 설문 폼 (초기 페이지 하나 생성)
-  const [surveyForm, setSurveyForm] = useState({
-    id: postId.current,
-    pages: [{ id: uuidv4(), questions: [] }],
-  });
 
   // 일반 게시글
   const [formData, setFormData] = useState({
@@ -113,10 +56,10 @@ function CreatePost() {
   //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
   const snapshot = structuredClone
-    ? structuredClone({ surveyForm, formData })
-    : JSON.parse(JSON.stringify({ surveyForm, formData }));
+    ? structuredClone({ formData })
+    : JSON.parse(JSON.stringify({ formData }));
 
-  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
+  const body = { ...snapshot.formData };
 
   // console.groupCollapsed("[RecruitPost] createGroup payload");
   // console.table(
@@ -136,7 +79,7 @@ function CreatePost() {
   console.time("[RecruitPost] createGroup");
   try {
     // const res = await createGroup(payload);
-    const res = await createSurvey(body);
+    const res = await createPost(body);
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
@@ -158,20 +101,18 @@ function CreatePost() {
 
   return (
     <div className="boardPage">
-      <h2>게시판</h2>
-      <div className={formData?.type === "설문조사" ? "limitedHeightBox" : "BigListBox"}>
+      <h2>수강생 관리</h2>
+      <div className="limitedHeightBox" style={{height: "706px"}}>
         <h4 style={{ fontWeight: "500" }}>{formData.type} 등록하기</h4>
 
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
           <div className="formArea_L">
-            <PostStatus
+            <InterviewForm
                 type={formData.type}
                 postId={postId.current}
                 domFormId={domFormId}
                 handleChange={handleChange}
                 formData={formData}
-                surveyForm={surveyForm}
-                setSurveyForm={setSurveyForm}
                 FileList={FileList}
                 files={files}
                 setFiles={setFiles}
@@ -187,7 +128,7 @@ function CreatePost() {
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
                   {(userAuth === 2 || userAuth === 3) ?
                       <>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "공지사항" }))}>공지사항</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "FAQ" }))}>FAQ</p>
@@ -197,32 +138,30 @@ function CreatePost() {
                   : ""}
                   {(userAuth === 4 || userAuth === 5) ? (
                     <>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
                     </>
                   ) : ""}
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
               </div>
-
+              {formData.type === "면담신청" ? 
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체" }))}>전체</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
                 </Dropdown>
                 <input type="hidden" name="scope" value={formData.scope} />
-              </div>
+              </div> 
+              :
+              null}
 
-              {formData.scope === "소속그룹" && (
+              {formData.scope === "관리자" && (
                 <div className="dropSet" style={{ zIndex: "1" }}>
                   <p>하위 그룹</p>
                   <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
-                    {hortlist.map((h, idx) => (
+                    {hortlist.map((h, idx) => ( //hortList대신 관리자 list
                       <p
                         className={layoutStyles.subMenuList}
                         key={idx}
@@ -231,7 +170,8 @@ function CreatePost() {
 
                         }}
                       >
-                        {h.cohortNm}
+                        {h.cohortNm //관리자 이름 표시 
+                        }
                       </p>
                     ))}
                   </Dropdown>
@@ -242,33 +182,6 @@ function CreatePost() {
 
             <div className="r_bottom">
               <FileUpload files={files} setFiles={setFiles} />
-              <ul>
-                {surveyForm.pages.map((page) => (
-                    <React.Fragment key={page.id}>
-                      {page.questions.map((q, i) => (
-                          <li key={q.qid}>
-                            <button
-                              type="button"
-                              className="specificBtn"
-                              onClick={() =>
-                              {
-                                // r_bottom 버튼 onClick 직전에 찍어봐
-                                console.log('child root?', qAddRef.current?.focusQuestion ? 'ok' : 'no');
-
-                                qAddRef.current?.focusQuestion(q.qid, {
-                                behavior: "smooth",
-                                offsetTop: 8, // 고정 헤더 있으면 px 조절
-                              })}}
-                            >
-                              {q.title?.trim()
-                              ? `Q${i + 1} ${q.title}`
-                              : `Q${i + 1} (제목 없음)`} · {q.type}
-                            </button>
-                          </li>
-                      ))}
-                    </React.Fragment>
-                ))}
-              </ul>
               <div className="save_box">
                 <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button>
                 <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>저장</button>
@@ -281,4 +194,60 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default StudyPost;
+
+
+function InterviewForm({
+  domFormId, handleChange, formData, files, formId, setFiles,
+}) {
+  // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
+  // const firstPage = surveyForm.pages[0];
+  const qContainerRef = useRef(null);
+
+  return (
+    <>
+      <div className='formHeader'>
+        <div className='inputSet'>
+          <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
+          <input
+            id={`${domFormId}_title`}
+            className='formInput'
+            name='title'
+            placeholder='제목을 입력하세요.'
+            value={formData.title}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className='inputSet inputFlex1'>
+          <DateTimeInput type="date" labelNm="작성자" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
+          <DateTimeInput type="date" labelNm="담당자" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" ></DateTimeInput>
+        </div>
+      </div>
+
+      <div className="formContent" ref={qContainerRef}>
+            <textarea                 
+                id={`${formId}_content`}
+                name="content"
+                className='formTextarea'
+                placeholder='본문을 입력하세요.'
+                value={formData.content}
+                onChange={handleChange}>
+            </textarea>
+            <div className='inputSet'>
+          </div>
+          <div className='inputSet'>
+            <div className='inputSet inputFlex1'>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" ></DateTimeInput>
+              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></FormInput>
+              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" ></FormInput>
+              
+            </div>
+          </div>
+              <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
+              <FileList files={files} setFiles={setFiles}></FileList>
+      </div>
+      </>
+  );
+}

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 
 import NoticeList from '../../components/module/NoticeList';
 import CalSched from '../../components/ui/CalSched';
 
 // 페이지찾기 - 수강생 메인
 export default function StdHome() {
-    const [selectedDate, setSelectedDate] = useState(null); // 공유할 상태
+    // const [selectedDate, setSelectedDate] = useState(null); // 공유할 상태
   
   return (
     <div className="mainCont_Lms_Row">

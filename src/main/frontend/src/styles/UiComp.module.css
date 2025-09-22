@@ -1,15 +1,40 @@
 /* 인풋 */
-.input {
-  width: 385px;
-  height: 32px;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  padding: 8px 12px;
-  font-size: 1.8rem;
-  box-sizing: border-box;
-  outline: none;
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* 기본 아이콘 숨김 (필요할 때만) */
 }
 
+
+.inputSet {
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.input {
+  display: flex;
+  justify-content: space-between;
+  height: 32px;
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  color: #acacac;
+  outline: none;
+  padding: 0 12px;
+}
+
+.input:focus {
+  color: #222;
+  border: 2px solid #222;
+}
+
+.inputLabel {
+  font-size: 1.4rem;
+  min-width: max-content;
+}
 
 /* 밑줄 */
 .underline {
@@ -456,34 +481,61 @@ color: #000;
   background-color: #e1f1ff;
   display: flex;
   gap: 16px;      
-  padding: 8px 12px;
   border-radius: 6px;
+  padding: 4px 0;
   align-items: center;
 }
 
-.row {
-  width: 100%;
-  display: flex;
-  padding: 8px 12px;
-  border-radius: 6px;
+.gridRow {
+  display: grid;
+  grid-template-columns: var(--cols);
+  column-gap: var(--gap, 8px);
   align-items: center;
-  gap: 12px;
+  width: 100%;
+}
+
+.row {
   background-color: #f6f6f6;
+  border-radius: 4px;
+  height: 3.2rem;
 }
 
 .row:hover {
   background-color: #D9D9D9;
+  border-radius: 4px;
 }
 
 .row:active, .row:active .cell {
   background-color: #ACACAC;
+  border-radius: 4px;
   color: #f6f6f6;
 }
 
-.cell {
-  display: flex;
-  flex: 1;       
-  font-size: 14px;
+.editRow {
+  background-color: #f6f6f6;
+  border-radius: 4px;
   align-items: center;
   justify-content: center;
-  }
+  height: 3.2rem;
+}
+
+.editRow input {
+  border: none;
+  padding: 0 12px;
+  text-align: center;
+  outline: none;
+  border-radius: 4px;
+}
+
+.cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+  

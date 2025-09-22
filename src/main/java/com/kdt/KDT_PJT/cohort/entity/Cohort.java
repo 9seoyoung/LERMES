@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Setter
@@ -47,8 +48,9 @@ public class Cohort {
     @Column(name = "COHORT_CATE")
     private QuestionType cohortCate;
 
+    @Column(name = "ATTEND_START_TM")
+    private LocalTime attendStartTm;
 
-    // Getter, Setter 생략 (롬복 사용 가능)
-
-    // 생성자, toString 등 필요시 추가
+    @Column(name = "ATTEND_END_TM")
+    private LocalTime attendEndTm;
 }

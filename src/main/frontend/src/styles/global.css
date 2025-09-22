@@ -1,6 +1,6 @@
 /* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
 
-/* 구글에서 가져온 폰트 - Noto Sans KR */ 
+/* 구글에서 가져온 폰트 - Noto Sans KR */
 
 /* 색상 클래스 */
 
@@ -20,7 +20,7 @@ html {
     font-size: clamp(8px, 0.8vw, 12px);
     width: 100%;
     height: 100%;
-    background-color: #d9d9d9;  
+    background-color: #d9d9d9;
     color: #222;
 }
 
@@ -32,7 +32,7 @@ body {
   padding: 0 24px;
 }
 
-a { 
+a {
   display: inline-flex;
   color: inherit;
   text-decoration: none;
@@ -317,12 +317,28 @@ footer > div:hover {
   flex: 1;
 }
 
+.limitedHeightBox {
+  width: 100%;
+  height: 618px;
+  display: flex;
+  background-color: #FCFEFF;
+  flex-direction: column;
+  padding: 20px 12px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 .boardPage{
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
 }
+
+.opacityBtn{
+  opacity: 60%;
+}
+
 
 .createBtn {
   background: #FCFEFF;
@@ -331,10 +347,25 @@ footer > div:hover {
   box-shadow: 2px 2px 2px #00000025;
 }
 
+.manageBtn {
+  padding :0 4px;
+  border-radius: 4px;
+  opacity: 60%;
+}
+
+.manageBtn:hover {
+  opacity: 100%;
+}
+
+.manageBtn:active {
+  scale: 0.96;
+}
+
 .createBtn:hover {
   cursor: pointer;
-  background: #ebeff4; 
+  background: #ebeff4;
   color: #333;
+  opacity: 100%;
 }
 
 .save_box {
@@ -352,6 +383,8 @@ footer > div:hover {
 .saveBtn {
   color: #f6f6f6;
   background-color: #ACACAC;
+  border-radius: 4px;
+  padding: 2px 12px;
 }
 
 .tempBtn {
@@ -509,7 +542,7 @@ footer > div:hover {
 }
 
 .ftList_L li:hover {
-  background: #ebeff4; 
+  background: #ebeff4;
   color: #333;
 }
 
@@ -566,6 +599,8 @@ footer > div:hover {
 .formAreaRow {
   display: flex;
   flex: 1;
+  height: 100%;
+  overflow: hidden;
   gap: 12px;
 }
 
@@ -573,8 +608,9 @@ footer > div:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px
-  ;
+  height: 100%;
+  flex-wrap: nowrap;
+  gap: 16px;
 }
 
 .formArea_R {
@@ -620,6 +656,7 @@ footer > div:hover {
   min-width: max-content;
   justify-content: center;
   width: 64px;
+  min-width: max-content;
   height: 100%;
 }
 
@@ -665,14 +702,17 @@ footer > div:hover {
 .formContent {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 100%;
+  overflow-y: auto;
   border-radius:4px;
   gap: 16px;
+  justify-content: space-between;
 }
 
 .inputSet {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   height: 36px;
   align-items: center;
   gap: 4px;
@@ -680,8 +720,17 @@ footer > div:hover {
 }
 
 .inputFlex1{
+  display: flex;
+  gap: 12px;
   flex: 1;
 }
+
+.inputTitleSet{
+  min-width: 400px;
+  max-width: 70%;
+}
+
+
 
 .formLabel{
   justify-content: center;
@@ -690,7 +739,11 @@ footer > div:hover {
   border-radius: 8px;
   width: 80px;
   display: flex;
-  height: 36px;
+  height: 100%;
+  max-height: 4.4rem;
+  font-size: 1.2rem;
+  padding: 4px 12px;
+  gap: 4px;
 }
 
 .formInput, .addfileList {
@@ -743,7 +796,6 @@ footer > div:hover {
   display: flex;
   flex-direction: column;
   padding: 16px 12px;
-  flex: 1;
   border: 1px solid #d9d9d9;
   border-radius: 8px;
   gap: 16px;
@@ -758,6 +810,7 @@ footer > div:hover {
   border-radius: 8px 8px 0 0;
   font-weight: 800;
   gap: 4px;
+  outline: none;
 }
 
 .questionAdd:hover {
@@ -795,7 +848,7 @@ footer > div:hover {
   font-weight: bold;
   color: #d9d9d9;
   outline: none;
-  
+
 }
 
 .questionTitle:focus {
@@ -803,10 +856,13 @@ footer > div:hover {
 }
 
 .questionTypeBox .dropSet, .questionTypeBox .dropSet button{
-  width: 12rem;
-  height: 2.4rem;
-  border: 1px solid #dedede;
+  width: 16rem;
+  height: 2.8rem;
   border-radius: 4px;
+}
+.questionTypeBox .dropSet button {
+  border: 1px solid #dedede;
+  padding: 8px 12px;
 }
 
 
@@ -832,6 +888,14 @@ footer > div:hover {
   color: #d9d9d9;
   font-size: 1.8rem;
   font-weight: 400;
+}
+
+.questionContainer{
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  flex: 1;
+  gap: 16px;
 }
 
 .qCont > .qTitle > input {
