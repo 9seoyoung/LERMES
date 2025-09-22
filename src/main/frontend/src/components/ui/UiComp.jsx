@@ -104,7 +104,7 @@ export function FormInput(props) {
   return (
     <div className={styles.inputSet}>
       <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addLabelStyle}`}>{labelNm}</label>
-      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete='false' className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={false} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }
