@@ -13,8 +13,8 @@ public class CohortConverter {
 
         // entity.setCohortSn(null); // id(UUID)와 cohortSn(Long) 타입 불일치, 보통 DB 생성 시 할당
 
-        entity.setCohortNm(dto.getTitle());
-        entity.setCrclmNm(dto.getGroupName());
+        entity.setCohortNm(dto.getGroupName());
+        entity.setCrclmNm(dto.getTitle());
         String content = dto.getContent();
         if (content == null || content.trim().isEmpty()) {
             entity.setCrclmCn("{}");
@@ -50,8 +50,8 @@ public class CohortConverter {
 
         // dto.setId(null); // UUID 값은 별도 로직 필요
 
-        dto.setTitle(entity.getCohortNm());
-        dto.setGroupName(entity.getCrclmNm());
+        dto.setTitle(entity.getCrclmNm());
+        dto.setGroupName(entity.getCohortNm());
         dto.setContent(entity.getCrclmCn());
         dto.setUserSn(entity.getCoSn());
         dto.setSurveyStart(entity.getRecruitBgngDt());
