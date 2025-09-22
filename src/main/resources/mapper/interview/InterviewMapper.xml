@@ -19,6 +19,7 @@
     <select id="getMyInterviewRequests" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
         /*
         QueryID : com.kdt.mapper.interview.getMyInterviewRequests
+        Description : 배정되지 않은 면담을 보여준다.
         Rule:
         - 대표(2): ITV_PIC_AUTHRT = 2
         - 직원(3): ITV_PIC_AUTHRT = 3
@@ -39,8 +40,10 @@
         i.PIC_CAL_SN,
         i.APLCNT_CAL_SN
         FROM TB_INTERVIEW i
-        WHERE i.COHORT_SN = #{cohortSn}
-        AND i.ITV_PIC_AUTHRT = #{roleType}
+        WHERE 1=1
+            AND i.COHORT_SN = #{cohortSn}
+            AND i.ITV_PIC_AUTHRT = #{roleType}
+            AND i.ITV_PRNMNT_DT IS NULL -- 이거 값 있으면 면담 배정 끝난거임
         <!-- 방어적으로 roleType 허용 범위 체크를 SQL로도 하고 싶다면 아래 주석 해제
         AND #{roleType} IN (2,3,4)
         -->

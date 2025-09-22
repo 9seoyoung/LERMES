@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,6 +33,7 @@ public class InterviewController {
     CmmnDao dao;
 
     private final InterviewService interviewService;
+    private final CalendarService calendarService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -108,6 +110,7 @@ public class InterviewController {
         return resp;
     }
 
+    @Transactional                      //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
     @PutMapping("/confirm/{itvSn}") // 면담 확정
     public void confirmInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,
@@ -148,7 +151,7 @@ public class InterviewController {
         int isUpdated = interviewService.confirmInterview(params); // 업데이트
         if (isUpdated == 1) {
             System.out.println("확정됨, 캘린더 일정 생성");
-            System.out.println("params => "+params);
+            System.out.println("params => " + params);
         }else{
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 확정되었거나 존재하지 않는 면담입니다.");
         }
@@ -156,12 +159,50 @@ public class InterviewController {
 
         System.out.println("itvSn=" + params.get("itvSn"));
         System.out.println(params.get("itvSn").getClass().getName());
-        CmmnMap m = new CmmnMap();
+        System.out.println("params = " + params);
+        CmmnMap m = new CmmnMap(); //면담 신청자(APLCNT), 면담 담당자(PIC)에 대해서 면담 번호 가져옴.
         m.put("itvSn",params.get("itvSn"));
         m = dao.selectOne("com.kdt.mapper.interview.selectInterviewParticipants",m);
         System.out.println("m = " + m);
+        CmmnMap aplcnt = new CmmnMap();
+        CmmnMap pic = new CmmnMap();
+        aplcnt.put("userSn",m.get("itvAplcntSn")); // 신청자의 SN
+//        aplcnt.put("eventNm",)
+
         //TODO 이제 여기서 m = [ITV_PIC_SN=314, ITV_APLCNT_SN=312] 이런거 이용해서
         // 캘린더 각자 만들고 내용도 위의 params이용해서 집어넣기 ㄱㄱ
+        // 작성해야할쿼리 -> calendar service가서
+//        INSERT INTO TB_CALENDAR
+//                (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
+//        /* 1행: 담당자(PIC) */
+//        SELECT
+//        up.OGDP_COHORT_SN,
+//      #{itvPrnmntDt}, #{itvPrnmntDt},
+//        CONCAT('면담 일정 ', ua.USER_NM, ' -> ', up.USER_NM),
+//                up.USER_SN,
+//                1
+//        FROM TB_INTERVIEW i
+//        JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
+//        JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
+//        WHERE i.ITV_SN = #{itvSn}
+
+        //2번째
+//        INSERT INTO TB_CALENDAR
+//                (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
+//        SELECT
+//        ua.OGDP_COHORT_SN,
+//      #{itvPrnmntDt}, #{itvPrnmntDt},
+//        CONCAT('면담 일정 ', ua.USER_NM, ' -> ', up.USER_NM),
+//                ua.USER_SN,
+//                1
+//        FROM TB_INTERVIEW i
+//        JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
+//        JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
+//        WHERE i.ITV_SN = #{itvSn};
+
+        //이거 넣어서 캘린더 만들어버리고 각각 받아온 sn 한번에 itvSn에 해당하는 인터뷰 행에 집어넣기
+
+//
 
     }
 
