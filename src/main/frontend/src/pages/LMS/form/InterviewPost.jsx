@@ -7,6 +7,8 @@ import {v4 as uuidv4} from "uuid";
 import { createInterview, createInterviewMemo } from '../../../services/postService';
 
 import { DateTimeInput } from '../../../components/ui/UiComp';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 // InterviewPost.jsx
@@ -16,20 +18,21 @@ function InterviewPost() {
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const userAuth = user.USER_AUTHRT_SN;
-  // const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [postType, setPostType] = useState("면담신청");
 
   const [files, setFiles] = useState([]);
 
   // 일반 게시글
   const [formData, setFormData] = useState({
-    __note: "id: 게시글uuid, userSn: 작성자 유저SN, itvAplyTtl: 제목, itvAplyCn: textarea 내용, type: 면담신청 or 면담요청 or 면담기록, scope: 공개범위, interviewDate: 면담확정일, interviewTime: 면담예정시간, author: 작성자 유저이름, mento: 담당자, comment: 수신측 기타요청메모",
+    __note: "id: 게시글uuid, userSn: 작성자 유저SN, itvAplyTtl: 제목, itvAplyCn: textarea 내용, type: 면담신청 or 면담요청 or 면담기록, itvPicAuthrt: 공개범위, interviewDate: 면담확정일, interviewTime: 면담예정시간, author: 작성자 유저이름, mento: 담당자, comment: 수신측 기타요청메모",
     formUuid: postId.current,
     userSn: user.USER_SN,
     itvAplyTtl: "",
     itvAplyCn: "",
     type: postType,
-    itvPicAuthrt: null,
+    itvPicAuthrt: "", //공개범위
     interviewDate: "",     // 면담확정일
     interviewTime: "", //면담예정시간
     author: user?.USER_NM, // 작성자
@@ -60,6 +63,7 @@ function InterviewPost() {
 
 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -76,27 +80,15 @@ function InterviewPost() {
     ? structuredClone({ formData })
     : JSON.parse(JSON.stringify({ formData }));
 
-  const body = { ...snapshot.formData };
+    const body = { ...snapshot.formData };
+    console.log("[will send to server]", JSON.stringify(body, null, 2));
+    console.table(snapshot.formData);
+    console.time("[RecruitPost] createGroup");
 
-  // console.groupCollapsed("[RecruitPost] createGroup payload");
-  // console.table(
-  //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
-  //     idx: i + 1, qid: q.qid, type: q.type,
-  //     title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
-  //   })) || []
-  // );
-  // console.groupEnd();
-
-  // console.log("[payload snapshot]", snapshot);
-  // console.log("[formData]", snapshot.formData);
-  // console.log("[surveyForm]", snapshot.surveyForm);
-  console.log("[will send to server]", JSON.stringify(body, null, 2));
-  console.table(snapshot.formData);
-
-  console.time("[RecruitPost] createGroup");
-  try {
+   try {
     // const res = await createGroup(payload);
     const res = await createInterview(body);
+    toast.success("신청등록 되었습니다.")
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
@@ -176,7 +168,10 @@ function InterviewPost() {
               <FileUpload files={files} setFiles={setFiles} />
               <div className="save_box">
                 <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button>
-                <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>저장</button>
+                <button className="basicBtn saveBtn" type="button" onClick={() => {
+                                                                                    saveSubmit();
+                                                                                    navigate('/stdHome/studySched');
+                                                                                  }}>{loading ? "저장 중..." : "저장"}</button>
               </div>
             </div>
           </div>
