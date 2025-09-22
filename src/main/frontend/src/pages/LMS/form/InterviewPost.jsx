@@ -154,11 +154,11 @@ function InterviewPost() {
               {formData.type === "면담신청" ? 
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
-                <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "2" }))}>대표</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "3" }))}>직원</p>
+                <Dropdown className="dropset_dd" label={formData.itvPicAuthrt || "---- 필수 선택 ----"}>
+                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "대표" }))}>대표</p>
+                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "직원" }))}>직원</p>
                 </Dropdown>
-                <input type="hidden" name="scope" value={formData.scope} />
+                <input type="hidden" name="scope" value={formData.itvPicAuthrt} />
               </div> 
               :
               null}

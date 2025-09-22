@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.interview.service;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
+import com.kdt.KDT_PJT.cmmn.Enum.AuthEnums;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
@@ -49,16 +50,15 @@ public class InterviewService {
 
         //itvPicAuthrt 값을 문자열로 가져와서 Integer로 변환
         String authrtString = (String) params.get("itvPicAuthrt");
-        Integer authrtCode = null;
-        if ("대표".equals(authrtString)) {
-            authrtCode = 2;
-        } else if ("직원".equals(authrtString)) {
-            authrtCode = 3;
-        } else if ("강사".equals(authrtString)) {
-            authrtCode = 4;
-        } else {
-            // 변환할 수 없는 값일 경우 예외 처리
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "유효하지 않은 면담 담당자 권한입니다.");
+
+        Integer authrtCode;
+        try {
+            // 공통 Enum 클래스에서 코드 변환
+            authrtCode = AuthEnums.getCodeByName(authrtString);
+            params.put("itvPicAuthrt", authrtCode);
+        } catch (IllegalArgumentException e) {
+            // getCodeByName()에서 던진 예외를 잡아서 처리
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
         System.out.println("면담대상자 authrtCode = " + authrtCode);
         // 2) 변환된 Integer 값을 다시 CmmnMap에 넣기
@@ -75,11 +75,11 @@ public class InterviewService {
         return result;
     }
 
-    @PreAuthorize("hasAnyRole('TENANT','EMPLOYEE','INSTRUCTOR')")
-    @Transactional
-    public List<CmmnMap> getMyInterviewRequests(Integer pathCohortSn) {
 
-        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequests");
+    @Transactional
+    public List<CmmnMap> getMyInterviewRequests(CmmnMap params) { //params에 where에 쓸거 실려옴
+//        params.put("pathCohortSn",pathCohortSn); // params에 실어서 보내기
+        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequests", params);
         return paramsList;
     }
 }

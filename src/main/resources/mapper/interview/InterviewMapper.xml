@@ -16,22 +16,36 @@
                  )
     </insert>
 
-    <select id="getMyInterviewRequest" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+    <select id="getMyInterviewRequests" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
         /*
-        QueryID : com.kdt.mapper.goods.getGoodsList
-        Description : 상품 목록 조회
-        작성자 : A팀 누군가
+        QueryID : com.kdt.mapper.interview.getMyInterviewRequests
+        Rule:
+        - 대표(2): ITV_PIC_AUTHRT = 2
+        - 직원(3): ITV_PIC_AUTHRT = 3
+        - 강사(4): ITV_PIC_AUTHRT = 4
+        - 공통: COHORT_SN = cohortSn  -> 여기 샵 괄호 이런거 쓰면 에러뜸 사용 ㄴㄴ
         */
         SELECT
-        GDS_SN
-        , GDS_NM
-        , GDS_CAT_CD
-        , GDS_PRC
-        , GDS_STK_QTY
-        , GDS_LT
-        , GDS_SFTY_STK_QTY
-        <!-- , CRTR_UNIT_CD -->
-        FROM teamA_db.TB_GOODS
+        i.ITV_SN,
+        i.COHORT_SN,
+        i.ITV_APLY_TTL,
+        i.ITV_APLY_CN,
+        i.ITV_APLY_DT,
+        i.ITV_PIC_AUTHRT,
+        i.ITV_PIC_SN,
+        i.ITV_APLCNT_SN,
+        i.ITV_PRNMNT_DT,
+        i.ITV_PLC,
+        i.PIC_CAL_SN,
+        i.APLCNT_CAL_SN
+        FROM TB_INTERVIEW i
+        WHERE i.COHORT_SN = #{cohortSn}
+        AND i.ITV_PIC_AUTHRT = #{roleType}
+        <!-- 방어적으로 roleType 허용 범위 체크를 SQL로도 하고 싶다면 아래 주석 해제
+        AND #{roleType} IN (2,3,4)
+        -->
+        ORDER BY i.ITV_APLY_DT DESC
     </select>
+
 
 </mapper>
