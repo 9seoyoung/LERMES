@@ -712,6 +712,7 @@ footer > div:hover {
 .inputSet {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   height: 36px;
   align-items: center;
   gap: 4px;
@@ -719,14 +720,17 @@ footer > div:hover {
 }
 
 .inputFlex1{
+  display: flex;
   gap: 12px;
   flex: 1;
 }
 
 .inputTitleSet{
-  width: 70%;
   min-width: 400px;
+  max-width: 70%;
 }
+
+
 
 .formLabel{
   justify-content: center;

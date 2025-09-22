@@ -31,7 +31,7 @@ function InterviewPost() {
     userSn: user.USER_SN,
     title: "",
     content: "",
-    type: "",
+    type: "면담신청",
     scope: "",
     interviewDate: "",     // 면담확정일
     interviewTime: "", //면담예정시간
@@ -188,8 +188,8 @@ function InterviewForm({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
-          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="menoto" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="menoto" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
         </div>
       </div>
 
@@ -206,10 +206,10 @@ function InterviewForm({
           </div>
           <div className='inputSet'>
             <div className='inputSet inputFlex1'>
-              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel" disabled={true}></DateTimeInput>
-              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" disabled={true}></DateTimeInput>
-              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
-              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addStyle="formLabel" disabled={true}></FormInput>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
+              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
+              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
               
             </div>
           </div>
