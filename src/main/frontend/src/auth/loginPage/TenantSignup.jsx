@@ -4,6 +4,7 @@ import { requestEmailCode, signupTenant } from '../authService.js';
 import styles from '../../styles/SignUp.module.css';
 import { useAccount } from '../AuthContext.jsx';
 import FilePreview from '../../components/ui/FilePreview.jsx';
+import { toast } from 'react-toastify';
 
 export default function TenantSignup() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export default function TenantSignup() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      alert('회원가입이 완료되었습니다!');
+      toast.success("회원가입 완료!")
       const redirectLoc = `/${me?.HOME_PATH}` || '/';
       navigate(redirectLoc, { replace: true });
     } catch (e) {
