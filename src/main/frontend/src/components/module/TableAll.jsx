@@ -8,7 +8,7 @@ import { BlueCheckbox } from '../../components/ui/UiComp';
 import styles from '../../styles/TableAll.module.css';
 
 export default function TableAll() {
-  const [manageState, setManageState] = useState(false);
+  /* const [manageState, setManageState] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     // formData 초기값
@@ -36,7 +36,7 @@ export default function TableAll() {
     const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  }; */
 
   return (
         <div>
@@ -148,7 +148,7 @@ const [manageState, setManageState] = useState(false);
             apiData={[{no: 1, name: "아무개", email: "abcd@example.com", tel: "010-xxxx-xxxx", course: "GSITM  부트캠프 풀스택 과정 10기", status: "교육중", completion: "N",  level: "수강생", access: "N" }]}
             gridTemplate="1fr 1fr 3fr 2fr 4fr 1fr 1fr 1fr 1fr"
             formData={formData}
-            type = {['text', 'text', 'text', 'date', 'text', 'text']}
+            type = {['text', 'text', 'email', 'tel', 'text', 'text', 'text', 'text', 'text']}
           />
           :
           <ListTable
@@ -262,7 +262,7 @@ const [manageState, setManageState] = useState(false);
             apiData={[{check: <input type="checkbox" /> , no: 1, name: "10기", course: "풀스택", recPeriod: "25.04.21 ~ 25.10.20", enrPeriod: "25.04.21 ~ 25.10.20", location: "윙스타워 B동 1103호", instructor: "난강사", user: "난직원", status: "모집예정", form: <button>수정</button> }]}
             gridTemplate="0.8fr 0.5fr 0.8fr 1fr 2.5fr 2.5fr 2.5fr 0.8fr 0.8fr 1fr 1.5fr"
             formData={formData}
-            type = {['text', 'text', 'text', 'date', 'text', 'text']}
+            type = {['text', 'text', 'text', 'text', 'date','date','text','text', 'text', 'text', 'text' ]}
           />
           :
           <ListTable
@@ -300,7 +300,7 @@ const [manageState, setManageState] = useState(false);
             apiData={[{no: 1, fileType: "출결확인서", name: "아무개", group: "10기", date: "25.09.09", number: "ATD250820_01" }]}
             gridTemplate="1fr 1fr 1fr 1fr 1fr 2fr"
             formData={formData}
-            type = {['text', 'text', 'text', 'date', 'text', 'text']}
+            type = {['text', 'text', 'text', 'text', 'date', 'text']}
           />
           :
           <ListTable
