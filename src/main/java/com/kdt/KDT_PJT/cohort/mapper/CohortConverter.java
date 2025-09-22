@@ -1,10 +1,13 @@
 package com.kdt.KDT_PJT.cohort.mapper;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kdt.KDT_PJT.cohort.dto.CohortDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
 import com.kdt.KDT_PJT.cohort.entity.QuestionType;
 //상준이 등장
 public class CohortConverter {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static Cohort toEntity(CohortDto dto) {
         if (dto == null) return null;
@@ -15,19 +18,28 @@ public class CohortConverter {
 
         entity.setCohortNm(dto.getGroupName());
         entity.setCrclmNm(dto.getTitle());
-        String content = dto.getContent();
-        if (content == null || content.trim().isEmpty()) {
-            entity.setCrclmCn("{}");
-        } else {
-            entity.setCrclmCn(content);
-        }
+//        String content = dto.getContent();
+//        if (content == null || content.trim().isEmpty()) {
+//            entity.setCrclmCn("{}");
+//        } else {
+//            entity.setCrclmCn(content);
+//        }
+//        entity.setCrclmCn(dto.getSurveyForm());
         entity.setCoSn(dto.getUserSn());
         entity.setRecruitBgngDt(dto.getSurveyStart());
         entity.setRecruitEndDt(dto.getSurveyEnd());
         entity.setCrclmBgngYmd(dto.getStartDate());
         entity.setCrclmEndYmd(dto.getEndDate());
         entity.setCohortSttsNm(dto.getScope());
-
+//        추가
+        if (dto.getSurveyForm() != null) {
+            try {
+                String jsonStr = objectMapper.writeValueAsString(dto.getSurveyForm());
+                entity.setSurveyForm(jsonStr);
+            } catch (Exception e) {
+                throw new RuntimeException("surveyForm 직렬화 실패", e);
+            }
+        }
         // String -> Enum 변환
         if (dto.getType() != null) {
             try {
@@ -52,19 +64,32 @@ public class CohortConverter {
 
         dto.setTitle(entity.getCrclmNm());
         dto.setGroupName(entity.getCohortNm());
-        dto.setContent(entity.getCrclmCn());
+//        ㅈㅅ 필요없는 칼럼 보낸듯?
+//        dto.setContent(entity.getCrclmCn());
         dto.setUserSn(entity.getCoSn());
         dto.setSurveyStart(entity.getRecruitBgngDt());
         dto.setSurveyEnd(entity.getRecruitEndDt());
         dto.setStartDate(entity.getCrclmBgngYmd());
         dto.setEndDate(entity.getCrclmEndYmd());
         dto.setScope(entity.getCohortSttsNm());
+//        추가
+        if (entity.getSurveyForm() != null) {
+            try {
+                JsonNode node = objectMapper.readTree(entity.getSurveyForm());
+                dto.setSurveyForm(node);
+            } catch (Exception e) {
+                throw new RuntimeException("surveyForm 역직렬화 실패", e);
+            }
+        }
 
-        // Enum -> Stringt 변환
+
+        // Enum -> String 변환
         dto.setType(entity.getCohortCate() == null ? null : entity.getCohortCate().name());
 
         dto.setClassStart(entity.getAttendStartTm());
         dto.setClassEnd(entity.getAttendEndTm());
+
+
 
         return dto;
     }

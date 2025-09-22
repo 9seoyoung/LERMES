@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Map;
 
 @Data @Getter
 @Setter
@@ -26,6 +27,7 @@ public class CohortDto {
     private LocalDate endDate;
     private LocalTime classStart;
     private LocalTime classEnd;
+    private com.fasterxml.jackson.databind.JsonNode surveyForm;
 
     // 기본 생성자, getter/setter 생략 가능 (롬복 사용 가능)
 }

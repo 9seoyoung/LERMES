@@ -1,10 +1,12 @@
 package com.kdt.KDT_PJT.cohort.dto;
 
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @Data @Getter
 @Setter
@@ -14,7 +16,7 @@ public class CohortListDto {
 
     private String cohortNm;
 
-    private String crclmNm;
+    private Map<String, Object> surveyForm;
 
     private LocalDate recruitBgngDt;
 

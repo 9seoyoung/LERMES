@@ -35,13 +35,12 @@ function RecruitPost() {
     pages: [{ id: uuidv4(), questions: [] }],
   });
 
-  // 일반 게시글
   const [formData, setFormData] = useState({
     id: postId.current,
     userSn: user.USER_OGDP_CO_SN, //유저같지만 회사임
-    title: "",
-    content: "",
-    groupName: "",
+    title: "", //과정명
+    answer: "", // 신청자 답변
+    groupName: "", //그룹명
     type: "모집공고",
     scope: "전체",
     surveyStart: "",     // 모집시작
