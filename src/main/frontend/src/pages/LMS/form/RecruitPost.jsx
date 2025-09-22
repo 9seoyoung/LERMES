@@ -8,6 +8,8 @@ import { hortlistByCpSn } from "../../../services/cohortService";
 import {v4 as uuidv4} from "uuid";
 
 import { createGroup } from '../../../services/postService';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 // CreatePost.jsx
@@ -20,6 +22,7 @@ function RecruitPost() {
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const qAddRef = useRef(null);
+  const navigate = useNavigate();
     const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
 
@@ -92,8 +95,11 @@ function RecruitPost() {
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
+    toast.success("게시 성공");
+    navigate(-1);
   } catch (err) {
     console.error("[RecruitPost] createGroup error:", err);
+    toast.error(err.message);
   }
 };
 

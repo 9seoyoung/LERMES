@@ -30,7 +30,7 @@ function InterviewPost() {
     formUuid: postId.current,
     userSn: user.USER_SN,
     itvAplyTtl: "",
-    itvAplyCn: "",
+    itvAplyCn: "", //내용
     type: postType,
     itvPicAuthrt: "", //공개범위
     interviewDate: "",     // 면담확정일
@@ -42,24 +42,22 @@ function InterviewPost() {
     files: files
   });
 
-  useEffect(() => {
-    setFormData({
-      __note: "id: 게시글uuid, userSn: 작성자 유저SN, itvAplyTtl: 제목, itvAplyCn: textarea 내용, type: 면담신청 or 면담요청 or 면담기록, scope: 공개범위, interviewDate: 면담확정일, interviewTime: 면담예정시간, author: 작성자 유저이름, mento: 담당자, comment: 수신측 기타요청메모",
-      formUuid: postId.current,
-      userSn: user.USER_SN,
-      itvAplyTtl: "",
-      itvAplyCn: "",
-      type: postType,
-      itvPicAuthrt: "",
-      interviewDate: "",     // 면담확정일
-      interviewTime: "", //면담예정시간
-      author: user?.USER_NM, // 작성자
+  const changeType = (nextType) => {
+    setPostType(nextType);                  // 라벨에만 쓰고 싶으면 유지, 아니면 없애도 됨
+    setFormData(prev => ({
+      ...prev,
+      type: nextType,
+      itvAplyTtl: "",//제목
+      itvAplyCn: "",//내용
+      itvPicAuthrt: "",  //공개범위
+      interviewDate: "",//면담확정일
+      interviewTime: "",//면담예정시간
       mento: "-", // 담당자
-      place: "", //장소
-      comment: "" //기타 요청(수신측)
-    });
-    console.log("게시글 유형 변경", formData)
-  },[formData.type])
+      place: "",//장소
+      comment: "",//기타내용
+    }));
+    setFiles([]); // 파일도 초기화하려면 같이
+  };
 
 
   const handleChange = (e) => {
@@ -72,10 +70,6 @@ function InterviewPost() {
   const saveSubmit = async (e) => {
     e.preventDefault();
 
-  // const payload = structuredClone
-  //   ? structuredClone({ surveyForm, formData })
-  //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
-
   const snapshot = structuredClone
     ? structuredClone({ formData })
     : JSON.parse(JSON.stringify({ formData }));
@@ -86,13 +80,14 @@ function InterviewPost() {
     console.time("[RecruitPost] createGroup");
 
    try {
-    // const res = await createGroup(payload);
     const res = await createInterview(body);
     toast.success("신청등록 되었습니다.")
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
+    navigate(-1);
   } catch (err) {
+    toast.error(err.message);
     console.error("[RecruitPost] createGroup error:", err);
   }
 };
@@ -135,21 +130,19 @@ function InterviewPost() {
             <div className="selectBoxArea" style={{ position: "relative" }}>
               <div className="dropSet" style={{ zIndex: "8" }}>
                 <p>유형</p>
-                <Dropdown className="dropset_dd" label={postType|| "---- 필수 선택 ----"}>
+                <Dropdown className="dropset_dd" label={formData.type|| "---- 필수 선택 ----"}>
                   {(userAuth === 4 || userAuth === 5) ? (
                     <>
                       <p className={layoutStyles.subMenuList} onClick={() => {
-                                                                              setPostType("면담신청");
-                                                                              setFormData(s => ({ ...s, type: postType }));
+                                                                              changeType("면담신청");
                                                                               }}>면담신청</p>
                       <p className={layoutStyles.subMenuList} onClick={() => {
-                                                                                setPostType("면담기록");
-                                                                                setFormData(s => ({ ...s, type: postType }));
+                                                                                changeType("면담기록");
                                                                               }}>면담기록</p>
                     </>
                   ) : ""}
                 </Dropdown>
-                <input type="hidden" name="type" value={formData.type} />
+                <input type="hidden" name="type" value={postType} />
               </div>
               {formData.type === "면담신청" ? 
               <div className="dropSet" style={{ zIndex: "2" }}>
@@ -168,9 +161,8 @@ function InterviewPost() {
               <FileUpload files={files} setFiles={setFiles} />
               <div className="save_box">
                 <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button>
-                <button className="basicBtn saveBtn" type="button" onClick={() => {
-                                                                                    saveSubmit();
-                                                                                    navigate('/stdHome/studySched');
+                <button className="basicBtn saveBtn" type="button" onClick={(e) => {
+                                                                                    saveSubmit(e);
                                                                                   }}>{loading ? "저장 중..." : "저장"}</button>
               </div>
             </div>
@@ -192,30 +184,30 @@ function InterviewForm({
     <>
       <div className='formHeader'>
         <div className='inputSet inputTitleSet'>
-          <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
+          <label className='formLabel' htmlFor={`${domFormId}_itvAplyTtl`}>제목</label>
           <input
-            id={`${domFormId}_title`}
+            id={`${domFormId}_itvAplyTtl`}
             className='formInput'
-            name='title'
+            name='itvAplyTtl'
             placeholder='제목을 입력하세요.'
-            value={formData.title}
+            value={formData.itvAplyTtl}
             onChange={handleChange}
           />
         </div>
 
         <div className='inputSet inputFlex1'>
           <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="menoto" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
         </div>
       </div>
 
       <div className="formContent">
             <textarea                 
-                id={`${formId}_content`}
-                name="content"
+                id={`${formId}_itvAplyCn`}
+                name="itvAplyCn"
                 className='formTextarea'
                 placeholder='본문을 입력하세요.'
-                value={formData.content}
+                value={formData.itvAplyCn}
                 onChange={handleChange}>
             </textarea>
             <div className='inputSet'>
@@ -245,30 +237,30 @@ function InterviewMemo({
   <>
   <div className='formHeader'>
     <div className='inputSet inputTitleSet'>
-      <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
+      <label className='formLabel' htmlFor={`${domFormId}_itvAplyTtl`}>제목</label>
         <input
-          id={`${domFormId}_title`}
+          id={`${domFormId}_itvAplyTtl`}
           className='formInput'
-          name='title'
+          name='itvAplyTtl'
           placeholder='제목을 입력하세요.'
-          value={formData.title}
+          value={formData.itvAplyTtl}
           onChange={handleChange}
         />
       </div>
 
       <div className='inputSet inputFlex1'>
         <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-        <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="menoto" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+        <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
       </div>
     </div>
 
     <div className="formContent">
           <textarea                 
-              id={`${formId}_content`}
-              name="content"
+              id={`${formId}_itvAplyCn`}
+              name="itvAplyCn"
               className='formTextarea'
               placeholder='본문을 입력하세요.'
-              value={formData.content}
+              value={formData.itvAplyCn}
               onChange={handleChange}>
           </textarea>
           <div className='inputSet'>
