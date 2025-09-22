@@ -104,7 +104,9 @@ function AppRoutes() {
         <Route path="stdHome" element={<StdHome />} />
         <Route path="stdHome/board" element={<Board />} />
         <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
-        <Route path="stdHome/studySched" element={"#"} />
+        <Route path="stdHome/studySched" element={<StudentManage/>} />
+        <Route path='stdHome/studySched/interviewPost' element={<InterviewPost/>}></Route>
+
         <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>
