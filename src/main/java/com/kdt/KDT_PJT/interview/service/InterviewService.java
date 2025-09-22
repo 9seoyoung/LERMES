@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,17 +38,27 @@ public class InterviewService {
     public CmmnMap createInterviewRequest(AuthCustomUserDetails me, CmmnMap params) {
         // 0) 인증 확인
         if (me == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요"); //예외 발생시 정상응답(200ok)대신 상태코드에 맞는 HTTP응답을 클라이언트에 돌려보냄
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");   //예외 발생시 정상응답(200ok)대신 상태코드에 맞는 HTTP응답을 클라이언트에 돌려보냄
         }
         //params에 담긴 정보 : 면담 신청 제목, 면담 신청 내용, 면담 담당자 권한
-        params.put("itvAplcntSn", me.getId());   //로그인유저 사용자SN 가져옴
-        params.put("cohortSn", me.getCohortId());  //로그인 유저의 기수SN 가져옴
-        String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid)
-        params.put("formUuid", uuid);              //신청글에대한 uuid 만듦
+        params.put("itvAplcntSn", me.getId());      //로그인유저 사용자SN 가져옴
+        params.put("cohortSn", me.getCohortId());   //로그인 유저의 기수SN 가져옴
+        String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid) // TODO 일단 모든 면담에 대해 uuid 만드는데, 파일 있을경우만 생성하도록 변경할팔요
+        params.put("formUuid", uuid);               //신청글에대한 uuid 만듦
+        params.put("itvAplyDt", LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)); // 면담 신청 일시 추가(기록용)
 
-        dao.insert("com.kdt.mapper.interview.insertApplyInterview", params);
-
-        CmmnMap result = new CmmnMap();
+        dao.insert("com.kdt.mapper.interview.insertApplyInterview", params); //itvSn 생성되어 들어옴.
+        System.out.println("params = " + params);
+//        CmmnMap result = new CmmnMap();
+        CmmnMap result = params;
         return result;
+    }
+
+    @PreAuthorize("hasAnyRole('TENANT','EMPLOYEE','INSTRUCTOR')")
+    @Transactional
+    public List<CmmnMap> getMyInterviewRequests(Integer pathCohortSn) {
+
+        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequests");
+        return paramsList;
     }
 }
