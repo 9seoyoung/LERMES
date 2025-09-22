@@ -48,4 +48,32 @@
     </select>
 
 
+    <update id="confirmInterview" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
+        /*
+        QueryID : com.kdt.mapper.interview.confirmInterview
+        Description : 면담 확정 (기존 컬럼 수정)
+        작성자 : 김동식
+        */
+        UPDATE TB_INTERVIEW i
+        SET
+            i.ITV_PRNMNT_DT = #{itvPrnmntDt},
+            i.ITV_PLC       = #{itvPlc},
+            i.ITV_PIC_SN    = #{itvPicSn},
+            i.ITV_CFMTN_DT  = NOW(),
+            i.ITV_PIC_ANS   = #{itvPicAns}
+        WHERE i.ITV_SN = #{itvSn}
+          AND i.ITV_PIC_SN IS NULL
+    </update>
+
+    <select id="selectInterviewParticipants" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+        /*
+        QueryID : com.kdt.mapper.interview.selectInterviewParticipants
+        Description : itvSn으로 ITV_PIC_SN, ITV_APLCNT_SN 조회
+        작성자 : 김동식
+        */
+        SELECT ITV_PIC_SN, ITV_APLCNT_SN
+        FROM TB_INTERVIEW
+        WHERE ITV_SN = #{itvSn}
+    </select>
+
 </mapper>

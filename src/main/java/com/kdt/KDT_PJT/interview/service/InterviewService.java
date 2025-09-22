@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -81,5 +82,12 @@ public class InterviewService {
 //        params.put("pathCohortSn",pathCohortSn); // params에 실어서 보내기
         List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequests", params);
         return paramsList;
+    }
+
+    @Transactional
+    public int confirmInterview(@RequestBody CmmnMap params){
+
+
+        return dao.update("com.kdt.mapper.interview.confirmInterview", params); //업데이트
     }
 }
