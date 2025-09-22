@@ -38,7 +38,7 @@ function RecruitPost() {
   // 일반 게시글
   const [formData, setFormData] = useState({
     id: postId.current,
-    userSn: user.USER_SN,
+    userSn: user.USER_OGDP_CO_SN, //유저같지만 회사임
     title: "",
     content: "",
     groupName: "",
@@ -210,7 +210,7 @@ function RecruitForm({
             id={`${domFormId}_title`}
             className='formInput'
             name='title'
-            placeholder='제목을 입력하세요.'
+            placeholder='과정명을 입력하세요.'
             value={formData.title}
             onChange={handleChange}
           />
