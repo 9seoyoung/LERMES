@@ -22,7 +22,7 @@ function GroupDropdown({coSn}) {
       })();
     }, [coSn]);
   return (
-    <div className="dropSet" style={{minWidth: "80px"}}>
+    <div className="dropSet" style={{minWidth: "100px", maxwidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
       <Dropdown className="dropset_dd" label={groupFilter || "All"} >
         <p className=".subMenuList" onClick={()=>setGroupFilter("All")} >All</p>
       { hortlist.map((hortlist, idx) => (

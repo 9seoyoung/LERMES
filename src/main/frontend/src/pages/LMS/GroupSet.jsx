@@ -16,12 +16,12 @@ function GroupSet() {
 
   useEffect(() => {
     if (!coSn) return;            // 아직 값 없으면 호출 x
-    let ignore = false;          
+    let ignore = false;
 
     (async () => {
       try {
         setLoading(true);
-        const res = await hortlistByCpSn(Number(coSn)); 
+        const res = await hortlistByCpSn(Number(coSn));
         if (!ignore) setHortList(res?.data ?? []);
       } catch (e) {
         console.error("[GroupSet] hortlistByCpSn error:", e);

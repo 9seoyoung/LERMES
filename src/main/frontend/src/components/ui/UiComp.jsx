@@ -52,7 +52,7 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
   ref
 ) {
   const inputRef = useRef(null);
-  const {type, name, addStyle, textType, icon, handleChange , formData = {}, labelNm} = props;
+  const {type, name, addLabelStyle, addStyle, textType, icon, handleChange , formData = {}, labelNm, disabled} = props;
   const inputId = useId();
 
   useImperativeHandle(ref, () => ({
@@ -75,11 +75,12 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
 
   return (
     <div className={`${styles2.field} ${styles.inputSet}`}>
-      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addStyle}`}>{labelNm}</label>
+      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addLabelStyle}`}>{labelNm}</label>
       <input
         ref={inputRef}
         type={type}
-        className={styles.input}
+        className={`${styles.input} ${addStyle}`}
+        disabled={disabled}
         id={`${inputId}-${name}`} autoComplete='false'name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
       <button
         type="button"
@@ -97,13 +98,13 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
 
 // 인풋
 export function FormInput(props) {
-  const {type, name, textType, handleChange , formData, labelNm, addStyle} = props;
+  const {type, name, textType, handleChange , formData, labelNm, addLabelStyle, addStyle, disabled} = props;
   const inputId = useId();
 
   return (
     <div className={styles.inputSet}>
-      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addStyle}`}>{labelNm}</label>
-      <input id={`${inputId}-${name}`} autoComplete='false' className={`${styles.input}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+      <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addLabelStyle}`}>{labelNm}</label>
+      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={false} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }

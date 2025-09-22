@@ -2,24 +2,19 @@
 import { useNavigate } from "react-router-dom";
 import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
+import FilterList from "../../components/ui/FilterList";
 
 export default function Board(){
     const navigate = useNavigate();
+
+    const filterArr2 = ["전체", "공지", "자료실", "설문", "FAQ", "Q&A", "임시 저장"]
 
     return (
         <div className="boardPage">
             <h2>게시판</h2>
             <div className="filterList">
                 <ul className="ftList_L">
-                    <li>전체</li>
-                    <li>공지</li>
-                    <li>일정</li>
-                    <li>자료실</li>
-                    <li>설문</li>
-                    <li>FAQ</li>
-                    <li>문의</li>
-                    <li>면담</li>
-                    <li>임시 저장</li>
+                    <FilterList arr={filterArr2}></FilterList>
                 </ul>
                 <div className="ftList_R">
                     <div className="createBtn " onClick={() => navigate('createPost')}>

@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kdt.mapper.interview">
-    <insert id="insertApplyInterview" parameterType="CmmnMap" useGeneratedKeys="true" keyProperty="itvSn">
+    <insert id="insertApplyInterview" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" useGeneratedKeys="true" keyProperty="itvSn">
+        /*
+          QueryID : com.kdt.mapper.interview.insertApplyInterview
+          Description : 클라이언트의 면담 요청을 받아 TB_INTERVIEW에 insert
+          작성자 : 김동식
+          */
         INSERT INTO TB_INTERVIEW (
-            ITV_DT, ITV_PLC, ITV_PIC_SN, ITV_TRPR_SN, ITV_APLCNT_SN,
-            ITV_APLY_TTL, ITV_APLY_CN, COHORT_SN, FORM_UUID, ITV_PIC_AUTHRT
+            ITV_APLCNT_SN,
+            ITV_APLY_TTL, ITV_APLY_CN, COHORT_SN, FORM_UUID, ITV_PIC_AUTHRT, ITV_APLY_DT
         ) VALUES (
-                     #{itvDt}, #{itvPlc}, #{itvPicSn}, #{itvTrprSn}, #{itvAplcntSn},
-                     #{itvAplyTtl}, #{itvAplyCn}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}
+                     #{itvAplcntSn},
+                     #{itvAplyTtl}, #{itvAplyCn}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}, #{itvAplyDt}
                  )
     </insert>
+
+    <select id="getMyInterviewRequest" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+        /*
+        QueryID : com.kdt.mapper.goods.getGoodsList
+        Description : 상품 목록 조회
+        작성자 : A팀 누군가
+        */
+        SELECT
+        GDS_SN
+        , GDS_NM
+        , GDS_CAT_CD
+        , GDS_PRC
+        , GDS_STK_QTY
+        , GDS_LT
+        , GDS_SFTY_STK_QTY
+        <!-- , CRTR_UNIT_CD -->
+        FROM teamA_db.TB_GOODS
+    </select>
+
 </mapper>

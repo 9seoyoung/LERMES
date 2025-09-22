@@ -33,7 +33,6 @@
   border-radius: .6rem;
   box-shadow: 0 8px 24px rgba(0,0,0,.08);
   overflow: hidden;
-
   /* 스르륵 내려오는 효과 */
   max-height: 0;
   opacity: 0;
@@ -53,6 +52,7 @@
   max-height: 320px; /* 내용보다 크면 자동으로 보임 */
   opacity: 1;
   transform: translateY(0);
+  padding: 4px 4px;
   pointer-events: auto;
   width: 100%;
 }

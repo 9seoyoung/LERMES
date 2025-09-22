@@ -9,63 +9,10 @@ import {v4 as uuidv4} from "uuid";
 import { createPost } from '../../../services/postService';
 
 import SurveyPost from './SurveyPost';
-import QuestionAdd from './QuestionAdd';
 import { DateTimeInput } from '../../../components/ui/UiComp';
 
 
 // StudyPost.jsx
-// ...import 생략
-
-function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef } = props;
-  switch (type) {
-    case "면담신청":
-    case "면담기록":
-    case "학습일지":
-    case "FAQ":
-      return (
-          <ArticlePost
-              postId={postId.current}
-              domFormId={domFormId}
-              handleChange={handleChange}
-              formData={formData}
-              FileList={FileList}
-              files={files}
-              setFiles={setFiles}
-          />
-      );
-    case "설문조사":
-      return (
-          <SurveyPost
-              postId={postId.current}
-              domFormId={domFormId}
-              handleChange={handleChange}
-              formData={formData}
-              surveyForm={surveyForm}
-              setSurveyForm={setSurveyForm}
-              FileList={FileList}
-              files={files}
-              setFiles={setFiles}
-              questionAddRef = {questionAddRef}
-              containerRef={containerRef}
-          />
-      );
-    default:
-      return (
-          <ArticlePost
-              postId={postId.current}
-              domFormId={domFormId}
-              handleChange={handleChange}
-              formData={formData}
-              FileList={FileList}
-              files={files}
-              setFiles={setFiles}
-          />
-      );
-  }
-}
-
-
 
 function StudyPost() {
   const domFormId = useId();
