@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { hortlistByCpSn } from "../../services/cohortService";
 import Dropdown from "./Dropdown";
 
-function GroupDropdown({coSn}) {
+function GroupDropdown({coSn, setCohortSn}) {
   const [hortlist, setHortList] = useState([]);
   const [groupFilter, setGroupFilter] = useState("All")
 
@@ -24,9 +24,9 @@ function GroupDropdown({coSn}) {
   return (
     <div className="dropSet" style={{minWidth: "100px", maxwidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
       <Dropdown className="dropset_dd" label={groupFilter || "All"} >
-        <p className=".subMenuList" onClick={()=>setGroupFilter("All")} >All</p>
+        <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p>
       { hortlist.map((hortlist, idx) => (
-          <p className=".subMenuList" key={idx} onClick={()=>setGroupFilter(`${hortlist.cohortNm}`)} >{hortlist.cohortNm}</p>
+          <p className=".subMenuList" key={idx} onClick={()=> {setGroupFilter(`${hortlist.cohortNm}`); setCohortSn(hortlist.cohortSn)}} >{hortlist.cohortNm}</p>
       ))}
       </Dropdown>
     </div>

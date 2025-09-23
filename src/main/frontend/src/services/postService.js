@@ -31,6 +31,11 @@ export function createInterviewMemo(body) {
   });
 }
 
+
+
+
+
+
 /**
  * 
  * @param {Object} params
@@ -40,6 +45,13 @@ export function createInterviewMemo(body) {
  */
 export const readInterview = ({itvSn, fixedSn}) => api.get(
   `/confirm/${itvSn}`,{params: {itvSn, fixedSn}})
+
+  // 면담신청 리스트 조회(관리자)
+export const readInterviewList = ({fixedSn}) => api.get(
+  `/interview/my-requests`,{params: {fixedSn}})
+
+export const readInterviewListByCoSn = ({fixedSn, cohortSn}) => api.get(
+  `/interview//my-requests/{cohortSn}`,{params: {cohortSn, fixedSn}})
 
 /**
  * 면담 수정(확정) API 

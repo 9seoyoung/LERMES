@@ -27,19 +27,19 @@ function InterviewEditPost() {
 
   // 일반 게시글
   const [formData, setFormData] = useState({
-    __note: "id: 게시글uuid, userSn: 작성자 유저SN, itvAplyTtl: 제목, itvAplyCn: textarea 내용, type: 면담신청 or 면담요청 or 면담기록, itvPicAuthrt: 공개범위, interviewDate: 면담확정일, interviewTime: 면담예정시간, author: 작성자 유저이름, mento: 담당자, comment: 수신측 기타요청메모",
+    __note: "id: 게시글uuid, userSn: 작성자 유저SN, itvAplyTtl: 제목, itvAplyCn: textarea 내용, type: 면담신청 or 면담요청 or 면담기록, itvPicAuthrt: 공개범위, itvDay: 면담확정일, itvTime: 면담예정시간, author: 작성자 유저이름, mento: 담당자, itvPicAns: 수신측 기타요청메모",
     formUuid: postId.current,
     userSn: user.USER_SN,
     itvAplyTtl: "",
     itvAplyCn: "", //내용
     type: postType,
     itvPicAuthrt: "", //공개범위
-    interviewDate: "",     // 면담확정일
-    interviewTime: "", //면담예정시간
+    itvDay: "",     // 면담확정일
+    itvTime: "", //면담예정시간
     author: user?.USER_NM, // 작성자
     mento: "-", // 담당자
     place: "", //장소
-    comment: "", //기타 요청(수신측)
+    itvPicAns: "", //기타 요청(수신측)
     files: files
   });
 
