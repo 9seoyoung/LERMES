@@ -26,17 +26,18 @@ import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 import UploadDownloadDemo from '../pages/UploadDownloadDemo.jsx';
-import DocxSet from '../pages/LMS/DocxSet.jsx';
+import DocxSet from '../pages/LMS/menu/DocxSet.jsx';
 import AccountSet from '../pages/LMS/AccountSet.jsx';
-import GroupSet from '../pages/LMS/GroupSet.jsx';
+import GroupSet from '../pages/LMS/menu/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';
-import BoardManage from '../pages/LMS/BoardManage.jsx'
+import BoardManage from '../pages/LMS/menu/BoardManage.jsx'
 import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
 import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
 import StudyManage from '../pages/LMS/menu/StudyManage.jsx';
 import StudentManage from '../pages/LMS/menu/StudentManage.jsx';
 import InterviewPost from '../pages/LMS/form/InterviewPost.jsx';
+import InterviewEditPost from '../pages/LMS/form/InterviewEditPost.jsx';
 
 function AppRoutes() {
   return (
@@ -52,7 +53,6 @@ function AppRoutes() {
       <Route path="/schedlist" element={<SchedList />} />
       <Route path="/schedlistpopup" element={<SchedListPopUp />} />
       <Route path="/calsched" element={<CalSched />} />
-      <Route path="/tableall" element={<TableAll />} />
       <Route path="/testQuestion" element={<QuestionAdd />} />
 
       <Route path="/files" element={<UploadDownloadDemo />} />
@@ -74,6 +74,12 @@ function AppRoutes() {
       <Route index element={<SuperMain/>}/>
       <Route path="visitorHome" element={<VisitorHome />} />
       <Route path='/myPage' element={<Mypage/>}/>
+
+      <Route element={<RoleRoute roles={[1, 2, 3, 4, 5]}/>}>
+      {/* 로그인이 필요한 테스트 페이지 */}
+        <Route path='testInterview' element={<InterviewEditPost/>}></Route>
+        <Route path="/tableall" element={<TableAll />} />
+      </Route>
 
 
       {/* 관리자(테넌트, 직원) */}
@@ -108,7 +114,6 @@ function AppRoutes() {
         <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
         <Route path="stdHome/studySched" element={<StudentManage/>} />
         <Route path='stdHome/studySched/interviewPost' element={<InterviewPost/>}></Route>
-
         <Route path=':home/myPage' element={<Mypage/>}/>
 
       </Route>

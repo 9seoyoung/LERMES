@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import ListTable from "../../../components/ui/ListTable";
-import uiStyle from "../../../styles/UiComp.module.css"
+// import uiStyle from "../../../styles/UiComp.module.css"
 import FilterList from "../../../components/ui/FilterList";
 import { useState } from "react";
 
 function StudentManage() {
     const navigate = useNavigate();
     const filterArr = ["전체", "면담 신청", "면담 요청", "면담 기록", "임시저장"];
+    const [selectedIdx, setSelected] = useState(0)
 
 
     return (
@@ -14,9 +15,7 @@ function StudentManage() {
             <h2>수강생 관리</h2>
             <div className="filterList">
                 <ul className="ftList_L">
-                    <FilterList arr={filterArr}>
-
-                    </FilterList>
+                    <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
                     <div className="createBtn " onClick={() => navigate('interviewPost')}>
