@@ -5,9 +5,9 @@
 function FilterList(props) {
   const {arr, children, selectedIdx, setSelected, setWhereToGo, filterArr, cohortSn, handler, whereTogo, setFilter} = props;
 //   const [pullList, setPullList] = useState([]);
-  const filter = filterArr[selectedIdx];
-  console.log(`1. ${filter} 필터 누름`);
-  setFilter(filter);
+  // const filter = filterArr[selectedIdx];
+  // console.log(`1. ${filter} 필터 누름`);
+  // setFilter(filter);
   console.log(`2. setFilter 상태훅 사용`)
 
 
