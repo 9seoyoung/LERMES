@@ -20,16 +20,18 @@ export default function BoardManage(){
     
     const filter = filterArr[selectedIdx];
     const path = useMemo(() => matchedPathAdminBoardFilter(filter), [filter]);
-
-  useEffect(() => {
-    const listApi = matchedListAPIAdminBoardFilter(filter);
-    console.log(` listApi = ${listApi}`);
-    console.log(`cohortSn ${cohortSn}`);
-    console.log(`filter ${filter}`);
-    console.log(`path ${path}`);
+    
+    useEffect(() => {
+        const listApi = matchedListAPIAdminBoardFilter(filter);
+        console.log(` listApi = ${listApi}`);
+        console.log(`cohortSn ${cohortSn}`);
+        console.log(`filter ${filter}`);
+        console.log(`path ${path}`);
+        console.log(`path ${user.USER_OGDP_CO_SN}`)
 
     const req = {
-        cohortSn: cohortSn,
+        roleType: user.USER_AUTHRT_SN,
+        cohortSn: cohortSn || 0,
         filter: filter,
         path: path,
         fixedSn: null}
@@ -44,7 +46,7 @@ export default function BoardManage(){
       try {
         console.log(`req >>>>>>>>>>>>>>>>>`);
         console.log(req);
-        const { data } = await listApi(); // ← API 함수 호출
+        const { data } = await listApi(req); // ← API 함수 호출
         setPullList(data);
         console.log(data);
         toast.success("데이터 불러옴");
