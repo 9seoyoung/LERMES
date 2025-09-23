@@ -1,10 +1,9 @@
-import React, { useEffect, useId, useState, useRef } from 'react'
-import Dropdown from '../../../components/ui/Dropdown'
-import layoutStyles from "../../../styles/layout.module.css"
-import {FileUpload, FileList, FormInput } from '../../../components/ui/UiComp';
+import React, { useId, useState, useRef } from 'react'
+import styles from "../../../styles/UiComp.module.css"
+import { FileList, FormInput } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import {v4 as uuidv4} from "uuid";
-import { createInterview, createInterviewMemo, readInterview } from '../../../services/postService';
+import { readInterview, editInterview } from '../../../services/postService';
 
 import { DateTimeInput } from '../../../components/ui/UiComp';
 import { toast } from 'react-toastify';
@@ -21,7 +20,7 @@ function InterviewEditPost() {
   const userAuth = user.USER_AUTHRT_SN;
   const myName = user.USER_NM;
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [editToggle, setEdit] = useState(true);
   const [postType, setPostType] = useState("면담신청");
 
   const [files, setFiles] = useState([]);
@@ -44,23 +43,23 @@ function InterviewEditPost() {
     files: files
   });
 
-  const editMyData = (myName === formData.author ? true : false);
-  const fixedInterviewData = (userAuth <= 4 ? true : false);
+  const editMyData = (myName === formData.author ? false : true);
+  const fixedInterviewData = (userAuth <= 4 ? false : true);
 
-  const handleFixed = async() => {
-    console.log("면담요청 확정 ㄱㄱ --> itvSn(면담신청SN 수동입력 필요)")
-    let itvSn = prompt("면담신청한 시리얼넘버를 입력하세요, itvSn");
-    let fixedSn = "아직없음";
+  // const handleFixed = async() => {
+  //   console.log("면담요청 확정 ㄱㄱ --> itvSn(면담신청SN 수동입력 필요)")
+  //   let itvSn = prompt("면담신청한 시리얼넘버를 입력하세요, itvSn");
+  //   let fixedSn = "아직없음";
 
-    try{
-      const {data} = await readInterview({itvSn, fixedSn})
-      console.log(`data 확인: ${data}`);
-      setFormData(data);
-      console.log(`formData 확인`);
-    } catch(err){
-      toast.error(err.message);
-    }
-  }
+  //   try{
+  //     const {data} = await readInterview({itvSn, fixedSn})
+  //     console.log(`data 확인: ${data}`);
+  //     setFormData(data);
+  //     console.log(`formData 확인`);
+  //   } catch(err){
+  //     toast.error(err.message);
+  //   }
+  // }
 
   const handleChange = (e) => {
 
@@ -82,7 +81,7 @@ function InterviewEditPost() {
     console.time("[RecruitPost] createGroup");
 
    try {
-    const res = await createInterview(body);
+    const res = await editInterview(body);
     toast.success("신청등록 되었습니다.")
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
@@ -97,6 +96,22 @@ function InterviewEditPost() {
 
   return (
     <div className="BigListBox">
+        <h4 style={{ fontWeight: "500", display:"flex", alignItems:"center"}}>
+          <div style={{display:"flex", gap:"4px", alignItems:"baseline"}}>
+            {editMyData ? "면담 신청" : "면담 요청"}
+            {editToggle ? 
+            <button type='button'  className={styles.grayBtn} style={{width:"3rem", fontSize:"1rem"}} onClick={() => setEdit(false)}>edit</button>
+            :
+            null
+            }
+          </div>       
+          {editToggle ? 
+          <button type='button' className={styles.grayBtn} onClick={()=>{navigate(-1); setEdit(true)}}>돌아가기</button>
+          :
+          <button type='button' className={styles.grayBtn} onClick={(e)=>{saveSubmit(e); navigate(-1); setEdit(true)}}>저장</button>
+          }
+        </h4>
+      
       <InterviewEditForm
         type={formData.type}
         postId={postId.current}
@@ -108,6 +123,7 @@ function InterviewEditPost() {
         setFiles={setFiles}
         editMyData={editMyData}
         fixedInterviewData={fixedInterviewData}
+        editToggle={editToggle}
       />
     </div>
           
@@ -118,7 +134,7 @@ export default InterviewEditPost;
 
 
 function InterviewEditForm({
-  domFormId, handleChange, formData, files, formId, setFiles, editMyData, fixedInterviewData
+  domFormId, handleChange, formData, files, formId, setFiles, editMyData, fixedInterviewData, editToggle
 }) {
 
   return (
@@ -133,13 +149,13 @@ function InterviewEditForm({
             placeholder='제목을 입력하세요.'
             value={formData.itvAplyTtl}
             onChange={handleChange}
-            disabled={editMyData}
+            disabled={ editToggle || editMyData}
           />
         </div>
 
         <div className='inputSetMini inputFlex1'>
-          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={fixedInterviewData}></FormInput>
+          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={ editToggle || true}></FormInput>
+          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={ editToggle || fixedInterviewData}></FormInput>
         </div>
       </div>
 
@@ -151,23 +167,23 @@ function InterviewEditForm({
                 placeholder='본문을 입력하세요.'
                 value={formData.itvAplyCn}
                 onChange={handleChange}
-                disabled={editMyData}
+                disabled={ editToggle || editMyData}
             >
             </textarea>
             <div className='inputSet'>
           </div>
           <div className='inputSet'>
             <div className='inputSet inputFlex1'>
-              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={fixedInterviewData}></DateTimeInput>
-              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={fixedInterviewData}></DateTimeInput>
-              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={fixedInterviewData}></FormInput>
-              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={fixedInterviewData}></FormInput>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={ editToggle || fixedInterviewData}></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={ editToggle || fixedInterviewData}></DateTimeInput>
+              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={ editToggle || fixedInterviewData}></FormInput>
+              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={ editToggle || fixedInterviewData}></FormInput>
               
             </div>
           </div>
           <div className='inputSet'>
               <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-              <FileList files={files} setFiles={setFiles} noShow={fixedInterviewData}></FileList>
+              <FileList files={files} setFiles={setFiles} noShow={editToggle || fixedInterviewData}></FileList>
           </div>
       </div>
       </>
