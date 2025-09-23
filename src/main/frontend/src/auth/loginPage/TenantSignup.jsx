@@ -96,7 +96,7 @@ export default function TenantSignup() {
           value={form.companyName}
           onChange={onChange}
           required
-        />
+          />
         <input
           name="businessNumber"
           placeholder="사업자등록번호"
@@ -105,7 +105,8 @@ export default function TenantSignup() {
           value={form.businessNumber}
           onChange={onChange}
           required
-        />
+          />
+          {msg && <p className="msg">{msg}</p>} 
 
         <input
           name="username"
@@ -115,7 +116,7 @@ export default function TenantSignup() {
           onChange={onChange}
           required
           autoComplete="off"
-        />
+          />
 
         <div className="input-with-btn">
           <input
@@ -128,13 +129,13 @@ export default function TenantSignup() {
             required
             disabled={codeSent}
             autoComplete="email"
-          />
+            />
           <button
             type="button"
             className="verify-btn"
             onClick={sendCode}
             disabled={sending || !form.email}
-          >
+            >
             {sending ? '전송중...' : '인증'}
           </button>
         </div>
@@ -181,7 +182,6 @@ export default function TenantSignup() {
           {loading ? '등록 중...' : '회원 가입'}
         </button>
 
-        {msg && <p className="msg">{msg}</p>}
       </form>
     </div>
   );

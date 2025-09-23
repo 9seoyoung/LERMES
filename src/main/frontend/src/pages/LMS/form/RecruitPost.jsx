@@ -46,6 +46,7 @@ function RecruitPost() {
     surveyStart: "",     // 모집시작
     surveyEnd: "",
     startDate:"",
+    place: "", // 장소
     endDate:"",   //  모집종료
     classStart: "", //수업시작시간
     classEnd: "", //수업종료시간
@@ -143,6 +144,7 @@ function RecruitPost() {
           <div className="formArea_R">
             <div className="selectBoxArea" style={{ position: "relative" }}>
                 <FormInput labelNm="그룹명" type="text" name="groupName" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
+                <FormInput labelNm="교육장소" type="text" name="place" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
                 <DateTimeInput labelNm="개강일" type="date" name="startDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
                 <DateTimeInput labelNm="종강일" type="date" name="endDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
                 <DateTimeInput labelNm="수업 시작" type="time" name="classStart" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
