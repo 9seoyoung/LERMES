@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -84,6 +85,7 @@ public class InterviewController {
         switch (roleType) {
             case 4: // 강사인 경우
                 if (resolvedCohortSn == null) {
+                    // 내 기수, 선택한 기수
                     Long myCohort = me.getCohortSn();
                     if (myCohort == null) {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "강사 계정의 기수 정보가 없습니다. 관리자에게 문의하세요.");
@@ -93,21 +95,41 @@ public class InterviewController {
                 break;
             case 2: // 대표인 경우
             case 3: // 직원인 경우
-                if (resolvedCohortSn == null) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기수번호(cohortSn)를 입력하세요.");
-                }
+                // 전체 조회 중 강사 한테 요청한 것만 제외 해야함 주석 처리 해놓겠음
+                // if (resolvedCohortSn == null) {
+                //     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기수번호(cohortSn)를 입력하세요.");
+                // }
                 break;
             default:
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한 없음");
         }
         // SQL 분기에 필요한 최소 파라미터만 전달 (Integer 타입 보장)
+        // ㅇㅎ params에 권한레벨 넣음
         params.put("roleType", roleType);
 //        params.put("userSn",   userSn);
+        // params에 받아온 기수정보 넣음
         params.put("cohortSn", resolvedCohortSn);
 
-        List<CmmnMap> resp = interviewService.getMyInterviewRequests(params);
+        //params에 받아온 회사정보 넣음
+        params.put("coSn", Math.toIntExact(me.getCompanySn()));
+        
+        // 기수정보가 없거나 0으로 넘어왔을 때는 전체 기수에 대한 조회
+        // 강사는 나중에 기수테이블에서 자기 이름?(pk) 박힌거 있으면 그거 다 긁어와야 할 듯
+        // 이건 나중에 진령언니랑 얘기해보겠음. 일단 화면 안봐서 킵 ㅋㅋ
+        // if (resolvedCohortSn == null && resolvedCohortSn == 0) { 
+        //     // 동식이가 만든 xml 복사할 예정. cohortSn만 안들어갈꺼임, 회사SN은 필요한디 모든회사꺼 나오면 곤란 >> fixedSn 꺼내쓴다.
+        //     //@params 안에 cohortSn, fixedSn 사용 예정
+            List<CmmnMap> resp = interviewService.getMyInterviewRequestsAll(params);
+        //     log.debug("getMyInterviewRequests result rows={}", (resp != null ? resp.size() : 0));
+
+        //     // 이 경우 빠르게 탈출
+        //     return resp;
+        // } else {
+
+        // List<CmmnMap> resp = interviewService.getMyInterviewRequests(params);
         log.debug("getMyInterviewRequests result rows={}", (resp != null ? resp.size() : 0));
         return resp;
+        // }
     }
 
     @Transactional                      //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
