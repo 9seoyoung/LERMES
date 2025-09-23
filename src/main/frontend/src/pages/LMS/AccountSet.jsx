@@ -7,6 +7,7 @@ import ListEditTable from '../../components/ui/ListEditTable';
 
 export default function AccountSet() {
   const [manageState, setManageState] = useState(false);
+  const [selectedIdx, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     // formData 초기값
@@ -41,7 +42,7 @@ export default function AccountSet() {
             <h2>계정 관리</h2>
             <div className="filterList">
                 <ul className="ftList_L">
-                  <FilterList arr={filterArr}></FilterList>
+                    <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
                   {manageState ? (

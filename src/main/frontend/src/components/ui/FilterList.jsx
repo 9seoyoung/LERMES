@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
 function FilterList(props) {
-  const {arr, children} = props;
-  const [selectedIdx, setSelected] = useState(0)
+  const {arr, children, selectedIdx, setSelected} = props;
 
   // 전체에 스타일 기본,
   // 다른거 클릭하면 원래 파란색이었던건 바뀌어야함

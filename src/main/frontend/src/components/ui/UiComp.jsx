@@ -332,7 +332,7 @@ export function FileUpload({ files, setFiles }) {
 }
 
 // 파일 목록
-export function FileList({ files, setFiles }) {
+export function FileList({ files, setFiles, noShow }) {
   const removeFile = (idx) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
   };
@@ -342,7 +342,12 @@ export function FileList({ files, setFiles }) {
       {files.map((file, idx) => (
         <li key={idx}>
           <span>
-            {file.name} <DeleteBtn onClick={() => removeFile(idx)} />
+            {file.name}
+            { noShow ? 
+              null
+              :
+              <DeleteBtn onClick={() => removeFile(idx)} />
+            }
           </span>
         </li>
       ))}
