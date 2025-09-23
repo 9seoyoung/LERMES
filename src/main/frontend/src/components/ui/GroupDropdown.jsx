@@ -5,6 +5,7 @@ import Dropdown from "./Dropdown";
 function GroupDropdown({coSn, setCohortSn}) {
   const [hortlist, setHortList] = useState([]);
   const [groupFilter, setGroupFilter] = useState("All")
+    console.log("그룹 변경")
 
 
   useEffect(() => {
@@ -26,7 +27,7 @@ function GroupDropdown({coSn, setCohortSn}) {
       <Dropdown className="dropset_dd" label={groupFilter || "All"} >
         <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p>
       { hortlist.map((hortlist, idx) => (
-          <p className=".subMenuList" key={idx} onClick={()=> {setGroupFilter(`${hortlist.cohortNm}`); setCohortSn(hortlist.cohortSn)}} >{hortlist.cohortNm}</p>
+          <p className=".subMenuList" key={idx} onClick={()=> {console.log("그룹선택>>>>>>>>>>>>>>>>>>>>>>>>>>>>");setGroupFilter(`${hortlist.cohortNm}`); setCohortSn(hortlist.cohortSn)}} >{hortlist.cohortNm}</p>
       ))}
       </Dropdown>
     </div>
