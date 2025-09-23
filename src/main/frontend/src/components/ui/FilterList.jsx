@@ -3,7 +3,7 @@
 // import { toast } from "react-toastify";
 
 function FilterList(props) {
-  const {arr, children, selectedIdx, setSelected, setWhereToGo, filterArr, cohortSn, handler, whereTogo, setFilter} = props;
+  const {arr, children, selectedIdx, setSelected } = props;
 //   const [pullList, setPullList] = useState([]);
   // const filter = filterArr[selectedIdx];
   // console.log(`1. ${filter} 필터 누름`);
@@ -18,8 +18,6 @@ return (
           key={idx}
           onClick={() => {
             setSelected(idx);
-            console.log("필터변경>>>>>>>>>>>>>>>>>>>>>>>>")
-            console.log(`whereToGo ${whereTogo}`)
           }}
           id= {selectedIdx === idx ? "ftClicked" : ""}
           >{ft}
@@ -27,7 +25,7 @@ return (
         ))
       }
       {/* 추가 버튼 생성 및 눌렀을 때 배열에 데이터 추가하기 위한 버튼 */}
-      {/* {children} */}
+      {children}
       </ul>
   )
 }

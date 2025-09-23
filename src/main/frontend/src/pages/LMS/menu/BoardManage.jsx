@@ -1,5 +1,5 @@
 // 페이지찾기 - 게시판
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {useNavigate } from "react-router-dom";
 import ListTable from "../../../components/ui/ListTable";
 import { useAccount } from "../../../auth/AuthContext";
@@ -9,38 +9,50 @@ import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter } from "../
 import { toast } from "react-toastify";
 
 export default function BoardManage(){
-    const [selectedIdx, setSelected] = useState(0)
     const navigate = useNavigate();
+    const [selectedIdx, setSelected] = useState(0)
     const {user} = useAccount();
-    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "임시 저장"]
-    const [filter, setFilter] = useState("");
+    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "임시저장"]
+    // const [filter, setFilter] = useState("");
     const [whereTogo, setWhereToGo] = useState("/");
     const [cohortSn, setCohortSn] = useState(null);
     const [pullList, setPullList] = useState([]);
-   
-    useEffect(() => {
-    console.log(">>>>>>>>>>>>>필터변경>>>>>>>>>>>>>")
-    console.log(`1. ${filter} 필터 누름`);
-    // setFilter(filter);
-    console.log(`2. setFilter 상태훅 사용`)
-    console.log(`3.${filter} 저장 후 useEffect 내의 필터`)
-    setWhereToGo(matchedPathAdminBoardFilter(filter));
-    console.log(`4. ${whereTogo} whereTogo에 게시물 상세보기 페이지 화면경로 반환`);
+    
+    const filter = filterArr[selectedIdx];
+    const path = useMemo(() => matchedPathAdminBoardFilter(filter), [filter]);
 
+  useEffect(() => {
+    const listApi = matchedListAPIAdminBoardFilter(filter);
+    console.log(` listApi = ${listApi}`);
+    console.log(`cohortSn ${cohortSn}`);
+    console.log(`filter ${filter}`);
+    console.log(`path ${path}`);
+
+    const req = {
+        cohortSn: cohortSn,
+        filter: filter,
+        path: path,
+        fixedSn: null}
+
+    if (!listApi) {
+      setPullList([]);  // 미구현 필터면 빈 리스트
+      return;
+    }
     (async () => {
-        const apiHandle = () => matchedListAPIAdminBoardFilter(filter);
-        
-        try {
-            const {data} = await apiHandle({cohortSn, filter });
-            toast.success("데이터불러옴");
-            setPullList(data);
-            console.log(pullList);
-        } catch(err) {
-            toast.error(err.message);
-        }
-        
+    
+
+      try {
+        console.log(`req >>>>>>>>>>>>>>>>>`);
+        console.log(req);
+        const { data } = await listApi(); // ← API 함수 호출
+        setPullList(data);
+        console.log(data);
+        toast.success("데이터 불러옴");
+      } catch (err) {
+        toast.error(err.message);
+      }
     })();
-    }, [filter, cohortSn]);
+  }, [filter, cohortSn]);
 
     return (
         <div className="boardPage">
@@ -49,33 +61,7 @@ export default function BoardManage(){
 
                 <div className="ftList_L">
                     <GroupDropdown coSn={user.USER_OGDP_CO_SN} setCohortSn={setCohortSn}></GroupDropdown>
-                        <ul className="ftList_L">
-                                { filterArr?.map((ft, idx) => (
-                                <li
-                                    key={idx}
-                                    onClick={(e) => {
-                                    // console.log(`idx: ${idx}`);
-                                    // console.log(`cohortSn: ${cohortSn}`);
-                                    // console.log(`filter:${filterArr[selectedIdx]}`)
-
-                                    // console.log("찍히는거 맞나");
-                                    setSelected(idx);
-                                    setFilter(ft);
-                                    // handleFilterChange();
-                                    // handler(idx);
-                                    console.log("필터변경>>>>>>>>>>>>>>>>>>>>>>>>")
-                                    console.log(`whereToGo ${whereTogo}`)
-                                    }}
-                                    id= {selectedIdx === idx ? "ftClicked" : ""}
-                                    >{ft}
-                                    </li>
-                                ))
-                            }
-                            {/* 추가 버튼 생성 및 눌렀을 때 배열에 데이터 추가하기 위한 버튼 */}
-                            {/* {children} */}
-                            </ul>
-                    {/* <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected} whereTogo={whereTogo} filter={filter} setFilter={setFilter} setWhereToGo={setWhereToGo} filterArr={filterArr} cohortSn={cohortSn}></FilterList>
-                    <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected} setWhereToGo={setWhereToGo} filterArr={filterArr} cohortSn={cohortSn}></FilterList> */}
+                    <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </div>
 
                 <div className="ftList_R">
