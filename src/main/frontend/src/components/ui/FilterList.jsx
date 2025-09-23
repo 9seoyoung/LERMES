@@ -1,7 +1,26 @@
 import React, { useState } from 'react'
+import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter } from "../../utils/readPageTypeReturn";
+import { toast } from "react-toastify";
 
 function FilterList(props) {
-  const {arr, children, selectedIdx, setSelected} = props;
+  const {arr, children, selectedIdx, setSelected, setWhereToGo, filterArr, cohortSn} = props;
+  const [pullList, setPullList] = useState([]);
+  const filter = filterArr[selectedIdx];
+
+  const handleFilterChange = async () => {
+    
+    setWhereToGo(matchedPathAdminBoardFilter(filter));
+    const apiHandle = matchedListAPIAdminBoardFilter(selectedIdx)
+    
+    try {
+        const {data} = await apiHandle({cohortSn, filter });
+        toast.success("데이터불러옴");
+        setPullList(data);
+    } catch(err) {
+        toast.error(err.message);
+    }
+    
+}
 
   // 전체에 스타일 기본,
   // 다른거 클릭하면 원래 파란색이었던건 바뀌어야함
@@ -14,11 +33,17 @@ function FilterList(props) {
   // const docxManagneFilters = ["로그 기록", "수료증", "출결확인서"];
 
   return (
-      <ul className="ftList_L">
+    <ul className="ftList_L">
+        {console.log("이 페이지 호출")}
         { arr?.map((ft, idx) => (
           <li
             key={idx}
-            onClick={() => setSelected(idx)}
+            onClick={() => {
+              console.log("찍히는거 맞나");
+              setSelected(idx);
+              console.log("handleFilterChange 호출")
+              // handleFilterChange();
+            }}
             id= {selectedIdx === idx ? "ftClicked" : ""}
             >{ft}
             </li>
