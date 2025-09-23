@@ -65,23 +65,13 @@ export function matchedListAPIAdminBoardFilter (filter) {
       return 
 
     case "면담요청":
-      return handleListApi = readInterviewList
+      return handleListApi = readInterviewList;
 
     case "면담기록":
       return 
       
     case "임시저장":
-      return 
-
-    case "공지":
-      return 
-
-    case "공지":
-      return 
-      
-    case "공지":
-      return 
-  
+      return   
       
   }
 }
