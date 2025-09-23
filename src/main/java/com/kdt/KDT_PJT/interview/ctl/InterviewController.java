@@ -63,7 +63,7 @@ public class InterviewController {
      * - 강사(INSTRUCTOR=4): url에 cohortSn 없으면 본인 cohortSn 사용, 그것도 없으면 400
      * - 대표/직원(TENANT=2, EMPLOYEE=3): url에 cohortSn 필수
      */
-    @PreAuthorize("hasAnyRole('TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN',TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
     @GetMapping({"/my-requests", "/my-requests/{cohortSn}"}) // 강사/대표/직원 공용
     public List<CmmnMap> getMyInterviewRequests(
             @AuthenticationPrincipal AuthCustomUserDetails me,
@@ -93,6 +93,7 @@ public class InterviewController {
                     resolvedCohortSn = Math.toIntExact(myCohort);
                 }
                 break;
+            case 1: // 슈퍼관리자
             case 2: // 대표인 경우
             case 3: // 직원인 경우
                 // 전체 조회 중 강사 한테 요청한 것만 제외 해야함 주석 처리 해놓겠음
