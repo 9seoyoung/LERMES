@@ -136,7 +136,7 @@ public class InterviewController {
         final LocalTime time;
         try {
             date = LocalDate.parse(itvDay);        // "yyyy-MM-dd"
-            time = LocalTime.parse(itvTime);       // "HH:mm" or "HH:mm:ss"
+            time = LocalTime.parse(itvTime).truncatedTo(java.time.temporal.ChronoUnit.MINUTES);       // "HH:mm" 초 절삭. 분단위만 남김
         } catch (DateTimeParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "날짜/시간 포맷이 잘못되었습니다. (예: 2025-09-22, 09:00)");
         }
@@ -160,50 +160,18 @@ public class InterviewController {
         System.out.println("itvSn=" + params.get("itvSn"));
         System.out.println(params.get("itvSn").getClass().getName());
         System.out.println("params = " + params);
-        CmmnMap m = new CmmnMap(); //면담 신청자(APLCNT), 면담 담당자(PIC)에 대해서 면담 번호 가져옴.
+        CmmnMap m = new CmmnMap(); // 일정 추가 파라미터 작성
+        m.put("itvPrnmntDt",params.get("itvPrnmntDt"));
         m.put("itvSn",params.get("itvSn"));
-        m = dao.selectOne("com.kdt.mapper.interview.selectInterviewParticipants",m);
+        m.put("itvTime",params.get("itvTime"));
         System.out.println("m = " + m);
-        CmmnMap aplcnt = new CmmnMap();
-        CmmnMap pic = new CmmnMap();
-        aplcnt.put("userSn",m.get("itvAplcntSn")); // 신청자의 SN
-//        aplcnt.put("eventNm",)
-
-        //TODO 이제 여기서 m = [ITV_PIC_SN=314, ITV_APLCNT_SN=312] 이런거 이용해서
-        // 캘린더 각자 만들고 내용도 위의 params이용해서 집어넣기 ㄱㄱ
-        // 작성해야할쿼리 -> calendar service가서
-//        INSERT INTO TB_CALENDAR
-//                (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
-//        /* 1행: 담당자(PIC) */
-//        SELECT
-//        up.OGDP_COHORT_SN,
-//      #{itvPrnmntDt}, #{itvPrnmntDt},
-//        CONCAT('면담 일정 ', ua.USER_NM, ' -> ', up.USER_NM),
-//                up.USER_SN,
-//                1
-//        FROM TB_INTERVIEW i
-//        JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
-//        JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
-//        WHERE i.ITV_SN = #{itvSn}
-
-        //2번째
-//        INSERT INTO TB_CALENDAR
-//                (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
-//        SELECT
-//        ua.OGDP_COHORT_SN,
-//      #{itvPrnmntDt}, #{itvPrnmntDt},
-//        CONCAT('면담 일정 ', ua.USER_NM, ' -> ', up.USER_NM),
-//                ua.USER_SN,
-//                1
-//        FROM TB_INTERVIEW i
-//        JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
-//        JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
-//        WHERE i.ITV_SN = #{itvSn};
-
-        //이거 넣어서 캘린더 만들어버리고 각각 받아온 sn 한번에 itvSn에 해당하는 인터뷰 행에 집어넣기
-
-//
-
+        dao.insert("com.kdt.mapper.calendar.createPicCalendarByItvSn", m); // 인터뷰SN으로 면담 진행할사람 두명 SN,기수SN 가져오고 면담 담당자 일정 추가
+        m.put("picCalSn",m.get("calSn")); //picCalSn 저장하기 (면담 담당자의 캘린더SN)
+        dao.insert("com.kdt.mapper.calendar.createAplcntCalendarByItvSn", m); // 인터뷰SN으로 면담 진행할사람 두명 SN,기수SN 가져오고 면담 신청자 일정 추가
+        m.put("aplcntCalSn",m.get("calSn")); //aplcntCalSn 저장하기 (면담 신청자의 캘린더SN)
+        System.out.println("m = " + m);
+        dao.update("com.kdt.mapper.interview.insertCalendarSnToInterview",m);
+        // 지금 calender 추가하는것 까지는 완료
     }
 
 
