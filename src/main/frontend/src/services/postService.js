@@ -38,8 +38,22 @@ export function createInterviewMemo(body) {
  * @param {Number} fixedSn LMS 회사 시리얼 넘버 고정값 => 상준이가 수퍼메인페이지 API 만들고 나면 정해질 예정
  * @returns {Object} itvSn 에 해당하는 면담신청 데이터
  */
-export const readInterview = ({itvSn, fixedSn}) => api.get(`/confirm/${itvSn}`,{params: {itvSn, fixedSn}})
+export const readInterview = ({itvSn, fixedSn}) => api.get(
+  `/confirm/${itvSn}`,{params: {itvSn, fixedSn}})
 
+/**
+ * 면담 수정(확정) API 
+ * @param {Number} itvSn 면담신청SN
+ * @param {Number} fixedSn LMS 회사 시리얼 넘버 고정값
+ * @param {Object} formData 변경(확정)된 내용
+ * @returns 1
+ */
+export function editInterview({ itvSn, fixedSn, formData }) {
+  return api.post(`/interview/edit/${itvSn}/${fixedSn}`, formData, {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+}
 
 /**
  * 관리자 게시글 관리 메뉴 - 전체 게시글 리스트(모집공고 제외)

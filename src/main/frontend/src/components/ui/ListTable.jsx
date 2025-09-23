@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import styles from "../../styles/UiComp.module.css";
+import { useEffect } from "react";
 
 // @apiData api 호출해서 구조분해할당한 것., 백에서 객체 배열로 보내줘야됨
 export default function ListTable({
@@ -8,9 +10,10 @@ export default function ListTable({
     columnData = [],
     gridTemplate,
     gap = 0,
-    whereTogo//클릭 시 페이지 이동 될 함수
+    whereTogo //클릭 시 페이지 이동 될 함수
 }) {
     // 선언부-------------------------------------------------------------
+    const navigate = useNavigate();
     //백에서 넘겨받은 데이터의 길이를 부정해서 0이면(하나라도 담기면 패스) 데이터 없음 리턴
     if(!apiData?.length) {
         return <div className={styles.ListTbBg}>-</div>;
@@ -39,7 +42,12 @@ export default function ListTable({
             null
         }
         {apiData.map((row, i) => (
-            <li key={i} className={`${styles.row} ${styles.gridRow}`}>
+            <li key={i} className={`${styles.row} ${styles.gridRow}`}
+                onClick={() => {
+                    console.log(whereTogo);
+                    navigate(whereTogo);
+                }} 
+            >
                 {columnData.map((col, j) => (
                     <>
                         <div key={j} className={styles.cell}>

@@ -63,7 +63,7 @@ export default function ListEditTable({
         </li>
         <li>
           <button
-            onClick={handleBulkDelete}
+            // onClick={handleBulkDelete}
             disabled={selected.size === 0}
             style={{ opacity: selected.size === 0 ? 0.5 : 1 }}
           >
