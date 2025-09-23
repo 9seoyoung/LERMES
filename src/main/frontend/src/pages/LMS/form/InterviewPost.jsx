@@ -131,7 +131,7 @@ function InterviewPost() {
               <div className="dropSet" style={{ zIndex: "8" }}>
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type|| "---- 필수 선택 ----"}>
-                  {(userAuth === 4 || userAuth === 5) ? (
+                  {(userAuth === 4 || userAuth === 1) ? (
                     <>
                       <p className={layoutStyles.subMenuList} onClick={() => {
                                                                               changeType("면담신청");
@@ -140,7 +140,14 @@ function InterviewPost() {
                                                                                 changeType("면담기록");
                                                                               }}>면담기록</p>
                     </>
-                  ) : ""}
+                  ) : null}
+                  {(userAuth === 5 || userAuth === 1) ? (
+                    <>
+                      <p className={layoutStyles.subMenuList} onClick={() => {
+                                                                              changeType("면담신청");
+                                                                              }}>면담신청</p>                     
+                    </>
+                  ): null }
                 </Dropdown>
                 <input type="hidden" name="type" value={postType} />
               </div>
@@ -150,6 +157,11 @@ function InterviewPost() {
                 <Dropdown className="dropset_dd" label={formData.itvPicAuthrt || "---- 필수 선택 ----"}>
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "대표" }))}>대표</p>
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "직원" }))}>직원</p>
+                  {(userAuth === 5 || userAuth === 1) ? (
+                    <>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "강사" }))}>강사</p>
+                    </>
+                  ) : null}
                 </Dropdown>
                 <input type="hidden" name="itvPicAuthrt" value={formData.itvPicAuthrt} />
               </div> 

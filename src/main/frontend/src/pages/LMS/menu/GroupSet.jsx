@@ -24,6 +24,7 @@ function GroupSet() {
   const [selectedDay, setSelectedDay] = useState(new Date().getDate()); // 숫자 (일자)
   const [events, setEvents] = useState([]); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
   const [displayDate, setDisplayDate] = useState("");                     // 문자열
+  const [selectedIdx, setSelected] = useState(0);
 
   const coSn = user?.USER_OGDP_CO_SN;
 
@@ -108,7 +109,7 @@ function formatYMDfrom(year, month /* 0-based */, day) {
       <h2>과정 관리</h2>
 
       <div className="filterList">
-        <FilterList arr={filterArr} loading={loading}>
+        <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected} loading={loading}>
           <li className="opacityBtn" onClick={() => { navigate('createGroup'); }}>+</li>
         </FilterList>
         <div className="ftList_R" />
