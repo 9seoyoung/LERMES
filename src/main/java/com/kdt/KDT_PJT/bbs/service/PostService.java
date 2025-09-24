@@ -3,12 +3,12 @@ package com.kdt.KDT_PJT.bbs.service;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.bbs.dto.PostRequestDto;
 import com.kdt.KDT_PJT.bbs.dto.PostResponseDto;
+import com.kdt.KDT_PJT.bbs.enums.BbsScope;
 import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.bbs.enums.BbsRole;
 import com.kdt.KDT_PJT.bbs.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,79 +21,44 @@ public class PostService {
     private final PostMapper postMapper;
 
     // 게시글 등록
-    public PostResponseDto createPost(PostRequestDto requestDto, Authentication auth) {
-        BbsRole role = resolveRole(auth);  //
+    public PostResponseDto createPost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
+        BbsRole role = resolveRole(auth);
         BbsType type = BbsType.fromDescription(requestDto.getBbsType());
 
         if (!role.canCreate(type)) {
             throw new AccessDeniedException("작성 권한 없음");
         }
 
-        // UUID 생성
         String uuid = UUID.randomUUID().toString();
-
-        // DB에 저장 (UUID 포함)
         postMapper.insertPost(requestDto, uuid);
-
         return postMapper.findById(requestDto.getPostSn());
     }
 
     // 게시글 단건 조회
-    public PostResponseDto getPost(Long postSn, Authentication auth) {
-        BbsRole role = resolveRole(auth);
+    public PostResponseDto getPost(Long postSn, AuthCustomUserDetails auth) {
         PostResponseDto post = postMapper.findById(postSn);
-        BbsType type = BbsType.fromDescription(post.getBbsType());
 
-        if (!role.canRead(type)) {
+        if (!canAccessPost(post, auth, null, null)) {
             throw new AccessDeniedException("조회 권한 없음");
         }
-
-        // PRIVATE 본인 여부
-        if (type == BbsType.PRIVATE) {
-            AuthCustomUserDetails user = (AuthCustomUserDetails) auth.getPrincipal();
-            if (!post.getPostWrtrSn().equals(user.getUserSn())) {
-                throw new AccessDeniedException("비공개 글은 본인만 조회 가능");
-            }
-        }
-
         return post;
     }
 
     // 게시글 목록 조회
-    public List<PostResponseDto> getPosts(Authentication auth) {
-        BbsRole role = resolveRole(auth);
+    public List<PostResponseDto> getPosts(AuthCustomUserDetails auth, Long filterCohortSn, String filterBbsType) {
         List<PostResponseDto> posts = postMapper.findAll();
 
-        // 권한 필터링
         return posts.stream()
-                .filter(post -> {
-                    BbsType type = BbsType.fromDescription(post.getBbsType());
-                    if (!role.canRead(type)) return false;
-
-                    if (type == BbsType.PRIVATE) {
-                        if (!(auth.getPrincipal() instanceof AuthCustomUserDetails user)) return false;
-                        return post.getPostWrtrSn().equals(user.getUserSn());
-                    }
-                    return true;
-                })
+                .filter(post -> canAccessPost(post, auth, filterCohortSn, filterBbsType))
                 .toList();
     }
 
     // 게시글 수정
-    public PostResponseDto updatePost(PostRequestDto requestDto, Authentication auth) {
-        BbsRole role = resolveRole(auth);
+    public PostResponseDto updatePost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
         PostResponseDto existing = postMapper.findById(requestDto.getPostSn());
-        BbsType type = BbsType.fromDescription(existing.getBbsType());
 
-        if (!role.canUpdate(type)) {
+        if (!canAccessPost(existing, auth, null, null)) { // 권한/Scope 체크 통일
             throw new AccessDeniedException("수정 권한 없음");
-        }
-
-        if (type == BbsType.PRIVATE) {
-            AuthCustomUserDetails user = (AuthCustomUserDetails) auth.getPrincipal();
-            if (!existing.getPostWrtrSn().equals(user.getUserSn())) {
-                throw new AccessDeniedException("본인만 수정 가능");
-            }
         }
 
         postMapper.updatePost(requestDto);
@@ -101,18 +66,30 @@ public class PostService {
     }
 
     // 게시글 삭제 (Soft Delete)
-    public void deletePost(Long postSn, Authentication auth) {
-        BbsRole role = resolveRole(auth);
+    public void deletePost(Long postSn, AuthCustomUserDetails auth) {
         PostResponseDto existing = postMapper.findById(postSn);
+        BbsRole role = resolveRole(auth);
         BbsType type = BbsType.fromDescription(existing.getBbsType());
+        BbsScope scope = BbsScope.fromDescription(existing.getBbsScope());
 
-        if (!role.canDelete(type)) {
-            throw new AccessDeniedException("삭제 권한 없음");
+        // PRIVATE → 본인만
+        if (scope == BbsScope.PRIVATE) {
+            if (!existing.getPostWrtrSn().equals(auth.getId())) {
+                throw new AccessDeniedException("비공개 글은 본인만 삭제 가능");
+            }
         }
-
-        if (type == BbsType.PRIVATE) {
-            AuthCustomUserDetails user = (AuthCustomUserDetails) auth.getPrincipal();
-            if (!existing.getPostWrtrSn().equals(user.getUserSn())) {
+        // 공지/FAQ/자료실/QNA → 관리자 or 작성자 본인
+        else if (type == BbsType.CLASS_MATERIAL || type == BbsType.QNA
+                || type == BbsType.NOTICE || type == BbsType.FAQ) {
+            if (!(role == BbsRole.SUPER_ADMIN || role == BbsRole.TENANT || role == BbsRole.EMPLOYEE)) {
+                if (!existing.getPostWrtrSn().equals(auth.getId())) {
+                    throw new AccessDeniedException("본인만 삭제 가능");
+                }
+            }
+        }
+        // 그 외 → 본인만
+        else {
+            if (!existing.getPostWrtrSn().equals(auth.getId())) {
                 throw new AccessDeniedException("본인만 삭제 가능");
             }
         }
@@ -120,14 +97,50 @@ public class PostService {
         postMapper.softDelete(postSn);
     }
 
-    // 현재 사용자 Role 확인
-    private BbsRole resolveRole(Authentication auth) {
-        if (auth == null || !auth.isAuthenticated()) {
+    // 공통 권한 + Scope 체크
+    private boolean canAccessPost(PostResponseDto post, AuthCustomUserDetails auth,
+                                  Long filterCohortSn, String filterBbsType) {
+        BbsRole role = resolveRole(auth);
+        BbsType type = BbsType.fromDescription(post.getBbsType());
+        BbsScope scope = BbsScope.fromDescription(post.getBbsScope());
+
+        // 1. bbsType 필터
+        if (filterBbsType != null) {
+            try {
+                BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase()); // 소문자 대응
+                if (!type.equals(filterType)) return false;
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("잘못된 게시판 유형: " + filterBbsType);
+            }
+        }
+
+        // 2. Role 권한 체크
+        if (!role.canRead(type)) return false;
+
+        // 3. Scope 권한 체크
+        if (scope == BbsScope.PUBLIC) return true;
+        if (auth == null || !auth.isEnabled()) return false;
+
+        return switch (scope) {
+            case PRIVATE -> post.getPostWrtrSn().equals(auth.getId());
+            case COMPANY -> post.getCoSn().equals(auth.getCompanySn());
+            case COHORT -> {
+                if (role == BbsRole.SUPER_ADMIN || role == BbsRole.TENANT || role == BbsRole.EMPLOYEE) {
+                    yield post.getCoSn().equals(auth.getCompanySn())
+                            && (filterCohortSn == null || post.getCohortSn().equals(filterCohortSn));
+                } else {
+                    yield post.getCoSn().equals(auth.getCompanySn())
+                            && post.getCohortSn().equals(auth.getCohortSn());
+                }
+            }
+            default -> false;
+        };
+    }
+
+    private BbsRole resolveRole(AuthCustomUserDetails auth) {
+        if (auth == null || !auth.isEnabled()) {
             return BbsRole.VISITOR;
         }
-        if (auth.getPrincipal() instanceof AuthCustomUserDetails user) {
-            return BbsRole.valueOf(user.getRole().name());
-        }
-        return BbsRole.VISITOR;
+        return BbsRole.fromCode(auth.getRoleType());
     }
 }

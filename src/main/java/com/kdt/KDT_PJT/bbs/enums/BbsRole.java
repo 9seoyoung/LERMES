@@ -123,4 +123,18 @@ public enum BbsRole {
     public abstract boolean canRead(BbsType type);
     public abstract boolean canUpdate(BbsType type);
     public abstract boolean canDelete(BbsType type);
+
+    // 👇 DB roleType(숫자) → Enum 변환 메서드
+    public static BbsRole fromCode(Long roleId) {
+        if (roleId == null) return VISITOR;
+        return switch (roleId.intValue()) {
+            case 1 -> SUPER_ADMIN;
+            case 2 -> TENANT;
+            case 3 -> EMPLOYEE;
+            case 4 -> INSTRUCTOR;
+            case 5 -> STUDENT;
+            case 6 -> GENERAL;
+            default -> VISITOR; // Unknown 안전 fallback
+        };
+    }
 }

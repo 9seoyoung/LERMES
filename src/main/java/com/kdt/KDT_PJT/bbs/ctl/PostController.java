@@ -1,10 +1,12 @@
 package com.kdt.KDT_PJT.bbs.ctl;
 
+import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.bbs.dto.PostRequestDto;
 import com.kdt.KDT_PJT.bbs.dto.PostResponseDto;
 import com.kdt.KDT_PJT.bbs.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
@@ -12,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("api/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -20,7 +22,7 @@ public class PostController {
     // 게시글 등록
     @PostMapping
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto,
-                                                      Authentication auth) {
+                                                      @AuthenticationPrincipal AuthCustomUserDetails auth) {
         PostResponseDto responseDto = postService.createPost(requestDto, auth);
         return ResponseEntity.ok(responseDto);
     }
@@ -28,15 +30,19 @@ public class PostController {
     // 게시글 단건 조회
     @GetMapping("/{postSn}")
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postSn,
-                                                   Authentication auth) {
+                                                   @AuthenticationPrincipal AuthCustomUserDetails auth) {
         PostResponseDto responseDto = postService.getPost(postSn, auth);
         return ResponseEntity.ok(responseDto);
     }
 
     // 게시글 목록 조회
     @GetMapping
-    public ResponseEntity<List<PostResponseDto>> getPosts(Authentication auth) {
-        List<PostResponseDto> posts = postService.getPosts(auth);
+    public ResponseEntity<List<PostResponseDto>> getPosts(
+            @AuthenticationPrincipal AuthCustomUserDetails auth,
+            @RequestParam(required = false) Long cohortSn,   // 기수 필터
+            @RequestParam(required = false) String bbsType   // 게시판 유형 필터 (Enum 이름: NOTICE, CLASS_MATERIAL 등)
+    ) {
+        List<PostResponseDto> posts = postService.getPosts(auth, cohortSn, bbsType);
         return ResponseEntity.ok(posts);
     }
 
@@ -44,7 +50,7 @@ public class PostController {
     @PutMapping("/{postSn}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postSn,
                                                       @RequestBody PostRequestDto requestDto,
-                                                      Authentication auth) {
+                                                      @AuthenticationPrincipal AuthCustomUserDetails auth) {
         requestDto.setPostSn(postSn); // pathVariable → DTO 반영
         PostResponseDto responseDto = postService.updatePost(requestDto, auth);
         return ResponseEntity.ok(responseDto);
@@ -53,7 +59,7 @@ public class PostController {
     // 게시글 삭제 (Soft Delete)
     @DeleteMapping("/{postSn}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postSn,
-                                           Authentication auth) {
+                                           @AuthenticationPrincipal AuthCustomUserDetails auth) {
         postService.deletePost(postSn, auth);
         return ResponseEntity.noContent().build(); // HTTP 204
     }
