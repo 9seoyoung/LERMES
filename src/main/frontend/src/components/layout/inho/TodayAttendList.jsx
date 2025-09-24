@@ -1,6 +1,6 @@
 // TodayAttendList.jsx
 import { useEffect, useState } from 'react';
-import {useAccount} from '../../../auth/AuthContext';
+import { useAccount } from '../../../auth/AuthContext';
 import { fetchTodayAttendance } from '../../../attend/attendService';
 import '../../../styles/Attend.css';
 
@@ -15,10 +15,10 @@ const STATUS_KO = {
 
 export default function TodayAttendList() {
   const [rows, setRows] = useState([]);
-  const {user} = useAccount();
+  const { user } = useAccount();
 
   useEffect(() => {
-    if(user?.USER_AUTHRT_SN === 1) return; //슈퍼 권한일 때 에러 방지
+    if (user?.USER_AUTHRT_SN === 1) return; //슈퍼 권한일 때 에러 방지
     fetchTodayAttendance().then((data) => setRows(data || []));
   }, []);
 

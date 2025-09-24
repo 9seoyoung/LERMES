@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Backdrop from './Backdrop';
 import { getActiveAttendCode, checkin } from './attendService';
+import { toast } from 'react-toastify';
 
 /**
  * 학생 출석 모달
@@ -49,13 +50,13 @@ export default function StdAttendModal({ onClose }) {
     try {
       const r = await checkin({ code: input.trim() });
       if (r?.ok) {
-        alert(r.message || '입실 완료');
+        toast.success(r.message || '입실 완료');
         onClose?.();
       } else {
-        alert(r?.message || '입실 실패');
+        toast.error(r?.message || '입실 실패');
       }
     } catch (e) {
-      alert(e.message || '입실 실패');
+      toast.error(e.message || '입실 실패');
     } finally {
       setLoading(false);
     }
