@@ -99,6 +99,7 @@ public class AuthSecurityConfig {
                                 "/api/new-password/**"
                         ).permitAll()
                         .requestMatchers("/api/files/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )

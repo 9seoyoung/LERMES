@@ -23,9 +23,7 @@ import java.util.UUID;
 public class InterviewService {
     @Autowired
     CmmnDao dao;
-
-
-    /** TODO 면담 신청 API 서비스
+    /**
      * @methodName : createInterviewRequest
      * @author : 김동식
      * @date : 2025.09.19
@@ -48,6 +46,7 @@ public class InterviewService {
         String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid) // TODO 일단 모든 면담에 대해 uuid 만드는데, 파일 있을경우만 생성하도록 변경할팔요
         params.put("formUuid", uuid);               //신청글에대한 uuid 만듦
         params.put("itvAplyDt", LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)); // 면담 신청 일시 추가(기록용)
+        params.put("coSn",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
 
         //itvPicAuthrt 값을 문자열로 가져와서 Integer로 변환
         String authrtString = (String) params.get("itvPicAuthrt");
@@ -92,9 +91,24 @@ public class InterviewService {
     }
 
     @Transactional
-    public int confirmInterview(@RequestBody CmmnMap params){
+    public int confirmInterview(CmmnMap params){
 
 
         return dao.update("com.kdt.mapper.interview.confirmInterview", params); //업데이트
+    }
+
+    @Transactional
+    public CmmnMap getCoSnAndCohortSnByItvSn(CmmnMap params){
+        return dao.selectOne("com.kdt.mapper.interview.getCoSnAndCohortSnByItvSn",params);
+    }
+
+    @Transactional
+    public CmmnMap readInterviewbyItvSn(CmmnMap params){
+        return dao.selectOne("com.kdt.mapper.interview.readInterviewbyItvSn", params);
+    }
+
+    @Transactional
+    public int incViewCnt(CmmnMap params){
+        return dao.update("com.kdt.mapper.interview.incViewCnt", params);
     }
 }
