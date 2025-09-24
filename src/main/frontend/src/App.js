@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 //페이지
 import AppRoutes from "./routes/AppRoutes";
 import AuthProvider from "./auth/AuthProvider";
+import { SelectedCompanyProvider } from './contexts/SelectedCompanyContext';
 
 //스타일
 
@@ -19,15 +20,17 @@ export default function App() {
   return (
     <BrowserRouter>
     <AuthProvider>
-      <AppRoutes />
-        <ToastContainer
-              autoClose={2000}
-              closeOnClick={true}
-              draggable={false}
-              theme="light"
-              position="top-center"
-              style={{zIndex: "99999999"}}
-            />
+      <SelectedCompanyProvider>
+        <AppRoutes />
+          <ToastContainer
+                autoClose={2000}
+                closeOnClick={true}
+                draggable={false}
+                theme="light"
+                position="top-center"
+                style={{zIndex: "99999999"}}
+              />
+        </SelectedCompanyProvider>
       </AuthProvider>
     </BrowserRouter>
   );

@@ -7,7 +7,7 @@ import LmsHeader from "../ui/headerModule/LmsHeader";
 import { useState } from "react";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import NavStatus from "../ui/navModule/NavStatus";
-
+import { Nav } from "../ui/navModule/Nav";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
@@ -63,11 +63,12 @@ export default function Layout() {
       <div className="layout_content">
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
-          {navToggle === false ? 
+          {/* {navToggle === false ? 
             null 
             : 
             <NavStatus navKind={navKind} setNavToggle={setNavToggle} loc={loc} myCoSn={myCoSn} fixedSn={fixedSn}/>
-          }
+          } */}
+          <Nav setNavToggle={setNavToggle}></Nav>
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>
