@@ -27,7 +27,7 @@ import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 import UploadDownloadDemo from '../pages/UploadDownloadDemo.jsx';
 import DocxSet from '../pages/LMS/menu/DocxSet.jsx';
-import AccountSet from '../pages/LMS/AccountSet.jsx';
+import AccountSet from '../pages/LMS/menu/AccountSet.jsx';
 import GroupSet from '../pages/LMS/menu/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';
@@ -38,6 +38,7 @@ import StudyManage from '../pages/LMS/menu/StudyManage.jsx';
 import StudentManage from '../pages/LMS/menu/StudentManage.jsx';
 import InterviewPost from '../pages/LMS/form/InterviewPost.jsx';
 import InterviewEditPost from '../pages/LMS/form/InterviewEditPost.jsx';
+import AdminPostRead from '../pages/LMS/readAndEdit/AdminPostRead.jsx';
 
 function AppRoutes() {
   return (
@@ -84,6 +85,7 @@ function AppRoutes() {
 
       {/* 관리자(테넌트, 직원) */}
       <Route element={<RoleRoute roles={[1, 2, 3]} />}>
+        <Route path='adminHome/boardSet/readInterview' element={<AdminPostRead/>}></Route>
         <Route path="adminHome" element={<AdminHome />} />
         <Route path="adminHome/boardSet" element={<BoardManage />} />
         <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
