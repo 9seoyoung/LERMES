@@ -85,6 +85,13 @@ public class InterviewService {
     }
 
     @Transactional
+    public List<CmmnMap> getMyInterviewRequestsAll(CmmnMap params) { //params에 where에 쓸거 실려옴
+//        params.put("pathCohortSn",pathCohortSn); // params에 실어서 보내기
+        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequestsAll", params);
+        return paramsList;
+    }
+
+    @Transactional
     public int confirmInterview(@RequestBody CmmnMap params){
 
 

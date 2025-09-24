@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import FilterList from '../../components/ui/FilterList';
-import ListTable from '../../components/ui/ListTable';
+import FilterList from '../../../components/ui/FilterList';
+import ListTable from '../../../components/ui/ListTable';
 import {Settings} from "lucide-react";
-import ListEditTable from '../../components/ui/ListEditTable';
+import ListEditTable from '../../../components/ui/ListEditTable';
 
 export default function AccountSet() {
   const [manageState, setManageState] = useState(false);
