@@ -1,5 +1,5 @@
 /* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
-
+@import "./token.css";
 /* 구글에서 가져온 폰트 - Noto Sans KR */
 
 /* 색상 클래스 */
@@ -259,9 +259,34 @@ footer > div:hover {
 
 /* 메인화면 각종 레이아웃 */
 .mainContainer_cardGrid{
+  padding: 0 12px;
+  width: 100%;
   background-color: #0088FF;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(312px, 1fr));
+  gap: 12px;
 }
+
+.company_card {
+  background-color: #ACACAC;
+  height: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 16px;
+  box-shadow: 4px 4px 4px #00000025;
+}
+
+.card_bottom {
+  background-color: #d9d9d9;
+  height: 120px;
+  border-radius: 0 0 16px 16px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+
 
 .mainCont_Lms_Row {
   display: flex;
