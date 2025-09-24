@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Backdrop from './Backdrop';
 import { createAttendCode, getActiveAttendCode } from './attendService';
+import { toast } from 'react-toastify';
 
 /**
  * 강사용 출석 코드 생성 모달
@@ -48,20 +49,20 @@ export default function TutorAttendModal({ onClose }) {
   const onCreate = async () => {
     const value = code.trim();
     if (value.length < 2) {
-      alert('코드는 최소 2자리 이상 입력해야 합니다.');
+      toast.error('코드는 최소 2자리 이상 입력해야 합니다.');
       return;
     }
     setLoading(true);
     try {
       const res = await createAttendCode({ code: value }); // { ok, message }
       if (res?.ok) {
-        alert(res.message || '코드 생성 완료');
+        toast.success(res.message || '코드 생성 완료');
         onClose?.(); // 성공 시 모달 닫기
       } else {
-        alert(res?.message || '코드 생성 실패');
+        toast.error(res?.message || '코드 생성 실패');
       }
     } catch (e) {
-      alert(e.message || '네트워크 오류');
+      toast.error(e.message || '네트워크 오류');
     } finally {
       setLoading(false);
     }

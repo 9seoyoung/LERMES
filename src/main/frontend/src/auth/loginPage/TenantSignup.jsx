@@ -38,9 +38,9 @@ export default function TenantSignup() {
       await requestEmailCode(normEmail);
       setForm((f) => ({ ...f, email: normEmail }));
       setCodeSent(true);
-      setMsg('인증코드를 전송했습니다.');
+      toast.success('인증코드를 전송했습니다.');
     } catch (e) {
-      setMsg(e.message || '인증코드 전송 실패');
+      toast.error(e.message || '인증코드 전송 실패');
     } finally {
       setSending(false);
     }
@@ -49,6 +49,12 @@ export default function TenantSignup() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setMsg(null);
+
+    const nameRegex = /^[가-힣]{2,5}$/;
+    if (!nameRegex.test(form.username.trim())) {
+      toast.error('이름은 한글 2~5자로 입력해주세요.');
+      return;
+    }
 
     if (form.password !== form.confirmPassword) {
       return setMsg('비밀번호가 일치하지 않습니다.');
@@ -71,7 +77,7 @@ export default function TenantSignup() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      toast.success("회원가입 완료!")
+      toast.success('회원가입이 완료되었습니다!');
       const redirectLoc = `/${me?.HOME_PATH}` || '/';
       navigate(redirectLoc, { replace: true });
     } catch (e) {
@@ -81,22 +87,28 @@ export default function TenantSignup() {
     }
   };
 
+  // ✔ 모든 값이 채워졌는지 확인
+  const isFormValid =
+    form.companyName.trim() &&
+    form.businessNumber.trim().length === 10 &&
+    form.username.trim() &&
+    form.email.trim() &&
+    form.verificationCode.trim().length === 6 &&
+    form.password &&
+    form.confirmPassword &&
+    form.phoneNumber.trim().length === 11;
+
   return (
     <div className="signup-inner">
       <div className="signup-title">비즈니스 회원가입</div>
-      <form className="signup-form" onSubmit={onSubmit}>
-        <div className={styles.logo}>
-          <FilePreview />
-          <div className={styles.imgCaption}>*이미지 크기 180px X 60px</div>
-        </div>
-
+      <form className="signup-form" onSubmit={onSubmit} noValidate>
         <input
           name="companyName"
           placeholder="회사명"
           value={form.companyName}
           onChange={onChange}
           required
-          />
+        />
         <input
           name="businessNumber"
           placeholder="사업자등록번호"
@@ -105,18 +117,21 @@ export default function TenantSignup() {
           value={form.businessNumber}
           onChange={onChange}
           required
-          />
-          {msg && <p className="msg">{msg}</p>} 
+        />
 
         <input
           name="username"
           type="text"
+          minLength={2}
+          maxLength={10}
           placeholder="이름(국문)"
           value={form.username}
           onChange={onChange}
           required
           autoComplete="off"
-          />
+          pattern="^[가-힣]{2,5}$"
+          title="이름은 한글 2~5자로 입력해주세요."
+        />
 
         <div className="input-with-btn">
           <input
@@ -129,13 +144,13 @@ export default function TenantSignup() {
             required
             disabled={codeSent}
             autoComplete="email"
-            />
+          />
           <button
             type="button"
             className="verify-btn"
             onClick={sendCode}
             disabled={sending || !form.email}
-            >
+          >
             {sending ? '전송중...' : '인증'}
           </button>
         </div>
@@ -177,11 +192,19 @@ export default function TenantSignup() {
           required
         />
 
-        {/* ✔ 전체 required 검사 사용하려면 submit 버튼 권장 */}
-        <button type="submit" disabled={loading} className="signup-btn">
+        <button
+          type="submit"
+          disabled={!isFormValid || loading}
+          className="signup-btn"
+          style={{
+            backgroundColor: !isFormValid ? '#ccc' : '#007bff',
+            cursor: !isFormValid ? 'not-allowed' : 'pointer',
+          }}
+        >
           {loading ? '등록 중...' : '회원 가입'}
         </button>
 
+        {msg && <p className="msg">{msg}</p>}
       </form>
     </div>
   );
