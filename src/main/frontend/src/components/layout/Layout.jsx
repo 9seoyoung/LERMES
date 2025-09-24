@@ -24,10 +24,10 @@ export default function Layout() {
 
     // 홈 경로 맵
   const HOME_PATHS = {
-    admin: "/adminHome",
-    tutor: "/tutorHome",
-    std: "/stdHome",
-    visitor: "/visitorHome",
+    adminHome: "/adminHome",
+    tutorHome: "/tutorHome",
+    stdHome: "/stdHome",
+    visitorHome: null, 
   };
 
 
@@ -52,20 +52,44 @@ useEffect(() => {
   //   setUser(saved);           // 서버 결과로 전역 user 교체
   // };
 
+// 대안
+//   const { user, loading: userLoading } = useAccount();
+// const { fixedSn, effectiveSn, ready } = useSelectedCompany();
+// const loading = userLoading || !ready;
+// const headerMode = loading ? 'loading' : (fixedSn == null ? 'super' : 'lms');
+
+// <header>
+//   {headerMode === 'loading' && null}
+//   {headerMode === 'super'   && <SuperHeader/>}
+//   {headerMode === 'lms'     && (
+//     <LmsHeader navToggle={navToggle} setNavToggle={setNavToggle}>
+//       <HeaderStatus navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn}/>
+//     </LmsHeader>
+//   )}
+// </header>
+
+
   console.log(effectiveSn);
   console.log(myCoSn);
 
   return (
     <div className="layout">
       <header>
+        {/* clearFixedSn누르면 초기화되고 초기화한 값을 바라봐야하는데 effective봐서그런거같은데 */}
         {/* <HeaderStatus></HeaderStatus> */}
-        {effectiveSn === null ? 
+        {/* {effectiveSn == null ? 
           <SuperHeader/> 
           : 
-          <LmsHeader>
+          <LmsHeader navToggle={navToggle} setNavToggle={setNavToggle}>
             <HeaderStatus  navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn}/>
           </LmsHeader>
-        }
+        } */}
+        {effectiveSn == null && <SuperHeader />}
+        {effectiveSn != null && (
+          <LmsHeader navToggle={navToggle} setNavToggle={setNavToggle}>
+            <HeaderStatus navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn} />
+          </LmsHeader>
+        )}
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>

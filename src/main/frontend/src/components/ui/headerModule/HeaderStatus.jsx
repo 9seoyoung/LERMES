@@ -42,17 +42,23 @@ export default function HeaderStatus({ navKind, myCoSn, effectiveSn }) {
   
   switch (navKind) {
     case 'adminHome':
-      component =  <AdminHeader />
-      return component;
+      return 
+        <AdminHeader />
+      
     case 'stdHome':
-      component =  <StdHeader />
-      return component;
+      return 
+        <StdHeader />
+      
     case 'tutorHome':
-      component =  <TutorHeader />
-      return component;
+      return 
+        <TutorHeader />
+      
     case 'visitorHome':
-      component =  <VisitorHeader />
-      return component;
+      return 
+        <VisitorHeader />
+      
+    default:           
+      return <VisitorHeader />; 
     }
 
 }
