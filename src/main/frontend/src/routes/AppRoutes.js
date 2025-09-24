@@ -87,11 +87,11 @@ function AppRoutes() {
 
       <Route element = {<LmsAuth/>}>
         <Route element={<LmsGuard />}>
-          <Route path='lmsHomeIndex' element={<LmsHomeIndex/>}>
+          <Route path='lmsHomeIndex' element={<LmsHomeIndex/>}/>
             {/* 관리자(테넌트, 직원) */}
             <Route element={<RoleRoute roles={[1, 2, 3]} />}>
-              <Route path='adminHome/boardSet/readInterview' element={<AdminPostRead/>}></Route>
               <Route path="adminHome" element={<AdminHome />} />
+              <Route path='adminHome/boardSet/readInterview' element={<AdminPostRead/>}></Route>
               <Route path="adminHome/boardSet" element={<BoardManage />} />
               <Route path='adminHome/boardSet/createPost' element={<CreatePost/>}></Route>
               <Route path="adminHome/groupSet" element={<GroupSet />} />
@@ -127,7 +127,6 @@ function AppRoutes() {
 
         </Route>
 
-      </Route>
 
     </Route>    
 

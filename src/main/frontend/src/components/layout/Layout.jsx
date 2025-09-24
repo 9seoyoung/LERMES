@@ -3,19 +3,16 @@ import { useNavigate } from "react-router-dom"
 import { useAccount } from "../../auth/AuthContext";
 import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
-import LmsHeader, { VisitorHeader } from "../ui/headerModule/LmsHeader";
-import Nav from "../ui/navModule/NavStatus";
-import StdNav from "../ui/navModule/StdNav";
-import AdminNav from "../ui/navModule/AdminNav";
-import TutorNav from "../ui/navModule/TutorNav";
+import LmsHeader from "../ui/headerModule/LmsHeader";
 import { useState } from "react";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
+import NavStatus from "../ui/navModule/NavStatus";
 
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
-  const { fixedSn } = useSelectedCompany();
+  const { fixedSn, clearFixedSn } = useSelectedCompany();
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();
@@ -42,65 +39,17 @@ export default function Layout() {
   //   setUser(saved);           // 서버 결과로 전역 user 교체
   // };
 
-// 헤더 종류 고르기
-  function HeaderStatus({ loc }) {
-    let component;
-
-    switch (loc) {
-      case "adminHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
-        break;
-      case "stdHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle}  loc={loc}/>;
-        break;
-      case "tutorHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle}  loc={loc}/>;
-        break;
-
-      case "visitorHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
-        break;
-
-      default:
-        component = <SuperHeader  />;
-    }
-
-    return component;
-  }
-
-  function NavStatus({ loc }) {
-    let component;
-
-    switch (loc) {
-      case "adminHome":
-        component = <AdminNav />;
-        break;
-      case "stdHome":
-        component = <StdNav  />;
-        break;
-      case "tutorHome":
-        component = <TutorNav />;
-        break;
-      default:
-        component = <Nav/>;
-    }
-
-    return component;
-  }
+  console.log(fixedSn);
+  console.log(myCoSn);
 
   return (
     <div className="layout">
       <header>
-        {/* 페이지 별 헤더 변경 */}
-        { myCoSn === fixedSn ? (
-          <HeaderStatus loc={loc} setNavToggle={setNavToggle} navToggle={navToggle} />
-        )
-        :
-          <LmsHeader>
-            <VisitorHeader />
-          </LmsHeader>
+        {fixedSn === myCoSn ?
+          <LmsHeader navKind={navKind} setNavToggle={setNavToggle} navToggle={navToggle} myCoSn={myCoSn} loc={loc}/>
+          :
+          <SuperHeader loc={loc}/>
         }
-        
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
@@ -114,13 +63,11 @@ export default function Layout() {
       <div className="layout_content">
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
-          {navToggle === false ? null : (
-            myCoSn === fixedSn ? (
-              <NavStatus loc={loc} />
-            ) : (
-              <Nav />
-            )
-          )}
+          {navToggle === false ? 
+            null 
+            : 
+            <NavStatus navKind={navKind} setNavToggle={setNavToggle} loc={loc}/>
+          }
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>
@@ -134,7 +81,7 @@ export default function Layout() {
             <div onClick={() => navigate('/visitorHome')} style={{cursor:"pointer"}}>방문자 홈</div>
           </>
           :
-          <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
+          <h2 onClick={() => {navigate('/'); setNavToggle(false); clearFixedSn();}} style={{cursor:"pointer"}}>LERMES</h2>
           }
           <div className="testBox">
             <div style={{ fontSize: "1.4rem", color: "#444" }}>권한</div>

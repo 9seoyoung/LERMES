@@ -18,33 +18,47 @@ import {
 } from '../../../attend/attendService';
 
 /** 공통 헤더 */
-export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
+function HeaderStatus({ loc, navKind, myCoSn, fixedSn }) {
+  const {user} = useAccount();
+  let component;
+
+  if((myCoSn !== fixedSn) || (user.USER_AUTHRT_SN !== 1) ) return <VisitorHeader />
+  
+  if (loc != navKind) throw new Error("선택한 것의 권한과 보이는 것이 다름")
+
+  
+  switch (navKind) {
+    case 'adminHome':
+      component =  <AdminHeader />;
+      return component;
+    case 'stdHome':
+      component =  <StdHeader />;
+      return component;
+    case 'tutorHome':
+      component =  <TutorHeader />;
+      return component;
+    case 'visitorHome':
+      component =  <VisitorHeader />;
+      return component;
+
+    default:
+      component =  <SuperHeader />;
+      return component;
+    }
+
+}
+        
+export default function LmsHeader({ loc ,navToggle, setNavToggle, myCoSn }) {
   const { clearFixedSn, fixedSn } = useSelectedCompany();
   const { user } = useAccount();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const navKind = pathname.split('/', 2)[1];
+  const navKind = pathname.split('/', 2)[1] || pathname.split('/',2)[1];
+  console.log(`${navKind} navKind가 가리키는 위치`)
 
   if(!user) {
     navigate('/', {redirect: true});
   }
-
-  // 현재 페이지별 헤더 라우팅
-  function HeaderStatus({ loc }) {
-    switch (loc) {
-      case 'adminHome':
-        return <AdminHeader />;
-      case 'stdHome':
-        return <StdHeader />;
-      case 'tutorHome':
-        return <TutorHeader />;
-      case 'visitorHome':
-        return <VisitorHeader />;
-      default:
-        return <SuperHeader />;
-    }
-  }
-
   return (
     <>
       <div className="header_L">
@@ -65,36 +79,32 @@ export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
             console.log(user);
           }}
         >
+          <h2>{ fixedSn || user?.CO_SN}</h2>
           {(user?.USER_AUTHRT_SN === 1 || user?.USER_AUTHRT_SN === 2) && (
             <button className="tempBtn basicBtn">로고 변경</button>
           )}
-          <h2>{user?.CO_NM || user?.CO_SN}</h2>
         </div>
       </div>
-      {user?.USER_OGDP_CO_SN === fixedSn ?
-        <HeaderStatus loc={loc} />
-      :
-        <>{children}</>
-      }
-    </>
-  );
+      <HeaderStatus navKind={navKind} fixedSn={fixedSn} myCoSn={myCoSn} loc={loc}></HeaderStatus>
+      {console.log("이거 호출됨", navKind)}
+  </>
+);
 }
 
-/** 수강생 헤더: 단일 버튼(출석/퇴실) + 상태 표시 */
-export function StdHeader() {
-  const { clearFixedSn } = useSelectedCompany();
-  const [showAttendModal, setShowAttendModal] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [inTime, setInTime] = useState(null);
-  const [outTime, setOutTime] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAccount();
-
-  console.log(user?.USER_EML_ADDR); // null 대비
-
-  // 오늘 상태 갱신
-  const refreshStatus = useCallback(async () => {
-    // 로그인 정보 없으면 API 호출하지 않음
+  /** 수강생 헤더: 단일 버튼(출석/퇴실) + 상태 표시 */
+  export function StdHeader() {
+    const [showAttendModal, setShowAttendModal] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [inTime, setInTime] = useState(null);
+    const [outTime, setOutTime] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const { user } = useAccount();
+    
+    console.log(user?.USER_EML_ADDR); // null 대비
+    
+    // 오늘 상태 갱신
+    const refreshStatus = useCallback(async () => {
+      // 로그인 정보 없으면 API 호출하지 않음
     if (!user) {
       setInTime(null);
       setOutTime(null);
@@ -125,25 +135,25 @@ export function StdHeader() {
   useEffect(() => {
     refreshStatus();
   }, [refreshStatus]);
-
+  
   const isCheckedIn = !!inTime;
   const isCheckedOut = !!outTime;
   const actionLabel = !isCheckedIn ? '출석' : !isCheckedOut ? '퇴실' : '출석'; // 퇴실 완료면 '출석'(비활성)
   const buttonDisabled = loading || isCheckedOut || !user; // 로그인/세션 확인 전에도 안전
-
+  
   // 헤더 단일 버튼 클릭 분기
   const onClickAction = () => {
     if (!isCheckedIn) setShowAttendModal(true); // 출석(코드입력)
     else if (!isCheckedOut) setShowConfirm(true); // 퇴실 확인
   };
-
+  
   const fmt = (t) => (t ? t : '00:00');
   const nowStr = new Date().toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
   });
-
+  
   // 퇴실 확정
   const doCheckout = async () => {
     try {
@@ -157,7 +167,7 @@ export function StdHeader() {
       setShowConfirm(false);
     }
   };
-
+  
   return (
     <div className="header_R">
       <div className={uiStyle.statusBtn}>
@@ -179,26 +189,26 @@ export function StdHeader() {
           background: buttonDisabled ? '#9ca3af' : undefined,
           opacity: buttonDisabled ? 0.7 : 1,
         }}
-      >
+        >
         {actionLabel}
       </button>
 
       {/* 출석 모달(입실) */}
       {showAttendModal && (
         <StdAttendModal
-          onClose={async () => {
-            setShowAttendModal(false);
+        onClose={async () => {
+          setShowAttendModal(false);
             await refreshStatus();
           }}
-        />
-      )}
+          />
+        )}
 
       {/* 퇴실 확인 모달(헤더에서 직접 띄움) */}
       {showConfirm && (
         <CheckoutConfirmModal
-          nowStr={nowStr}
-          onCancel={() => setShowConfirm(false)}
-          onConfirm={doCheckout}
+        nowStr={nowStr}
+        onCancel={() => setShowConfirm(false)}
+        onConfirm={doCheckout}
         />
       )}
     </div>
@@ -210,7 +220,7 @@ export function TutorHeader() {
   const { clearFixedSn } = useSelectedCompany();
   const [modalOpen, setModalOpen] = useState(false);
   const [ , setActiveCode] = useState(null);
-
+  
   const refreshCode = async () => {
     try {
       const r = await getActiveAttendCode(); // { data: { code: "65" } }
@@ -219,7 +229,7 @@ export function TutorHeader() {
       setActiveCode(null);
     }
   };
-
+  
   useEffect(() => {
     refreshCode();
   }, []);
