@@ -9,10 +9,13 @@ import StdNav from "../ui/navModule/StdNav";
 import AdminNav from "../ui/navModule/AdminNav";
 import TutorNav from "../ui/navModule/TutorNav";
 import { useState } from "react";
+import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
+
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
+  const { clearSelectedCompany } = useSelectedCompany();
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();

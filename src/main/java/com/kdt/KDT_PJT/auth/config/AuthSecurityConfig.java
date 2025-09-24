@@ -92,7 +92,7 @@ public class AuthSecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/signup/**", "/api/email/code/**").permitAll()
-                        .requestMatchers("/api/files/**").permitAll()
+                        .requestMatchers("/api/files/**", "api/public/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )

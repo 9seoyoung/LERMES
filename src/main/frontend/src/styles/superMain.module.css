@@ -3,6 +3,7 @@
   box-sizing: border-box;
   padding: 0 12px;
   width: 100%;
+  grid-auto-flow: row;
   display: grid;
   gap: 12px;
   /* 컨테이너 폭에 따라 자동 칼럼 */
@@ -32,7 +33,6 @@
   justify-content: space-between;
 }
 
-/* ✅ data-속성으로 상태/타입 표시 (권장) */
 .title {
   display: flex;
   align-items: center;
