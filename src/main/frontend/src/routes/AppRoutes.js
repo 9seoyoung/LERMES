@@ -27,7 +27,7 @@ import Board from '../pages/LMS/Board.jsx';
 import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 import UploadDownloadDemo from '../pages/UploadDownloadDemo.jsx';
 import DocxSet from '../pages/LMS/menu/DocxSet.jsx';
-import AccountSet from '../pages/LMS/AccountSet.jsx';
+import AccountSet from '../pages/LMS/menu/AccountSet.jsx';
 import GroupSet from '../pages/LMS/menu/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
 import Mypage from '../pages/Mypage.jsx';

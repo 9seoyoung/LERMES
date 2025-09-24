@@ -63,7 +63,7 @@ public class InterviewController {
      * - 강사(INSTRUCTOR=4): url에 cohortSn 없으면 본인 cohortSn 사용, 그것도 없으면 400
      * - 대표/직원(TENANT=2, EMPLOYEE=3): url에 cohortSn 필수
      */
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN',TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
     @GetMapping({"/my-requests", "/my-requests/{cohortSn}"}) // 강사/대표/직원 공용
     public List<CmmnMap> getMyInterviewRequests(
             @AuthenticationPrincipal AuthCustomUserDetails me,
