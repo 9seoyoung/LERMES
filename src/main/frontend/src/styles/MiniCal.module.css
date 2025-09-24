@@ -1,18 +1,18 @@
 .calContainer {
-background-color: #fff;
-border-radius: 16px;
-display: flex;
+  background-color: var(--color-sec-bg);
+  border-radius: 16px;
+  display: flex;
 }
 
 .cal{
-width: 420px;
-margin: 0 auto;
+  width: 420px;
+  margin: 0 auto;
 }
 
 /* 현재 연도,월 */
 .month {
   display: flex;
-justify-content: space-around;
+  justify-content: space-around;
   margin-bottom: 5px;
   margin-top: 10px;
   font-size: 15px;

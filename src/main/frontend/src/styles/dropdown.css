@@ -13,7 +13,8 @@
   /* border: 1px solid #d0d5dd; */
   width: 100%;
   font-size: 1.2rem;
-  background: #fff;
+  /* background: #fff; */
+  background: var(--color-sec-bg);
   cursor: pointer;
 }
 .dd__button:hover { background: #f8fafc; }
@@ -28,7 +29,8 @@
   top: calc(100% + 8px);
   width: 100%;
   min-width: max-content;
-  background: #f6f6f6;
+  /* background: #f6f6f6; */
+  background: var(--color-light-bg);
   border: 1px solid #e5e7eb;
   border-radius: .6rem;
   box-shadow: 0 8px 24px rgba(0,0,0,.08);
