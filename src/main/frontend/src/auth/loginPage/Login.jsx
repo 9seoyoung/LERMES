@@ -86,9 +86,14 @@ export default function Login() {
           <Link to="/welcome/generaljoin" className="problemBox">
             아이디가 없어요
           </Link>
-          <Link to="/find" className="findIdPw">
-            <span>ID/PW 를 잊어버렸어요</span>
-          </Link>
+          <div className="findIdPw">
+            <Link to="/welcome/find-id">
+              <span>아이디 찾기</span>
+            </Link>
+            <Link to="/welcome/find-pw">
+              <span>비밀번호 찾기</span>
+            </Link>
+          </div>
         </form>
       </div>
     </div>
