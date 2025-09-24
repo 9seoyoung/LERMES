@@ -7,6 +7,7 @@ import { useState } from "react";
 function StudyManage() {
     const navigate = useNavigate();
     const filterArr = ["전체", "공식", "내 일정", "일지", "자료실"];
+    const [selectedIdx, setSelected] = useState(0)
 
 
     return (
@@ -14,9 +15,7 @@ function StudyManage() {
             <h2>학습 관리</h2>
             <div className="filterList">
                 <ul className="ftList_L">
-                    <FilterList arr={filterArr}>
-
-                    </FilterList>
+                    <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
                     <div className="createBtn " onClick={() => navigate('createPost')}>

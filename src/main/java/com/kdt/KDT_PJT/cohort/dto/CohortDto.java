@@ -28,6 +28,7 @@ public class CohortDto {
     private LocalTime classStart;
     private LocalTime classEnd;
     private com.fasterxml.jackson.databind.JsonNode surveyForm;
+    private String place;
 
     // 기본 생성자, getter/setter 생략 가능 (롬복 사용 가능)
 }

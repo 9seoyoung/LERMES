@@ -58,6 +58,12 @@ public class GlobalExceptionHandler {
         return buildResponse("접근이 거부되었습니다.", HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
+        ex.printStackTrace(); // 필요 시 로그 레벨 조절
+        return buildResponse("요청 처리 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST);
+    }
+
     /** 공통 응답 생성 */
     private ResponseEntity<ErrorResponse> buildResponse(String message, HttpStatus status) {
         return ResponseEntity.status(status).body(
@@ -68,4 +74,5 @@ public class GlobalExceptionHandler {
                         .build()
         );
     }
+
 }

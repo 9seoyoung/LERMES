@@ -51,6 +51,7 @@ public class CohortConverter {
 
         entity.setAttendStartTm(dto.getClassStart());
         entity.setAttendEndTm(dto.getClassEnd());
+        entity.setCohortPl(dto.getPlace());
 
         return entity;
     }
@@ -88,7 +89,7 @@ public class CohortConverter {
 
         dto.setClassStart(entity.getAttendStartTm());
         dto.setClassEnd(entity.getAttendEndTm());
-
+        dto.setPlace(entity.getCohortPl());
 
 
         return dto;
