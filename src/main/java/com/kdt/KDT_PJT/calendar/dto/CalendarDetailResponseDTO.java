@@ -17,4 +17,5 @@ public class CalendarDetailResponseDTO { //상세조회용
     private Integer userSn;             //USER_SN 사용자 일련번호
     private LocalDateTime eventRegDt;   //EVENT_REG_DT 작성일
     private Byte prvtYn;                //PRVT_YN 개인일정이면1 아니면 0
+    private Integer coSn;
 }
