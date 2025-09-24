@@ -4,7 +4,7 @@ import { useAccount } from "../../auth/AuthContext";
 import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
 import LmsHeader, { VisitorHeader } from "../ui/headerModule/LmsHeader";
-import Nav from "../ui/navModule/Nav";
+import Nav from "../ui/navModule/NavStatus";
 import StdNav from "../ui/navModule/StdNav";
 import AdminNav from "../ui/navModule/AdminNav";
 import TutorNav from "../ui/navModule/TutorNav";
@@ -15,7 +15,7 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
-  const { selectedCompanySn } = useSelectedCompany();
+  const { fixedSn } = useSelectedCompany();
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();
@@ -92,7 +92,7 @@ export default function Layout() {
     <div className="layout">
       <header>
         {/* 페이지 별 헤더 변경 */}
-        { myCoSn === selectedCompanySn ? (
+        { myCoSn === fixedSn ? (
           <HeaderStatus loc={loc} setNavToggle={setNavToggle} navToggle={navToggle} />
         )
         :
@@ -115,7 +115,7 @@ export default function Layout() {
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
           {navToggle === false ? null : (
-            myCoSn === selectedCompanySn ? (
+            myCoSn === fixedSn ? (
               <NavStatus loc={loc} />
             ) : (
               <Nav />

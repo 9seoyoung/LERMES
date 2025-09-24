@@ -6,7 +6,7 @@ import { Navigate } from "react-router-dom";
 
 // function LmsHomeIndex() {
 //   const { user, loading } = useAccount();
-//   const {selectedCompanySn} = useSelectedCompany();
+//   const {fixedSn} = useSelectedCompany();
 //   const navigate = useNavigate();
 //   const navigatedRef = useRef(false); 
 
@@ -24,7 +24,7 @@ import { Navigate } from "react-router-dom";
 
 //     if (userAuthrtSn === 1) {navigate("/visitorHome");  return; }
 
-//     if(myCompany === selectedCompanySn) {
+//     if(myCompany === fixedSn) {
 
 //       // 권한 번호 읽기 (snake_case/camelCase/Pascal? 모두 대응)
 
@@ -52,7 +52,7 @@ import { Navigate } from "react-router-dom";
 //       navigate("/visitorHome", {replace: true});
 //     }
 
-//     }, [user, loading, selectedCompanySn, navigate]);
+//     }, [user, loading, fixedSn, navigate]);
 
 //   return null; // 렌더링할 내용 없음, 분기만 처리
 // }

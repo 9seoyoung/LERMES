@@ -19,7 +19,7 @@ import {
 
 /** 공통 헤더 */
 export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
-  const { clearSelectedCompany, selectedCompanySn } = useSelectedCompany();
+  const { clearFixedSn, fixedSn } = useSelectedCompany();
   const { user } = useAccount();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -60,7 +60,7 @@ export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
         <div
           className="logoBox"
           onClick={() => {
-            clearSelectedCompany();
+            clearFixedSn();
             navigate(`/${loc}`);
             console.log(user);
           }}
@@ -71,7 +71,7 @@ export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
           <h2>{user?.CO_NM || user?.CO_SN}</h2>
         </div>
       </div>
-      {user?.USER_OGDP_CO_SN === selectedCompanySn ?
+      {user?.USER_OGDP_CO_SN === fixedSn ?
         <HeaderStatus loc={loc} />
       :
         <>{children}</>
@@ -82,7 +82,7 @@ export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
 
 /** 수강생 헤더: 단일 버튼(출석/퇴실) + 상태 표시 */
 export function StdHeader() {
-  const { clearSelectedCompany } = useSelectedCompany();
+  const { clearFixedSn } = useSelectedCompany();
   const [showAttendModal, setShowAttendModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [inTime, setInTime] = useState(null);
@@ -207,7 +207,7 @@ export function StdHeader() {
 
 /** 강사 헤더 */
 export function TutorHeader() {
-  const { clearSelectedCompany } = useSelectedCompany();
+  const { clearFixedSn } = useSelectedCompany();
   const [modalOpen, setModalOpen] = useState(false);
   const [ , setActiveCode] = useState(null);
 

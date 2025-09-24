@@ -1,26 +1,26 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const SelectedCompanyContext = createContext(null);
-const KEY = "selectedCompanySn";
+const KEY = "fixedSn";
 
 export function SelectedCompanyProvider({ children }) {
-  const [selectedCompanySn, setSelectedCompanySn] = useState(() => {
+  const [fixedSn, setFixedSn] = useState(() => {
     const raw = sessionStorage.getItem(KEY);
     return raw ? Number(raw) : null;
   });
 
   useEffect(() => {
-    if (selectedCompanySn == null) {
+    if (fixedSn == null) {
       sessionStorage.removeItem(KEY);
     } else {
-      sessionStorage.setItem(KEY, String(selectedCompanySn));
+      sessionStorage.setItem(KEY, String(fixedSn));
     }
-  }, [selectedCompanySn]);
+  }, [fixedSn]);
 
-  const clearSelectedCompany = () => setSelectedCompanySn(null);
+  const clearFixedSn = () => setFixedSn(null);
 
   return (
-    <SelectedCompanyContext.Provider value={{ selectedCompanySn, setSelectedCompanySn, clearSelectedCompany }}>
+    <SelectedCompanyContext.Provider value={{ fixedSn, setFixedSn, clearFixedSn }}>
       {children}
     </SelectedCompanyContext.Provider>
   );

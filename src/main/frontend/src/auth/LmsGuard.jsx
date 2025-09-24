@@ -4,7 +4,7 @@ import { useSelectedCompany } from "../contexts/SelectedCompanyContext";
 
 export default function LmsGuard() {
   const { user, loading } = useAccount();
-  const { selectedCompanySn } = useSelectedCompany();
+  const { fixedSn } = useSelectedCompany();
 
   if (loading) return null;
   if (!user) return <Navigate to="/visitorHome" replace />;
@@ -12,7 +12,7 @@ export default function LmsGuard() {
   const myCompany = Number(
     user?.USER_OGDP_CO_SN ?? user?.user_ogdp_co_sn ?? user?.userOgdpCoSn ?? NaN
   );
-  const selected = Number(selectedCompanySn ?? NaN);
+  const selected = Number(fixedSn ?? NaN);
   if (myCompany !== selected) {
     return <Navigate to="/visitorHome" replace />;
   }
