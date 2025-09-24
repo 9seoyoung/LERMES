@@ -20,6 +20,19 @@ export default function BoardManage(){
     
     const filter = filterArr[selectedIdx];
     const path = useMemo(() => matchedPathAdminBoardFilter(filter), [filter]);
+
+    const splitWroteDate = (v) => v.split("T", 1);
+
+    const toReUseObject = (pullList) => ({
+        type: pullList.postType ?? "-",
+        title: pullList.ITV_APLY_TTL ?? "-",
+        wroteDate: splitWroteDate(pullList.ITV_APLY_DT ?? "-"),
+        author: pullList.ITV_APLCNT_SN ?? "-",
+        views: "미구현"
+      });
+      
+      // 배열 캐스팅
+      const reUseArray = pullList.map(toReUseObject);
     
     useEffect(() => {
         const listApi = matchedListAPIAdminBoardFilter(filter);
@@ -75,11 +88,11 @@ export default function BoardManage(){
 
             <div className="BigListBox">
                 <ListTable
-                    tableHead={['순번', '유형', '제목', '시작일', '종료일', '작성일', '작성자', '조회수']}
+                    tableHead={['순번', '유형', '제목', '작성일', '작성자', '조회수']}
                     columnData={['no',  'type', 'title', 'startDate', 'endDate', 'date', 'name', 'views']}
-                    apiData={[{no: 1, type: "공지", title: "커리큘럼 같은 공식 일정(관리자 등록)", startDate: "25.09.07", endDate: "25.09.07", date: "25.09.07", name:"하이", views: 2}]}
+                    apiData={pullList}
                     // 문자열로 지정
-                    gridTemplate="1fr 1fr 5fr 1fr 1fr 1fr 1fr 1fr "
+                    gridTemplate="0.5fr 0.5fr 5fr 1fr 1fr 0.5fr "
                     gap="12px"
                     whereTogo = {whereTogo}
                 />
@@ -87,3 +100,14 @@ export default function BoardManage(){
         </div>
     );
 }
+
+// 면담리스트 응답 정보
+/**
+ * COHORT_SN 기수
+ITV_APLCNT_SN "작성자"
+ITV_APLY_CN "내용"
+ITV_APLY_DT "2025-09-22T17:06:17"
+ITV_APLY_TTL "제목"
+ITV_PIC_AUTHRT "공개범위"
+ITV_SN "면담일련번호"
+ */

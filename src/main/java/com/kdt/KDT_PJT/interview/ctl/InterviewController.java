@@ -63,7 +63,7 @@ public class InterviewController {
      * - 강사(INSTRUCTOR=4): url에 cohortSn 없으면 본인 cohortSn 사용, 그것도 없으면 400
      * - 대표/직원(TENANT=2, EMPLOYEE=3): url에 cohortSn 필수
      */
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN',TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
     @GetMapping({"/my-requests", "/my-requests/{cohortSn}"}) // 강사/대표/직원 공용
     public List<CmmnMap> getMyInterviewRequests(
             @AuthenticationPrincipal AuthCustomUserDetails me,
@@ -121,6 +121,7 @@ public class InterviewController {
         //     // 동식이가 만든 xml 복사할 예정. cohortSn만 안들어갈꺼임, 회사SN은 필요한디 모든회사꺼 나오면 곤란 >> fixedSn 꺼내쓴다.
         //     //@params 안에 cohortSn, fixedSn 사용 예정
             List<CmmnMap> resp = interviewService.getMyInterviewRequestsAll(params);
+//            resp에 게시물 유형 추가해서 반환
         //     log.debug("getMyInterviewRequests result rows={}", (resp != null ? resp.size() : 0));
 
         //     // 이 경우 빠르게 탈출
