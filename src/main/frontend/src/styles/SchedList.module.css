@@ -1,8 +1,8 @@
 .sched {
   width: 440px;
   height: 410px;
-  background-color:#626262;
-  color: white;
+  background-color: var(--color-list-bg);
+  color: var(--color-head-bg);
   border-radius: 16px;
   padding: 16px;
   box-sizing: border-box;
@@ -17,26 +17,10 @@
 .schedDate {
 width: 380px;
 height: 35px;
-background-color: #fff;
+background-color: var(--color-head-bg);
 border-radius: 4px;
 padding: 6px 5px;
 font-size: 14px;
-}
-
-.schedTitle {
-  width: 370px;
-  height: 35px;
-  padding: 10px;
-  border: 1px solid #ccc;           /* 기본 테두리 */
-    border-radius: 4px;             /* 둥글게 */
-    outline: none;                  /* 기본 아웃라인 제거 */
-    font-size: 14px;
-}
-
-.schedTitle:focus {
-  border: 1px solid #000;         /* 포커스 시 테두리 색상 */
-  background-color: #fff;         /* 선택 사항: 포커스 시 배경 */
-  color: #000;                    /* 선택 사항: 포커스 시 텍스트 색 */
 }
 
 .schedList {
@@ -47,6 +31,6 @@ font-size: 14px;
 
 .schedList li {
   margin-bottom: 8px;
-  color: #fff;
+  color: var(--color-head-bg);
   font-size: 18px;
 }

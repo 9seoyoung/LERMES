@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { SchedAddBtn } from './UiComp.jsx';
 import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
+import '../../styles/token.css';
 
 function SchedList({selectedDate}) {
   const [schedules, setSchedules] = useState({});   // 날짜별 일정 저장
