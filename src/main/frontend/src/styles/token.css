@@ -1,0 +1,20 @@
+:root{
+    --color-main: #D9D9D9;
+    --color-light: #F6F6F6;
+    --color-head-bg: #FFF;
+    --color-list-bg: #626262;
+    --color-sec-bg: #FCFEFF;
+    --color-checkin-title: #E1F1FF;
+    --color-font-dark: #222;
+    --color-checkout-title: #FFE6DF;
+    --color-secondary: #ACACAC;
+    --color-primary: #08F;
+    --coolor-checkin-btn: #62B6FF;
+    --color-checkout-warning: #FFB5A0;
+    --color-disable-bg: #EEEFF0;
+    --color-font-main: #000;
+    --color-font-nav: #565656;
+    --color-font-sec: #333;
+    --color-font-warning: #E9623A;
+    --color-font-disable: #575757;
+}
