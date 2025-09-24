@@ -5,7 +5,7 @@ import ListTable from "../../../components/ui/ListTable";
 import { useAccount } from "../../../auth/AuthContext";
 import FilterList from "../../../components/ui/FilterList";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
-import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter } from "../../../utils/readPageTypeReturn";
+import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter,matchedPostAPIAdminBoardFilter } from "../../../utils/readPageTypeReturn";
 import { toast } from "react-toastify";
 
 export default function BoardManage(){
@@ -20,6 +20,7 @@ export default function BoardManage(){
     
     const filter = filterArr[selectedIdx];
     const path = useMemo(() => matchedPathAdminBoardFilter(filter), [filter]);
+    const handlePostReader = useMemo(() => matchedPostAPIAdminBoardFilter(filter), [filter]);
 
     const splitWroteDate = (v) => v.split("T", 1);
 
@@ -28,7 +29,8 @@ export default function BoardManage(){
         title: pullList.ITV_APLY_TTL ?? "-",
         wroteDate: splitWroteDate(pullList.ITV_APLY_DT ?? "-"),
         author: pullList.ITV_APLCNT_SN ?? "-",
-        views: "미구현"
+        views: "미구현",
+        postSn: pullList.ITVSN ?? ""
       });
       
       // 배열 캐스팅
@@ -89,12 +91,13 @@ export default function BoardManage(){
             <div className="BigListBox">
                 <ListTable
                     tableHead={['순번', '유형', '제목', '작성일', '작성자', '조회수']}
-                    columnData={['no',  'type', 'title', 'startDate', 'endDate', 'date', 'name', 'views']}
-                    apiData={pullList}
+                    columnData={['type', 'title', 'wroteDate', 'author', 'views']}
+                    apiData={reUseArray}
                     // 문자열로 지정
                     gridTemplate="0.5fr 0.5fr 5fr 1fr 1fr 0.5fr "
                     gap="12px"
-                    whereTogo = {whereTogo}
+                    whereTogo = {path}
+                    handlePostReader = {handlePostReader}
                 />
             </div>
         </div>

@@ -10,7 +10,8 @@ export default function ListTable({
     columnData = [],
     gridTemplate,
     gap = 0,
-    whereTogo //클릭 시 페이지 이동 될 함수
+    whereTogo, //클릭 시 페이지 이동 될 함수
+    handlePostReader // 읽어올 API
 }) {
     // 선언부-------------------------------------------------------------
     const navigate = useNavigate();
@@ -46,8 +47,10 @@ export default function ListTable({
                 onClick={() => {
                     console.log(whereTogo);
                     navigate(whereTogo);
+                    handlePostReader(row.postSn);
                 }} 
             >
+                <div key={`no${i}`} className={styles.cell}>{i + 1}</div>
                 {columnData.map((col, j) => (
                     <>
                         <div key={j} className={styles.cell}>
