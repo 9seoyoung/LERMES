@@ -14,4 +14,6 @@ public interface ResponseMapper {
     ResponseResponseDto findResponseById(Long rspnsSn);
 
     List<ResponseResponseDto> findResponsesByParent(Long parentSn, String parentType);
+
+    int countResponsesByParent(Long parentSn, String parentType);
 }

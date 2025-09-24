@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public enum SurveyType { BBS("설문");      // 게시판
+public enum SurveyType { BBS ("설문 조사");      // 게시판
 
     private final String displayName;
 
@@ -17,7 +17,7 @@ public enum SurveyType { BBS("설문");      // 게시판
     @JsonCreator
     public static SurveyType fromDisplayName(String name) {
         if (name == null) {  // null 방어 로직 추가
-            throw new IllegalArgumentException("설문 유형이 없습니다.");
+            throw new IllegalArgumentException("유형이 없습니다.");
         }
 
         for (SurveyType type : values()) {

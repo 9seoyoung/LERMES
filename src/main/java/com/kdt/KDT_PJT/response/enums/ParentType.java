@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Getter
 public enum ParentType {
-    BBS("설문"),
-    COHORT("모집");
+    BBS("설문 조사"),
+    COHORT("모집 공고");
 
     private final String displayName;
 

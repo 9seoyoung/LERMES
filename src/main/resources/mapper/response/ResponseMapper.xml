@@ -43,4 +43,12 @@
         AND R.PARENT_TYPE = #{parentType}
     </select>
 
+    <select id="countResponsesByParent" resultType="int">
+        SELECT COUNT(*)
+        FROM TB_RESPONSE
+        WHERE PARENT_SN = #{parentSn}
+        AND PARENT_TYPE = #{parentType}
+    </select>
+
+
 </mapper>
