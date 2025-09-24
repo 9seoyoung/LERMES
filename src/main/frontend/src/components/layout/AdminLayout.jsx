@@ -43,30 +43,8 @@ export default function Layout() {
   // };
 
 // 헤더 종류 고르기
-  function HeaderStatus({ loc }) {
-    let component;
+//  <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
 
-    switch (loc) {
-      case "adminHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
-        break;
-      case "stdHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle}  loc={loc}/>;
-        break;
-      case "tutorHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle}  loc={loc}/>;
-        break;
-
-      case "visitorHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
-        break;
-
-      default:
-        component = <SuperHeader  />;
-    }
-
-    return component;
-  }
 
   function NavStatus({ loc }) {
     let component;
@@ -96,9 +74,7 @@ export default function Layout() {
           <HeaderStatus loc={loc} setNavToggle={setNavToggle} navToggle={navToggle} />
         )
         :
-          <LmsHeader>
-            <VisitorHeader />
-          </LmsHeader>
+          <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>
         }
         
         {/* 로그인 / 로그아웃 버튼 체인지 */}

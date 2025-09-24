@@ -48,17 +48,17 @@ export default function Layout() {
 
     switch (loc) {
       case "adminHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
       case "stdHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle}  loc={loc}/>;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
       case "tutorHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle}  loc={loc}/>;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
 
       case "visitorHome":
-        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} loc={loc}/>;
+        component = <LmsHeader navToggle = {navToggle} setNavToggle = {setNavToggle} />;
         break;
 
       default:

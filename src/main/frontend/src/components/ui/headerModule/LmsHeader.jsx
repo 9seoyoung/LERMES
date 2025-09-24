@@ -18,7 +18,7 @@ import {
 } from '../../../attend/attendService';
 
 /** 공통 헤더 */
-export default function LmsHeader({ navToggle, setNavToggle, children }) {
+export default function LmsHeader({ loc ,navToggle, setNavToggle, children }) {
   const { clearSelectedCompany, selectedCompanySn } = useSelectedCompany();
   const { user } = useAccount();
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export default function LmsHeader({ navToggle, setNavToggle, children }) {
           className="logoBox"
           onClick={() => {
             clearSelectedCompany();
-            navigate(`/${navKind}`);
+            navigate(`/${loc}`);
             console.log(user);
           }}
         >
@@ -72,7 +72,7 @@ export default function LmsHeader({ navToggle, setNavToggle, children }) {
         </div>
       </div>
       {user?.USER_OGDP_CO_SN === selectedCompanySn ?
-        <HeaderStatus loc={navKind} />
+        <HeaderStatus loc={loc} />
       :
         <>{children}</>
       }

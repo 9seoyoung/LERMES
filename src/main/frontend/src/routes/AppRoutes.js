@@ -77,12 +77,12 @@ function AppRoutes() {
     {/* 기본 접근 루트 */}
       <Route index element={<SuperMain/>}/>
       <Route path="visitorHome" element={<VisitorHome />} />
-      <Route path='/myPage' element={<Mypage/>}/>
 
       <Route element={<RoleRoute roles={[1, 2, 3, 4, 5]}/>}>
       {/* 로그인이 필요한 테스트 페이지 */}
         <Route path='testInterview' element={<InterviewEditPost/>}></Route>
         <Route path="/tableall" element={<TableAll />} />
+        <Route path='myPage' element={<Mypage/>}/>
       </Route>
 
       <Route element = {<LmsAuth/>}>
