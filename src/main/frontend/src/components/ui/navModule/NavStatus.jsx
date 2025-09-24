@@ -3,29 +3,34 @@ import { useAccount } from "../../../auth/AuthContext";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 
 
-export default function NavStatus({ setNavToggle, loc, myCoSn }) {
-  const {fixedSn} = useSelectedCompany();
+export default function NavStatus({ setNavToggle, loc, myCoSn, navKind, fixedSn }) {
+  const {user} =useAccount();
+
+    if((myCoSn !== fixedSn) || (user.USER_AUTHRT_SN !== 1) ) return <VisitorNav setNavToggle={setNavToggle} loc={loc} />
+
     let component;
 
-    switch (loc) {
+    switch (navKind) {
       case "adminHome":
         component = <AdminNav setNavToggle={setNavToggle} loc={loc}  />;
-        break;
+        return component
       case "stdHome":
         component = <StdNav setNavToggle={setNavToggle} loc={loc} />;
-        break;
+        return component
+
       case "tutorHome":
         component = <TutorNav setNavToggle={setNavToggle} loc={loc} />;
-        break;
+        return component
+
       default:
         component = <VisitorNav setNavToggle={setNavToggle} loc={loc} />;
+        return component;
     }
 
-    if(myCoSn !== fixedSn) {component = <VisitorNav setNavToggle={setNavToggle} loc={loc} />}
 
-    return component;
   }
-  
+
+
 export function VisitorNav({setNavToggle, loc}) {
     const { user, fetchedOnce } = useAccount();
     const { clearFixedSn } = useSelectedCompany();
@@ -34,7 +39,6 @@ export function VisitorNav({setNavToggle, loc}) {
     if (!fetchedOnce) {
         return <div className="navCont">로딩중…{/* 스켈레톤 */}</div>;
     }
-    
     
     return (
         <div className="navCont">

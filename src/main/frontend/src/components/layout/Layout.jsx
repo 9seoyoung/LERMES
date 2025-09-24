@@ -16,8 +16,8 @@ export default function Layout() {
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();
-  const curloc = useLocation();
-  const navKind = curloc.pathname.split('/', 2)[1] || '';
+  const { pathname } = useLocation();
+  const navKind = pathname.split('/', 2)[1] || pathname.split('/',2)[1];
   const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];
   const [selectedItem, setItem] = useState(0);
   const myCoSn = user?.USER_OGDP_CO_SN;
@@ -66,7 +66,7 @@ export default function Layout() {
           {navToggle === false ? 
             null 
             : 
-            <NavStatus navKind={navKind} setNavToggle={setNavToggle} loc={loc}/>
+            <NavStatus navKind={navKind} setNavToggle={setNavToggle} loc={loc} myCoSn={myCoSn} fixedSn={fixedSn}/>
           }
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
@@ -103,7 +103,10 @@ export default function Layout() {
               ))
             }
           </div>
+          <div onClick={() => {
+  console.log(`navKind ${navKind}`);
 
+          }}>클릭</div>
         </footer>
       </div>
     </div>
