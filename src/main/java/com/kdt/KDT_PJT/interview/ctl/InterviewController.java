@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,6 +33,7 @@ public class InterviewController {
     CmmnDao dao;
 
     private final InterviewService interviewService;
+    private final CalendarService calendarService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -108,6 +110,7 @@ public class InterviewController {
         return resp;
     }
 
+    @Transactional                      //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
     @PutMapping("/confirm/{itvSn}") // 면담 확정
     public void confirmInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,
@@ -133,7 +136,7 @@ public class InterviewController {
         final LocalTime time;
         try {
             date = LocalDate.parse(itvDay);        // "yyyy-MM-dd"
-            time = LocalTime.parse(itvTime);       // "HH:mm" or "HH:mm:ss"
+            time = LocalTime.parse(itvTime).truncatedTo(java.time.temporal.ChronoUnit.MINUTES);       // "HH:mm" 초 절삭. 분단위만 남김
         } catch (DateTimeParseException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "날짜/시간 포맷이 잘못되었습니다. (예: 2025-09-22, 09:00)");
         }
@@ -148,7 +151,7 @@ public class InterviewController {
         int isUpdated = interviewService.confirmInterview(params); // 업데이트
         if (isUpdated == 1) {
             System.out.println("확정됨, 캘린더 일정 생성");
-            System.out.println("params => "+params);
+            System.out.println("params => " + params);
         }else{
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 확정되었거나 존재하지 않는 면담입니다.");
         }
@@ -156,13 +159,19 @@ public class InterviewController {
 
         System.out.println("itvSn=" + params.get("itvSn"));
         System.out.println(params.get("itvSn").getClass().getName());
-        CmmnMap m = new CmmnMap();
+        System.out.println("params = " + params);
+        CmmnMap m = new CmmnMap(); // 일정 추가 파라미터 작성
+        m.put("itvPrnmntDt",params.get("itvPrnmntDt"));
         m.put("itvSn",params.get("itvSn"));
-        m = dao.selectOne("com.kdt.mapper.interview.selectInterviewParticipants",m);
+        m.put("itvTime",params.get("itvTime"));
         System.out.println("m = " + m);
-        //TODO 이제 여기서 m = [ITV_PIC_SN=314, ITV_APLCNT_SN=312] 이런거 이용해서
-        // 캘린더 각자 만들고 내용도 위의 params이용해서 집어넣기 ㄱㄱ
-
+        dao.insert("com.kdt.mapper.calendar.createPicCalendarByItvSn", m); // 인터뷰SN으로 면담 진행할사람 두명 SN,기수SN 가져오고 면담 담당자 일정 추가
+        m.put("picCalSn",m.get("calSn")); //picCalSn 저장하기 (면담 담당자의 캘린더SN)
+        dao.insert("com.kdt.mapper.calendar.createAplcntCalendarByItvSn", m); // 인터뷰SN으로 면담 진행할사람 두명 SN,기수SN 가져오고 면담 신청자 일정 추가
+        m.put("aplcntCalSn",m.get("calSn")); //aplcntCalSn 저장하기 (면담 신청자의 캘린더SN)
+        System.out.println("m = " + m);
+        dao.update("com.kdt.mapper.interview.insertCalendarSnToInterview",m);
+        // 지금 calender 추가하는것 까지는 완료
     }
 
 

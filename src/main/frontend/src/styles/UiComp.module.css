@@ -91,18 +91,21 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* 회색 버튼 ex. 비밀번호 변경, ←back */
 .grayBtn {
-  width: 100px;
+  width: 8rem;
   height: 24px;
   border-radius: 4px;
   font-size: 14px;
   color: #fff;
   background-color: #ACACAC;
+  outline: none;
 }
 
-.grayBtn:hover,
-.grayBtn:focus,
+.grayBtn:hover {
+  background-color: #666;
+}
 .grayBtn:active {
-  border: 1px solid #000;
+  scale: 0.97;
+  background-color: #555;
   outline: none;
 }
 
@@ -396,7 +399,9 @@ color: #000;
 
 /* 주황색 체크 */
 .orangeCheck .checkmark {
-  background-color: #d9d9d9;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 4px;
 }
 
 .orangeCheck input:checked + .checkmark::after {

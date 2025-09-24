@@ -53,4 +53,43 @@
         WHERE CAL_SN = #{calSn}
     </select>
 
+    <insert id="createPicCalendarByItvSn"
+            parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
+            useGeneratedKeys="true" keyProperty="calSn">	-- 담당자 일정 추가
+    INSERT INTO TB_CALENDAR
+        (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
+    SELECT
+        up.OGDP_COHORT_SN,
+        #{itvPrnmntDt},
+        #{itvPrnmntDt},
+        CONCAT('[면담 일정] ', #{itvTime}, ' ', ua.USER_NM, ' -> ', up.USER_NM),
+        up.USER_SN,
+        1
+    FROM TB_INTERVIEW i
+             JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
+             JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
+    WHERE i.ITV_SN = #{itvSn}
+      AND i.ITV_PIC_SN IS NOT NULL;
+
+    </insert>
+
+    <insert id="createAplcntCalendarByItvSn"
+            parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
+            useGeneratedKeys="true" keyProperty="calSn">
+        INSERT INTO TB_CALENDAR
+            (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
+        SELECT
+            ua.OGDP_COHORT_SN,
+            #{itvPrnmntDt},
+            #{itvPrnmntDt},
+            CONCAT('[면담 일정] ', #{itvTime} ,' ' , ua.USER_NM, ' -> ', up.USER_NM),
+            ua.USER_SN,
+            1
+        FROM TB_INTERVIEW i
+                 JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
+                 JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
+        WHERE i.ITV_SN = #{itvSn}
+          AND i.ITV_PIC_SN IS NOT NULL;
+    </insert>
+
 </mapper>

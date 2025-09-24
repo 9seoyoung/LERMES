@@ -8,7 +8,10 @@ import { toast } from 'react-toastify';
 
 export default function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
-
+  useEffect(() => {
+    console.log("[AuthProvider] mounted");
+    return () => console.log("[AuthProvider] unmounted");
+  }, []);
   // 앱 부팅 시: 세션 유효하면 유저 로드
   useEffect(() => {
     (async () => {

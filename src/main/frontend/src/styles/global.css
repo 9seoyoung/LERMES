@@ -299,7 +299,7 @@ footer > div:hover {
   border-radius: 1.6rem;
   box-shadow: 0 4px 4px #00000025;
   background-color: #FCFEFF;
-  border-radius: 1.6rem;
+  border-radius: 1.6rem;     
   padding: 20px 24px;
 }
 
@@ -330,8 +330,9 @@ footer > div:hover {
 }
 
 .limitedInput {
-  width: 30px;
-  max-width: 80px;
+  width: 10ch;
+  min-width: 3ch;
+  text-align: center;
 }
 
 .boardPage{
@@ -728,6 +729,7 @@ footer > div:hover {
 
 .inputFlex1{
   display: flex;
+  justify-content: space-between;
   min-width: fit-content;
   gap: 12px;
   flex: 1;
