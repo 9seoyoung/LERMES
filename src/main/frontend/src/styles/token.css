@@ -22,7 +22,16 @@
     /* 폰트 크기 */
 }
 
-:root[titleType = "3"]{
+[titleType = "3"]{
+    display: flex;
+    align-items: center;
     font-size: 2.2rem;
-    font-weight: 700;
+    font-weight: 500;
+    color: #222;
+}
+
+[boxType = "row"]{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

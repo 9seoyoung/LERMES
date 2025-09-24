@@ -118,4 +118,42 @@ public class FileController {
                 .contentLength(Math.max(0, len))
                 .body(r);
     }
+
+    // 파일명으로 직접 보기 (inline)
+    @GetMapping("/{storedFileName}")
+    public ResponseEntity<Resource> view(@PathVariable String storedFileName) {
+        Resource r = storage.loadAsResource(storedFileName);
+        Path p = storage.resolveFilename(storedFileName);
+        String contentType = storage.detectContentType(p); // image/png, image/jpeg 등
+        long len;
+        try { len = Files.size(p); } catch (Exception e) { len = -1L; }
+
+        return ResponseEntity.ok()
+                // inline: 다운로드 강제 X (사실 이 헤더 자체를 생략해도 됨)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + storedFileName + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .contentLength(Math.max(0, len))
+                .body(r);
+    }
+
+    // 파일 SN으로 보기 (inline)
+    @GetMapping("/id/{fileSn}")
+    public ResponseEntity<Resource> viewById(@PathVariable int fileSn) {
+        var meta = fileService.getMeta(fileSn);
+        if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
+            return ResponseEntity.notFound().build();
+        }
+        String storedFileName = meta.getStrgFileNm();
+        Resource r = storage.loadAsResource(storedFileName);
+        Path p = storage.resolveFilename(storedFileName);
+        String contentType = storage.detectContentType(p);
+        long len;
+        try { len = Files.size(p); } catch (Exception e) { len = -1L; }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + storedFileName + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .contentLength(Math.max(0, len))
+                .body(r);
+    }
 }
