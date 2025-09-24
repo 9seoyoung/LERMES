@@ -71,12 +71,17 @@
             i.ITV_PIC_SN        AS itvPicSn,
             i.ITV_APLCNT_SN     AS itvAplcntSn,
             i.ITV_PRNMNT_DT     AS itvPrnmntDt,
+            u1.USER_NM          AS itvAplcntNm, -- 신청자 명
+            u2.USER_NM          AS itvPicNm,    -- 담당자 명
             i.ITV_PLC           AS itvPlc,
             i.PIC_CAL_SN        AS picCalSn,
-            i.APLCNT_CAL_SN     AS aplcntCalSn
+            i.APLCNT_CAL_SN     AS aplcntCalSn,
+            i.VIEW_CNT          AS viewCnt      -- 조회수
         FROM TB_INTERVIEW i
         JOIN TB_COHORT c
             ON c.COHORT_SN = i.COHORT_SN
+        JOIN TB_USER u1      ON u1.USER_SN = i.ITV_APLCNT_SN    -- 이름 매칭용
+        LEFT JOIN TB_USER u2 ON u2.USER_SN = i.ITV_PIC_SN       -- 이름 매칭용
         WHERE 1=1
             AND c.CO_SN = #{coSn}               <!-- 회사는 항상 제한 -->
             <if test="cohortSn != null and cohortSn != 0">
@@ -89,6 +94,11 @@
         ORDER BY i.ITV_APLY_DT ASC
         </select>
 
+    <update id="incViewCnt" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+        UPDATE TB_INTERVIEW
+            SET VIEW_CNT = VIEW_CNT + 1
+        WHERE ITV_SN = #{itvSn}
+    </update>
 
     <update id="confirmInterview" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
         /*
@@ -178,6 +188,7 @@
             i.ITV_APLY_CN       AS itvAplyCn,
             i.ITV_APLY_DT       AS itvAplyDt,
             i.ITV_PIC_AUTHRT    AS itvPicAutht,
+            i.VIEW_CNT          AS viewCnt,
             u.USER_NM           AS itvAplcntNm
           --  i.ITV_APLCNT_SN     AS itvAplcntSn -- 작성자
         FROM TB_INTERVIEW i
