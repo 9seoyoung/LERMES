@@ -3,10 +3,10 @@ import { useAccount } from "../../../auth/AuthContext";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 
 
-export default function NavStatus({ setNavToggle, loc, myCoSn, navKind, fixedSn }) {
+export default function NavStatus({ setNavToggle, loc, myCoSn, navKind, effectiveSn }) {
   const {user} =useAccount();
 
-    if((myCoSn !== fixedSn) || (user.USER_AUTHRT_SN !== 1) ) return <VisitorNav setNavToggle={setNavToggle} loc={loc} />
+    if((myCoSn !== effectiveSn) || (user.USER_AUTHRT_SN !== 1) ) return <VisitorNav setNavToggle={setNavToggle} loc={loc} />
 
     let component;
 

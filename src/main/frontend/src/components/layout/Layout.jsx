@@ -1,18 +1,18 @@
 import { Outlet, useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { useAccount } from "../../auth/AuthContext";
-import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
-import LmsHeader from "../ui/headerModule/LmsHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
-import NavStatus from "../ui/navModule/NavStatus";
 import { Nav } from "../ui/navModule/Nav";
+import HeaderStatus from "../ui/headerModule/HeaderStatus";
+import LmsHeader from "../ui/headerModule/LmsHeader";
+import SuperHeader from "../ui/headerModule/SuperHeader";
 
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
-  const { fixedSn, clearFixedSn } = useSelectedCompany();
+  const { effectiveSn, clearFixedSn, fixedSn } = useSelectedCompany();
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();
@@ -22,33 +22,49 @@ export default function Layout() {
   const [selectedItem, setItem] = useState(0);
   const myCoSn = user?.USER_OGDP_CO_SN;
 
-  const myAuth = user?.USER_AUTHRT_SN;
-  const authLvPath = {
-    1: "adminHome",
-    2: "adminHome",
-    3: "adminHome",
-    4: "tutorHome",
-    5: "stdHome",
-    6: "visitorHome",
-    7: "superHome"
+    // 홈 경로 맵
+  const HOME_PATHS = {
+    admin: "/adminHome",
+    tutor: "/tutorHome",
+    std: "/stdHome",
+    visitor: "/visitorHome",
+  };
+
+
+const CLEAR_PATHS = ["/", "/welcome"];
+
+useEffect(() => {
+  // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
+  if (HOME_PATHS[navKind] == null) {
+    clearFixedSn();
   }
-  const loc = authLvPath[myAuth];
+}, [navKind]);
+
+
+// useEffect(() => {
+//   if (CLEAR_PATHS.includes(location.pathname)) {
+//     clearFixedSn();
+//   }
+// }, [pathname]);
 
   // const onSaveProfile = async (form) => {
   //   const saved = await saveProfile(form);
   //   setUser(saved);           // 서버 결과로 전역 user 교체
   // };
 
-  console.log(fixedSn);
+  console.log(effectiveSn);
   console.log(myCoSn);
 
   return (
     <div className="layout">
       <header>
-        {fixedSn === myCoSn ?
-          <LmsHeader navKind={navKind} setNavToggle={setNavToggle} navToggle={navToggle} myCoSn={myCoSn} loc={loc}/>
-          :
-          <SuperHeader loc={loc}/>
+        {/* <HeaderStatus></HeaderStatus> */}
+        {effectiveSn === null ? 
+          <SuperHeader/> 
+          : 
+          <LmsHeader>
+            <HeaderStatus  navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn}/>
+          </LmsHeader>
         }
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
@@ -63,12 +79,11 @@ export default function Layout() {
       <div className="layout_content">
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
-          {/* {navToggle === false ? 
+          {navToggle === false ? 
             null 
             : 
-            <NavStatus navKind={navKind} setNavToggle={setNavToggle} loc={loc} myCoSn={myCoSn} fixedSn={fixedSn}/>
-          } */}
-          <Nav setNavToggle={setNavToggle}></Nav>
+            <Nav setNavToggle={setNavToggle}></Nav>
+          }
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>
@@ -106,6 +121,8 @@ export default function Layout() {
           </div>
           <div onClick={() => {
   console.log(`navKind ${navKind}`);
+  console.log(`${effectiveSn} 최종 fixedSn`)
+  console.log(`${fixedSn} 최종 fixedSn`)
 
           }}>클릭</div>
         </footer>

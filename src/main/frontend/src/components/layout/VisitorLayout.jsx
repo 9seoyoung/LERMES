@@ -15,7 +15,7 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
-  const { fixedSn } = useSelectedCompany();
+  const { effectiveSn } = useSelectedCompany();
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();
@@ -92,7 +92,7 @@ export default function Layout() {
     <div className="layout">
       <header>
         {/* 페이지 별 헤더 변경 */}
-        { myCoSn === fixedSn ? (
+        { myCoSn === effectiveSn ? (
           <HeaderStatus loc={loc} setNavToggle={setNavToggle} navToggle={navToggle} />
         )
         :
@@ -115,7 +115,7 @@ export default function Layout() {
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
           {navToggle === false ? null : (
-            myCoSn === fixedSn ? (
+            myCoSn === effectiveSn ? (
               <NavStatus loc={loc} />
             ) : (
               <Nav />

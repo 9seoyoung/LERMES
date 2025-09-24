@@ -4,7 +4,7 @@ import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 
 export function Nav({setNavToggle}) {
     const { user, fetchedOnce } = useAccount();
-    const { clearFixedSn, fixedSn } = useSelectedCompany();
+    const { clearFixedSn, effectiveSn } = useSelectedCompany();
     const navigate = useNavigate();
     
     if (!fetchedOnce) {
@@ -13,16 +13,11 @@ export function Nav({setNavToggle}) {
 
     const myCoSn = user.USER_OGDP_CO_SN;
 
-/** Header
- * 0. 경로(navLike)로 LMS헤더인지 수퍼메인 헤더인지 분기 (헤더)
- * 1. fixedSn이 없으면? 내 회사 SN을 자동으로 set, 비로그인/소속회사 없을수도 있으니, fix || 나 || null 로 초기값 지정
- * 2. 내 회사 SN과 fixedSn(선택한 회사SN)이 다르면 visitor값 반환
- * 3. 내 회사 SN과 fixedSn이 같으면 auth에 맞는 페이지로 리다이렉트
- *  */ 
+
     
 /** Nav
  * 0. 이미 경로로 접근한 상태 >>>>>>>
- * 1. fixedSn과 내 회사 SN이 다르면 VistiorNav 메뉴
+ * 1. effectiveSn과 내 회사 SN이 다르면 VistiorNav 메뉴
  * 2. 같으면 권한레벨에 따라 메뉴 다르게 보임
  */
 
@@ -40,7 +35,7 @@ export function Nav({setNavToggle}) {
                 </button> 
             </div>
             <div className="navMenuList">
-            {fixedSn !== myCoSn ? 
+            {effectiveSn !== myCoSn ? 
                 <div onClick={() => navigate('/visitorHome')}>홈</div>
                 :
                 <>

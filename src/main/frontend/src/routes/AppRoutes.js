@@ -73,7 +73,7 @@ function AppRoutes() {
 
     {/*기본 레이아웃*/}
   <Route path='/' element={<Layout></Layout>} >
-    {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, selectedSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
+    {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
     {/* 기본 접근 루트 */}
       <Route index element={<SuperMain/>}/>
       <Route path="visitorHome" element={<VisitorHome />} />

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function SuperMain() {
-  const { fixedSn, setFixedSn } = useSelectedCompany();
+  const { effectiveSn, setFixedSn } = useSelectedCompany();
   const [companyList, setCompanyList] = useState();
   const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ export default function SuperMain() {
                   <p className={cardStyle.title} data-title-type="3">{v?.name}</p>
                   <p className={cardStyle.title}>{`소재지 ${v?.coPl}`}</p>
                   <div className={cardStyle.row} data-box-type="row">
-                    <button type="button"  onClick={() => {setFixedSn(v.id); navigate('/lmsHomeIndex'); console.log(fixedSn);}}>LMS 바로가기</button>
+                    <button type="button"  onClick={() => {setFixedSn(v.id); navigate('/lmsHomeIndex'); console.log(effectiveSn);}}>LMS 바로가기</button>
                     <button type="button">상태변수</button>
                   </div>
                 </div>

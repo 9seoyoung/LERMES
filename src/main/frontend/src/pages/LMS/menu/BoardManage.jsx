@@ -49,7 +49,7 @@ export default function BoardManage(){
         cohortSn: cohortSn || 0,
         filter: filter,
         path: path,
-        fixedSn: null}
+        effectiveSn: null}
 
     if (!listApi) {
       setPullList([]);  // 미구현 필터면 빈 리스트
