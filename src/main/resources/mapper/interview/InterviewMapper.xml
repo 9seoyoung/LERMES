@@ -19,6 +19,7 @@
     <select id="getMyInterviewRequests" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
         /*
         QueryID : com.kdt.mapper.interview.getMyInterviewRequests
+        Description : 배정되지 않은 면담을 보여준다. (가장 오래된 신청부터)
         Rule:
         - 대표(2): ITV_PIC_AUTHRT = 2
         - 직원(3): ITV_PIC_AUTHRT = 3
@@ -39,12 +40,14 @@
         i.PIC_CAL_SN,
         i.APLCNT_CAL_SN
         FROM TB_INTERVIEW i
-        WHERE i.COHORT_SN = #{cohortSn}
-        AND i.ITV_PIC_AUTHRT = #{roleType}
+        WHERE 1=1
+            AND i.COHORT_SN = #{cohortSn}
+            AND i.ITV_PIC_AUTHRT = #{roleType}
+            AND i.ITV_PRNMNT_DT IS NULL -- 이거 값 있으면 면담 배정 끝난거임
         <!-- 방어적으로 roleType 허용 범위 체크를 SQL로도 하고 싶다면 아래 주석 해제
         AND #{roleType} IN (2,3,4)
         -->
-        ORDER BY i.ITV_APLY_DT DESC
+        ORDER BY i.ITV_APLY_DT ASC
     </select>
 
 
@@ -75,5 +78,38 @@
         FROM TB_INTERVIEW
         WHERE ITV_SN = #{itvSn}
     </select>
+
+    <update id="updateInterviewCalSn" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
+        /*
+        QueryID : com.kdt.mapper.interview.confirmInterview
+        Description : 면담 확정 (기존 컬럼 수정)
+        작성자 : 김동식
+        */
+        UPDATE TB_INTERVIEW i
+        SET
+            i.ITV_PRNMNT_DT = #{itvPrnmntDt},
+            i.ITV_PLC       = #{itvPlc},
+            i.ITV_PIC_SN    = #{itvPicSn},
+            i.ITV_CFMTN_DT  = NOW(),
+            i.ITV_PIC_ANS   = #{itvPicAns}
+        WHERE i.ITV_SN = #{itvSn}
+          AND i.ITV_PIC_SN IS NULL
+    </update>
+
+    <update id="insertCalendarSnToInterview" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
+        /*
+        QueryID : com.kdt.mapper.interview.updateCalendarSn
+        Description : 캘린더 일정 2명 만들어지면 만들어진 일정 번호 각각 집어넣음.
+        작성자 : 김동식
+        */
+        UPDATE TB_INTERVIEW i
+        SET
+            i.PIC_CAL_SN    = #{picCalSn},
+            i.APLCNT_CAL_SN = #{aplcntCalSn}
+        WHERE 1=1
+          AND i.ITV_SN = #{itvSn}
+          AND i.PIC_CAL_SN IS NULL
+          AND i.APLCNT_CAL_SN IS NULL
+    </update>
 
 </mapper>

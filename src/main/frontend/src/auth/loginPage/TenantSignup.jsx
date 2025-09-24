@@ -4,6 +4,7 @@ import { requestEmailCode, signupTenant } from '../authService.js';
 import styles from '../../styles/SignUp.module.css';
 import { useAccount } from '../AuthContext.jsx';
 import FilePreview from '../../components/ui/FilePreview.jsx';
+import { toast } from 'react-toastify';
 
 export default function TenantSignup() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export default function TenantSignup() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      alert('회원가입이 완료되었습니다!');
+      toast.success("회원가입 완료!")
       const redirectLoc = `/${me?.HOME_PATH}` || '/';
       navigate(redirectLoc, { replace: true });
     } catch (e) {
@@ -95,7 +96,7 @@ export default function TenantSignup() {
           value={form.companyName}
           onChange={onChange}
           required
-        />
+          />
         <input
           name="businessNumber"
           placeholder="사업자등록번호"
@@ -104,7 +105,8 @@ export default function TenantSignup() {
           value={form.businessNumber}
           onChange={onChange}
           required
-        />
+          />
+          {msg && <p className="msg">{msg}</p>} 
 
         <input
           name="username"
@@ -114,7 +116,7 @@ export default function TenantSignup() {
           onChange={onChange}
           required
           autoComplete="off"
-        />
+          />
 
         <div className="input-with-btn">
           <input
@@ -127,13 +129,13 @@ export default function TenantSignup() {
             required
             disabled={codeSent}
             autoComplete="email"
-          />
+            />
           <button
             type="button"
             className="verify-btn"
             onClick={sendCode}
             disabled={sending || !form.email}
-          >
+            >
             {sending ? '전송중...' : '인증'}
           </button>
         </div>
@@ -180,7 +182,6 @@ export default function TenantSignup() {
           {loading ? '등록 중...' : '회원 가입'}
         </button>
 
-        {msg && <p className="msg">{msg}</p>}
       </form>
     </div>
   );

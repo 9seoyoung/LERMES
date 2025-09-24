@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import FilterList from "../../components/ui/FilterList";
-import { useAccount } from "../../auth/AuthContext";
-import { hortlistByCpSn } from "../../services/cohortService";
-import TodayAttendList from "../../components/layout/inho/TodayAttendList";
-import ScheduleList from "../../components/ui/ScheduleList";
-import BigCal from "../../components/ui/BigCal";
+import FilterList from "../../../components/ui/FilterList";
+import { useAccount } from "../../../auth/AuthContext";
+import { hortlistByCpSn } from "../../../services/cohortService";
+import TodayAttendList from "../../../components/layout/inho/TodayAttendList";
+import ScheduleList from "../../../components/ui/ScheduleList";
+import BigCal from "../../../components/ui/BigCal";
 
 function formatYMD(d) {
   if (!(d instanceof Date)) return "";
@@ -22,9 +22,9 @@ function GroupSet() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(formatYMD(new Date())); // 문자열로 시작
   const [selectedDay, setSelectedDay] = useState(new Date().getDate()); // 숫자 (일자)
-  const [events, setEvents] = useState({}); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
+  const [events, setEvents] = useState([]); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
   const [displayDate, setDisplayDate] = useState("");                     // 문자열
-
+  const [selectedIdx, setSelected] = useState(0);
 
   const coSn = user?.USER_OGDP_CO_SN;
 
@@ -72,9 +72,13 @@ function formatYMDfrom(year, month /* 0-based */, day) {
 
     (async () => {
       try {
+        console.log(`${coSn}-회사SN으로 과정리스트 불러오기API 실행 >>>>>>>>>>>>>>>>>>`)
         setLoading(true);
         const res = await hortlistByCpSn(Number(coSn));
-        if (!ignore) setHortList(res?.data ?? []);
+        console.log(`${res.data}-회사SN으로 과정리스트 불러오기API 응답 <<<<<<<<<<<<<<<<<<<`)
+        // if (!ignore) setHortList(res?.data ?? []);
+        if (!ignore) setHortList(res?.data || []);
+        console.log(`${hortlist}-회사SN으로 상태에 저장한 리스트`)
       } catch (e) {
         console.error("[GroupSet] hortlistByCpSn error:", e);
       } finally {
@@ -105,7 +109,7 @@ function formatYMDfrom(year, month /* 0-based */, day) {
       <h2>과정 관리</h2>
 
       <div className="filterList">
-        <FilterList arr={filterArr} loading={loading}>
+        <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected} loading={loading}>
           <li className="opacityBtn" onClick={() => { navigate('createGroup'); }}>+</li>
         </FilterList>
         <div className="ftList_R" />
