@@ -21,8 +21,8 @@ public class AuthCustomUserDetails implements UserDetails {
     private final boolean enabled;   //  활성여부
     private final Long roleType;     //  권한(숫자)
     private final String userTelno;  //  전화번호
-    private final Long companyId;    //  회사 FK
-    private final Long cohortId;     //  기수 FK
+    private final Long companySn;    //  회사 FK
+    private final Long cohortSn;     //  기수 FK
 
     public AuthCustomUserDetails(User user) {
         this.id = user.getId();
@@ -33,8 +33,8 @@ public class AuthCustomUserDetails implements UserDetails {
         this.enabled = user.isEnabled();
         this.roleType = user.getRoleType();
         this.userTelno = user.getUserTelno();
-        this.companyId = user.getCompanyId();
-        this.cohortId = user.getCohortId();
+        this.companySn = user.getCompanySn();
+        this.cohortSn = user.getCohortSn();
     }
 
     private String mapRoleIdToName(Long roleId) {
@@ -55,8 +55,8 @@ public class AuthCustomUserDetails implements UserDetails {
     public String getEmail() { return email; }
     public Long getRoleType() { return roleType; }
     public String getUserTelno() { return userTelno; }
-    public Long getCompanyId() { return companyId; }
-    public Long getCohortId() { return cohortId; }
+    public Long getCompanySn() { return companySn; }
+    public Long getCohortSn() { return cohortSn; }
 
     // ===== UserDetails 구현 =====
     @Override

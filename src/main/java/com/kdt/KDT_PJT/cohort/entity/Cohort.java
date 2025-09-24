@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Setter
@@ -23,7 +24,9 @@ public class Cohort {
     @Column(name = "CRCLM_NM")
     private String crclmNm;
 
-    @Column(name = "CRCLM_CN")
+//    @Column(name = "CRCLM_CN")
+//    private String crclmCn;
+    @Column(name = "CRCLM_CN", columnDefinition = "json")
     private String crclmCn;
 
     @Column(name = "CO_SN")
@@ -45,10 +48,14 @@ public class Cohort {
     private String cohortSttsNm;
 
     @Column(name = "COHORT_CATE")
-    private String cohortCate;
+    private QuestionType cohortCate;
 
+    @Column(name = "ATTEND_START_TM")
+    private LocalTime attendStartTm;
 
-    // Getter, Setter 생략 (롬복 사용 가능)
+    @Column(name = "ATTEND_END_TM")
+    private LocalTime attendEndTm;
 
-    // 생성자, toString 등 필요시 추가
+    @Column(name = "COHORT_PL")
+    private String cohortPl;
 }

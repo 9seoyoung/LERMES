@@ -1,12 +1,48 @@
 /* 인풋 */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* 기본 아이콘 숨김 (필요할 때만) */
+}
+
+
+.inputSet {
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
 .input {
-  width: 385px;
+  display: flex;
+  justify-content: space-between;
   height: 32px;
+  width: 100%;
   border: 1px solid #d9d9d9;
-  padding: 8px 12px;
-  font-size: 14px;
-  box-sizing: border-box;
+  border-radius: 4px;
+  color: #acacac;
   outline: none;
+  padding: 0 12px;
+}
+
+.input:focus {
+  color: #222;
+  border: 2px solid #222;
+}
+
+.inputLabel {
+  font-size: 1.4rem;
+  min-width: max-content;
+}
+
+.inputSet .limitedInput input {
+  width: 30px;
+  max-width: max-content;
+}
+
+.inputSet .inputLabel {
+  font-size: 1.2rem;
 }
 
 /* 밑줄 */
@@ -55,18 +91,21 @@
 
 /* 회색 버튼 ex. 비밀번호 변경, ←back */
 .grayBtn {
-  width: 100px;
+  width: 8rem;
   height: 24px;
   border-radius: 4px;
   font-size: 14px;
   color: #fff;
   background-color: #ACACAC;
+  outline: none;
 }
 
-.grayBtn:hover,
-.grayBtn:focus,
+.grayBtn:hover {
+  background-color: #666;
+}
 .grayBtn:active {
-  border: 1px solid #000;
+  scale: 0.97;
+  background-color: #555;
   outline: none;
 }
 
@@ -274,13 +313,16 @@ color: #000;
 
 /* 항목 추가 버튼 */
 .addBtn {
-  width: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 24px;
+  min-width: 64px;
+  padding: 8px 12px;
   border-radius: 16px;
-  padding: 0 4px;
   background-color: #e1f1ff;
   color: #0088ff;
-  font-size: 12px;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -290,7 +332,6 @@ color: #000;
 .addBtn:hover,
 .addBtn:focus,
 .addBtn:active {
-  border: 1px solid #0088ff;
   outline: none;
 }
 
@@ -342,8 +383,8 @@ color: #000;
 }
 
 .checkBox .checkmark {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -353,12 +394,14 @@ color: #000;
 
 .checkBox input:checked + .checkmark::after {
   content: '✔';
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* 주황색 체크 */
 .orangeCheck .checkmark {
-  background-color: #d9d9d9;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 4px;
 }
 
 .orangeCheck input:checked + .checkmark::after {
@@ -369,7 +412,7 @@ color: #000;
 .blueCheck .checkmark {
   background-color: #fff;
   border: 1px solid #000;
-  border-radius: 5px;
+
 }
 
 .blueCheck input:checked + .checkmark::after {
@@ -452,34 +495,58 @@ color: #000;
   background-color: #e1f1ff;
   display: flex;
   gap: 16px;      
-  padding: 8px 12px;
   border-radius: 6px;
+  padding: 4px 0;
   align-items: center;
 }
 
-.row {
-  width: 100%;
-  display: flex;
-  padding: 8px 12px;
-  border-radius: 6px;
+.gridRow {
+  display: grid;
+  grid-template-columns: var(--cols);
+  column-gap: var(--gap, 8px);
   align-items: center;
-  gap: 12px;
+  width: 100%;
+}
+
+.row {
   background-color: #f6f6f6;
+  border-radius: 4px;
+  height: 3.2rem;
 }
 
 .row:hover {
   background-color: #D9D9D9;
+  border-radius: 4px;
 }
 
 .row:active, .row:active .cell {
   background-color: #ACACAC;
+  border-radius: 4px;
   color: #f6f6f6;
 }
 
-.cell {
-  display: flex;
-  flex: 1;       
-  font-size: 14px;
+.editRow {
+  background-color: #f6f6f6;
+  border-radius: 4px;
   align-items: center;
   justify-content: center;
-  }
+  height: 3.2rem;
+}
+
+.editRow input {
+  border: none;
+  padding: 0 12px;
+  text-align: center;
+  outline: none;
+  border-radius: 4px;
+}
+
+.cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

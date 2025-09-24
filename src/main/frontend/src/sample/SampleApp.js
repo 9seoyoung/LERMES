@@ -1,9 +1,7 @@
 // src/App.js
 
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import About from "../About";
-import LoginForm from "./UserRegistForm";  // 👈 LoginForm import 추가
+import { useNavigate } from "react-router-dom";
 
 import { fetchCurrentTime, registerUser } from "../services/sampleService";
 
@@ -109,11 +107,10 @@ function Home() {
 }
 
 function SampleApp() {
-  // 여기 handleLogin 함수 정의 (로그인 시도 처리)
-  const handleLogin = ({ email, password }) => {
-    console.log("로그인 시도:", email, password);
-    // TODO: 로그인 API 호출 등 구현
-  };
+  // // 여기 handleLogin 함수 정의 (로그인 시도 처리)
+  // const handleLogin = ({ email, password }) => {
+  //   console.log("로그인 시도:", email, password);
+  // };
 
   return <Home></Home>;
 }

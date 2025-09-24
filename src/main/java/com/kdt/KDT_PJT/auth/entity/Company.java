@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,4 +34,7 @@ public class Company {
     @CreatedDate
     @Column(name = "CO_REG_DT", nullable = false, updatable = false)
     private LocalDateTime registeredAt;
+
+    @Column(name = "FILE_SN")
+    private Integer fileSn;
 }

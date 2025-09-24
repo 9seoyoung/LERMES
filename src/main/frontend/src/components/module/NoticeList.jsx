@@ -1,5 +1,5 @@
-import React from 'react'
-import ListTable from '../ui/ListTable'
+import React from 'react';
+import ListTable from '../ui/ListTable';
 
 function NoticeList() {
   return (
@@ -15,4 +15,4 @@ function NoticeList() {
   )
 }
 
-export default NoticeList
+export default NoticeList;

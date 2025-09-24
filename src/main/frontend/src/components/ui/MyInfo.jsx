@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import "../../styles/dropdown.css";
-import { UserCircle, Users, User } from "lucide-react";
+import { User } from "lucide-react";
 
 
 const MyInfo = forwardRef(function MyInfo(

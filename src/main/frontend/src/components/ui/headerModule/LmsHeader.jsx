@@ -77,9 +77,25 @@ export function StdHeader() {
   const [inTime, setInTime] = useState(null);
   const [outTime, setOutTime] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAccount();
+
+  console.log(user?.USER_EML_ADDR); // null 대비
 
   // 오늘 상태 갱신
   const refreshStatus = useCallback(async () => {
+    // 로그인 정보 없으면 API 호출하지 않음
+    if (!user) {
+      setInTime(null);
+      setOutTime(null);
+      setLoading(false);
+      return;
+    }
+    // (선택) 특정 계정 제외 로직이 필요하면 아래처럼
+    if (user?.USER_EML_ADDR === 'hash@com') {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const r = await getTodayStatus(); // { ok, checkinTime, checkoutTime }
@@ -93,7 +109,7 @@ export function StdHeader() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     refreshStatus();
@@ -102,7 +118,7 @@ export function StdHeader() {
   const isCheckedIn = !!inTime;
   const isCheckedOut = !!outTime;
   const actionLabel = !isCheckedIn ? '출석' : !isCheckedOut ? '퇴실' : '출석'; // 퇴실 완료면 '출석'(비활성)
-  const buttonDisabled = loading || isCheckedOut;
+  const buttonDisabled = loading || isCheckedOut || !user; // 로그인/세션 확인 전에도 안전
 
   // 헤더 단일 버튼 클릭 분기
   const onClickAction = () => {
@@ -120,7 +136,7 @@ export function StdHeader() {
   // 퇴실 확정
   const doCheckout = async () => {
     try {
-      const r = await checkout();
+      const r = await checkout(); // ok 래퍼 기준: { ok, message, checkoutTime }
       if (r?.ok) {
         await refreshStatus();
       } else {
@@ -181,7 +197,7 @@ export function StdHeader() {
 /** 강사 헤더 */
 export function TutorHeader() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeCode, setActiveCode] = useState(null);
+  const [ , setActiveCode] = useState(null);
 
   const refreshCode = async () => {
     try {
@@ -237,11 +253,11 @@ export function TutorHeader() {
 }
 
 export function AdminHeader() {
-  const { user } = useAccount();
+  // const { user } = useAccount();
   return <></>;
 }
 
 export function VisitorHeader() {
-  const { user } = useAccount();
+  // const { user } = useAccount();
   return <></>;
 }

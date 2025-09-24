@@ -68,8 +68,8 @@ export default function GeneralJoin() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      const redirectLoc = `/${me?.HOME_PATH}` || '/superMain';
-      alert('회원가입이 완료되었습니다!');
+      const redirectLoc = `${me?.HOME_PATH}` || '/superMain';
+      toast.success("회원가입 성공!")
       navigate(redirectLoc, { replace: true });
     } catch (e) {
       toast.error(getErrMsg(e)); // 예: "이메일 인증 실패", "비밀번호가 일치하지 않습니다."
@@ -148,7 +148,6 @@ export default function GeneralJoin() {
         <button className="signup-btn" type="submit" disabled={loading}>
           {loading ? '가입 중...' : '회원가입'}
         </button>
-        {msg && <p className="msg">{msg}</p>}
       </form>
     </div>
   );

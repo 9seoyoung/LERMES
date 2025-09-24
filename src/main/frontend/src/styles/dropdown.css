@@ -8,11 +8,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: .5rem;
   padding: .6rem .9rem;
   border-radius: .6rem;
   /* border: 1px solid #d0d5dd; */
   width: 100%;
+  font-size: 1.2rem;
   background: #fff;
   cursor: pointer;
 }
@@ -28,12 +28,11 @@
   top: calc(100% + 8px);
   width: 100%;
   min-width: max-content;
-  background: #fff;
+  background: #f6f6f6;
   border: 1px solid #e5e7eb;
   border-radius: .6rem;
   box-shadow: 0 8px 24px rgba(0,0,0,.08);
   overflow: hidden;
-
   /* 스르륵 내려오는 효과 */
   max-height: 0;
   opacity: 0;
@@ -53,6 +52,7 @@
   max-height: 320px; /* 내용보다 크면 자동으로 보임 */
   opacity: 1;
   transform: translateY(0);
+  padding: 4px 4px;
   pointer-events: auto;
   width: 100%;
 }
@@ -68,7 +68,10 @@
   font: inherit;
   font-size: 1.6rem;
 }
-.dd__item:hover { background: #f3f4f6; }
+.dd__menu p:hover {
+  background: #00000025;
+  cursor: pointer;
+}
 
 /* 모션 최소화 환경 */
 @media (prefers-reduced-motion: reduce) {

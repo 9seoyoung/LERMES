@@ -1,9 +1,9 @@
 .sched {
-  width: 450px;
+  width: 440px;
   height: 410px;
   background-color:#626262;
   color: white;
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 16px;
   box-sizing: border-box;
 }

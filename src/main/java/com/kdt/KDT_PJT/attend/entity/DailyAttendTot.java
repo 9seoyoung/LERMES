@@ -23,15 +23,20 @@ public class DailyAttendTot {
     @Column(name = "ATTEND_YMD", nullable = false)
     private LocalDate date;
 
-    @Column(name = "ATTEND_DTL_TYPE_SN", nullable = false)
-    private Integer attendDtlTypeSn;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ATTEND_DTL_TYPE_NM", nullable = false)
+    private AttendDtlTypeNm attendDtlTypeNm;
 
     @Column(name = "USER_SN", nullable = false)
     private Long userSn;
 
-    @Column(name = "CO_SN", nullable = false)
+    @Column(name = "CO_SN", nullable = true) // 나중에 다시 false로
     private Long companySn;
 
     @Column(name = "COHORT_SN", nullable = false)
     private Long cohortSn;
+
+    public void updateAttendDtlType(AttendDtlTypeNm attendDtlTypeNm) {
+        this.attendDtlTypeNm = attendDtlTypeNm;
+    }
 }

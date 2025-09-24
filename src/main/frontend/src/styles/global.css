@@ -1,6 +1,6 @@
 /* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
 
-/* 구글에서 가져온 폰트 - Noto Sans KR */ 
+/* 구글에서 가져온 폰트 - Noto Sans KR */
 
 /* 색상 클래스 */
 
@@ -20,7 +20,7 @@ html {
     font-size: clamp(8px, 0.8vw, 12px);
     width: 100%;
     height: 100%;
-    background-color: #d9d9d9;  
+    background-color: #d9d9d9;
     color: #222;
 }
 
@@ -32,7 +32,7 @@ body {
   padding: 0 24px;
 }
 
-a { 
+a {
   display: inline-flex;
   color: inherit;
   text-decoration: none;
@@ -73,6 +73,12 @@ li {
 hr {
   border: none;
   border-top: 1px solid #222;
+}
+
+.hrSt2 {
+  border: none;
+  border-top: 1px solid #acacac;
+  width: 100%;
 }
 
 textarea {
@@ -118,6 +124,7 @@ h4 {
   max-width: 1440px;
   margin: 0 auto;
   display: flex;
+  padding: 16px 0 0 0;
   flex-direction: column;
   gap: 16px;
 }
@@ -259,26 +266,44 @@ footer > div:hover {
 .mainCont_Lms_Row {
   display: flex;
   width: 100%;
+  height: 100%;
   gap: 24px;
-  padding: 8px 0;
 }
 
-.main_L, .main_R {
+.main_L {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main_R {
   height: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.main_R > div{
-  background-color: #FCFEFF;
-  box-shadow: 0 4px 4px #00000025;
+.max_height{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 702px;
+  max-height: 800px;
+  background-color: yellow;
+}
+
+.dashBoardModule {
+  display: flex;
+  flex-direction: column;
   border-radius: 1.6rem;
+  box-shadow: 0 4px 4px #00000025;
+  background-color: #FCFEFF;
+  border-radius: 1.6rem;     
   padding: 20px 24px;
 }
 
 .main_L > div {
-  background-color: #0088FF;
   padding: 20px 24px;
 }
 
@@ -293,12 +318,34 @@ footer > div:hover {
   flex: 1;
 }
 
+.limitedHeightBox {
+  width: 100%;
+  height: 618px;
+  display: flex;
+  background-color: #FCFEFF;
+  flex-direction: column;
+  padding: 20px 12px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.limitedInput {
+  width: 10ch;
+  min-width: 3ch;
+  text-align: center;
+}
+
 .boardPage{
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
 }
+
+.opacityBtn{
+  opacity: 60%;
+}
+
 
 .createBtn {
   background: #FCFEFF;
@@ -307,10 +354,25 @@ footer > div:hover {
   box-shadow: 2px 2px 2px #00000025;
 }
 
+.manageBtn {
+  padding :0 4px;
+  border-radius: 4px;
+  opacity: 60%;
+}
+
+.manageBtn:hover {
+  opacity: 100%;
+}
+
+.manageBtn:active {
+  scale: 0.96;
+}
+
 .createBtn:hover {
   cursor: pointer;
-  background: #ebeff4; 
+  background: #ebeff4;
   color: #333;
+  opacity: 100%;
 }
 
 .save_box {
@@ -328,6 +390,8 @@ footer > div:hover {
 .saveBtn {
   color: #f6f6f6;
   background-color: #ACACAC;
+  border-radius: 4px;
+  padding: 2px 12px;
 }
 
 .tempBtn {
@@ -468,6 +532,7 @@ footer > div:hover {
 
 .ftList_L {
   display: flex;
+  justify-content: flex-start;
   align-items: center;
   gap: 12px;
 }
@@ -485,7 +550,7 @@ footer > div:hover {
 }
 
 .ftList_L li:hover {
-  background: #ebeff4; 
+  background: #ebeff4;
   color: #333;
 }
 
@@ -542,6 +607,8 @@ footer > div:hover {
 .formAreaRow {
   display: flex;
   flex: 1;
+  height: 100%;
+  overflow: hidden;
   gap: 12px;
 }
 
@@ -549,8 +616,9 @@ footer > div:hover {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px
-  ;
+  height: 100%;
+  flex-wrap: nowrap;
+  gap: 16px;
 }
 
 .formArea_R {
@@ -596,6 +664,7 @@ footer > div:hover {
   min-width: max-content;
   justify-content: center;
   width: 64px;
+  min-width: max-content;
   height: 100%;
 }
 
@@ -605,8 +674,6 @@ footer > div:hover {
 
 .dropSet p:hover {
   cursor: pointer;
-  background: #00000025;
-  color: #f6f6f6;
 }
 
 .menuContainer {
@@ -640,9 +707,20 @@ footer > div:hover {
   gap: 12px;
 }
 
+.formContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  border-radius:4px;
+  gap: 16px;
+  justify-content: space-between;
+}
+
 .inputSet {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   height: 36px;
   align-items: center;
   gap: 4px;
@@ -650,8 +728,19 @@ footer > div:hover {
 }
 
 .inputFlex1{
+  display: flex;
+  justify-content: space-between;
+  min-width: fit-content;
+  gap: 12px;
   flex: 1;
 }
+
+.inputTitleSet{
+  min-width: 400px;
+  max-width: 70%;
+}
+
+
 
 .formLabel{
   justify-content: center;
@@ -660,7 +749,11 @@ footer > div:hover {
   border-radius: 8px;
   width: 80px;
   display: flex;
-  height: 36px;
+  height: 100%;
+  max-height: 4.4rem;
+  font-size: 1.2rem;
+  padding: 4px 12px;
+  gap: 4px;
 }
 
 .formInput, .addfileList {
@@ -707,3 +800,147 @@ footer > div:hover {
   gap: 16px;
 }
 
+
+/* 폼 */
+.questionBox {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  gap: 16px;
+}
+
+.questionAdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E1F1FF;
+  height: 46px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 800;
+  gap: 4px;
+  outline: none;
+}
+
+.questionAdd:hover {
+  background-color: #c6e4ff;
+  font-size: 1.2rem;
+}
+
+.questionAdd:active {
+  font-size: 1.0rem;
+}
+
+.multipleSet {
+  width: 60%;
+}
+
+.questionTypeBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.questionTypeBox > p:first-child {
+  display: flex;
+  align-items: center;
+  grid-area: 12px;
+  font-weight: bold;
+}
+
+.questionTitle {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 2.4rem;
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #d9d9d9;
+  outline: none;
+
+}
+
+.questionTitle:focus {
+  color: #333;
+}
+
+.questionTypeBox .dropSet, .questionTypeBox .dropSet button{
+  width: 16rem;
+  height: 2.8rem;
+  border-radius: 4px;
+}
+.questionTypeBox .dropSet button {
+  border: 1px solid #dedede;
+  padding: 8px 12px;
+}
+
+
+.questionTypeBox .dropSet p {
+  padding: 4px 12px;
+}
+
+.qTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  color: #d9d9d9;
+}
+
+.qTitle p {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #0088FF;
+}
+
+.questionCont{
+  color: #d9d9d9;
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+.questionContainer{
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  flex: 1;
+  gap: 16px;
+}
+
+.qCont > .qTitle > input {
+  font-size: 2.2rem;
+  padding: 4px 12px;
+  flex: 1;
+  border: none;
+  font-weight: 600;
+  border-radius: 4px;
+  color: #d9d9d9;
+}
+
+.qTitle input:focus {
+  border: 2px solid #222;
+  outline: none;
+}
+
+.qCont {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.qTitle > hr {
+  flex: 1;
+  border: 1px solid #d9d9d9;
+}
+
+/* 테이블 */
+.list-th {
+  display: flex;
+  background-color: #E1F1FF;
+  border-radius: 8px;
+  width: 100%
+  ;
+}

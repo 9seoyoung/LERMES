@@ -8,10 +8,9 @@ import { fetchMe } from "../../auth/authService";
 import "../../styles/sj.css";
 
 // 컴포넌트
-import WelcomePromotion from "./super/WelcomePromotion";
 
 function WelcomeLayout() {
-  const [Action, setAction] = useState("basic");
+  const [, setAction] = useState("basic");
   const navigate = useNavigate();
 
   console.log(fetchMe);

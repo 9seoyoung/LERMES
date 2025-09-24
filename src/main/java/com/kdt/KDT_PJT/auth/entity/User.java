@@ -2,16 +2,14 @@ package com.kdt.KDT_PJT.auth.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
 @Table(name = "TB_USER")
 public class User {
     @Id
@@ -44,9 +42,10 @@ public class User {
 
     // 회사 번호(FK) - nullable
     @Column(name = "OGDP_CO_SN")
-    private Long companyId;
+    private Long companySn;
 
     // 기수 번호(FK) - nullable
     @Column(name = "OGDP_COHORT_SN")
-    private Long cohortId;
+    private Long cohortSn;
+
 }
