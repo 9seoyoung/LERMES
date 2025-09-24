@@ -2,7 +2,7 @@
   width: 440px;
   height: 410px;
   background-color: var(--color-list-bg);
-  color: var(--color-head-bg);
+  /*color: var(--color-head-bg);*/
   border-radius: 16px;
   padding: 16px;
   box-sizing: border-box;
@@ -17,7 +17,7 @@
 .schedDate {
 width: 380px;
 height: 35px;
-background-color: var(--color-head-bg);
+background-color: var(--color-sec-bg);
 border-radius: 4px;
 padding: 6px 5px;
 font-size: 14px;
@@ -31,6 +31,6 @@ font-size: 14px;
 
 .schedList li {
   margin-bottom: 8px;
-  color: var(--color-head-bg);
+  color: var(--color-text-primary);
   font-size: 18px;
 }

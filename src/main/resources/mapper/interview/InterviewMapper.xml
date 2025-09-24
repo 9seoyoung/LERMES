@@ -73,7 +73,8 @@
             i.ITV_PRNMNT_DT,
             i.ITV_PLC,
             i.PIC_CAL_SN,
-            i.APLCNT_CAL_SN
+            i.APLCNT_CAL_SN,
+            '면담요청' AS postType
         FROM TB_INTERVIEW i
         JOIN TB_COHORT c
             ON c.COHORT_SN = i.COHORT_SN

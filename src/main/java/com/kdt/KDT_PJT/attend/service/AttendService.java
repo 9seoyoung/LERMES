@@ -35,7 +35,7 @@ public class AttendService {
     private EntityManager em;                          // 네이티브 쿼리 (exists)
 
     private static final ZoneId ZONE = ZoneId.of("Asia/Seoul");
-    private static final int DEFAULT_TTL = 480; // minutes
+    private static final int DEFAULT_TTL = 10; // minutes
 
     /** 코드 저장 키: cohort 기준으로 통일 */
     private String codeKey(Long cohortSn) {
