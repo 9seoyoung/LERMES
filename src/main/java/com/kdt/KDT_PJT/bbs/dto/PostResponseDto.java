@@ -1,5 +1,7 @@
 package com.kdt.KDT_PJT.bbs.dto;
 
+import com.kdt.KDT_PJT.bbs.enums.BbsScope;
+import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,6 @@ public class PostResponseDto {
     private Long coSn;                // 회사 일련번호 (FK)
     private Long cohortSn;            // 기수/과정 일련번호 (FK)
     private String formUuid;          // UUID
-    private String bbsType;           // 게시판 유형
-    private String bbsScope;          // 공개 범위
+    private BbsType bbsType;           // 게시판 유형
+    private BbsScope bbsScope;          // 공개 범위
 }

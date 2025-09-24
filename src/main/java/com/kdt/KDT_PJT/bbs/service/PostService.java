@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,11 +24,15 @@ public class PostService {
     // 게시글 등록
     public PostResponseDto createPost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
         BbsRole role = resolveRole(auth);
-        BbsType type = BbsType.fromDescription(requestDto.getBbsType());
+        BbsType type = requestDto.getBbsType();
 
         if (!role.canCreate(type)) {
             throw new AccessDeniedException("작성 권한 없음");
         }
+//      작성일자
+        LocalDateTime now = LocalDateTime.now();
+        requestDto.setPostFrstWrtDt(now);
+        requestDto.setPostLastMdfcnDt(now);
 
         String uuid = UUID.randomUUID().toString();
         postMapper.insertPost(requestDto, uuid);
@@ -61,6 +66,8 @@ public class PostService {
             throw new AccessDeniedException("수정 권한 없음");
         }
 
+        requestDto.setPostLastMdfcnDt(LocalDateTime.now());
+
         postMapper.updatePost(requestDto);
         return postMapper.findById(requestDto.getPostSn());
     }
@@ -69,8 +76,8 @@ public class PostService {
     public void deletePost(Long postSn, AuthCustomUserDetails auth) {
         PostResponseDto existing = postMapper.findById(postSn);
         BbsRole role = resolveRole(auth);
-        BbsType type = BbsType.fromDescription(existing.getBbsType());
-        BbsScope scope = BbsScope.fromDescription(existing.getBbsScope());
+        BbsType type = existing.getBbsType();
+        BbsScope scope = existing.getBbsScope();
 
         // PRIVATE → 본인만
         if (scope == BbsScope.PRIVATE) {
@@ -101,8 +108,8 @@ public class PostService {
     private boolean canAccessPost(PostResponseDto post, AuthCustomUserDetails auth,
                                   Long filterCohortSn, String filterBbsType) {
         BbsRole role = resolveRole(auth);
-        BbsType type = BbsType.fromDescription(post.getBbsType());
-        BbsScope scope = BbsScope.fromDescription(post.getBbsScope());
+        BbsType type = post.getBbsType();
+        BbsScope scope = post.getBbsScope();
 
         // 1. bbsType 필터
         if (filterBbsType != null) {
@@ -118,8 +125,14 @@ public class PostService {
         if (!role.canRead(type)) return false;
 
         // 3. Scope 권한 체크
-        if (scope == BbsScope.PUBLIC) return true;
+        if (scope == BbsScope.PUBLIC) {
+            if (type == BbsType.NOTICE) {
+                return true; //  공지 + PUBLIC → Visitor도 열람 가능
+            }
+            return auth != null && auth.isEnabled(); // FAQ/자료실/QnA는 로그인 필요
+        }
         if (auth == null || !auth.isEnabled()) return false;
+
 
         return switch (scope) {
             case PRIVATE -> post.getPostWrtrSn().equals(auth.getId());

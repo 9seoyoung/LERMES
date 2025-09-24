@@ -5,58 +5,60 @@
 
 <mapper namespace="com.kdt.KDT_PJT.bbs.mapper.PostMapper">
     <!-- 등록 -->
-    <insert id="insertPost" parameterType="com.kdt.KDT_PJT.bbs.dto.PostRequestDto"
-            useGeneratedKeys="true" keyProperty="postSn">
+    <insert id="insertPost" useGeneratedKeys="true" keyProperty="dto.postSn">
         INSERT INTO TB_POST (
         BBS_NM, POST_TTL, POST_CN, POST_WRTR_SN, CO_SN, COHORT_SN,
-        FORM_UUID, BBS_TYPE, BBS_SCOPE
+        FORM_UUID, BBS_TYPE, BBS_SCOPE, POST_FRST_WRT_DT, POST_LAST_MDFCN_DT
         ) VALUES (
-        #{bbsNm}, #{postTtl}, #{postCn}, #{postWrtrSn}, #{coSn}, #{cohortSn},
-        #{uuid}, #{bbsType}, #{bbsScope}
+        #{dto.bbsNm}, #{dto.postTtl}, #{dto.postCn}, #{dto.postWrtrSn},
+        #{dto.coSn}, #{dto.cohortSn}, #{uuid},
+        #{dto.bbsType},
+        #{dto.bbsScope},
+        #{dto.postFrstWrtDt}, #{dto.postLastMdfcnDt}
         )
     </insert>
 
     <!-- 단건 조회 -->
     <select id="findById" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
         SELECT
-        p.POST_SN,
-        p.BBS_NM,
-        p.POST_TTL,
-        p.POST_CN,
-        p.POST_WRTR_SN,
-        u.USER_NM AS postWriterName,
-        p.POST_FRST_WRT_DT,
-        p.POST_LAST_MDFCN_DT,
-        p.DEL_YN,
-        p.CO_SN,
-        p.COHORT_SN,
-        p.FORM_UUID,
-        p.BBS_TYPE,
-        p.BBS_SCOPE
+            p.POST_SN,
+            p.BBS_NM,
+            p.POST_TTL,
+            p.POST_CN,
+            p.POST_WRTR_SN,
+            u.USER_NM AS postWriterName,
+            p.POST_FRST_WRT_DT,
+            p.POST_LAST_MDFCN_DT,
+            p.DEL_YN,
+            p.CO_SN,
+            p.COHORT_SN,
+            p.FORM_UUID,
+            p.BBS_TYPE,
+            p.BBS_SCOPE
         FROM TB_POST p
-        JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
+                 JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.POST_SN = #{postSn}
     </select>
 
     <!-- 목록 조회 -->
     <select id="findAll" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
         SELECT
-        p.POST_SN,
-        p.BBS_NM,
-        p.POST_TTL,
-        p.POST_CN,
-        p.POST_WRTR_SN,
-        u.USER_NM AS postWriterName,
-        p.POST_FRST_WRT_DT,
-        p.POST_LAST_MDFCN_DT,
-        p.DEL_YN,
-        p.CO_SN,
-        p.COHORT_SN,
-        p.FORM_UUID,
-        p.BBS_TYPE,
-        p.BBS_SCOPE
+            p.POST_SN,
+            p.BBS_NM,
+            p.POST_TTL,
+            p.POST_CN,
+            p.POST_WRTR_SN,
+            u.USER_NM AS postWriterName,
+            p.POST_FRST_WRT_DT,
+            p.POST_LAST_MDFCN_DT,
+            p.DEL_YN,
+            p.CO_SN,
+            p.COHORT_SN,
+            p.FORM_UUID,
+            p.BBS_TYPE,
+            p.BBS_SCOPE
         FROM TB_POST p
-        JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
+                 JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = 0
     </select>
 
@@ -75,7 +77,7 @@
     <update id="softDelete" parameterType="long">
         UPDATE TB_POST
         SET DEL_YN = 1,
-        POST_LAST_MDFCN_DT = NOW()
+            POST_LAST_MDFCN_DT = NOW()
         WHERE POST_SN = #{postSn}
     </update>
 

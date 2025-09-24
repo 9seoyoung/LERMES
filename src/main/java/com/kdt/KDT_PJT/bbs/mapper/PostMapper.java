@@ -8,7 +8,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 @Mapper
 public interface PostMapper {
-    void insertPost(@Param("dto") PostRequestDto dto, @Param("uuid") String uuid);
+    void insertPost(@Param("dto") PostRequestDto dto,
+                    @Param("uuid") String uuid);
     PostResponseDto findById(Long postSn);
     List<PostResponseDto> findAll();
     void updatePost(PostRequestDto dto);
