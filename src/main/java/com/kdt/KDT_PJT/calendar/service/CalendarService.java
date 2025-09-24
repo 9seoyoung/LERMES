@@ -74,6 +74,7 @@ public class CalendarService {
         m.put("USER_SN",       me.getId());                   // 등록자(항상 서버에서)
         m.put("PRVT_YN",       req.getPrvtYn());
         m.put("EVENT_REG_DT",  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));          // << 서버에서 세팅
+        m.put("CO_SN",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
 
         // 4) INSERT (PK 반환)
         try {
@@ -97,6 +98,7 @@ public class CalendarService {
                 .userSn(userSn)
                 .eventRegDt((LocalDateTime) m.get("EVENT_REG_DT"))
                 .prvtYn((Byte) m.get("PRVT_YN"))
+                .coSn((Integer) m.get("CO_SN"))
                 .build();
     }
 
