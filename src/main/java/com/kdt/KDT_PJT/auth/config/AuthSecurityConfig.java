@@ -93,6 +93,7 @@ public class AuthSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/signup/**", "/api/email/code/**").permitAll()
                         .requestMatchers("/api/files/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )

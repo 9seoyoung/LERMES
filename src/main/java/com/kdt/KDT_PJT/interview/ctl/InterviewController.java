@@ -134,6 +134,41 @@ public class InterviewController {
         // }
     }
 
+
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
+    @GetMapping("/read/{itvSn}")
+    public ResponseEntity<CmmnMap> readInterview(@AuthenticationPrincipal AuthCustomUserDetails me,
+                                                 @PathVariable Long itvSn,
+                                                 CmmnMap params){ //params는 로컬변수
+        if (me == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");
+        else if (itvSn == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "뭐를조회할건디요");
+
+        params.put("itvSn",itvSn); // 인터뷰SN 실어줌
+        // 해당 글에 접근 권한 있는지 체크 (다른 회사의 글일수도 있으니)
+        boolean isSuperAdmin = me.getRoleType().equals(1L); // me.getRoleType() == 1 해도 됨
+                                                            // Long 래퍼 객체의 값 비교할때는 equals 써야함. ==는 주소를 비교함. 1L은 롱타입 1말함 근데 기본타입이랑 비교시 == 써서 비교하면
+                                                            // 왼쪽의 래퍼 클래스에 담긴 값을 자동 언박싱해서 비교함.
+                                                            // 하지만 래퍼 클래스 객체끼리의 값 비교할때는 == 쓰면 주소를 비교하므로 equals써야 내부 값을 비교할수있음
+                                                            // 걍 객체의 값 비교할때는 .equals 쓰는게 습관들이는데 좋음
+        if(!isSuperAdmin) { // 슈퍼어드민 아닌경우
+            System.out.println("님은 슈퍼어드민이 아님, coSN체크 드가겠음");
+            CmmnMap scope = interviewService.getCoSnAndCohortSnByItvSn(params);
+            System.out.println("scope = " + scope);
+            if(scope.get("coSn").equals(me.getCompanySn())) {//접근하고자 하는 글의 coSn이 사용자의 coSn과 다르면 BAD_REQUEST
+                System.out.println("coSn = " + scope.get("coSn"));
+                System.out.println("내 cosn= "+me.getCompanySn());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "다른 회사 글 조회 불가능");
+            } else if(me.getRoleType() == 4 && scope.get("cohortSn").equals(me.getCohortSn())){ // 선생이면서 다른 cohort의 글 확인하려한다? 나가셈
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "다른 기수 글 조회 불가능");
+            }
+        }
+
+        //회사 체크 완료, 이제 글 보여드리겠음, 학생 밑으로는 이미 @PreAuthorize로 걸러져서 ㄱㅊ
+        CmmnMap resp = interviewService.readInterviewbyItvSn(params);
+
+        return ResponseEntity.ok(resp);
+    }
+
     @Transactional                      //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
     @PutMapping("/confirm/{itvSn}") // 면담 확정
     public void confirmInterview(

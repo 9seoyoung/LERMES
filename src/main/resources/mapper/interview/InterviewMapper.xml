@@ -9,10 +9,10 @@
           */
         INSERT INTO TB_INTERVIEW (
             ITV_APLCNT_SN,
-            ITV_APLY_TTL, ITV_APLY_CN, COHORT_SN, FORM_UUID, ITV_PIC_AUTHRT, ITV_APLY_DT
+            ITV_APLY_TTL, ITV_APLY_CN, COHORT_SN, FORM_UUID, ITV_PIC_AUTHRT, ITV_APLY_DT, CO_SN
         ) VALUES (
                      #{itvAplcntSn},
-                     #{itvAplyTtl}, #{itvAplyCn}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}, #{itvAplyDt}
+                     #{itvAplyTtl}, #{itvAplyCn}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}, #{itvAplyDt}, #{coSn}
                  )
     </insert>
 
@@ -27,18 +27,18 @@
         - 공통: COHORT_SN = cohortSn  -> 여기 샵 괄호 이런거 쓰면 에러뜸 사용 ㄴㄴ
         */
         SELECT
-        i.ITV_SN,
-        i.COHORT_SN,
-        i.ITV_APLY_TTL,
-        i.ITV_APLY_CN,
-        i.ITV_APLY_DT,
-        i.ITV_PIC_AUTHRT,
-        i.ITV_PIC_SN,
-        i.ITV_APLCNT_SN,
-        i.ITV_PRNMNT_DT,
-        i.ITV_PLC,
-        i.PIC_CAL_SN,
-        i.APLCNT_CAL_SN,
+        i.ITV_SN            AS itvSn,
+        i.COHORT_SN         AS cohortSn,
+        i.ITV_APLY_TTL      AS itvAplyTtl,
+        i.ITV_APLY_CN       AS itvAplyCn,
+        i.ITV_APLY_DT       AS itvAplyDt,
+        i.ITV_PIC_AUTHRT    AS itvPicAutht,
+        i.ITV_PIC_SN        AS itvPicSn,
+        i.ITV_APLCNT_SN     AS itvAplcntSn,
+        i.ITV_PRNMNT_DT     AS itvPrnmntDt,
+        i.ITV_PLC           AS itvPlc,
+        i.PIC_CAL_SN        AS picCalSn,
+        i.APLCNT_CAL_SN     AS aplcntCalSn
         FROM TB_INTERVIEW i
         WHERE 1=1
             AND i.COHORT_SN = #{cohortSn}
@@ -62,19 +62,18 @@
         - 공통: COHORT_SN = cohortSn  -> 여기 샵 괄호 이런거 쓰면 에러뜸 사용 ㄴㄴ
         */
         SELECT
-            i.ITV_SN,
-            i.COHORT_SN,
-            i.ITV_APLY_TTL,
-            i.ITV_APLY_CN,
-            i.ITV_APLY_DT,
-            i.ITV_PIC_AUTHRT,
-            i.ITV_PIC_SN,
-            i.ITV_APLCNT_SN,
-            i.ITV_PRNMNT_DT,
-            i.ITV_PLC,
-            i.PIC_CAL_SN,
-            i.APLCNT_CAL_SN,
-            '면담요청' AS postType
+            i.ITV_SN            AS itvSn,
+            i.COHORT_SN         AS cohortSn,
+            i.ITV_APLY_TTL      AS itvAplyTtl,
+            i.ITV_APLY_CN       AS itvAplyCn,
+            i.ITV_APLY_DT       AS itvAplyDt,
+            i.ITV_PIC_AUTHRT    AS itvPicAutht,
+            i.ITV_PIC_SN        AS itvPicSn,
+            i.ITV_APLCNT_SN     AS itvAplcntSn,
+            i.ITV_PRNMNT_DT     AS itvPrnmntDt,
+            i.ITV_PLC           AS itvPlc,
+            i.PIC_CAL_SN        AS picCalSn,
+            i.APLCNT_CAL_SN     AS aplcntCalSn
         FROM TB_INTERVIEW i
         JOIN TB_COHORT c
             ON c.COHORT_SN = i.COHORT_SN
@@ -151,5 +150,41 @@
           AND i.PIC_CAL_SN IS NULL
           AND i.APLCNT_CAL_SN IS NULL
     </update>
+
+    <select id="getCoSnAndCohortSnByItvSn" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+        /*
+        QueryID : com.kdt.mapper.interview.getCoSnAndCohortSnByItvSn
+        Description : 해당 면담 글에 조회 가능한지 체크하기위해 itvSn으로 coSn,cohortSn 조회
+        작성자 : 김동식
+        */
+        SELECT
+            CO_SN as coSn,
+            COHORT_SN as cohortSn
+        FROM TB_INTERVIEW
+        WHERE ITV_SN = #{itvSn}
+    </select>
+
+    <select id="readInterviewbyItvSn" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+        /*
+        QueryID : com.kdt.mapper.interview.readInterviewbyItvSn
+        Description : itvSn으로 글 상세보기. TB_USER이랑 조인해서 이름 리턴해줌
+        작성자 : 김동식
+        */
+        SELECT
+            i.ITV_SN            AS itvSn,
+            i.CO_SN             AS coSn,
+            i.COHORT_SN         AS cohortSn,
+            i.ITV_APLY_TTL      AS itvAplyTtl,
+            i.ITV_APLY_CN       AS itvAplyCn,
+            i.ITV_APLY_DT       AS itvAplyDt,
+            i.ITV_PIC_AUTHRT    AS itvPicAutht,
+            u.USER_NM           AS itvAplcntNm
+          --  i.ITV_APLCNT_SN     AS itvAplcntSn -- 작성자
+        FROM TB_INTERVIEW i
+        JOIN
+            TB_USER u ON i.ITV_APLCNT_SN = u.USER_SN
+        WHERE
+            i.ITV_SN = #{itvSn}
+    </select>
 
 </mapper>

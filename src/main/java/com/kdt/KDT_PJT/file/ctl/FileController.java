@@ -56,6 +56,25 @@ public class FileController {
         return fileService.saveBatch(files, userSn, coSn, formUuid);
     }
 
+    // 미리보기 요청 받는 컨트롤러
+    @GetMapping("/{storedFileName}/preview")
+    public ResponseEntity<Resource> preview(@PathVariable String storedFileName,
+                                            @RequestParam(value = "original", required = false) String original) {
+        Resource r = storage.loadAsResource(storedFileName);
+        Path p = storage.resolveFilename(storedFileName);
+        String contentType = storage.detectContentType(p);
+        String filename = (original != null && !original.isBlank()) ? original : storedFileName;
+        String encoded = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+        long len;
+        try { len = Files.size(p); } catch (Exception e) { len = -1L; }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + encoded + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .contentLength(Math.max(0, len))
+                .body(r);
+    }
+
+
     // 다운로드 (attachment)
     @GetMapping("/{storedFileName}/download")
     public ResponseEntity<Resource> download(@PathVariable String storedFileName,

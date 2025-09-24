@@ -6,6 +6,21 @@ import '../../styles/sj.css';
 import { toast } from 'react-toastify';
 import { useAccount } from '../AuthContext.jsx';
 
+// 파일 상단 어딘가에 유틸(컴포넌트 안/밖 아무데나 가능)
+const safePath = (p) => {
+  if (!p) return '/';
+  const s = String(p).trim();
+  const noLead = s.startsWith('/') ? s.slice(1) : s;
+  // 세그먼트 단위 인코딩(공백/한글 방지)
+  return (
+    '/' +
+    noLead
+      .split('/')
+      .map((seg) => encodeURIComponent(seg.trim()))
+      .join('/')
+  );
+};
+
 export default function GeneralJoin() {
   const { signIn } = useAccount();
   const [form, setForm] = useState({
@@ -35,16 +50,16 @@ export default function GeneralJoin() {
     if (!emailRef.current?.reportValidity()) return;
 
     const normEmail = form.email.trim().toLowerCase();
-    if (!normEmail) return setMsg('이메일을 입력하세요.');
+    if (!normEmail) return toast.error('이메일을 입력하세요.');
     setSending(true);
     setMsg(null);
     try {
       await requestEmailCode(normEmail); // 200 OK or 409 CONFLICT 등
       setForm((f) => ({ ...f, email: normEmail }));
       setCodeSent(true);
-      setMsg('인증코드를 전송했습니다.');
+      toast.success('인증코드를 전송했습니다.');
     } catch (e) {
-      setMsg(getErrMsg(e)); // 예: "이미 가입된 이메일입니다."
+      toast.error(getErrMsg(e)); // 예: "이미 가입된 이메일입니다."
     } finally {
       setSending(false);
     }
@@ -54,6 +69,14 @@ export default function GeneralJoin() {
     e.preventDefault();
     setLoading(true);
     setMsg(null);
+
+    const nameRegex = /^[가-힣]{2,5}$/;
+    if (!nameRegex.test(form.username.trim())) {
+      toast.error('이름은 한글 2~5자로 입력해주세요.');
+      setLoading(false);
+      return;
+    }
+
     try {
       const payload = {
         username: form.username.trim(),
@@ -68,9 +91,8 @@ export default function GeneralJoin() {
 
       const loginPayload = { email: payload.email, password: payload.password };
       const me = await signIn(loginPayload);
-      const redirectLoc = `${me?.HOME_PATH}` || '/superMain';
-      toast.success("회원가입 성공!")
-      navigate(redirectLoc, { replace: true });
+      toast.success('회원가입이 완료되었습니다!');
+      navigate(safePath(me?.HOME_PATH) || '/', { replace: true });
     } catch (e) {
       toast.error(getErrMsg(e)); // 예: "이메일 인증 실패", "비밀번호가 일치하지 않습니다."
     } finally {
@@ -78,14 +100,25 @@ export default function GeneralJoin() {
     }
   };
 
+  // 모든 값이 채워졌는지 확인
+  const isFormValid =
+    form.username.trim() &&
+    form.email.trim() &&
+    form.verificationCode.trim().length === 6 &&
+    form.password &&
+    form.confirmPassword &&
+    form.phoneNumber.trim().length === 11;
+
   return (
     <div className="signup-inner">
       <div className="signup-title">
         <b>회원가입</b>
       </div>
-      <form className="signup-form" onSubmit={onSubmit}>
+      <form className="signup-form" onSubmit={onSubmit} noValidate>
         <input
           name="username"
+          minLength={2}
+          maxLength={10}
           placeholder="이름(국문)"
           value={form.username}
           onChange={onChange}
@@ -145,9 +178,18 @@ export default function GeneralJoin() {
           maxLength={11}
           required
         />
-        <button className="signup-btn" type="submit" disabled={loading}>
+        <button
+          className="signup-btn"
+          type="submit"
+          disabled={!isFormValid || loading}
+          style={{
+            backgroundColor: !isFormValid ? '#ccc' : '#007bff',
+            cursor: !isFormValid ? 'not-allowed' : 'pointer',
+          }}
+        >
           {loading ? '가입 중...' : '회원가입'}
         </button>
+        {msg && <p className="msg">{msg}</p>}
       </form>
     </div>
   );

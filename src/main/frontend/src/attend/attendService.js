@@ -41,3 +41,32 @@ export const getAttendSummary = () =>
 // 금일 모든 기수 출결 현황 조회(관리자용)
 export const getAbsenceByCohortToday = () =>
   api.get('/attend/absence/by-cohort/today').then(({ data }) => data.data);
+
+// 출결 인정 요청 생성
+export const createAttendAdjust = (payload) =>
+  api.post('/attend/adjust', payload).then(({ data }) => data);
+
+// 내 요청 목록(페이징)
+export const getMyAttendAdjustPage = ({ page = 0, size = 10 } = {}) =>
+  api
+    .get('/attend/adjust/my', { params: { page, size } })
+    .then(({ data }) => data);
+
+// 파일 업로드
+export const uploadEvidenceFile = (file, formUuid) => {
+  const fd = new FormData();
+  fd.append('file', file);
+  if (formUuid) fd.append('formUuid', formUuid);
+
+  return api
+    .post('/files', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+    .then(({ data }) => data);
+};
+
+// ✅ 관리자: 출석 인정 요청 전체 조회 (회사 기준)
+export const getAdminAttendAdjustPage = ({ page = 0, size = 10 } = {}) =>
+  ok(api.get('/attend/adjust/admin', { params: { page, size } }));
+
+// 관리자: 승인여부 변경 (Y/N)
+export const updateAttendAdjustStatus = (id, status) =>
+  ok(api.put(`/attend/adjust/${id}/status`, { status }));
