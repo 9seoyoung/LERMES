@@ -106,4 +106,9 @@ public class InterviewService {
     public CmmnMap readInterviewbyItvSn(CmmnMap params){
         return dao.selectOne("com.kdt.mapper.interview.readInterviewbyItvSn", params);
     }
+
+    @Transactional
+    public int incViewCnt(CmmnMap params){
+        return dao.update("com.kdt.mapper.interview.incViewCnt", params);
+    }
 }
