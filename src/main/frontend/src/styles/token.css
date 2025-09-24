@@ -9,11 +9,20 @@
     --color-checkout-title: #FFE6DF;
     --color-secondary-bg: #ACACAC;
     --color-primary-bg: #08F;
-    --coolor-checkin-btn: #62B6FF;
+    --color-checkin-btn: #62B6FF;
     --color-checkout-warning: #FFB5A0;
     --color-disable-bg: #EEEFF0;
     --color-font-nav: #565656;
     --color-font-sec: #333;
     --color-font-warning: #E9623A;
     --color-font-disable: #575757;
+
+
+
+    /* 폰트 크기 */
+}
+
+:root[titleType = "3"]{
+    font-size: 2.2rem;
+    font-weight: 700;
 }
