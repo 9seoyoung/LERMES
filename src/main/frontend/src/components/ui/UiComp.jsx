@@ -104,7 +104,7 @@ export function FormInput(props) {
   return (
     <div className={styles.inputSet}>
       <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addLabelStyle}`}>{labelNm}</label>
-      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete='false' className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={false} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }
@@ -332,7 +332,7 @@ export function FileUpload({ files, setFiles }) {
 }
 
 // 파일 목록
-export function FileList({ files, setFiles }) {
+export function FileList({ files, setFiles, noShow }) {
   const removeFile = (idx) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
   };
@@ -342,7 +342,12 @@ export function FileList({ files, setFiles }) {
       {files.map((file, idx) => (
         <li key={idx}>
           <span>
-            {file.name} <DeleteBtn onClick={() => removeFile(idx)} />
+            {file.name}
+            { noShow ? 
+              null
+              :
+              <DeleteBtn onClick={() => removeFile(idx)} />
+            }
           </span>
         </li>
       ))}

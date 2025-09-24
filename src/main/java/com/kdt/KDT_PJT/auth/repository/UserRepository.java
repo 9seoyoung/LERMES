@@ -16,4 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByEnabledTrueAndCohortSnIsNotNull();
     List<User> findByEnabledTrueAndCompanySnIsNotNullAndCohortSnIsNotNull();
+
+    @Override
+    List<User> findAll();
+
 }

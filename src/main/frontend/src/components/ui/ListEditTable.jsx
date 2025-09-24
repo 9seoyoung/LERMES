@@ -1,71 +1,134 @@
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "../../styles/UiComp.module.css";
-import { DateTimeInput } from "./UiComp";
+import { DateTimeInput, OrangeCheckbox } from "./UiComp";
 
-// @apiData api 호출해서 구조분해할당한 것., 백에서 객체 배열로 보내줘야됨
 export default function ListEditTable({
-    // props -------------------------------------------------------------
     tableHead = [],
-    nameArr = [], // api로 받은 객체의 프로퍼티 이름, 컬럼 순으로
+    nameArr = [],
     apiData = [],
     columnData = [],
-    formData,
+    formData,          // 필요하면 유지
     handleChange,
     gridTemplate,
     gap = 0,
-    type = [] // input type 컬럼 순서대로 적으셈
+    type = [],
 }) {
-    // 선언부-------------------------------------------------------------
-    //백에서 넘겨받은 데이터의 길이를 부정해서 0이면(하나라도 담기면 패스) 데이터 없음 리턴
-    if(!apiData?.length) {
-        return <div className={styles.ListTbBg}>-</div>;
-    }
+    const [selected, setSelected] = useState(() => new Set());
+    const headerCbRef = useRef(null);
+    
+    const resolvedTemplate = useMemo(() => {
+        return Array.isArray(gridTemplate)
+        ? gridTemplate.join(" ")
+        : gridTemplate ||
+        `repeat(${(tableHead?.length || columnData?.length || 1) + 1}, minmax(0,1fr))`;
+    }, [gridTemplate, tableHead, columnData]);
+    
+    const getRowId = (row, i) => row.id ?? row.sn ?? row.MAT_SN ?? row.USER_SN ?? i;
+    const allIds = useMemo(() => apiData.map(getRowId), [apiData]);
+    const allSelected = selected.size > 0 && selected.size === allIds.length;
+    const someSelected = selected.size > 0 && selected.size < allIds.length;
+    
+    useEffect(() => {
+        if (headerCbRef.current) headerCbRef.current.indeterminate = someSelected;
+    }, [someSelected]);
+    
+    const toggleAll = () => {
+        setSelected(prev => (prev.size === allIds.length ? new Set() : new Set(allIds)));
+    };
+    
+    const toggleRow = (id) => {
+        setSelected(prev => {
+            const s = new Set(prev);
+            s.has(id) ? s.delete(id) : s.add(id);
+            return s;
+        });
+    };
+    
 
-    // 1) 배열이면 공백으로 join
-    // 2) 문자열이면 그대로
-    // 3) 없으면 컬럼 수 기준으로 동일 폭
-    const resolvedTemplate = Array.isArray(gridTemplate)
-    ? gridTemplate.join(' ')
-    : gridTemplate ||
-    `repeat(${(tableHead?.length || columnData?.length || 1)}, minmax(0,1fr))`;
-
+    
     return (
-    <ul className={styles.ListTbBg}
-        style={{ ['--cols']: resolvedTemplate, ['--gap']: gap }}
-    >
-        {tableHead?.length > 0 ? 
-                <li key="tableHead" className={`${styles.ListHeader} ${styles.gridRow}`}>
-        {            tableHead.map((col, idx) => (
-                    <div key={`th-${idx}`} className={styles.cell}>{col}</div>
-                ))
-            }
-                </li>
-            :
-            null
-        }
-        {apiData.map((row, i) => (
-            <li key={i} className={`${styles.editRow} ${styles.gridRow}`}>
-                {columnData.map((col, j) => (
-                    <>
-                        {type[j] === "date" || type[j] === "time" ? 
-                        <DateTimeInput
-                            type="date" 
-                            handleChange={handleChange}
-                            name={nameArr[j]}
-                            formData={formData} 
-                        ></DateTimeInput>
-                        :
-                        <input 
-                            type={type[j]} 
-                            key={j} 
-                            className={styles.cell} 
-                            placeholder={row[col]}
-                            autoComplete="false"
-                        />
-                        }
-                    </>
-                ))}
+        <>
+      {/* 툴바 */}
+      <ul style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}>
+        <li>
+          <label style={{ display: "inline-flex", gap: 6, alignItems: "center", cursor: "pointer" }}>
+            <input
+              ref={headerCbRef}
+              type="checkbox"
+              checked={allSelected}
+              onChange={toggleAll}
+            />
+            전체선택
+          </label>
+        </li>
+        <li>
+          <button
+            // onClick={handleBulkDelete}
+            disabled={selected.size === 0}
+            style={{ opacity: selected.size === 0 ? 0.5 : 1 }}
+          >
+            선택삭제 ({selected.size})
+          </button>
+        </li>
+      </ul>
+
+      {/* 테이블 */}
+      <ul
+        className={styles.ListTbBg}
+        style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
+      >
+        {tableHead?.length > 0 && (
+          <li key="tableHead" className={`${styles.ListHeader} ${styles.gridRow}`}>
+            {/* 체크박스 헤더 빈 칸 */}
+            <div className={styles.cell} />
+            {tableHead.map((col, idx) => (
+              <div key={`th-${idx}`} className={styles.cell}>
+                {col}
+              </div>
+            ))}
+          </li>
+        )}
+
+        {apiData.map((row, i) => {
+          const id = getRowId(row, i);
+          const checked = selected.has(id);
+
+          return (
+            <li key={id} className={`${styles.editRow} ${styles.gridRow}`}>
+              {/* 체크박스 컬럼 */}
+              <div className={styles.cell}>
+                <OrangeCheckbox
+                  checked={checked}
+                  onChange={() => toggleRow(id)}
+                  value={id}
+                />
+              </div>
+
+              {/* 데이터 컬럼 */}
+              {columnData.map((col, j) => (
+                <div key={`${id}-${j}`} className={styles.cell}>
+                  {type[j] === "date" || type[j] === "time" ? (
+                    <DateTimeInput
+                      type={type[j]}
+                      handleChange={handleChange}
+                      name={nameArr[j]}
+                      formData={row}          // 각 행 기준으로 넘김
+                    />
+                  ) : (
+                    // 편집 불가면 div로 보여주고, 편집 가능이면 value/onChange로 제어
+                    <input
+                      type={type[j] || "text"}
+                      value={row[col] ?? ""}
+                      onChange={(e) => handleChange?.(e, { row, rowIndex: i, col, colIndex: j })}
+                      autoComplete="off"
+                    />
+                  )}
+                </div>
+              ))}
             </li>
-        ))}
-    </ul>
-    );
+          );
+        })}
+      </ul>
+    </>
+  );
 }

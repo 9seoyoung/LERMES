@@ -95,6 +95,7 @@ const Dropdown = forwardRef(function Dropdown(
         aria-expanded={open}
         onClick={handleButtonClick}
         disabled={disabled}
+        
       >
         {label}
         <div className={`dd__chev ${open ? "is-open" : ""}`} aria-hidden>

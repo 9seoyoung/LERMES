@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.interview.service;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
+import com.kdt.KDT_PJT.cmmn.Enum.AuthEnums;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -41,24 +43,58 @@ public class InterviewService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");   //예외 발생시 정상응답(200ok)대신 상태코드에 맞는 HTTP응답을 클라이언트에 돌려보냄
         }
         //params에 담긴 정보 : 면담 신청 제목, 면담 신청 내용, 면담 담당자 권한
-        params.put("itvAplcntSn", me.getId());      //로그인유저 사용자SN 가져옴
-        params.put("cohortSn", me.getCohortSn());   //로그인 유저의 기수SN 가져옴
+        params.put("itvAplcntSn", Math.toIntExact(me.getId()));      //로그인유저 사용자SN 가져옴
+        params.put("cohortSn", Math.toIntExact(me.getCohortSn()));   //로그인 유저의 기수SN 가져옴
         String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid) // TODO 일단 모든 면담에 대해 uuid 만드는데, 파일 있을경우만 생성하도록 변경할팔요
         params.put("formUuid", uuid);               //신청글에대한 uuid 만듦
         params.put("itvAplyDt", LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)); // 면담 신청 일시 추가(기록용)
 
+        //itvPicAuthrt 값을 문자열로 가져와서 Integer로 변환
+        String authrtString = (String) params.get("itvPicAuthrt");
+
+        Integer authrtCode;
+        try {
+            // 공통 Enum 클래스에서 코드 변환
+            authrtCode = AuthEnums.getCodeByName(authrtString);
+            params.put("itvPicAuthrt", authrtCode);
+        } catch (IllegalArgumentException e) {
+            // getCodeByName()에서 던진 예외를 잡아서 처리
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        System.out.println("면담대상자 authrtCode = " + authrtCode);
+        // 2) 변환된 Integer 값을 다시 CmmnMap에 넣기
+        params.put("itvPicAuthrt", authrtCode);
+
+
         dao.insert("com.kdt.mapper.interview.insertApplyInterview", params); //itvSn 생성되어 들어옴.
         System.out.println("params = " + params);
+        System.out.println(params.get("itvPicAuthrt"));
+        System.out.println(params.get("itvPicAuthrt").getClass().getName());
+        System.out.println(params.get("itvAplcntSn").getClass().getName());
 //        CmmnMap result = new CmmnMap();
         CmmnMap result = params;
         return result;
     }
 
-    @PreAuthorize("hasAnyRole('TENANT','EMPLOYEE','INSTRUCTOR')")
-    @Transactional
-    public List<CmmnMap> getMyInterviewRequests(Integer pathCohortSn) {
 
-        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequests");
+    @Transactional
+    public List<CmmnMap> getMyInterviewRequests(CmmnMap params) { //params에 where에 쓸거 실려옴
+//        params.put("pathCohortSn",pathCohortSn); // params에 실어서 보내기
+        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequests", params);
         return paramsList;
+    }
+
+    @Transactional
+    public List<CmmnMap> getMyInterviewRequestsAll(CmmnMap params) { //params에 where에 쓸거 실려옴
+//        params.put("pathCohortSn",pathCohortSn); // params에 실어서 보내기
+        List<CmmnMap> paramsList = dao.selectList("com.kdt.mapper.interview.getMyInterviewRequestsAll", params);
+        return paramsList;
+    }
+
+    @Transactional
+    public int confirmInterview(@RequestBody CmmnMap params){
+
+
+        return dao.update("com.kdt.mapper.interview.confirmInterview", params); //업데이트
     }
 }

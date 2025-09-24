@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-import FilterList from '../../components/ui/FilterList';
-import ListTable from '../../components/ui/ListTable';
+import FilterList from '../../../components/ui/FilterList';
+import ListTable from '../../../components/ui/ListTable';
 import {Settings} from "lucide-react";
-import ListEditTable from '../../components/ui/ListEditTable';
+import ListEditTable from '../../../components/ui/ListEditTable';
 
 export default function AccountSet() {
   const [manageState, setManageState] = useState(false);
+  const [selectedIdx, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     // formData 초기값
@@ -41,7 +42,7 @@ export default function AccountSet() {
             <h2>계정 관리</h2>
             <div className="filterList">
                 <ul className="ftList_L">
-                  <FilterList arr={filterArr}></FilterList>
+                    <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
                   {manageState ? (
@@ -70,20 +71,20 @@ export default function AccountSet() {
             <div className="BigListBox">
               {manageState ? 
                 <ListEditTable 
-                tableHead={['순번', '이름', '이메일', '전화번호']}
-                columnData={['no', 'name', 'email', 'tel']}
+                tableHead={['순번', '직책' ,'이름', '이메일', '전화번호', '담당그룹', '권한레벨', '블랙']}
+                columnData={['no', 'hat', 'name','email', 'tel', 'duty', 'authLv', 'blacklist']}
                 apiData={[{no: 1, name:"하이", email:"ㄴㄴ", tel:"ㅁ"}, {no: 1, name:"하이", email:"ㄷㄷ", tel:"ㄴ"}]}
-                gridTemplate="1fr 1fr 2fr 1.2fr"
+                gridTemplate="0.5fr 0.5fr 1fr 1fr 2fr 2fr 2fr 1fr 1fr"
                 formData={formData}
                 type = {['text', 'date', 'email', 'tel']}
                 />
                 :
                 <ListTable
-                tableHead={['순번', '이름', '이메일', '전화번호']}
-                columnData={['no', 'name', 'email', 'tel']}
+                tableHead={['순번', '직책' ,'이름', '이메일', '전화번호', '담당그룹', '권한레벨', '블랙']}
+                columnData={['no', 'hat', 'name','email', 'tel', 'duty', 'authLv', 'blacklist']}
                 apiData={[{no: 1, name:"하이", email:"ㄴㄴ", tel:"ㅁ"}]}
                 // 문자열로 지정
-                gridTemplate="1fr 1fr 2fr 1.2fr"
+                gridTemplate="0.5fr 1fr 1fr 2fr 2fr 2fr 1fr 1fr"
                 gap="12px"
                 handleChange = {handleChange}
               /> 
