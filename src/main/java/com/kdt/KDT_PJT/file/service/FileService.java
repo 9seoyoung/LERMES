@@ -1,10 +1,17 @@
 package com.kdt.KDT_PJT.file.service;
 
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
+import com.kdt.KDT_PJT.file.dto.FileDTO;
+import com.kdt.KDT_PJT.file.dto.UploadResultDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,7 +21,7 @@ public class FileService {
     private final CmmnDao cmmnDao;
     private final FileStorageService storage;
 
-    public com.kdt.KDT_PJT.file.dto.UploadResultDTO save(MultipartFile file, Integer userSn, Integer coSn, String formUuid) {
+    public UploadResultDTO save(MultipartFile file, Integer userSn, Integer coSn, String formUuid) {
         if (file == null || file.isEmpty()) throw new IllegalArgumentException("file is required");
         String original = Objects.requireNonNullElse(file.getOriginalFilename(), "file");
         String ext = extractExt2(original);
@@ -30,10 +37,10 @@ public class FileService {
         }
 
         // DB 저장 DTO 구성
-        com.kdt.KDT_PJT.file.dto.FileDTO dto = new com.kdt.KDT_PJT.file.dto.FileDTO();
+        FileDTO dto = new com.kdt.KDT_PJT.file.dto.FileDTO();
         dto.setOrgnlFileNm(original);
         dto.setStrgFileNm(stored);
-        dto.setStrgFilePath(""); //com.kdt.KDT_PJT.file.util.StoragePaths.root().toString() //경로는 하위에 날짜형식 YYYY/MM/DD 이런거 나중에 추가하면 할듯
+        dto.setStrgFilePath(""); //StoragePaths.root().toString() //경로는 하위에 날짜형식 YYYY/MM/DD 이런거 나중에 추가하면 할듯
         dto.setDelYn((byte)0);
         dto.setStrgDt(java.time.LocalDateTime.now());
         dto.setUserSn(userSn);
@@ -45,16 +52,16 @@ public class FileService {
 
         cmmnDao.insert("com.kdt.mapper.file.FileMapper.insertTbFile", dto);
 
-        return new com.kdt.KDT_PJT.file.dto.UploadResultDTO(dto.getFileSn(), original, stored, size);
+        return new UploadResultDTO(dto.getFileSn(), original, stored, size);
     }
 
-    public java.util.List<com.kdt.KDT_PJT.file.dto.UploadResultDTO> saveBatch(java.util.List<MultipartFile> files, Integer userSn, Integer coSn, String formUuid) {
+    public List<UploadResultDTO> saveBatch(List<MultipartFile> files, Integer userSn, Integer coSn, String formUuid) {
         if (files == null || files.isEmpty()) throw new IllegalArgumentException("files is required");
         // formUuid 없으면 서버가 생성
         if (formUuid == null || formUuid.isBlank()) {
             formUuid = UUID.randomUUID().toString().replace("-", "");
         }
-        java.util.List<com.kdt.KDT_PJT.file.dto.UploadResultDTO> list = new java.util.ArrayList<>();
+        List<UploadResultDTO> list = new ArrayList<>();
         for (MultipartFile f : files) {
             list.add(save(f, userSn, coSn, formUuid));
         }
@@ -71,13 +78,13 @@ public class FileService {
         try {
             String probe = file.getContentType();
             if (probe != null && !probe.isBlank()) return probe;
-            return ext != null ? java.nio.file.Files.probeContentType(java.nio.file.Path.of("dummy." + ext)) : org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            return ext != null ? Files.probeContentType(Path.of("dummy." + ext)) : MediaType.APPLICATION_OCTET_STREAM_VALUE;
         } catch (Exception e) {
-            return org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
+            return MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
     }
 
-    public com.kdt.KDT_PJT.file.dto.FileDTO getMeta(int fileSn) {
+    public FileDTO getMeta(int fileSn) {
         return cmmnDao.selectOne("com.kdt.mapper.file.FileMapper.selectTbFileBySn", fileSn);
     }
 }

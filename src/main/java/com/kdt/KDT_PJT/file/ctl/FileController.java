@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -35,19 +36,18 @@ public class FileController {
 //    } //@RequiredArgsConstructor로 대치
 
     // 단일 업로드: 파일을 user.home/LERMES/files 폴더에 저장하고 저장된 파일명을 반환
-    // TODO me로 me.getCompanyId() 이런거 가져와서 파일에 사용자 소속 company 넣어버리기
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public UploadResultDTO upload(@AuthenticationPrincipal AuthCustomUserDetails me,
-                                  @RequestPart("file") MultipartFile file,
-                                  @RequestParam(value="formUuid", required=false) String formUuid) {
-        Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
-        Integer coSn   = (me != null && me.getCompanySn() != null) ? Math.toIntExact(me.getCompanySn()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
-        return fileService.save(file, userSn, coSn, formUuid);
-    }
+    // 단일 업로드는 폐기) 필요가없음. 다중이 더 안정적일듯 [{}] 걍 단일도 이렇게 받으면 되니까.
+//    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public UploadResultDTO upload(@AuthenticationPrincipal AuthCustomUserDetails me,
+//                                  @RequestPart("file") MultipartFile file,
+//                                  @RequestParam(value="formUuid", required=false) String formUuid) {
+//        Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
+//        Integer coSn   = (me != null && me.getCompanySn() != null) ? Math.toIntExact(me.getCompanySn()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
+//        return fileService.save(file, userSn, coSn, formUuid);
+//    }
 
-    // 다중 업로드
-    // TODO me로 me.getCompanyId() 이런거 가져와서 파일에 사용자 소속 company 넣어버리기
-    @PostMapping(path = "/batch", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // 다중 업로드: /api/files 에 POST로 처리 (단일도 files 1개로 전송)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<UploadResultDTO> uploadBatch(@AuthenticationPrincipal AuthCustomUserDetails me,
                                              @RequestPart("files") List<MultipartFile> files,
                                              @RequestParam(value="formUuid", required=false) String formUuid) {
@@ -75,8 +75,8 @@ public class FileController {
     }
 
 
-    // 다운로드 (attachment)
-    @GetMapping("/{storedFileName}/download")
+    // 다운로드 (attachment) - 저장 파일명으로
+    @GetMapping("/{storedFileName}")
     public ResponseEntity<Resource> download(@PathVariable String storedFileName,
                                              @RequestParam(value = "original", required = false) String original) {
         Resource r = storage.loadAsResource(storedFileName);
@@ -98,20 +98,20 @@ public class FileController {
     }
 
     // 파일 SN으로 원본 파일명 조회
-    @GetMapping("/id/{fileSn}/name")
+    @GetMapping("/{fileSn:\\d+}/name")
     public ResponseEntity<?> getOriginalName(@PathVariable int fileSn) {
         var meta = fileService.getMeta(fileSn);
         if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(java.util.Map.of(
+        return ResponseEntity.ok(Map.of(
                 "fileSn", meta.getFileSn(),
                 "originalFileName", meta.getOrgnlFileNm()
         ));
     }
 
     // 파일 SN으로 다운로드 (attachment)
-    @GetMapping("/id/{fileSn}/download")
+    @GetMapping("/{fileSn:\\d+}")
     public ResponseEntity<Resource> downloadById(@PathVariable int fileSn) {
         var meta = fileService.getMeta(fileSn);
         if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
