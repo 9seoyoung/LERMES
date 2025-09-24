@@ -43,8 +43,7 @@ export function createInterviewMemo(body) {
  * @param {Number} fixedSn LMS 회사 시리얼 넘버 고정값 => 상준이가 수퍼메인페이지 API 만들고 나면 정해질 예정
  * @returns {Object} itvSn 에 해당하는 면담신청 데이터
  */
-export const readInterview = (itvSn) => api.get(
-  `/confirm/${itvSn}`,{params: {itvSn}})
+export const readInterview = (itvSn) => api.read(`/read/${itvSn}`);
 
   // 면담신청 리스트 조회(관리자)
 // postService.js
