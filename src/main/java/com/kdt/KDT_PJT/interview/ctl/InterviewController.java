@@ -134,7 +134,9 @@ public class InterviewController {
         // }
     }
 
-
+    /**
+     * 면담 요청 상세보기
+     */
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
     @GetMapping("/read/{itvSn}")
     public ResponseEntity<CmmnMap> readInterview(@AuthenticationPrincipal AuthCustomUserDetails me,
@@ -164,7 +166,16 @@ public class InterviewController {
         }
 
         //회사 체크 완료, 이제 글 보여드리겠음, 학생 밑으로는 이미 @PreAuthorize로 걸러져서 ㄱㅊ
-        CmmnMap resp = interviewService.readInterviewbyItvSn(params);
+
+        //일단 조회수 +1 조지겠음
+        int isIncViewCnt = interviewService.incViewCnt(params);
+        if (isIncViewCnt == 1) {
+            System.out.println("조회수 +1");
+        } else{
+            System.out.println("조회수 +1 실패");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "조회수 올리기 실패");
+        }
+        CmmnMap resp = interviewService.readInterviewbyItvSn(params); //실제 상세 조회
 
         return ResponseEntity.ok(resp);
     }
@@ -205,6 +216,7 @@ public class InterviewController {
         params.put("itvPlc", itvPlc);
         params.put("itvPicAns", itvPicAns);  // url에 온거 map에 실어주기
         params.put("itvPicSn", Math.toIntExact(me.getId()) );
+        params.put("coSn",me.getCompanySn().intValue());
 
         params.put("itvSn",itvSn);
         int isUpdated = interviewService.confirmInterview(params); // 업데이트
@@ -223,6 +235,7 @@ public class InterviewController {
         m.put("itvPrnmntDt",params.get("itvPrnmntDt"));
         m.put("itvSn",params.get("itvSn"));
         m.put("itvTime",params.get("itvTime"));
+        m.put("coSn", params.get("coSn"));
         System.out.println("m = " + m);
         dao.insert("com.kdt.mapper.calendar.createPicCalendarByItvSn", m); // 인터뷰SN으로 면담 진행할사람 두명 SN,기수SN 가져오고 면담 담당자 일정 추가
         m.put("picCalSn",m.get("calSn")); //picCalSn 저장하기 (면담 담당자의 캘린더SN)

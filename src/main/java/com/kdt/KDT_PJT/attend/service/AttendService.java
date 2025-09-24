@@ -287,9 +287,7 @@ public class AttendService {
                 } else if (checkIn.isAfter(attendStartTm) && checkOut.isBefore(attendEndTm)) {
                     // 지각 + 조기 퇴실 => 결석
                     status = "ABSENT";
-                } else if (work.compareTo(fullDay) >= 0) {
-                    status = "PRESENT";
-                } else if (checkOut.isBefore(attendEndTm)) {
+                }  else if (checkOut.isBefore(attendEndTm)) {
                     status = "EARLY_LEAVE";
                 } else if (checkIn.isAfter(attendStartTm)) {
                     status = "LATE";

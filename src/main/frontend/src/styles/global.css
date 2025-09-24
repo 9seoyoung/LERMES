@@ -1,5 +1,5 @@
 /* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
-@import "./token.css";
+
 /* 구글에서 가져온 폰트 - Noto Sans KR */
 
 /* 색상 클래스 */
@@ -17,11 +17,11 @@
 
 html {
   /* 기본사이즈 10px, 나머지는 rem 기준으로 계산 */
-    font-size: clamp(8px, 0.8vw, 12px);
-    width: 100%;
-    height: 100%;
-    background-color: #d9d9d9;
-    color: #222;
+  font-size: clamp(8px, 0.8vw, 12px);
+  width: 100%;
+  height: 100%;
+  background-color: #d9d9d9;
+  color: #222;
 }
 
 body {
@@ -135,7 +135,7 @@ h4 {
   flex-direction: column;
 }
 
-.layout > header {
+.layout>header {
   width: 100%;
   height: 64px;
   background-color: #fff;
@@ -143,7 +143,7 @@ h4 {
   display: flex;
   gap: 24px;
   border-radius: 32px;
-  box-shadow: 4px 4px 4px #00000025 ;
+  box-shadow: 4px 4px 4px #00000025;
   justify-content: space-between;
   position: relative;
   z-index: 999999;
@@ -203,7 +203,7 @@ h4 {
   position: relative;
 }
 
-footer > div {
+footer>div {
   color: #fff;
   font-size: 1.6rem;
   cursor: pointer;
@@ -211,7 +211,7 @@ footer > div {
   padding: 12px 4px;
 }
 
-footer > div:hover {
+footer>div:hover {
   background-color: #00000025;
   cursor: pointer;
 }
@@ -225,7 +225,7 @@ footer > div:hover {
   max-height: 100vh;
 }
 
-.headerLogo{
+.headerLogo {
   height: 80px;
   display: flex;
   align-items: center;
@@ -241,6 +241,7 @@ footer > div:hover {
 }
 
 .findIdPw {
+  gap: 30px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -591,6 +592,7 @@ footer > div:hover {
   right: 24px;
   justify-content: flex-end;
 }
+
 .testBtn {
   font-size: 1rem;
   padding: 4px 12px;
@@ -895,6 +897,7 @@ footer > div:hover {
   height: 2.8rem;
   border-radius: 4px;
 }
+
 .questionTypeBox .dropSet button {
   border: 1px solid #dedede;
   padding: 8px 12px;
