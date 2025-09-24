@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useAccount } from "../../auth/AuthContext";
 import SuperHeader from "../ui/headerModule/SuperHeader"
 import MyInfo from "../ui/MyInfo";
-import LmsHeader from "../ui/headerModule/LmsHeader";
+import LmsHeader, { VisitorHeader } from "../ui/headerModule/LmsHeader";
 import Nav from "../ui/navModule/Nav";
 import StdNav from "../ui/navModule/StdNav";
 import AdminNav from "../ui/navModule/AdminNav";
@@ -15,7 +15,7 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 // 진짜 레이아웃만 짜놓고, 사용자 정보 받아와서 롤, 기본url 체크 후 세부 컴포넌트에서 디자인 바꿔야 할듯
 // 세부 컴포넌트 들 마다 outlet 써야할 듯
 export default function Layout() {
-  const { clearSelectedCompany } = useSelectedCompany();
+  const { selectedCompanySn } = useSelectedCompany();
   const navigate = useNavigate();
   const [navToggle, setNavToggle] = useState(false);
   const { user, signOut, patchUser } = useAccount();
@@ -23,6 +23,19 @@ export default function Layout() {
   const navKind = curloc.pathname.split('/', 2)[1] || '';
   const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];
   const [selectedItem, setItem] = useState(0);
+  const myCoSn = user?.USER_OGDP_CO_SN;
+
+  const myAuth = user?.USER_AUTHRT_SN;
+  const authLvPath = {
+    1: "adminHome",
+    2: "adminHome",
+    3: "adminHome",
+    4: "tutorHome",
+    5: "stdHome",
+    6: "visitorHome",
+    7: "superHome"
+  }
+  const loc = authLvPath[myAuth];
 
   // const onSaveProfile = async (form) => {
   //   const saved = await saveProfile(form);
@@ -79,7 +92,15 @@ export default function Layout() {
     <div className="layout">
       <header>
         {/* 페이지 별 헤더 변경 */}
-        <HeaderStatus loc={navKind} />
+        { myCoSn === selectedCompanySn ? (
+          <HeaderStatus loc={loc} setNavToggle={setNavToggle} navToggle={navToggle} />
+        )
+        :
+          <LmsHeader>
+            <VisitorHeader />
+          </LmsHeader>
+        }
+        
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
@@ -93,10 +114,13 @@ export default function Layout() {
       <div className="layout_content">
         <main className="varPage">
           {/* Nav 팝업은 여기서 처리 */}
-          {(navToggle === false) ? ""
-            :
-            <NavStatus loc={navKind} />
-          }
+          {navToggle === false ? null : (
+            myCoSn === selectedCompanySn ? (
+              <NavStatus loc={navKind} />
+            ) : (
+              <Nav />
+            )
+          )}
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
           <Outlet />
         </main>

@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom"
 import { useAccount } from "../../../auth/AuthContext";
+import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
+
 
 export default function Nav({setNavToggle}) {
     const { user, fetchedOnce } = useAccount();
+    const { clearSelectedCompany } = useSelectedCompany();
     const navigate = useNavigate();
 
     if (!fetchedOnce) {
@@ -24,13 +27,11 @@ export default function Nav({setNavToggle}) {
                 </button> 
             </div>
             <div className="navMenuList">
-                <div onClick={() => navigate('/stdHome')}>홈</div>
-                <div onClick={() => navigate('/stdHome/studySched')}>학습 일정</div>
-                <div onClick={() => navigate('/stdHome/board')}>게시판</div>
+                <div onClick={() => navigate('/visitorHome')}>홈</div>
             </div>
         </div>
         <div className="goSuper" onClick={() => {navigate('/'); setNavToggle(false);}}>
-            <div>
+            <div onClick={() => clearSelectedCompany()}>
                 LERMES로 돌아가기
             </div>
         </div>

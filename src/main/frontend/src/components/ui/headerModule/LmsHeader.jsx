@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import SuperHeader from './SuperHeader';
 import uiStyle from '../../../styles/UiComp.module.css';
 import { useAccount } from '../../../auth/AuthContext';
+import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 
 // 출결 (헤더는 모달만 열고, 실제 입/퇴실은 모달/서비스가 처리)
 import TutorAttendModal from '../../..//attend/TutorAttendModal';
@@ -17,11 +18,16 @@ import {
 } from '../../../attend/attendService';
 
 /** 공통 헤더 */
-export default function LmsHeader({ navToggle, setNavToggle }) {
+export default function LmsHeader({ navToggle, setNavToggle, children }) {
+  const { clearSelectedCompany, selectedCompanySn } = useSelectedCompany();
   const { user } = useAccount();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const navKind = pathname.split('/', 2)[1];
+
+  if(!user) {
+    navigate('/', {redirect: true});
+  }
 
   // 현재 페이지별 헤더 라우팅
   function HeaderStatus({ loc }) {
@@ -54,6 +60,7 @@ export default function LmsHeader({ navToggle, setNavToggle }) {
         <div
           className="logoBox"
           onClick={() => {
+            clearSelectedCompany();
             navigate(`/${navKind}`);
             console.log(user);
           }}
@@ -64,14 +71,18 @@ export default function LmsHeader({ navToggle, setNavToggle }) {
           <h2>{user?.CO_NM || user?.CO_SN}</h2>
         </div>
       </div>
-
-      <HeaderStatus loc={navKind} />
+      {user?.USER_OGDP_CO_SN === selectedCompanySn ?
+        <HeaderStatus loc={navKind} />
+      :
+        <>{children}</>
+      }
     </>
   );
 }
 
 /** 수강생 헤더: 단일 버튼(출석/퇴실) + 상태 표시 */
 export function StdHeader() {
+  const { clearSelectedCompany } = useSelectedCompany();
   const [showAttendModal, setShowAttendModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [inTime, setInTime] = useState(null);
@@ -196,6 +207,7 @@ export function StdHeader() {
 
 /** 강사 헤더 */
 export function TutorHeader() {
+  const { clearSelectedCompany } = useSelectedCompany();
   const [modalOpen, setModalOpen] = useState(false);
   const [ , setActiveCode] = useState(null);
 
@@ -254,10 +266,10 @@ export function TutorHeader() {
 
 export function AdminHeader() {
   // const { user } = useAccount();
-  return <></>;
+  return <div></div>;
 }
 
 export function VisitorHeader() {
   // const { user } = useAccount();
-  return <></>;
+  return <div></div>;
 }
