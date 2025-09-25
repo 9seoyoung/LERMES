@@ -23,26 +23,22 @@ export default function LmsGuard() {
   if(myCompany === selected) {
     const myCoAuth = user.USER_AUTHRT_SN;
 
-    const authLvPath = {
-      1: "adminHome",
-      2: "adminHome",
-      3: "adminHome",
-      4: "tutorHome",
-      5: "stdHome",
-      6: "visitorHome",
-      7: "visitorHome"
+    switch (myCoAuth) {
+      case 2:
+        return <Navigate to="/adminHome" replace />;
+      case 3:
+        return <Navigate to="/adminHome" replace />;
+      case 4:
+        return <Navigate to="/tutorHome" replace />;
+      case 5:
+        return <Navigate to="/stdHome" replace />;
+      
+        default:
+          return <Navigate to="/visitorHome" replace />;
     }
-
-    const arrive = authLvPath?.myCoAuth;
-
-    if (authLvPath?.[myCoAuth]) {
-
-    <Navigate to = {`${arrive}`} replace></Navigate>
-    } else {
-      <Navigate to = '/visitorHome' replace></Navigate>
-    }
-
   }
+
+
 
   return <Outlet />; 
 }

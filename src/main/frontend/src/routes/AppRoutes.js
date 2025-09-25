@@ -5,7 +5,7 @@ import RoleRoute from '../auth/RoleRoute.jsx';
 
 //페이지
 import Login from '../auth/loginPage/Login';
-// import Layout from '../components/layout/NONONOLayout.jsx'; //제일 먼저 만들어야 할 파일
+import Layout from '../components/layout/NONONOLayout.jsx'; //제일 먼저 만들어야 할 파일
 import NotAllowed from '../auth/loginPage/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
@@ -30,7 +30,7 @@ import DocxSet from '../pages/LMS/menu/DocxSet.jsx';
 import AccountSet from '../pages/LMS/menu/AccountSet.jsx';
 import GroupSet from '../pages/LMS/menu/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
-import Mypage, {AdminMypage} from '../pages/Mypage.jsx';
+import Mypage from '../pages/Mypage.jsx';
 import BoardManage from '../pages/LMS/menu/BoardManage.jsx'
 import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
 import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
@@ -99,7 +99,7 @@ function AppRoutes() {
               <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
               <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
               <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
-              <Route path=':home/myPage' element={<AdminMypage/>}/>
+              <Route path=':home/myPage' element={<Mypage/>}/>
             </Route>
 
             {/* 강사 */}
