@@ -34,7 +34,7 @@ export default function LmsGuard() {
         return <Navigate to="/stdHome" replace />;
       
         default:
-          return <Navigate to="/visitorHome" replace />;
+          return 1;
     }
   }
 
