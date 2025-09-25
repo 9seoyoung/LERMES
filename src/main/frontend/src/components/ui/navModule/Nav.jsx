@@ -11,7 +11,7 @@ export function Nav({setNavToggle}) {
         return <div className="navCont">로딩중…{/* 스켈레톤 */}</div>;
     }
 
-    const myCoSn = user.USER_OGDP_CO_SN;
+    const myCoSn = user?.USER_OGDP_CO_SN;
 
 
     
@@ -27,8 +27,8 @@ export function Nav({setNavToggle}) {
             <div className="navMyInfo">
                 <img src="#" alt="사용자 프로필"></img>
                 <div className="infoWrap">
-                    <div style={{fontSize: "18px", fontWeight:"600"}}>{user.USER_NM}</div>
-                    <div>{user.USER_EML_ADDR}</div>
+                    <div style={{fontSize: "18px", fontWeight:"600"}}>{user?.USER_NM}</div>
+                    <div>{user?.USER_EML_ADDR}</div>
                 </div>
                 <button type="button" className="lmsMyInfoBtn"  style={{fontSize: "14px"}}>
                     내 정보
@@ -39,7 +39,7 @@ export function Nav({setNavToggle}) {
                 <div onClick={() => navigate('/visitorHome')}>홈</div>
                 :
                 <>
-                    {user.USER_AUTHRT_SN === 1 ? 
+                    {user?.USER_AUTHRT_SN === 1 ? 
                         <>
                             <div onClick={() => navigate('/adminHome')}>관리자 홈</div>
                             <div onClick={() => navigate('/adminHome/groupSet')}>과정 관리</div>            

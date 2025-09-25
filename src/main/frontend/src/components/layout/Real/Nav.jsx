@@ -16,8 +16,8 @@ export default function Nav({setNavToggle}) {
             <div className="navMyInfo">
                 <img src="#" alt="사용자 프로필"></img>
                 <div className="infoWrap">
-                    <div style={{fontSize: "18px", fontWeight:"600"}}>{user.USER_NM}</div>
-                    <div>{user.USER_EML_ADDR}</div>
+                    <div style={{fontSize: "18px", fontWeight:"600"}}>{user?.USER_NM}</div>
+                    <div>{user?.USER_EML_ADDR}</div>
                 </div>
                 <button type="button" className="lmsMyInfoBtn"  style={{fontSize: "14px"}}>
                     내 정보

@@ -57,7 +57,7 @@ export default function Layout2() {
   
   useEffect(() => {
     // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
-    if (HOME_PATHS[navKind] == null) {
+    if (pathname === '/') {
       clearFixedSn();
     }
   }, [navKind]);
@@ -125,7 +125,7 @@ export default function Layout2() {
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
-        <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
+        <MyInfo label={user?.USER_NM} className="joinBtn" trigger="hover">
           <div className= "subMenuList" onClick={() => {navigate(`myPage`);}}>마이페이지</div>
           <div className= "subMenuList" onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
         </MyInfo>

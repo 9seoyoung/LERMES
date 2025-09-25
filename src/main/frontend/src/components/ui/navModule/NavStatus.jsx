@@ -6,7 +6,7 @@ import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 export default function NavStatus({ setNavToggle, loc, myCoSn, navKind, effectiveSn }) {
   const {user} =useAccount();
 
-    if((myCoSn !== effectiveSn) || (user.USER_AUTHRT_SN !== 1) ) return <VisitorNav setNavToggle={setNavToggle} loc={loc} />
+    if((myCoSn !== effectiveSn) || (user?.USER_AUTHRT_SN !== 1) ) return <VisitorNav setNavToggle={setNavToggle} loc={loc} />
 
     let component;
 
@@ -46,8 +46,8 @@ export function VisitorNav({setNavToggle, loc}) {
             <div className="navMyInfo">
                 <img src="#" alt="사용자 프로필"></img>
                 <div className="infoWrap">
-                    <div style={{fontSize: "18px", fontWeight:"600"}}>{user.USER_NM}</div>
-                    <div>{user.USER_EML_ADDR}</div>
+                    <div style={{fontSize: "18px", fontWeight:"600"}}>{user?.USER_NM}</div>
+                    <div>{user?.USER_EML_ADDR}</div>
                 </div>
                 <button type="button" className="lmsMyInfoBtn"  style={{fontSize: "14px"}}>
                     내 정보
@@ -82,8 +82,8 @@ function StdNav({setNavToggle}) {
           <div className="navMyInfo">
               <img src="#" alt="사용자 프로필"></img>
               <div className="infoWrap">
-                  <div style={{fontSize: "18px", fontWeight:"600"}}>{user.USER_NM}</div>
-                  <div>{user.USER_EML_ADDR}</div>
+                  <div style={{fontSize: "18px", fontWeight:"600"}}>{user?.USER_NM}</div>
+                  <div>{user?.USER_EML_ADDR}</div>
               </div>
               <button type="button" className="lmsMyInfoBtn"  style={{fontSize: "14px"}}>
                   내 정보
@@ -122,8 +122,8 @@ function TutorNav({setNavToggle}) {
           <div className="navMyInfo">
               <img src="#" alt="사용자 프로필"></img>
               <div className="infoWrap">
-                  <div style={{fontSize: "18px", fontWeight:"600"}}>{user.USER_NM}</div>
-                  <div>{user.USER_EML_ADDR}</div>
+                  <div style={{fontSize: "18px", fontWeight:"600"}}>{user?.USER_NM}</div>
+                  <div>{user?.USER_EML_ADDR}</div>
               </div>
               <button type="button" className="lmsMyInfoBtn"  style={{fontSize: "14px"}}>
                   내 정보
@@ -162,11 +162,11 @@ function AdminNav({setNavToggle}) {
           <div className="navMyInfo">
               <img src="#" alt="사용자 프로필"></img>
               <div className="infoWrap">
-                  <div style={{fontSize: "16px", fontWeight:"600" }}>{user.USER_NM}</div>
-                  <div style={{color:"#666"}}>{user.USER_EML_ADDR}</div>
+                  <div style={{fontSize: "16px", fontWeight:"600" }}>{user?.USER_NM}</div>
+                  <div style={{color:"#666"}}>{user?.USER_EML_ADDR}</div>
               </div>
               <div className="lmsMyInfoBtn"  style={{fontSize: "12px", fontWeight:"400"}}>
-                관리자 / {user.USER_AUTHRT_SN === 2 ? "대표" : "직원"}
+                관리자 / {user?.USER_AUTHRT_SN === 2 ? "대표" : "직원"}
               </div>
           </div>
           <div className="navMenuList">
