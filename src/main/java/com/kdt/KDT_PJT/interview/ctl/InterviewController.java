@@ -47,7 +47,7 @@ public class InterviewController {
      * @author : 김동식
      * @date : 2025.09.19
      */
-    @PostMapping("/apply") //TODO 면담 신청 API 컨트롤러
+    @PostMapping("/apply")
     public ResponseEntity<CmmnMap> applyInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,
             @RequestBody CmmnMap params){

@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.file.ctl;
 
+import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import com.kdt.KDT_PJT.file.dto.UploadResultDTO;
 import com.kdt.KDT_PJT.file.service.FileService;
 import com.kdt.KDT_PJT.file.service.FileStorageService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -112,30 +114,40 @@ public class FileController {
     }
 
     // 파일 SN으로 다운로드 (attachment)
-    @GetMapping("/id/{fileSn:\\d+}")
+    @GetMapping("/id/{fileSn:\\d+}")    //파일 SN을 url에 실어서 요청 보냄, @Pathvariable은 항상 포함되어야하고,
+    // @RequestParam도 value="fileSn" required = false 한거 아니면
+    //일반 타입으로 받아도 괜찮음. null이 해당 변수에 들어오기 전에 막혀서 상관 없음
     public ResponseEntity<Resource> downloadById(@PathVariable int fileSn) {
-        var meta = fileService.getMeta(fileSn);
+        var meta = fileService.getMeta(fileSn);     //select * from TB_FILE where fileSn = {#fileSn} 실행, 해당 row 긁어옴
         if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();   //삭제됐거나 긁어온게 null뿐이라면 return
         }
         String storedFileName = meta.getStrgFileNm();
-        String original = meta.getOrgnlFileNm();
+        String original = meta.getOrgnlFileNm();        //파일 원본명 original 에 저장
 
-        Resource r = storage.loadAsResource(storedFileName);
-        Path p = storage.resolveFilename(storedFileName);
-        String contentType = storage.detectContentType(p);
-        String filename = (original != null && !original.isBlank()) ? original : storedFileName;
-        String encoded = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+        Resource r = storage.loadAsResource(storedFileName);    // 파일이 실제 그경로에 있으면 해당하는 파일 객체가 반환됨 (Resource 타입 파일 객체)
+        Path p = storage.resolveFilename(storedFileName);       // 파일의 경로값을 Path 타입 객체로 반환
+        String contentType = storage.detectContentType(p);      // MIME 타입 감지 (응답 헤더에 사용할 용도)
+        String filename = (original != null && !original.isBlank()) ? original : storedFileName;    //파일 원본명 없으면 저장명(UUID적용)을 실제 다운로드시 사용할 파일명으로 사용, 있으면 원본명 사용
+        String encoded = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); //파일명 인코딩, 한글 깨짐 방지
         long len;
         try {
-            len = Files.size(p);
-        } catch (Exception e) {
+            len = Files.size(p);    //파일 사이즈 감지해서 len에 담음
+        } catch (Exception e) {     // 오류 발생시 -1로 설정
             len = -1L;
         }
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encoded + "\"")
-                .contentType(MediaType.parseMediaType(contentType))
-                .contentLength(Math.max(0, len))
-                .body(r);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encoded + "\"")    //DisPosition헤더를 attachment로 설정하여 브라우저가 파일 다운하도록 강제설정, filename에 인코딩된 파일명을 담아서 올바르게 저장하도록 함
+                .contentType(MediaType.parseMediaType(contentType))         //contentType 헤더에 MIME타입을 설정해서 브라우저가 적절한 방식으로 처리하게함
+                .contentLength(Math.max(0, len))                            //파일 크기(바이트)설정, 이걸로 브라우저가 다운로드 진행률 표시할수있음. 크기 측정 아까 못했으면(-1) 0으로 처리
+                .body(r);                                                   //body에 파일 객체를 실어서 보냄(실제 파일 데이터를 전송)
     }
+
+    @GetMapping("/formUuid/{formUuid}") // formUuid를 보내면 해당하는 파일의 SN을 리턴해줌
+    public List<CmmnMap> findFileSnByFormUuid(@PathVariable String formUuid) {
+        List<CmmnMap> result = fileService.findFileSnByFormUuid(formUuid);
+        System.out.println("결과 result = " + result);
+        return result;
+    }
+
 }
