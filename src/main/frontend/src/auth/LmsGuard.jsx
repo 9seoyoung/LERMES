@@ -15,7 +15,7 @@ export default function LmsGuard() {
   const selected = Number(effectiveSn ?? NaN);
 
   // 남의 회사
-  if (myCompany !== selected) {
+  if (myCompany != selected) {
     return <Navigate to="/visitorHome" replace />;
   }
 
