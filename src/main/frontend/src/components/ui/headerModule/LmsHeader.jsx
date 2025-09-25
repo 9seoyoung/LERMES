@@ -40,7 +40,6 @@ export default function LmsHeader({ loc, navToggle, setNavToggle, children }) {
         <div
           className="logoBox"
           onClick={() => {
-            clearFixedSn();
             navigate(`/${navKind}`);
           }}
         >

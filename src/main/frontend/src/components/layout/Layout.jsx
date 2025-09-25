@@ -21,6 +21,20 @@ export default function Layout() {
   const testAuthLv = ["1(관리자)", "2(테넌트)", "3(직원)", "4(강사)", "5(수강생)", "6(신청자)", "7(비활성화)"];
   const [selectedItem, setItem] = useState(0);
   const myCoSn = user?.USER_OGDP_CO_SN;
+  const curloc = useLocation();
+
+  const myAuth = user?.USER_AUTHRT_SN;
+  const authLvPath = {
+    1: "adminHome",
+    2: "adminHome",
+    3: "adminHome",
+    4: "tutorHome",
+    5: "stdHome",
+    6: "visitorHome",
+    7: "visitorHome"
+  }
+  const loc = authLvPath[myAuth];
+
 
     // 홈 경로 맵
   const HOME_PATHS = {
@@ -84,7 +98,7 @@ const CLEAR_PATHS = ["/", "/welcome"];
             <HeaderStatus  navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn}/>
           </LmsHeader>
         } */}
-        {effectiveSn == null ?  //보정된 회사값이 널 값이면?
+        {/* {effectiveSn == null ?  //보정된 회사값이 널 값이면?
           <SuperHeader />
           :
           <> 
@@ -94,6 +108,11 @@ const CLEAR_PATHS = ["/", "/welcome"];
               </LmsHeader>
         )}
           </>
+        } */}
+        {fixedSn === myCoSn ?
+          <LmsHeader navKind={navKind} setNavToggle={setNavToggle} navToggle={navToggle} myCoSn={myCoSn} loc={loc}/>
+          :
+          <SuperHeader navKind={navKind}/>
         }
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
