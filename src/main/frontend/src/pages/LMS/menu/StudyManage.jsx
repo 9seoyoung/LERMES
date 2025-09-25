@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import ListTable from "../../../components/ui/ListTable";
-import uiStyle from "../../../styles/UiComp.module.css"
 import FilterList from "../../../components/ui/FilterList";
 import { useState } from "react";
 
