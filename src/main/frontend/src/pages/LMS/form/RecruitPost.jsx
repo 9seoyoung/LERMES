@@ -42,7 +42,8 @@ function RecruitPost() {
     answer: "", // 신청자 답변
     groupName: "", //그룹명
     type: "모집공고",
-    scope: "전체",
+    content: "",
+    scope: "",
     surveyStart: "",     // 모집시작
     surveyEnd: "",
     startDate:"",
@@ -50,6 +51,7 @@ function RecruitPost() {
     endDate:"",   //  모집종료
     classStart: "", //수업시작시간
     classEnd: "", //수업종료시간
+    files: [{qid: "", fid: ""}, {qid: "", fid: ""}]
   });
 
 
@@ -195,7 +197,7 @@ export default RecruitPost;
 
 
 function RecruitForm({
-  domFormId, handleChange, formData,
+  domFormId, handleChange, formData, setFiles,
   surveyForm, setSurveyForm, questionAddRef, containerRef 
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
@@ -227,6 +229,7 @@ function RecruitForm({
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
           <QuestionAdd
               ref={questionAddRef}
+              setFiles = {setFiles}
               containerRef={containerRef}
               questions={surveyForm.pages[0].questions}
               onChange={(updaterOrQs) => {

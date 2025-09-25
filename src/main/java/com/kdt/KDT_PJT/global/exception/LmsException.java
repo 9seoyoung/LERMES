@@ -28,4 +28,5 @@ public class LmsException extends RuntimeException {
     public static LmsException general(String message) {
         return new LmsException(message, HttpStatus.BAD_REQUEST, ExceptionType.GENERAL);
     }
+
 }
