@@ -1,8 +1,24 @@
 import { useState, useEffect } from "react";
 import style from "../../styles/SignUp.module.css";
+import { uploadProfileFile, uploadMany } from "../../utils/fileUpload";
+import { useAccount } from "../../auth/AuthContext";
 
-function FilePreview() {
+function FilePreview({qid, setFiles}) {
   const [preview, setPreview] = useState(null);
+  const {user} = useAccount();
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0]; // 여러개면 Array.from(e.target.files)
+    if (!file) return;
+
+    try {
+      const res = await uploadProfileFile(file, { qid: qid, userSn: user.USER_SN });
+      console.log("업로드 성공:", res.data);
+    } catch (err) {
+      console.error("업로드 실패:", err);
+    }
+  };
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -24,7 +40,11 @@ function FilePreview() {
       <input
         type="file"
         accept="image/*"
-        onChange={handleFileChange}
+        onChange={(e) => { 
+          handleFileChange(e);
+          handleFileUpload(e);
+        }
+      }
         style={{ display: "none" }}
         id="profile-input"
       />

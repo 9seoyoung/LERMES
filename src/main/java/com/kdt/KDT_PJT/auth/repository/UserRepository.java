@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.auth.repository;
 
 import com.kdt.KDT_PJT.auth.entity.User;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,4 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     List<User> findAll();
 
+    Optional<User> findByNameAndUserTelno(String name, String userTelno);
 }

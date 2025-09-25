@@ -17,31 +17,39 @@ import java.util.UUID;
 public class FileStorageService {
     private final Path base = StoragePaths.root();
 
+    /*
+    * 파일 저장될 루트 디렉터리 실제로 존재하는지 체크, 없으면 생성함*/
     public void ensureBaseDir() {
         try {
-            Files.createDirectories(base);
+            Files.createDirectories(base);  //base 경로 (user.home/LERMES/files)생성함, 없으면 만들고 있으면 아무것도 안함
         } catch (IOException e) {
-            throw new RuntimeException("cannot create base dir: " + base, e);
+            throw new RuntimeException("cannot create base dir: " + base, e);   //생성 실패시 예외 발생
         }
     }
-
+    /*
+    * 파일을 물리적으로 저장하는 함수
+    * 저장 파일명(UUID 적용)을 반환함.
+    * return 예시 ) 9a4b3d1f...c8e.jpg */
     public String store(MultipartFile file) {
-        if (file == null || file.isEmpty()) throw new IllegalArgumentException("file is required");
-        ensureBaseDir();
-        String original = Objects.requireNonNullElse(file.getOriginalFilename(), "file");
-        String ext = extractExt(original);
-        String stored = genRandomName(ext);
-        Path target = resolveFilename(stored);
+        if (file == null || file.isEmpty()) throw new IllegalArgumentException("file is required"); // 파일이 비어있는지 체크하고 비어있으면 예외
+        ensureBaseDir();                                                                            // 파일 저장 디렉토리 존재하는지 체크, 없으면 만듦
+        String original = Objects.requireNonNullElse(file.getOriginalFilename(), "file"); // getOriginalFilename()로 실제 이름을 original에 저장.
+        String ext = extractExt(original);      // 확장자만 ext에 저장
+        String stored = genRandomName(ext);     // UUID 생성후 확장자도 붙임. ex) 9a4b3d1f...c8e.jpg -> 실제 파일 명 생성
+        Path target = resolveFilename(stored);  // 저장될 파일의 최종 저장 경로 반환됨. user.home/LERMES/files/9a4b3d1f...c8e.jpg
         try {
-            Files.copy(file.getInputStream(), target);
+            Files.copy(file.getInputStream(), target);  // 전달받은 file객체에서 입력 스트림 얻어와서 경로에 파일의 바이너리 데이터를 복사함
         } catch (IOException e) {
-            throw new RuntimeException("copy failed to: " + target, e);
+            throw new RuntimeException("copy failed to: " + target, e); //실패하면 예외발생
         }
-        return stored;
+        return stored;      //파일 물리저장 후 uuid 적용된 이름 반환해줌 ex)9a4b3d1f...c8e.jpg
     }
 
+    /*
+    * 파일 확장자 포함된 UUID 적용된 이름을 String타입으로 받고
+    * base경로 (user.home/LERMES/files) 와 합쳐진 주소를 반환해준다 (파일의 최종 경로 반환).*/
     public Path resolveFilename(String storedFileName) {
-        Path target = base.resolve(storedFileName).normalize();
+        Path target = base.resolve(storedFileName).normalize();         //중간에 불필요한 .. 같은거 들어갈수있는거 빼줌
         if (!target.startsWith(base)) throw new SecurityException("Path traversal");
         return target;
     }

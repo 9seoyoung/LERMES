@@ -13,7 +13,7 @@ export const buildPreviewUrl = (storedFileName, originalName = "") =>
     `${API_BASE}/${encodeURIComponent(storedFileName)}/preview?original=${encodeURIComponent(originalName)}`;
 
 export const buildDownloadUrl = (storedFileName, originalName = "") =>
-    `${API_BASE}/${encodeURIComponent(storedFileName)}/download?original=${encodeURIComponent(originalName)}`;
+    `${API_BASE}/${encodeURIComponent(storedFileName)}?original=${encodeURIComponent(originalName)}`;
 
 // ---- 업로드 (단일/다중 공용)
 export async function uploadFiles(files, { onProgress, path, formUuid } = {}) {
@@ -23,7 +23,7 @@ export async function uploadFiles(files, { onProgress, path, formUuid } = {}) {
     if (path) form.append("path", path);
     if (formUuid) form.append("formUuid", formUuid);
 
-    const { data } = await api.post("/batch", form, {
+    const { data } = await api.post("", form, {
         onUploadProgress: (e) => {
             if (onProgress && e.total) onProgress(Math.round((e.loaded * 100) / e.total));
         },
@@ -37,7 +37,7 @@ export const uploadFile = (file, opts) => uploadFiles([file], opts).then((arr) =
 // ---- 다운로드 (XHR로 받아 파일 저장)
 export async function downloadByStoredName(storedFileName, originalName = "") {
     const { data, headers } = await api.get(
-        `/${encodeURIComponent(storedFileName)}/download`,
+        `${encodeURIComponent(storedFileName)}`,
         {
             params: { original: originalName },
             responseType: "blob",
@@ -73,12 +73,12 @@ export function openDownload(storedFileName, originalName = "") {
 
 // ---- 삭제/목록 (서버 규약에 맞춰 조정)
 export async function deleteById(fileSn) {
-    const { data } = await api.delete(`/` + fileSn);
+    const { data } = await api.delete(`${fileSn}`);
     return data;
 }
 
 export async function listFiles(params = {}) {
-    const { data } = await api.get("/", { params });
+    const { data } = await api.get("", { params });
     return data; // 예: 페이지네이션 응답
 }
 

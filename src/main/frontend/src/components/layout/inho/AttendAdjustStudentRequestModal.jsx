@@ -254,7 +254,7 @@ export default function AttendAdjustStudentRequestModal({
                 {uploadResList.map((f) => (
                   <div key={f.fileSn} style={sx.fileTag}>
                     <a
-                      href={`http://localhost:940/api/files/id/${f.fileSn}/download`}
+                      href={`http://localhost:940/api/files/${f.fileSn}`}
                       target="_blank"
                       rel="noreferrer"
                       style={{

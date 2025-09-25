@@ -21,13 +21,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   width: 100%;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
-  color: #acacac;
+  /* color: #acacac; */
+  color: var(--color-secondary-bg);
   outline: none;
   padding: 0 12px;
 }
 
 .input:focus {
-  color: #222;
+  /* color: #222; */
+  color: var(--color-text-main);
   border: 2px solid #222;
 }
 
@@ -60,8 +62,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .btn {
   width: 75px;
   height: 30px;
-  background-color: #fff;
-  color: #000;
+  /* background-color: #fff;
+  color: #000; */
+  background-color: var(--color-text-primary);
+  color: var(--color-text-main);
   box-shadow: 2px 1px 5px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   font-size: 10px;
@@ -77,8 +81,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* 파란색 버튼*/
 .blueBtn {
-  background-color: #0088ff;
-  color: #fff;
+  /* background-color: #0088ff;
+  color: #fff; */
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
 .blueBtn:hover,
@@ -95,14 +101,17 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   height: 24px;
   border-radius: 4px;
   font-size: 14px;
-  color: #fff;
-  background-color: #ACACAC;
+  /* color: #fff;
+  background-color: #ACACAC; */
+  color: var(--color-text-primary);
+  background-color: var(--color-secondary-bg);
   outline: none;
 }
 
 .grayBtn:hover {
   background-color: #666;
 }
+
 .grayBtn:active {
   scale: 0.97;
   background-color: #555;
@@ -116,8 +125,8 @@ height: 35px;
 border-radius: 4px;
 font-size: 12px;
 font-weight: bold;
-background-color: #D9D9D9;
-color: #000;
+background-color: var(--color-main-bg);
+color: var(--color-text-sec);
 }
 
 .schedAddBtn:hover,
@@ -133,12 +142,14 @@ color: #000;
   height: 25px;
   border-radius: 4px;
   font-size: 10px;
-  color: #fff;
+  /* color: #fff; */
+  color: var(--color-text-primary);
 }
 
 /* 저장 버튼 */
 .saveBtn {
-  background-color: #acacac;
+  /* background-color: #acacac; */
+  background-color: var(--color-secondary-bg);
 }
 
 .saveBtn:hover,
@@ -150,7 +161,8 @@ color: #000;
 
 /* 취소 버튼*/
 .cancelBtn {
-  background-color: #d9d9d9;
+  /* background-color: #d9d9d9; */
+  background-color: var(--color-main-bg);
 }
 
 .cancelBtn:hover,
@@ -165,7 +177,8 @@ color: #000;
   width: 90px;
   height: 25px;
   border-radius: 4px;
-  background-color: #d9d9d9;
+  /* background-color: #d9d9d9; */
+  background-color: var(--color-main-bg);
   font-size: 11px;
 }
 
@@ -181,7 +194,8 @@ color: #000;
   min-width: 180px;
   height: 32px;
   border-radius: 4px;
-  color: #fff;
+  /* color: #fff; */
+  color: var(--color-text-primary);
   font-size: 14px;
 }
 
@@ -190,7 +204,8 @@ color: #000;
   height: 3.6rem;
   border-radius: 2rem;
   font-size: 1.4rem;
-  background-color: #F6F6F6;
+  /* background-color: #F6F6F6; */
+  background-color: var(--color-light-bg);
   display: flex;
   align-items: center;
   padding: 0 1.2rem;
@@ -205,18 +220,21 @@ color: #000;
 
 /* 입실 버튼 */
 .checkInBtn {
-  background-color: #62b6ff;
+  /* background-color: #62b6ff; */
+  background-color: var(--color-secondary);
 }
 
 .checkInBtn {
-  background-color: #62b6ff;
+  /* background-color: #62b6ff; */
+  /* color: #f6f6f6; */
+  background-color: var(--color-secondary);
+  color: var(--color-light-bg);
   border-radius: 18px;
   width: 180px;
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f6f6f6;
   font-weight: 400;
   font-size: 1.4rem;
   outline: none;
@@ -234,7 +252,8 @@ color: #000;
 
 /* 퇴실 버튼 */
 .checkOutBtn {
-  background-color: #ffb5a0;
+  /* background-color: #ffb5a0; */
+  background-color: var(--color-accent-light);
 }
 
 .checkOutBtn:hover,
@@ -246,7 +265,8 @@ color: #000;
 
 /* 입•퇴실 취소 버튼*/
 .backBtn {
-  background-color: #acacac;
+  /* background-color: #acacac; */
+  background-color: var(--color-secondary-bg);
 }
 
 .backBtn:hover,
@@ -262,7 +282,8 @@ color: #000;
   height: 56px;
   border-radius: 8px;
   font-size: 16px;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: var(--color-sec-bg);
 }
 
 .navBtn:hover,
@@ -274,7 +295,8 @@ color: #000;
 
 /* 마이너스 버튼 (파일 삭제) */
 .deleteBtn {
-  background-color: #e9623a;
+  /* background-color: #e9623a; */
+  background-color: var(--color-accent);
   width: 16px;
   height: 16px;
   border-radius: 8px;
@@ -292,7 +314,8 @@ color: #000;
 }
 
 .delete {
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: var(--color-sec-bg);
   width: 8px;
   height: 2px;
   border-radius: 6px;
@@ -306,7 +329,8 @@ color: #000;
   height: 45px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  background-color: #e1f1ff;
+  /* background-color: #e1f1ff; */
+  background-color: var(--color-secondary-light);
   font-size: 14px;
   font-weight: bold;
 }
@@ -320,8 +344,10 @@ color: #000;
   min-width: 64px;
   padding: 8px 12px;
   border-radius: 16px;
-  background-color: #e1f1ff;
-  color: #0088ff;
+  /* background-color: #e1f1ff;
+  color: #0088ff; */
+  background-color: var(--color-secondary-light);
+  color: var(--color-primary);
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -340,7 +366,8 @@ color: #000;
   border: none;
   font-size: 14px;
   outline: none;
-  color: #000;
+  /* color: #000; */
+  color: var(--color-text-main);
   padding: 0px 10px;
   width: 210px;
   height: 32px;
@@ -400,23 +427,26 @@ color: #000;
 /* 주황색 체크 */
 .orangeCheck .checkmark {
   cursor: pointer;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: var(--color-sec-bg);
   border-radius: 4px;
 }
 
 .orangeCheck input:checked + .checkmark::after {
-  color: #e9623a;
+  /* color: #e9623a; */
+  color: var(--color-accent);
 }
 
 /* 파란색 체크 */
 .blueCheck .checkmark {
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: var(--color-sec-bg);
   border: 1px solid #000;
-
 }
 
 .blueCheck input:checked + .checkmark::after {
-  color: #0088ff;
+  /* color: #0088ff; */
+  color: var(--color-primary);
 }
 
 /* 파일 첨부 */
@@ -427,7 +457,8 @@ color: #000;
   border-radius: 8px;
   padding: 4px;
   font-size: 12px;
-  color: #08f;
+  /* color: #08f; */
+  color: var(--color-primary);
   display: flex;
   justify-content: center;
   cursor: pointer;
@@ -450,21 +481,25 @@ color: #000;
 }
 
 .table thead th{
-  background-color: #E1F1FF !important;
-
+  /* background-color: #E1F1FF !important; */
+  background-color: var(--color-secondary-light);
 }
 
 .row td {
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
+  background-color: var(--color-light-bg);
 }
 
 .row:hover td {
-  background-color: #d9d9d9;
+  /* background-color: #d9d9d9; */
+  background-color: var(--color-main-bg);
 }
 
 .row:active td {
-  background-color: #acacac;
-  color: #fff;
+  /* background-color: #acacac;
+  color: #fff; */
+  background-color: var(--color-secondary-bg);
+  color: var(--color-text-primary);
 }
 
 .table th:first-child,
@@ -492,7 +527,8 @@ color: #000;
 }
 
 .ListHeader {
-  background-color: #e1f1ff;
+  /* background-color: #e1f1ff; */
+  background-color: var(--color-secondary-light);
   display: flex;
   gap: 16px;      
   border-radius: 6px;
@@ -509,24 +545,29 @@ color: #000;
 }
 
 .row {
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
+  background-color: var(--color-light-bg);
   border-radius: 4px;
   height: 3.2rem;
 }
 
 .row:hover {
-  background-color: #D9D9D9;
+  /* background-color: #D9D9D9; */
+  background-color: var(--color-main-bg);
   border-radius: 4px;
 }
 
 .row:active, .row:active .cell {
-  background-color: #ACACAC;
   border-radius: 4px;
-  color: #f6f6f6;
+  /* background-color: #ACACAC;
+  color: #f6f6f6; */
+  background-color: var(--color-secondary-bg);
+  color: var(--color-light-bg);
 }
 
 .editRow {
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
+  background-color: var(--color-light-bg);
   border-radius: 4px;
   align-items: center;
   justify-content: center;
