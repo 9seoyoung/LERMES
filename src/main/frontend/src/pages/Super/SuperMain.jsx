@@ -10,7 +10,7 @@ import { useAccount } from "../../auth/AuthContext";
 
 export default function SuperMain() {
   const {user} = useAccount();
-  const { effectiveSn, setFixedSn, fixedSn } = useSelectedCompany();
+  const {  setFixedSn } = useSelectedCompany();
   const [companyList, setCompanyList] = useState();
   const navigate = useNavigate();
   const myCoSn = user?.USER_OGDP_CO_SN;
@@ -24,7 +24,6 @@ export default function SuperMain() {
     6: "visitorHome",
     7: "visitorHome"
   }
-  const loc = authLvPath[myAuth];
 
 
   useEffect(() => {

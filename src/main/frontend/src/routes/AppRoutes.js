@@ -5,7 +5,7 @@ import RoleRoute from '../auth/RoleRoute.jsx';
 
 //페이지
 import Login from '../auth/loginPage/Login';
-import Layout from '../components/layout/NONONOLayout.jsx'; //제일 먼저 만들어야 할 파일
+// import Layout from '../components/layout/NONONOLayout.jsx'; //제일 먼저 만들어야 할 파일
 import NotAllowed from '../auth/loginPage/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
