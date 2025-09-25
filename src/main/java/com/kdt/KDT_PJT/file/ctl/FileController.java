@@ -47,13 +47,14 @@ public class FileController {
 //    }
 
     // 다중 업로드: /api/files 에 POST로 처리 (단일도 files 1개로 전송)
+    // 다중 업로드의 경우도, MultipartFile 타입 객체로 받고
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<UploadResultDTO> uploadBatch(@AuthenticationPrincipal AuthCustomUserDetails me,
                                              @RequestPart("files") List<MultipartFile> files,
                                              @RequestParam(value="formUuid", required=false) String formUuid) {
         Integer userSn = (me != null) ? Math.toIntExact(me.getId()) : null; //로그인한경우 usersn집어넣음
         Integer coSn   = (me != null && me.getCompanySn() != null) ? Math.toIntExact(me.getCompanySn()) : null; //회사넘버는 없을수도있는데 있으면 집어넣음
-        return fileService.saveBatch(files, userSn, coSn, formUuid);
+        return fileService.saveBatch(files, userSn, coSn, formUuid); //
     }
 
     // 미리보기 요청 받는 컨트롤러
@@ -98,7 +99,7 @@ public class FileController {
     }
 
     // 파일 SN으로 원본 파일명 조회
-    @GetMapping("/{fileSn:\\d+}/name")
+    @GetMapping("/id/{fileSn:\\d+}/name")
     public ResponseEntity<?> getOriginalName(@PathVariable int fileSn) {
         var meta = fileService.getMeta(fileSn);
         if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
@@ -111,7 +112,7 @@ public class FileController {
     }
 
     // 파일 SN으로 다운로드 (attachment)
-    @GetMapping("/{fileSn:\\d+}")
+    @GetMapping("/id/{fileSn:\\d+}")
     public ResponseEntity<Resource> downloadById(@PathVariable int fileSn) {
         var meta = fileService.getMeta(fileSn);
         if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
