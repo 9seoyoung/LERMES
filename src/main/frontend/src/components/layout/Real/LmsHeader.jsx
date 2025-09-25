@@ -8,7 +8,7 @@ import uiStyle from '../../../styles/UiComp.module.css';
 import { useAccount } from '../../../auth/AuthContext';
 
 // 출결 (헤더는 모달만 열고, 실제 입/퇴실은 모달/서비스가 처리)
-import TutorAttendModal from '../../..//attend/TutorAttendModal';
+import TutorAttendModal from '../../../attend/TutorAttendModal';
 import StdAttendModal from '../../../attend/StdAttendModal';
 import CheckoutConfirmModal from '../../../attend/CheckoutConfirmModal';
 import {

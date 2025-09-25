@@ -42,7 +42,7 @@ import AdminPostRead from '../pages/LMS/readAndEdit/AdminPostRead.jsx';
 import LmsHomeIndex from '../pages/LmsHomeIndex.jsx';
 import LmsAuth from '../auth/LmsAuth.jsx';
 import LmsGuard from '../auth/LmsGuard.jsx';
-import Layout2 from '../components/layout/temp/Layout2.jsx';
+import Layout2 from '../components/layout/Real/Layout2.jsx';
 
 function AppRoutes() {
   return (
