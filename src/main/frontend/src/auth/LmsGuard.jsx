@@ -24,8 +24,6 @@ export default function LmsGuard() {
     const myCoAuth = user.USER_AUTHRT_SN;
 
     switch (myCoAuth) {
-      case 1:
-        return <Navigate to="/adminHome" replace />;
       case 2:
         return <Navigate to="/adminHome" replace />;
       case 3:
