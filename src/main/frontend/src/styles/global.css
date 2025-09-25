@@ -219,8 +219,6 @@ h4 {
 footer > div {
   /* color: #fff; */
   color: var(--color-text-primary);
-  footer>div {
-  color: #fff;
   font-size: 1.6rem;
   cursor: pointer;
   border-radius: 4px;
