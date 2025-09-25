@@ -47,7 +47,7 @@ export default function SuperMain() {
   const handleGoLms = (e) => {
     // myCoSn != fixedSn ? navigate('/visitorHome', {redirect: true}) : <>{navigate(`${authLvPath}`, {redirect: true})}</>}
     if (myCoSn != fixedSn) navigate('/visitorHome', {redirect:true});
-    else if (myCoSn == fixedSn || myCoSn == effectiveSn) navigate(`${authLvPath}`, {redirect: true});
+    else if (myCoSn == fixedSn || myCoSn == effectiveSn) navigate(authLvPath, {redirect: true});
     else navigate('/403', {redirect: true});
   }
   
