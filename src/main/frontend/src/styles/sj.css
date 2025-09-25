@@ -66,6 +66,7 @@
   font-weight: 500;
   transition: background 0.2s;
 }
+
 .start-btn:hover {
   background: #5361e6;
 }
@@ -74,6 +75,7 @@
   display: flex;
   flex: 1;
 }
+
 .contBox {
   display: flex;
   width: 100%;
@@ -118,6 +120,7 @@
   outline: none;
   transition: border 0.18s;
 }
+
 .signup-form input:focus {
   border: 2px solid #5e87fb;
 }
@@ -127,9 +130,11 @@
   align-items: center;
   gap: 10px;
 }
+
 .input-with-btn input {
   flex: 1;
 }
+
 .verify-btn {
   background: #4286f5;
   color: #fff;
@@ -144,6 +149,7 @@
   white-space: nowrap;
   transition: background 0.2s;
 }
+
 .verify-btn:hover {
   background: #2967cf;
 }
@@ -161,6 +167,7 @@
   font-weight: 600;
   transition: background 0.22s;
 }
+
 .signup-btn:hover {
   background: #266cd0;
 }
@@ -175,15 +182,57 @@
     flex-direction: column;
     width: 98vw;
   }
+
   .panel {
     min-width: unset;
     width: 100%;
   }
+
   .left-panel {
     border-right: none;
     border-bottom: 2px solid #e1e1e1;
   }
-  .signup-inner, .welcome-inner {
+
+  .signup-inner,
+  .welcome-inner {
     padding: 32px 18px;
   }
+}
+
+/* find-id  */
+
+/* 공통 input */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 14px;
+}
+
+/* 버튼 */
+.signup-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.signup-btn:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
+/* 결과 박스 */
+.resultBox {
+  margin-top: 20px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
 }
