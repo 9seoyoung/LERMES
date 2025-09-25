@@ -31,8 +31,8 @@ export default function SuperMain() {
     const fetchCompanies = async () => {
       try {
         const res = await pullAllCompany();
-        setCompanyList( res.data );
-        console.log(companyList);
+        console.log(res.data);
+        setCompanyList(res.data);
         toast.success("정보 불러옴");
       } catch (err) {
         toast.error(err.message);
@@ -44,12 +44,16 @@ export default function SuperMain() {
   }, []);
   
     
-  const handleGoLms = (e) => {
-    // myCoSn != fixedSn ? navigate('/visitorHome', {redirect: true}) : <>{navigate(`${authLvPath}`, {redirect: true})}</>}
-    if (myCoSn != effectiveSn) navigate('/visitorHome', {redirect:true});
-    else if (myCoSn == effectiveSn) navigate(authLvPath, {redirect: true});
-    else navigate('/403', {redirect: true});
-  }
+  const handleGoLms = (selectedCoSn) => {
+    // 상태는 비동기이므로 분기엔 클릭값을 직접 사용
+    if (myCoSn !== selectedCoSn) {
+      navigate("/visitorHome", { replace: true });
+    } else {
+      const path = authLvPath[myAuth] ?? "visitorHome";
+      navigate(`/${path}`, { replace: true });
+    }
+  };
+
   
   return (
     <div className={cardStyle.mainContainer_cardGrid}>
@@ -69,7 +73,15 @@ export default function SuperMain() {
                   <p className={cardStyle.title} data-title-type="3">{v?.name}</p>
                   <p className={cardStyle.title}>{`소재지 ${v?.coPl}`}</p>
                   <div className={cardStyle.row} data-box-type="row">
-                    <button type="button"  onClick={(e) => {setFixedSn(v.id); handleGoLms(e);}}>LMS 바로가기</button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFixedSn(v.id);
+                      handleGoLms(v.id);
+                    }}
+                    >
+                    LMS 바로가기
+                  </button>
                     <button type="button">상태변수</button>
                   </div>
                 </div>
