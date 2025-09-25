@@ -20,7 +20,6 @@ public class CohortDto {
     private String content;
     private String groupName;
     private String type;             // Enum 문자열로 받음
-    private String scope;            // Enum 문자열로 받음
     private LocalDate surveyStart;
     private LocalDate surveyEnd;
     private LocalDate startDate;
@@ -29,6 +28,7 @@ public class CohortDto {
     private LocalTime classEnd;
     private com.fasterxml.jackson.databind.JsonNode surveyForm;
     private String place;
+    private String stts;
 
     // 기본 생성자, getter/setter 생략 가능 (롬복 사용 가능)
 }

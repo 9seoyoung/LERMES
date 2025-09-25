@@ -4,12 +4,15 @@ package com.kdt.KDT_PJT.cohort.ctl;
 // import com.kdt.KDT_PJT.cohort.dto.CohortListDto;
 import com.kdt.KDT_PJT.cohort.dto.CohortDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
+import com.kdt.KDT_PJT.cohort.entity.cohortSttsNm;
 import com.kdt.KDT_PJT.cohort.mapper.CohortConverter;
 import com.kdt.KDT_PJT.cohort.service.CohortService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cohorts")
@@ -36,13 +39,23 @@ public class CohortController {
     }
     //회사 조회
     @GetMapping("/company/{coSn}")
-    public ResponseEntity<List<Cohort>> getCohortsByCompanyId(@PathVariable Long coSn) {
+    public ResponseEntity<Map<String, Object>> getCohortsByCompanyId(@PathVariable Long coSn) {
         List<Cohort> cohorts = cohortService.findByCoSn(coSn);
+
         if (cohorts.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(cohorts);
+
+        boolean hasRecruiting = cohorts.stream()
+                .anyMatch(cohort -> cohort.getCohortSttsNm() == cohortSttsNm.RECRUITING);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("cohorts", cohorts);
+        response.put("stts", hasRecruiting ? "RECRUITING" : null);
+
+        return ResponseEntity.ok(response);
     }
+
 
     // @GetMapping("/company/{coSn}/names")
     // public ResponseEntity<List<CohortListDto>> getCohortNamesByCompanyId(@PathVariable Long coSn) {
