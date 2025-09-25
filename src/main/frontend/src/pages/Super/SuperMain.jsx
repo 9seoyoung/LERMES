@@ -5,12 +5,27 @@ import { pullAllCompany } from "../../services/infoService";
 import { toast } from "react-toastify";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "../../auth/AuthContext";
 
 
 export default function SuperMain() {
-  const { effectiveSn, setFixedSn } = useSelectedCompany();
+  const {user} = useAccount();
+  const { effectiveSn, setFixedSn, fixedSn } = useSelectedCompany();
   const [companyList, setCompanyList] = useState();
   const navigate = useNavigate();
+  const myCoSn = user?.USER_OGDP_CO_SN;
+  const myAuth = user?.USER_AUTHRT_SN;
+  const authLvPath = {
+    1: "adminHome",
+    2: "adminHome",
+    3: "adminHome",
+    4: "tutorHome",
+    5: "stdHome",
+    6: "visitorHome",
+    7: "visitorHome"
+  }
+  const loc = authLvPath[myAuth];
+
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -28,6 +43,13 @@ export default function SuperMain() {
     fetchCompanies();
   }, []);
   
+    
+  const handleGoLms = (e) => {
+    // myCoSn != fixedSn ? navigate('/visitorHome', {redirect: true}) : <>{navigate(`${authLvPath}`, {redirect: true})}</>}
+    if (myCoSn != fixedSn) navigate('/visitorHome', {redirect:true});
+    else if (myCoSn == fixedSn || myCoSn == effectiveSn) navigate(`${authLvPath}`, {redirect: true});
+    else navigate('/403', {redirect: true});
+  }
   
   return (
     <div className={cardStyle.mainContainer_cardGrid}>
@@ -47,7 +69,7 @@ export default function SuperMain() {
                   <p className={cardStyle.title} data-title-type="3">{v?.name}</p>
                   <p className={cardStyle.title}>{`소재지 ${v?.coPl}`}</p>
                   <div className={cardStyle.row} data-box-type="row">
-                    <button type="button"  onClick={() => {setFixedSn(v.id); navigate('/lmsHomeIndex'); console.log(effectiveSn);}}>LMS 바로가기</button>
+                    <button type="button"  onClick={() => {setFixedSn(v.id); handleGoLms(loc); console.log(effectiveSn);}}>LMS 바로가기</button>
                     <button type="button">상태변수</button>
                   </div>
                 </div>

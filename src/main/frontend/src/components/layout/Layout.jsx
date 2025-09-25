@@ -35,36 +35,43 @@ export default function Layout() {
   }
   const loc = authLvPath[myAuth];
 
-
-    // 홈 경로 맵
+  
+  // 홈 경로 맵
   const HOME_PATHS = {
     adminHome: "/adminHome",
     tutorHome: "/tutorHome",
     stdHome: "/stdHome",
     visitorHome: "/visitorHome" 
   };
-
-
-const CLEAR_PATHS = ["/", "/welcome"];
-
-// useEffect(() => {
-//   // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
-//   if (HOME_PATHS[navKind] == null) {
-//     clearFixedSn();
-//   }
-// }, [navKind]);
-
-
-// useEffect(() => {
-//   if (CLEAR_PATHS.includes(location.pathname)) {
-//     clearFixedSn();
-//   }
-// }, [pathname]);
-
-  // const onSaveProfile = async (form) => {
-  //   const saved = await saveProfile(form);
-  //   setUser(saved);           // 서버 결과로 전역 user 교체
-  // };
+  
+  
+  const CLEAR_PATHS = ["/", "/welcome"];
+  
+  useEffect(() => {
+    // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
+    if (HOME_PATHS[navKind] == null) {
+      clearFixedSn();
+    }
+  }, [navKind]);
+  
+  // const handleGoLms = (e) => {
+  //   e.preventDefault();
+  //   // myCoSn != fixedSn ? navigate('/visitorHome', {redirect: true}) : <>{navigate(`${authLvPath}`, {redirect: true})}</>}
+  //   if (myCoSn != fixedSn) navigate('/visitorHome', {redirect:true});
+  //   else if (myCoSn == fixedSn || myCoSn == effectiveSn) navigate(`${authLvPath}`, {redirect: true});
+  //   else navigate('/403', {redirect: true});
+  // }
+  
+  // useEffect(() => {
+    //   if (CLEAR_PATHS.includes(location.pathname)) {
+      //     clearFixedSn();
+      //   }
+      // }, [pathname]);
+      
+      // const onSaveProfile = async (form) => {
+        //   const saved = await saveProfile(form);
+        //   setUser(saved);           // 서버 결과로 전역 user 교체
+        // };
 
 // 대안
 //   const { user, loading: userLoading } = useAccount();
@@ -156,7 +163,7 @@ const CLEAR_PATHS = ["/", "/welcome"];
                   key={item ?? idx}                  // ← 고유 key
                   type="button"
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
+                  onClick={(e) => {
                     patchUser({ USER_AUTHRT_SN: idx + 1 });
                     setItem(idx);                    // selectedItem 업데이트하는 setter
                   }}
