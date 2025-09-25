@@ -42,6 +42,7 @@ import AdminPostRead from '../pages/LMS/readAndEdit/AdminPostRead.jsx';
 import LmsHomeIndex from '../pages/LmsHomeIndex.jsx';
 import LmsAuth from '../auth/LmsAuth.jsx';
 import LmsGuard from '../auth/LmsGuard.jsx';
+import Layout2 from '../components/layout/temp/Layout2.jsx';
 
 function AppRoutes() {
   return (
@@ -72,7 +73,7 @@ function AppRoutes() {
       </Route>
 
     {/*기본 레이아웃*/}
-  <Route path='/' element={<Layout></Layout>} >
+  <Route path='/' element={<Layout2></Layout2>} >
     {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
     {/* 기본 접근 루트 */}
       <Route index element={<SuperMain/>}/>
