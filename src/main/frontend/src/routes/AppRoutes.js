@@ -41,6 +41,8 @@ import StudentManage from '../pages/LMS/menu/StudentManage.jsx';
 import InterviewPost from '../pages/LMS/form/InterviewPost.jsx';
 import InterviewEditPost from '../pages/LMS/form/InterviewEditPost.jsx';
 import AdminPostRead from '../pages/LMS/readAndEdit/AdminPostRead.jsx';
+import FindId from '../auth/loginPage/FindId.jsx';
+import FindPw from '../auth/loginPage/FindPw.jsx';
 
 function AppRoutes() {
   return (
@@ -68,6 +70,8 @@ function AppRoutes() {
         <Route path="generaljoin" element={<GeneralJoin />} />
         <Route path="tenantjoin" element={<TenantSignup />} />
         <Route path="login" element={<Login />} />
+        <Route path="find-id" element={<FindId />} />
+        <Route path="find-pw" element={<FindPw />} />
       </Route>
 
       {/*기본 레이아웃*/}

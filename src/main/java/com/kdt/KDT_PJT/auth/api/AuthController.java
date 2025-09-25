@@ -3,10 +3,13 @@ package com.kdt.KDT_PJT.auth.api;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.auth.dto.*;
 import com.kdt.KDT_PJT.auth.service.LandingService;
+import com.kdt.KDT_PJT.auth.service.PasswordResetService;
 import com.kdt.KDT_PJT.auth.service.SignupService;
+import com.kdt.KDT_PJT.auth.service.UserFindService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +35,8 @@ public class AuthController {
     private final LandingService landingService;
     private final SignupService signupService;
     private final AuthenticationManager authenticationManager;
+    private final UserFindService userFindService;
+    private final PasswordResetService passwordResetService;
 
     // 인증코드 발송
     @PostMapping("/email/code")
@@ -134,7 +139,23 @@ public class AuthController {
     response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
     return ResponseEntity.ok(Map.of("ok", true, "message", "로그아웃 성공"));
-}
+    }
 
+    @PostMapping("/find-id")
+    public ResponseEntity<FindIdResponse> findId(@Valid @RequestBody FindIdRequest request) {
+        FindIdResponse res = userFindService.findId(request);
+        return ResponseEntity.ok(res);
+    }
 
+    // 새 비밀번호 인증용 이메일 코드 발송
+    @PostMapping("/new-password/code")
+    public ApiResponse sendCode(@Valid @RequestBody EmailCodeRequest req) {
+        return passwordResetService.sendResetCode(req);
+    }
+
+    // 비밀번호 재설정
+    @PostMapping("/new-password/confirm")
+    public ApiResponse confirm(@Valid @RequestBody PasswordResetConfirmRequest req) {
+        return passwordResetService.resetPassword(req);
+    }
 }
