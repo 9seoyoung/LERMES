@@ -15,8 +15,8 @@ export default function SuperMain() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const { data } = await pullAllCompany();
-        setCompanyList( data );
+        const res = await pullAllCompany();
+        setCompanyList( res.data );
         console.log(companyList);
         toast.success("정보 불러옴");
       } catch (err) {

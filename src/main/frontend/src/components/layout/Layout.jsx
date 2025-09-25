@@ -27,18 +27,18 @@ export default function Layout() {
     adminHome: "/adminHome",
     tutorHome: "/tutorHome",
     stdHome: "/stdHome",
-    visitorHome: null, 
+    visitorHome: "/visitorHome" 
   };
 
 
 const CLEAR_PATHS = ["/", "/welcome"];
 
-useEffect(() => {
-  // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
-  if (HOME_PATHS[navKind] == null) {
-    clearFixedSn();
-  }
-}, [navKind]);
+// useEffect(() => {
+//   // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
+//   if (HOME_PATHS[navKind] == null) {
+//     clearFixedSn();
+//   }
+// }, [navKind]);
 
 
 // useEffect(() => {
@@ -84,12 +84,17 @@ useEffect(() => {
             <HeaderStatus  navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn}/>
           </LmsHeader>
         } */}
-        {effectiveSn == null && <SuperHeader />}
-        {effectiveSn != null && (
-          <LmsHeader navToggle={navToggle} setNavToggle={setNavToggle}>
-            <HeaderStatus navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn} />
-          </LmsHeader>
+        {effectiveSn == null ?  //보정된 회사값이 널 값이면?
+          <SuperHeader />
+          :
+          <> 
+            {effectiveSn != null &&  (// (HOME_PATHS[navKind] ??  )  ( // 보정된 회사값이 널 값이 아니고!
+              <LmsHeader navToggle={navToggle} setNavToggle={setNavToggle}>
+                <HeaderStatus navKind={navKind} myCoSn={myCoSn} effectiveSn={effectiveSn} />
+              </LmsHeader>
         )}
+          </>
+        }
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
