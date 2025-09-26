@@ -3,6 +3,7 @@ import AttendAdjustStudentRequestList from '../components/layout/inho/AttendAdju
 import AttendAdjustAdminPage from '../components/layout/inho/AttendAdjustAdminPage';
 import '../styles/Attend.css';
 import MyInfoForm from '../components/layout/inho/MyInfoForm';
+import UserProfile from '../components/layout/inho/UserProfile';
 
 export default function Mypage() {
   return (
@@ -12,8 +13,6 @@ export default function Mypage() {
     </div>
   );
 }
-
-
 
 export function AdminMypage() {
   return (
@@ -29,6 +28,7 @@ export function StdMypage() {
     <div>
       <div className="std-page-div">
         <section>
+          <UserProfile />
           <MyInfoForm />
         </section>
         <section>

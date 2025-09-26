@@ -45,3 +45,6 @@ export const saveUserDetail = (payload) =>
 
 // 유저 상세 정보 조회
 export const getUserDetail = () => ok(api.get('/user-detail'));
+
+// 유저 프로필 조회
+export const getUserProfile = () => ok(api.get('/user-profile'));

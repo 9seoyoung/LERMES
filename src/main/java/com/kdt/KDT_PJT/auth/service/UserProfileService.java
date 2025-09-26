@@ -16,32 +16,22 @@ public class UserProfileService {
     private final CohortRepository cohortRepository;
     private final UserRepository userRepository;
 
-    public UserProfileResponse getProfile(@AuthenticationPrincipal AuthCustomUserDetails me) {
+    public UserProfileResponse getProfile(AuthCustomUserDetails me) {
         User user = userRepository.findById(me.getId())
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음 UserProfileService 파일임"));
 
         Cohort cohort = cohortRepository.findById(me.getCohortSn())
                 .orElseThrow(() -> new IllegalArgumentException("기수 없음 UserProfileService 파일임"));
 
-        String name = user.getName();
-        String status = "비활성";
-        if (user.isEnabled()) {
-            status = "활성";
-        }
-        String phoneNumber = user.getUserTelno();
-        String email = user.getEmail();
-        String cohortNm = cohort.getCohortNm();
-        String crclmNm = cohort.getCrclmNm();
+        String status = user.isEnabled() ? "활성" : "비활성";
 
-        UserProfileResponse userProfileResponse = UserProfileResponse.builder()
-                .name(name)
+        return UserProfileResponse.builder()
+                .name(user.getName())
                 .status(status)
-                .phoneNumber(phoneNumber)
-                .email(email)
-                .cohortName(cohortNm)
-                .courseName(crclmNm)
+                .phoneNumber(user.getUserTelno())
+                .email(user.getEmail())
+                .cohortName(cohort.getCohortNm())   // 소속 그룹명
+                .courseName(cohort.getCrclmNm())    // 과정명
                 .build();
-
-        return userProfileResponse;
     }
 }
