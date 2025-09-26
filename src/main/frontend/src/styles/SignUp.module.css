@@ -1,7 +1,10 @@
 hr {
-  border: none; /* 기본 border 없애기 */
-  border-top: 1px solid #000; /* 위쪽에 실선 1px 넣기 */
-  height: 0; /* 높이는 0으로 */
+  border: none;
+  /* 기본 border 없애기 */
+  border-top: 1px solid #000;
+  /* 위쪽에 실선 1px 넣기 */
+  height: 0;
+  /* 높이는 0으로 */
   margin: 0px 10px;
   width: 430px;
 }
@@ -97,7 +100,7 @@ body {
   border-radius: 48px;
   /* background-color: #0088ff;
   color: #fff; */
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-bg);
   color: var(--color-text-primary);
   font-size: 16px;
 }
@@ -109,7 +112,7 @@ body {
   border-radius: 48px;
   /* background-color: #0088ff;
   color: #fff; */
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-bg);
   color: var(--color-text-primary);
   font-size: 20px;
   font-weight: bold;
