@@ -9,7 +9,7 @@ export default function FilesPage() {
     if (!files.length) return;
     const form = new FormData();
     files.forEach(f => form.append('files', f));
-    const res = await fetch('http://localhost:940/api/files/batch', {
+    const res = await fetch('http://localhost:940/api/files', {
       method: 'POST',
       body: form,
       credentials: 'include',
@@ -41,7 +41,7 @@ export default function FilesPage() {
               }>미리보기</button>
               <button onClick={() =>
                 window.open(
-                  `http://localhost:940/api/files/${encodeURIComponent(r.storedFileName)}/download?original=${encodeURIComponent(r.originalFileName||'')}`,
+                  `http://localhost:940/api/files/${encodeURIComponent(r.storedFileName)}?original=${encodeURIComponent(r.originalFileName||'')}`,
                   '_blank'
                 )
               } style={{marginLeft:8}}>다운로드</button>

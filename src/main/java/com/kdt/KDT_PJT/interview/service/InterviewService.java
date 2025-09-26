@@ -23,9 +23,7 @@ import java.util.UUID;
 public class InterviewService {
     @Autowired
     CmmnDao dao;
-
-
-    /** TODO 면담 신청 API 서비스
+    /**
      * @methodName : createInterviewRequest
      * @author : 김동식
      * @date : 2025.09.19
@@ -45,9 +43,10 @@ public class InterviewService {
         //params에 담긴 정보 : 면담 신청 제목, 면담 신청 내용, 면담 담당자 권한
         params.put("itvAplcntSn", Math.toIntExact(me.getId()));      //로그인유저 사용자SN 가져옴
         params.put("cohortSn", Math.toIntExact(me.getCohortSn()));   //로그인 유저의 기수SN 가져옴
-        String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid) // TODO 일단 모든 면담에 대해 uuid 만드는데, 파일 있을경우만 생성하도록 변경할팔요
-        params.put("formUuid", uuid);               //신청글에대한 uuid 만듦
+//        String uuid = UUID.randomUUID().toString().replace("-", ""); //하이픈 제거된 uuid 얻음(신청글에대한 uuid) // 파일 먼저업로드 후 받아온값 넣기로 변경 (이줄은 사용X)
+//        params.put("formUuid", uuid);                                                                     // 이미 들어있음
         params.put("itvAplyDt", LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)); // 면담 신청 일시 추가(기록용)
+        params.put("coSn",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
 
         //itvPicAuthrt 값을 문자열로 가져와서 Integer로 변환
         String authrtString = (String) params.get("itvPicAuthrt");
@@ -92,9 +91,24 @@ public class InterviewService {
     }
 
     @Transactional
-    public int confirmInterview(@RequestBody CmmnMap params){
+    public int confirmInterview(CmmnMap params){
 
 
         return dao.update("com.kdt.mapper.interview.confirmInterview", params); //업데이트
+    }
+
+    @Transactional
+    public CmmnMap getCoSnAndCohortSnByItvSn(CmmnMap params){
+        return dao.selectOne("com.kdt.mapper.interview.getCoSnAndCohortSnByItvSn",params);
+    }
+
+    @Transactional
+    public CmmnMap readInterviewbyItvSn(CmmnMap params){
+        return dao.selectOne("com.kdt.mapper.interview.readInterviewbyItvSn", params);
+    }
+
+    @Transactional
+    public int incViewCnt(CmmnMap params){
+        return dao.update("com.kdt.mapper.interview.incViewCnt", params);
     }
 }

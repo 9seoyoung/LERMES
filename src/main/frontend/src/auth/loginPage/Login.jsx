@@ -86,7 +86,7 @@ export default function Login() {
           <Link to="/welcome/generaljoin" className="problemBox">
             아이디가 없어요
           </Link>
-          <div className="findIdPw" style={{ gap: 20 }}>
+          <div className="findIdPw">
             <Link to="/welcome/find-id">
               <span>아이디 찾기</span>
             </Link>

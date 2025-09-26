@@ -25,6 +25,7 @@ const QuestionType = forwardRef(function QuestionType(
       onAddOption,
       onUpdateOption,
       onRemoveOption,
+      setFiles
     },
     ref
 ) {
@@ -37,6 +38,7 @@ const QuestionType = forwardRef(function QuestionType(
       getRoot: () => rootRef.current,
       focusTitle: () => titleRef.current?.focus?.({ preventScroll: true }),
   }));
+  
  
   return (
       <div ref={rootRef} className="questionBox" data-qid={q.qid}>
@@ -79,8 +81,8 @@ const QuestionType = forwardRef(function QuestionType(
           <hr className="hrSt2" />
 
           {q.type === "image" && (
-              <div>
-                <FilePreview />
+              <div style={{width: "100%", overflow:"hidden"}}>
+                <FilePreview qid ={q.qid} setFiles={setFiles}/>
               </div>
           )}
 

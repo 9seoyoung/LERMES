@@ -1,97 +1,98 @@
-import React, { useState } from 'react';
+// frontend/src/pages/UploadDownloadDemo.jsx
 
-const API_BASE = 'http://localhost:940/api/files';
+import React, { useState } from 'react';
+// UiComp.jsx에서 필요한 컴포넌트들을 import 합니다.
+import { FileUpload, FileList } from '../components/ui/UiComp';
+import { uploadFiles, openPreview as fsOpenPreview, openDownload as fsOpenDownload } from '../services/fileService';
 
 export default function UploadDownloadDemo() {
-  const [files, setFiles] = useState([]);              // File[]
-  const [results, setResults] = useState([]);          // UploadResultDTO[]
+    // 컴포넌트 데모용 상태만 유지
+    const [attachedFiles, setAttachedFiles] = useState([]);      // File[] (FileUpload/FileList 사용)
+    const [attachedResults, setAttachedResults] = useState([]);  // UploadResultDTO[] (업로드 결과)
 
-  const onChange = (e) => {
-    const list = Array.from(e.target.files || []);
-    setFiles(list);
-    setResults([]); // 새 선택 시 결과 초기화
-  };
+    // --- 업로드 핸들러 ---
+    const onAttachedUpload = async () => {
+        if (attachedFiles.length === 0) return;
 
-  const onUpload = async () => {
-    if (files.length === 0) return;
-    const form = new FormData();
-    // 서버 컨트롤러 @RequestPart("files") List<MultipartFile> 와 키 일치
-    files.forEach(f => form.append('files', f));
+        // 업로드 전 결과 초기화
+        setAttachedResults([]);
 
-    const res = await fetch(`${API_BASE}/batch`, {
-      method: 'POST',
-      body: form,
-      credentials: 'include'
-    });
-    if (!res.ok) {
-      alert('업로드 실패');
-      return;
-    }
-    const json = await res.json(); // List<UploadResultDTO>
-    setResults(json);
-  };
+        try {
+            const results = await uploadFiles(attachedFiles);
+            setAttachedResults(results || []);
+            // 업로드 성공 후 선택 목록 초기화
+            // setAttachedFiles([]);
+        } catch (e) {
+            console.error(e);
+            alert('파일 업로드 실패');
+        }
+    };
+    // ---------------------
 
-  const openPreview = (r) => {
-    const url = `${API_BASE}/${encodeURIComponent(r.storedFileName)}/preview?original=${encodeURIComponent(r.originalFileName || '')}`;
-    window.open(url, '_blank');
-  };
+    // 미리보기 및 다운로드 핸들러는 서비스 레이어 사용
+    const onPreview = (r) => fsOpenPreview(r.storedFileName, r.originalFileName || '');
+    const onDownload = (r) => fsOpenDownload(r.storedFileName, r.originalFileName || '');
 
-  const openDownload = (r) => {
-    const url = `${API_BASE}/${encodeURIComponent(r.storedFileName)}/download?original=${encodeURIComponent(r.originalFileName || '')}`;
-    window.open(url, '_blank');
-  };
+    return (
+        <div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif' }}>
 
-  return (
-      <div style={{ maxWidth: 520, margin: '2rem auto', fontFamily: 'sans-serif' }}>
-        <h3>파일 다중 업로드/다운로드 데모</h3>
+            {/* =======================================================
+        // Custom UI 컴포넌트 파일 업로드 데모
+        // ======================================================= */}
+            <h3>UI 컴포넌트 파일 업로드/다운로드 데모</h3>
 
-        <input type="file" multiple onChange={onChange} />
-        <button onClick={onUpload} disabled={files.length === 0} style={{ marginLeft: 8 }}>
-          업로드 ({files.length}개)
-        </button>
+            {/* 파일 첨부 컴포넌트 (드래그 앤 드롭 영역) */}
+            <FileUpload
+                files={attachedFiles}
+                setFiles={setAttachedFiles}
+            />
 
-        {/* 선택한 파일 간단 미리보기 (이미지) */}
-        {files.length > 0 && (
-            <div style={{ marginTop: 12 }}>
-              <div style={{ fontWeight: 600 }}>선택 목록</div>
-              <ul>
-                {files.map(f => (
-                    <li key={f.name}>
-                      {f.type?.startsWith('image/') && (
-                          <img
-                              src={URL.createObjectURL(f)}
-                              alt={f.name}
-                              style={{ width: 60, height: 60, objectFit: 'cover', marginRight: 8, verticalAlign: 'middle' }}
-                              onLoad={e => URL.revokeObjectURL(e.currentTarget.src)}
-                          />
-                      )}
-                      <span>{f.name} ({Math.round(f.size/1024)} KB)</span>
-                    </li>
-                ))}
-              </ul>
-            </div>
-        )}
+            {/* 파일 목록 컴포넌트 */}
+            <FileList
+                files={attachedFiles}
+                setFiles={setAttachedFiles}
+            />
 
-        {/* 업로드 결과 */}
-        {results.length > 0 && (
-            <div style={{ marginTop: 16, padding: 12, border: '1px solid #ddd' }}>
-              <div style={{ fontWeight: 600 }}>업로드 결과</div>
-              <ul>
-                {results.map(r => (
-                    <li key={r.storedFileName} style={{ marginBottom: 8 }}>
-                      {console.log(r)}
-                      <div>원본: {r.originalFileName}</div>
-                      <div>저장: {r.storedFileName}</div>
-                      <div>크기: {r.size} bytes</div>
-                      <div style={{ marginTop: 6 }}>
-                        <button onClick={() => openPreview(r)} style={{ marginRight: 8 }}>미리보기</button>
-                        <button onClick={() => openDownload(r)}>다운로드</button>
-                      </div>
-                    </li>
-                ))}
-              </ul>
-            </div>
-        )}
-      </div>
-  );
+            {/* 업로드 버튼 */}
+            <button
+                onClick={onAttachedUpload}
+                disabled={attachedFiles.length === 0}
+                style={{
+                    marginTop: '16px',
+                    padding: '10px 20px',
+                    backgroundColor: attachedFiles.length === 0 ? '#ccc' : '#007bff',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: attachedFiles.length === 0 ? 'not-allowed' : 'pointer',
+                    fontWeight: 'bold'
+                }}
+            >
+                파일 업로드 ({attachedFiles.length}개)
+            </button>
+
+            {/* 콘솔 찍어 보기 */}
+            {console.log(attachedFiles)}
+
+            {/* 업로드 결과 */}
+            {attachedResults.length > 0 && (
+                <div style={{ marginTop: 24, padding: 12, border: '1px solid #007bff' }}>
+                    <div style={{ fontWeight: 600, color: '#007bff', marginBottom: '8px' }}>업로드 결과 (서버 저장 정보)</div>
+                    <ul>
+                        {attachedResults.map(r => (
+                            <li key={r.storedFileName} style={{ marginBottom: 12, borderBottom: '1px dotted #eee', paddingBottom: '4px' }}>
+                                <div>**원본:** {r.originalFileName}</div>
+                                <div>**저장:** {r.storedFileName}</div>
+                                <div>**크기:** {r.size} bytes</div>
+                                <div style={{ marginTop: 8 }}>
+                                    <button onClick={() => onPreview(r)} style={{ marginRight: 8 }}>미리보기</button>
+                                    <button onClick={() => onDownload(r)}>다운로드</button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
 }

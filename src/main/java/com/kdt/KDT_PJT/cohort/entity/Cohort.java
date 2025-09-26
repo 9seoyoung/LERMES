@@ -45,9 +45,11 @@ public class Cohort {
     private LocalDate crclmEndYmd;
 
     @Column(name = "COHORT_STTS_NM")
-    private String cohortSttsNm;
+    @Enumerated(EnumType.STRING)
+    private cohortSttsNm cohortSttsNm;
 
     @Column(name = "COHORT_CATE")
+    @Enumerated(EnumType.STRING)
     private QuestionType cohortCate;
 
     @Column(name = "ATTEND_START_TM")

@@ -22,7 +22,8 @@
             DEL_YN,
             USER_SN,
             EVENT_REG_DT,
-            PRVT_YN
+            PRVT_YN,
+            CO_SN
         ) VALUES (
             #{COHORT_SN},
             #{EVENT_BGNG_DT},
@@ -32,7 +33,8 @@
             #{DEL_YN},
             #{USER_SN},
             #{EVENT_REG_DT},
-            #{PRVT_YN}
+            #{PRVT_YN},
+            #{CO_SN}
         )
     </insert>
 
@@ -48,23 +50,25 @@
         RMRK_CN          AS rmrkCn,
         USER_SN          AS userSn,
         EVENT_REG_DT     AS eventRegDt,
-        PRVT_YN          AS prvtYn
+        PRVT_YN          AS prvtYn,
+        CO_SN            AS coSn
         FROM TB_CALENDAR
         WHERE CAL_SN = #{calSn}
     </select>
 
     <insert id="createPicCalendarByItvSn"
             parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
-            useGeneratedKeys="true" keyProperty="calSn">	-- 담당자 일정 추가
+            useGeneratedKeys="true" keyProperty="calSn">	-- 담당자 일정 추가 TODO CO_SN 넣어주기
     INSERT INTO TB_CALENDAR
-        (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
+        (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN)
     SELECT
         up.OGDP_COHORT_SN,
         #{itvPrnmntDt},
         #{itvPrnmntDt},
         CONCAT('[면담 일정] ', #{itvTime}, ' ', ua.USER_NM, ' -> ', up.USER_NM),
         up.USER_SN,
-        1
+        1,
+        #{coSn}
     FROM TB_INTERVIEW i
              JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
              JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
@@ -75,16 +79,17 @@
 
     <insert id="createAplcntCalendarByItvSn"
             parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
-            useGeneratedKeys="true" keyProperty="calSn">
+            useGeneratedKeys="true" keyProperty="calSn"> -- TODO CO_SN 넣어주기
         INSERT INTO TB_CALENDAR
-            (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN)
+            (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN)
         SELECT
             ua.OGDP_COHORT_SN,
             #{itvPrnmntDt},
             #{itvPrnmntDt},
             CONCAT('[면담 일정] ', #{itvTime} ,' ' , ua.USER_NM, ' -> ', up.USER_NM),
             ua.USER_SN,
-            1
+            1,
+            #{coSn}
         FROM TB_INTERVIEW i
                  JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
                  JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN

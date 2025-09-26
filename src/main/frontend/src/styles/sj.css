@@ -198,3 +198,41 @@
     padding: 32px 18px;
   }
 }
+
+/* find-id  */
+
+/* 공통 input */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 14px;
+}
+
+/* 버튼 */
+.signup-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.signup-btn:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
+/* 결과 박스 */
+.resultBox {
+  margin-top: 20px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}

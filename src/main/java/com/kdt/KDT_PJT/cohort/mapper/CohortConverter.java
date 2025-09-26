@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kdt.KDT_PJT.cohort.dto.CohortDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
 import com.kdt.KDT_PJT.cohort.entity.QuestionType;
-//상준이 등장
+
 public class CohortConverter {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -14,24 +14,14 @@ public class CohortConverter {
 
         Cohort entity = new Cohort();
 
-        // entity.setCohortSn(null); // id(UUID)와 cohortSn(Long) 타입 불일치, 보통 DB 생성 시 할당
-
         entity.setCohortNm(dto.getGroupName());
         entity.setCrclmNm(dto.getTitle());
-//        String content = dto.getContent();
-//        if (content == null || content.trim().isEmpty()) {
-//            entity.setCrclmCn("{}");
-//        } else {
-//            entity.setCrclmCn(content);
-//        }
-//        entity.setCrclmCn(dto.getSurveyForm());
         entity.setCoSn(dto.getUserSn());
         entity.setRecruitBgngDt(dto.getSurveyStart());
         entity.setRecruitEndDt(dto.getSurveyEnd());
         entity.setCrclmBgngYmd(dto.getStartDate());
         entity.setCrclmEndYmd(dto.getEndDate());
-        entity.setCohortSttsNm(dto.getScope());
-//        추가
+
         if (dto.getSurveyForm() != null) {
             try {
                 String jsonStr = objectMapper.writeValueAsString(dto.getSurveyForm());
@@ -40,7 +30,7 @@ public class CohortConverter {
                 throw new RuntimeException("surveyForm 직렬화 실패", e);
             }
         }
-        // String -> Enum 변환
+
         if (dto.getType() != null) {
             try {
                 entity.setCohortCate(QuestionType.valueOf(dto.getType()));
@@ -53,6 +43,9 @@ public class CohortConverter {
         entity.setAttendEndTm(dto.getClassEnd());
         entity.setCohortPl(dto.getPlace());
 
+        // 여기서 cohortSttsNm 관련 처리 절대 안 함!
+        // 백엔드 서비스 계층에서 날짜 기준으로 직접 세팅할 것
+
         return entity;
     }
 
@@ -61,19 +54,14 @@ public class CohortConverter {
 
         CohortDto dto = new CohortDto();
 
-        // dto.setId(null); // UUID 값은 별도 로직 필요
-
         dto.setTitle(entity.getCrclmNm());
         dto.setGroupName(entity.getCohortNm());
-//        ㅈㅅ 필요없는 칼럼 보낸듯?
-//        dto.setContent(entity.getCrclmCn());
         dto.setUserSn(entity.getCoSn());
         dto.setSurveyStart(entity.getRecruitBgngDt());
         dto.setSurveyEnd(entity.getRecruitEndDt());
         dto.setStartDate(entity.getCrclmBgngYmd());
         dto.setEndDate(entity.getCrclmEndYmd());
-        dto.setScope(entity.getCohortSttsNm());
-//        추가
+
         if (entity.getCrclmCn() != null) {
             try {
                 JsonNode node = objectMapper.readTree(entity.getCrclmCn());
@@ -83,14 +71,14 @@ public class CohortConverter {
             }
         }
 
-
-        // Enum -> String 변환
         dto.setType(entity.getCohortCate() == null ? null : entity.getCohortCate().name());
 
         dto.setClassStart(entity.getAttendStartTm());
         dto.setClassEnd(entity.getAttendEndTm());
         dto.setPlace(entity.getCohortPl());
 
+        // dto.setScope(??) 이 부분도 제거!
+        // scope은 프론트에서 안 받고, 백엔드에서 따로 계산해서 셋팅할 예정
 
         return dto;
     }

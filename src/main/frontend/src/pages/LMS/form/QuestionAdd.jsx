@@ -1,6 +1,6 @@
 // QuestionAdd.jsx
 import React, {
-  forwardRef, useRef, useImperativeHandle, createRef, useEffect
+  forwardRef, useRef, useImperativeHandle, createRef, useEffect, setFiles
 } from "react";
 import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
@@ -172,6 +172,7 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
             onAddOption={addOption}
             onUpdateOption={updateOption}
             onRemoveOption={removeOption}
+            setFiles={setFiles}
           />
         ))}
       </div>
