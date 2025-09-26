@@ -121,9 +121,9 @@ public class AuthSecurityConfig {
     }
 
     // 커스텀 Firewall 등록
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall httpFirewall) {
-        return web -> web.httpFirewall(httpFirewall);
-    }
+//
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall httpFirewall) {
+//        return web -> web.httpFirewall(httpFirewall);
+//    }
 }
