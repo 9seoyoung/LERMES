@@ -49,10 +49,10 @@ function InterviewEditPost() {
   // const handleFixed = async() => {
   //   console.log("면담요청 확정 ㄱㄱ --> itvSn(면담신청SN 수동입력 필요)")
   //   let itvSn = prompt("면담신청한 시리얼넘버를 입력하세요, itvSn");
-  //   let fixedSn = "아직없음";
+  //   let effectiveSn = "아직없음";
 
   //   try{
-  //     const {data} = await readInterview({itvSn, fixedSn})
+  //     const {data} = await readInterview({itvSn, effectiveSn})
   //     console.log(`data 확인: ${data}`);
   //     setFormData(data);
   //     console.log(`formData 확인`);

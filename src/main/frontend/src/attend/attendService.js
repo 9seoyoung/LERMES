@@ -47,7 +47,7 @@ export const createAttendAdjust = (payload) =>
   api.post('/attend/adjust', payload).then(({ data }) => data);
 
 // 내 요청 목록(페이징)
-export const getMyAttendAdjustPage = ({ page = 0, size = 10 } = {}) =>
+export const getMyAttendAdjustPage = ({ page = 0, size = 7 } = {}) =>
   api
     .get('/attend/adjust/my', { params: { page, size } })
     .then(({ data }) => data);
@@ -55,16 +55,19 @@ export const getMyAttendAdjustPage = ({ page = 0, size = 10 } = {}) =>
 // 파일 업로드
 export const uploadEvidenceFile = (file, formUuid) => {
   const fd = new FormData();
-  fd.append('file', file);
+  fd.append('files', file); // 백엔드가 List<MultipartFile> 받으니까 key는 "files"
   if (formUuid) fd.append('formUuid', formUuid);
 
   return api
     .post('/files', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
-    .then(({ data }) => data);
+    .then(({ data }) => {
+      // 서버가 배열을 내려주면 첫 번째만 리턴
+      return Array.isArray(data) ? data[0] : data;
+    });
 };
 
 // ✅ 관리자: 출석 인정 요청 전체 조회 (회사 기준)
-export const getAdminAttendAdjustPage = ({ page = 0, size = 10 } = {}) =>
+export const getAdminAttendAdjustPage = ({ page = 0, size = 7 } = {}) =>
   ok(api.get('/attend/adjust/admin', { params: { page, size } }));
 
 // 관리자: 승인여부 변경 (Y/N)

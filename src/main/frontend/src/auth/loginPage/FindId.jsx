@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { findId } from '../authService';
 import { toast } from 'react-toastify';
 import '../../styles/sj.css';
+import '../../styles/inhoinho.css';
+import { Link } from 'react-router-dom';
 
 export default function FindId() {
   const [name, setName] = useState('');
@@ -75,6 +77,14 @@ export default function FindId() {
             >
               {loading ? '조회 중...' : '찾기'}
             </button>
+            <div className="findIdPw">
+              <Link to="/welcome/login">
+                <span>로그인</span>
+              </Link>
+              <Link to="/welcome/find-pw">
+                <span>비밀번호 찾기</span>
+              </Link>
+            </div>
           </form>
         )}
       </div>

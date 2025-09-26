@@ -96,7 +96,8 @@ public class AuthSecurityConfig {
                                 "/api/signup/**",
                                 "/api/email/code/**",
                                 "/api/find-id",
-                                "/api/new-password/**"
+                                "/api/new-password/**",
+                                "/api/user-detail/**"
                         ).permitAll()
                         .requestMatchers("/api/files/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()

@@ -94,9 +94,9 @@ export default function AttendAdjustStudentRequestModal({
   const [attendDtlTypeNm, setType] = useState('');
   const [bgngDt, setBgngDt] = useState('');
   const [stuRmrkCn, setRmk] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadResList, setUploadResList] = useState([]);
+  const [uploadRes, setUploadRes] = useState(null); // 하나만 저장
   const [submitting, setSubmitting] = useState(false);
 
   const fileInputRef = useRef(null);
@@ -105,15 +105,12 @@ export default function AttendAdjustStudentRequestModal({
 
   /** 파일 업로드 */
   const doUpload = async () => {
+    if (!selectedFile) return;
     try {
       setUploading(true);
-      const results = [];
-      for (let f of selectedFiles) {
-        const res = await uploadEvidenceFile(f);
-        results.push(res);
-      }
-      setUploadResList((prev) => [...prev, ...results]);
-      setSelectedFiles([]);
+      const res = await uploadEvidenceFile(selectedFile);
+      setUploadRes(res); // 하나만 저장
+      setSelectedFile(null);
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (e) {
       alert(e.message || '업로드 실패');
@@ -123,8 +120,8 @@ export default function AttendAdjustStudentRequestModal({
   };
 
   /** 업로드된 파일 삭제 */
-  const removeFile = (fileSn) => {
-    setUploadResList(uploadResList.filter((f) => f.fileSn !== fileSn));
+  const removeFile = () => {
+    setUploadRes(null);
   };
 
   /** 제출 */
@@ -138,7 +135,7 @@ export default function AttendAdjustStudentRequestModal({
       bgngDt,
       endDt: bgngDt,
       stuRmrkCn: stuRmrkCn.trim() || null,
-      fileSn: uploadResList.length ? uploadResList[0].fileSn : null,
+      fileSn: uploadRes ? uploadRes.fileSn : null,
     };
 
     try {
@@ -149,8 +146,8 @@ export default function AttendAdjustStudentRequestModal({
         setType('');
         setBgngDt('');
         setRmk('');
-        setUploadResList([]);
-        setSelectedFiles([]);
+        setUploadRes(null);
+        setSelectedFile(null);
         if (fileInputRef.current) fileInputRef.current.value = '';
 
         onCreated?.(res.data);
@@ -232,10 +229,9 @@ export default function AttendAdjustStudentRequestModal({
             <div style={{ display: 'flex', gap: 8 }}>
               <input
                 type="file"
-                multiple
                 ref={fileInputRef}
                 style={{ ...sx.input, padding: 6 }}
-                onChange={(e) => setSelectedFiles(Array.from(e.target.files))}
+                onChange={(e) => setSelectedFile(e.target.files[0])}
                 disabled={uploading || submitting}
                 accept="image/*,application/pdf"
               />
@@ -243,37 +239,31 @@ export default function AttendAdjustStudentRequestModal({
                 type="button"
                 style={sx.btn}
                 onClick={doUpload}
-                disabled={!selectedFiles.length || uploading || submitting}
+                disabled={!selectedFile || uploading || submitting}
               >
                 {uploading ? '업로드 중...' : '업로드'}
               </button>
             </div>
 
-            {uploadResList.length > 0 && (
-              <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap' }}>
-                {uploadResList.map((f) => (
-                  <div key={f.fileSn} style={sx.fileTag}>
-                    <a
-                      href={`http://localhost:940/api/files/${f.fileSn}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{
-                        textDecoration: 'none',
-                        color: '#333',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {f.originalFileName}
-                    </a>
-
-                    <span
-                      style={sx.fileRemove}
-                      onClick={() => removeFile(f.fileSn)}
-                    >
-                      ⛔
-                    </span>
-                  </div>
-                ))}
+            {uploadRes && (
+              <div style={{ marginTop: 8 }}>
+                <div style={sx.fileTag}>
+                  <a
+                    href={`http://localhost:940/api/files/${uploadRes.fileSn}/name`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      textDecoration: 'none',
+                      color: '#333',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {uploadRes.originalFileName}
+                  </a>
+                  <span style={sx.fileRemove} onClick={removeFile}>
+                    ⛔
+                  </span>
+                </div>
               </div>
             )}
           </div>

@@ -48,4 +48,7 @@ public class User {
     @Column(name = "OGDP_COHORT_SN")
     private Long cohortSn;
 
+    // 사용자 이미지 파일 일련번호
+    @Column(name = "USER_PROFILE_IMAGE")
+    private Long userProfileImage;
 }

@@ -38,3 +38,10 @@ export const sendPasswordResetCode = (payload) =>
 // 새 비밀번호 설정
 export const resetPassword = (payload) =>
   api.post('/new-password/confirm', payload).then((res) => res.data);
+
+// 유저 상세 정보 등록 및 수정
+export const saveUserDetail = (payload) =>
+  ok(api.post('/user-detail/save', payload));
+
+// 유저 상세 정보 조회
+export const getUserDetail = () => ok(api.get('/user-detail'));

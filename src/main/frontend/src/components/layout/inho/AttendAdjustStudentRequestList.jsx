@@ -15,8 +15,9 @@ const sx = {
     borderRadius: 12,
     padding: 16,
     boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
-    maxWidth: 800,
+    maxWidth: 570,
     margin: '0 auto',
+    backgroundColor: 'white',
   },
   head: {
     display: 'flex',
@@ -75,7 +76,7 @@ const fmtDate = (s) => (s ? String(s).slice(0, 10) : '');
 
 export default function AttendAdjustStudentRequestList() {
   const [pageNo, setPageNo] = useState(0);
-  const [size] = useState(10);
+  const [size] = useState(7);
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -110,7 +111,7 @@ export default function AttendAdjustStudentRequestList() {
     <section style={sx.card}>
       {/* 헤더 + 생성 버튼 */}
       <div style={sx.head}>
-        <h2 style={sx.title}>출석 요청 내역(학생 마이페이지에 있어야함)</h2>
+        <h2 style={sx.title}>출석 요청 내역</h2>
         <button style={sx.btnPrimary} onClick={() => setOpen(true)}>
           출결 요청
         </button>
@@ -120,12 +121,12 @@ export default function AttendAdjustStudentRequestList() {
       <div style={sx.tableWrap}>
         <table style={sx.table}>
           <colgroup>
-            <col style={{ width: '60px' }} />
-            <col style={{ width: '100px' }} />
-            <col style={{ width: '250px' }} />
-            <col style={{ width: '120px' }} />
-            <col style={{ width: '100px' }} />
-            <col style={{ width: '90px' }} />
+            <col style={{ width: '40px' }} /> {/* 순번 */}
+            <col style={{ width: '60px' }} /> {/* 유형 */}
+            <col style={{ width: '110px' }} /> {/* 사유 */}
+            <col style={{ width: '110px' }} /> {/* 신청일 */}
+            <col style={{ width: '80px' }} /> {/* 승인여부 */}
+            <col style={{ width: '100px' }} /> {/* 첨부파일 */}
           </colgroup>
           <thead>
             <tr>
@@ -167,7 +168,7 @@ export default function AttendAdjustStudentRequestList() {
                   <td style={sx.td}>
                     {r.fileSn ? (
                       <a
-                        href={`http://localhost:940/api/files/${r.fileSn}`}
+                        href={`http://localhost:940/api/files/${r.fileSn}/name`}
                         target="_blank"
                         rel="noreferrer"
                         style={{
