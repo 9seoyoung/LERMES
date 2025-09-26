@@ -142,9 +142,6 @@ export default function FindPw() {
         <Link to="/welcome/login">
           <span>로그인</span>
         </Link>
-        <Link to="/welcome/find-pw">
-          <span>비밀번호 찾기</span>
-        </Link>
       </div>
     </div>
   );
