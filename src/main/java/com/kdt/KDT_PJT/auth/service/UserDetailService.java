@@ -1,6 +1,6 @@
 package com.kdt.KDT_PJT.auth.service;
 
-import com.kdt.KDT_PJT.auth.dto.UserDetailRequest;
+import com.kdt.KDT_PJT.auth.dto.mypage.UserDetailRequest;
 import com.kdt.KDT_PJT.auth.entity.UserDetail;
 import com.kdt.KDT_PJT.auth.repository.UserDetailRepository;
 import lombok.RequiredArgsConstructor;

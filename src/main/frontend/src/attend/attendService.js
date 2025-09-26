@@ -66,7 +66,7 @@ export const uploadEvidenceFile = (file, formUuid) => {
     });
 };
 
-// ✅ 관리자: 출석 인정 요청 전체 조회 (회사 기준)
+// 관리자: 출석 인정 요청 전체 조회 (회사 기준)
 export const getAdminAttendAdjustPage = ({ page = 0, size = 7 } = {}) =>
   ok(api.get('/attend/adjust/admin', { params: { page, size } }));
 

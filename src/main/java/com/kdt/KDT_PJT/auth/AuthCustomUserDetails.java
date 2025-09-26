@@ -62,6 +62,7 @@ public class AuthCustomUserDetails implements UserDetails {
     public Long getUserProfileImage() { return userProfileImage; }
 
 
+
     // ===== UserDetails 구현 =====
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

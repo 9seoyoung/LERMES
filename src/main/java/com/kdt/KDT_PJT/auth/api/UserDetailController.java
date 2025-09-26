@@ -1,7 +1,7 @@
 package com.kdt.KDT_PJT.auth.api;
 
 import com.kdt.KDT_PJT.auth.dto.ApiResponse;
-import com.kdt.KDT_PJT.auth.dto.UserDetailRequest;
+import com.kdt.KDT_PJT.auth.dto.mypage.UserDetailRequest;
 import com.kdt.KDT_PJT.auth.entity.UserDetail;
 import com.kdt.KDT_PJT.auth.service.UserDetailService;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
