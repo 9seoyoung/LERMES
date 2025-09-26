@@ -5,7 +5,7 @@ import RoleRoute from '../auth/RoleRoute.jsx';
 
 //페이지
 import Login from '../auth/loginPage/Login';
-import Layout from '../components/layout/NONONOLayout.jsx'; //제일 먼저 만들어야 할 파일
+// import Layout from '../components/layout/NONONOLayout.jsx'; //제일 먼저 만들어야 할 파일
 import NotAllowed from '../auth/loginPage/NotAllowed';
 import SampleApp from '../sample/SampleApp';
 import GeneralJoin from '../auth/loginPage/GeneralJoin';
@@ -30,7 +30,7 @@ import DocxSet from '../pages/LMS/menu/DocxSet.jsx';
 import AccountSet from '../pages/LMS/menu/AccountSet.jsx';
 import GroupSet from '../pages/LMS/menu/GroupSet.jsx';
 import VisitorHome from '../pages/LMS/VisitorHome.jsx';
-import Mypage, {AdminMypage} from '../pages/Mypage.jsx';
+import Mypage, {AdminMypage, StdMypage, TutorMypage} from '../pages/Mypage.jsx';
 import BoardManage from '../pages/LMS/menu/BoardManage.jsx'
 import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
 import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
@@ -111,7 +111,7 @@ function AppRoutes() {
               <Route path='tutorHome/studySched' element={<StudyManage/>}></Route>
               <Route path='tutorHome/studentManage' element={<StudentManage/>}></Route>
               <Route path='tutorHome/studentManage/interviewPost' element={<InterviewPost/>}></Route>
-              <Route path=':home/myPage' element={<Mypage/>}/>
+              <Route path=':home/myPage' element={<TutorMypage/>}/>
             </Route>
 
             {/* 수강생 */}
@@ -121,7 +121,7 @@ function AppRoutes() {
               <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
               <Route path="stdHome/studySched" element={<StudentManage/>} />
               <Route path='stdHome/studySched/interviewPost' element={<InterviewPost/>}></Route>
-              <Route path=':home/myPage' element={<Mypage/>}/>
+              <Route path=':home/myPage' element={<StdMypage/>}/>
             </Route>
 
           </Route>
