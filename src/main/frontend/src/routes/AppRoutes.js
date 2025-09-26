@@ -99,7 +99,7 @@ function AppRoutes() {
               <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
               <Route path='adminHome/docuSet' element={<DocxSet/>}></Route>
               <Route path='adminHome/accountSet' element={<AccountSet/>}></Route>
-              <Route path=':home/myPage' element={<AdminMypage/>}/>
+              <Route path='adminHome/myPage' element={<AdminMypage/>}/>
             </Route>
 
             {/* 강사 */}
@@ -111,7 +111,7 @@ function AppRoutes() {
               <Route path='tutorHome/studySched' element={<StudyManage/>}></Route>
               <Route path='tutorHome/studentManage' element={<StudentManage/>}></Route>
               <Route path='tutorHome/studentManage/interviewPost' element={<InterviewPost/>}></Route>
-              <Route path=':home/myPage' element={<TutorMypage/>}/>
+              <Route path='tutorHome/myPage' element={<TutorMypage/>}/>
             </Route>
 
             {/* 수강생 */}
@@ -121,7 +121,7 @@ function AppRoutes() {
               <Route path='stdHome/board/createPost' element={<CreatePost/>}></Route>
               <Route path="stdHome/studySched" element={<StudentManage/>} />
               <Route path='stdHome/studySched/interviewPost' element={<InterviewPost/>}></Route>
-              <Route path=':home/myPage' element={<StdMypage/>}/>
+              <Route path='stdHome/myPage' element={<StdMypage/>}/>
             </Route>
 
           </Route>

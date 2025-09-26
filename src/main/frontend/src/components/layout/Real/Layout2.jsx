@@ -125,15 +125,15 @@ export default function Layout2() {
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
-          <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
+          <MyInfo label={user?.USER_NM} className="joinBtn" trigger="hover">
             <div
               className="subMenuList"
               onClick={() => {
-                if (user.USER_AUTHRT_SN === 2 || user.USER_AUTHRT_SN === 3) {
+                if (user?.USER_AUTHRT_SN === 2 || user?.USER_AUTHRT_SN === 3) {
                   navigate('/adminHome/myPage');
-                } else if (user.USER_AUTHRT_SN === 5) {
+                } else if (user?.USER_AUTHRT_SN === 5) {
                   navigate('/stdHome/myPage');
-                } else if (user.USER_AUTHRT_SN === 4) {
+                } else if (user?.USER_AUTHRT_SN === 4) {
                   navigate('/tutorHome/myPage');
                 } else {
                   navigate('/myPage');
