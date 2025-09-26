@@ -23,6 +23,7 @@ public class AuthCustomUserDetails implements UserDetails {
     private final String userTelno;  //  전화번호
     private final Long companySn;    //  회사 FK
     private final Long cohortSn;     //  기수 FK
+    private final Long userProfileImage; //
 
     public AuthCustomUserDetails(User user) {
         this.id = user.getId();
@@ -35,6 +36,7 @@ public class AuthCustomUserDetails implements UserDetails {
         this.userTelno = user.getUserTelno();
         this.companySn = user.getCompanySn();
         this.cohortSn = user.getCohortSn();
+        this.userProfileImage = user.getUserProfileImage();
     }
 
     private String mapRoleIdToName(Long roleId) {
@@ -57,6 +59,8 @@ public class AuthCustomUserDetails implements UserDetails {
     public String getUserTelno() { return userTelno; }
     public Long getCompanySn() { return companySn; }
     public Long getCohortSn() { return cohortSn; }
+    public Long getUserProfileImage() { return userProfileImage; }
+
 
     // ===== UserDetails 구현 =====
     @Override

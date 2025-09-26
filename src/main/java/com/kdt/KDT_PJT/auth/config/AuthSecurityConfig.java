@@ -91,8 +91,16 @@ public class AuthSecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/signup/**", "/api/email/code/**").permitAll()
-                        .requestMatchers("/api/files/**", "api/public/**").permitAll()
+                        .requestMatchers(
+                                "/api/login",
+                                "/api/signup/**",
+                                "/api/email/code/**",
+                                "/api/find-id",
+                                "/api/new-password/**",
+                                "/api/user-detail/**"
+                        ).permitAll()
+                        .requestMatchers("/api/files/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
@@ -121,9 +129,9 @@ public class AuthSecurityConfig {
     }
 
     // 커스텀 Firewall 등록
-//
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall httpFirewall) {
-//        return web -> web.httpFirewall(httpFirewall);
-//    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall httpFirewall) {
+        return web -> web.httpFirewall(httpFirewall);
+    }
 }

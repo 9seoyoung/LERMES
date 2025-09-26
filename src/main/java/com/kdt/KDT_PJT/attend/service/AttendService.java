@@ -35,7 +35,7 @@ public class AttendService {
     private EntityManager em;                          // 네이티브 쿼리 (exists)
 
     private static final ZoneId ZONE = ZoneId.of("Asia/Seoul");
-    private static final int DEFAULT_TTL = 480; // minutes
+    private static final int DEFAULT_TTL = 10; // minutes
 
     /** 코드 저장 키: cohort 기준으로 통일 */
     private String codeKey(Long cohortSn) {
@@ -287,9 +287,7 @@ public class AttendService {
                 } else if (checkIn.isAfter(attendStartTm) && checkOut.isBefore(attendEndTm)) {
                     // 지각 + 조기 퇴실 => 결석
                     status = "ABSENT";
-                } else if (work.compareTo(fullDay) >= 0) {
-                    status = "PRESENT";
-                } else if (checkOut.isBefore(attendEndTm)) {
+                }  else if (checkOut.isBefore(attendEndTm)) {
                     status = "EARLY_LEAVE";
                 } else if (checkIn.isAfter(attendStartTm)) {
                     status = "LATE";

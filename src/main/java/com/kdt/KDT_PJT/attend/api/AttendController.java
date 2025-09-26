@@ -1,12 +1,19 @@
 package com.kdt.KDT_PJT.attend.api;
 
 import com.kdt.KDT_PJT.attend.dto.*;
+import com.kdt.KDT_PJT.attend.service.AttendDocumentService;
 import com.kdt.KDT_PJT.attend.service.AttendService;
 import com.kdt.KDT_PJT.attend.service.DailyAttendTotService;
 import com.kdt.KDT_PJT.attend.support.ClientIpResolver;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -23,6 +30,7 @@ public class AttendController {
 
     private final AttendService attendService;
     private final DailyAttendTotService dailyAttendTotService;
+    private final AttendDocumentService attendDocumentService;
 
     /**
      * 강사: 출석코드 생성
@@ -115,6 +123,7 @@ public class AttendController {
         );
     }
 
+    /** 금일 학생들 출결 현황 조회 (강사 홈 페이지) */
     @GetMapping("/today/list")
     public ResponseEntity<SimpleResponse> getTodayStudentAttendance(Authentication auth) {
         List<StudentAttendanceDto> attendanceList = attendService.getTodayStudentAttendance(auth);
@@ -160,5 +169,86 @@ public class AttendController {
                         .data(rows)
                         .build()
         );
+    }
+
+    /** 학생 출결인정 요청 생성 */
+    @PostMapping("/adjust")
+    @PreAuthorize("hasRole('STUDENT')")
+    public SimpleResponse create(@Valid @RequestBody AttendAdjustCreateRequest req,
+                                 Authentication authentication) {
+        Long id = attendDocumentService.create(authentication, req);
+        return SimpleResponse.builder()
+                .ok(true)
+                .message("created")
+                .data(id)
+                .build();
+    }
+
+    /** 학생 내 요청 내역(페이징) */
+    @GetMapping("/adjust/my")
+    @PreAuthorize("hasRole('STUDENT')")
+    public SimpleResponse myList(
+            Authentication authentication,
+            @PageableDefault(size = 5, sort = "attendDcmntSn", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+
+        AuthCustomUserDetails me = requirePrincipal(authentication);
+        Page<AttendDocumentResponse> page = attendDocumentService.listMine(me.getId(), pageable);
+
+        return SimpleResponse.builder()
+                .ok(true)
+                .message("ok")
+                .data(page) // 프론트에서 data.content / data.totalPages 등으로 사용
+                .build();
+    }
+
+    // --- helpers ---
+    private AuthCustomUserDetails requirePrincipal(Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()
+                || !(auth.getPrincipal() instanceof AuthCustomUserDetails p)) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+        return p;
+    }
+
+    /** 관리자: 출석 인정 요청 전체 조회 (회사 기준) */
+    @GetMapping("/adjust/admin")
+//    @PreAuthorize("hasAnyRole('EMPLOYEE','TENANT_ADMIN')")
+    public SimpleResponse adminList(
+            @AuthenticationPrincipal AuthCustomUserDetails me,
+            @PageableDefault(size = 10, sort = "attendDcmntSn", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+
+        Page<AttendDocumentAdminResponse> page =
+                attendDocumentService.listAllByCohort(me.getCompanySn(), pageable);
+
+        return SimpleResponse.builder()
+                .ok(true)
+                .message("ok")
+                .data(page)
+                .build();
+    }
+
+    /**
+     * 관리자: 출석 인정 요청 전체 조회 (페이징)
+     * 예) GET /api/attend/adjust/admin?page=0&size=10
+     */
+    @GetMapping("/admin")
+//    @PreAuthorize("hasAnyRole('EMPLOYEE','TENANT_ADMIN')")
+    public Page<AttendDocumentResponse> adminList(@PageableDefault(size = 10, sort = "attendDcmntSn", direction = Sort.Direction.DESC) Pageable pageable) {
+        return attendDocumentService.findAllForAdmin(pageable);
+    }
+
+    @PutMapping("/adjust/{id}/status")
+//    @PreAuthorize("hasAnyRole('INSTRUCTOR','EMPLOYEE','TENANT_ADMIN')")
+    public SimpleResponse updateStatus(@PathVariable Long id,
+                                       @RequestBody Map<String, String> body) {
+        String status = body.get("status");
+        attendDocumentService.updateStatus(id, status);
+
+        return SimpleResponse.builder()
+                .ok(true)
+                .message("상태 변경 완료")
+                .build();
     }
 }

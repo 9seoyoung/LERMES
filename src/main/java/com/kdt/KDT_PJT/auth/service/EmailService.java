@@ -30,7 +30,7 @@ public class EmailService {
             MimeMessageHelper h = new MimeMessageHelper(mime, "UTF-8");
             h.setFrom(fromAddress, fromName);     // 하드코드 금지
             h.setTo(toEmail);
-            h.setSubject("[LERMES] 회원가입 인증코드");
+            h.setSubject("[LERMES] 인증코드");
             h.setText("""
                 <div style="font-family:system-ui,Arial;line-height:1.6">
                   <h2>이메일 인증코드</h2>
