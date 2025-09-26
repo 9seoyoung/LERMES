@@ -125,10 +125,33 @@ export default function Layout2() {
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
         :
-        <MyInfo label={user?.USER_NM} className="joinBtn" trigger="hover">
-          <div className= "subMenuList" onClick={() => {navigate(`myPage`);}}>마이페이지</div>
-          <div className= "subMenuList" onClick={()=> {signOut(); window.location.href = "/";}} >로그아웃</div>
-        </MyInfo>
+          <MyInfo label={user.USER_NM} className="joinBtn" trigger="hover">
+            <div
+              className="subMenuList"
+              onClick={() => {
+                if (user.USER_AUTHRT_SN === 2 || user.USER_AUTHRT_SN === 3) {
+                  navigate('/adminHome/myPage');
+                } else if (user.USER_AUTHRT_SN === 5) {
+                  navigate('/stdHome/myPage');
+                } else if (user.USER_AUTHRT_SN === 4) {
+                  navigate('/tutorHome/myPage');
+                } else {
+                  navigate('/myPage');
+                }
+              }}
+            >
+              마이페이지
+            </div>
+            <div
+              className="subMenuList"
+              onClick={() => {
+                signOut();
+                window.location.href = '/';
+              }}
+            >
+              로그아웃
+            </div>
+          </MyInfo>
         }
       </header>
       <div className="layout_content">
