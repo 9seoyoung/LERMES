@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getUserDetail, saveUserDetail } from '../../../auth/authService';
 import { toast } from 'react-toastify';
-// import '../../../styles/MyInfo.css';
+import '../../../styles/MyInfo.css';
 
 const MyInfoForm = () => {
   const [form, setForm] = useState({
