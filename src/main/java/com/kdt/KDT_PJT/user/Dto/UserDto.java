@@ -20,8 +20,8 @@ public class UserDto {
     private Long ogdpCoSn;
     private Long ogdpCohortSn;
 
-
-    public User toEntity() {
-        return new User(userSn, userNm, userPswd,userEmlAddr,userActvtnYn, userAuthrtSn, userTelno, ogdpCoSn, ogdpCohortSn);
-    }
+//
+//    public User toEntity() {
+//        return new User(userSn, userNm, userPswd,userEmlAddr,userActvtnYn, userAuthrtSn, userTelno, ogdpCoSn, ogdpCohortSn);
+//    }
 }

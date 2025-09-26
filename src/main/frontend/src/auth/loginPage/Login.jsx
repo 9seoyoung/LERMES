@@ -62,7 +62,7 @@ export default function Login() {
             {loading ? '로그인 중...' : '로그인'}
           </button>
           <hr />
-          <Link to="/signup" className="problemBox">
+          <Link to="/welcome/generaljoin" className="problemBox">
             아이디가 없어요
           </Link>
           <Link to="/find" className="findIdPw">
