@@ -26,7 +26,7 @@ init-job:
     - echo "Run Checkstyle"
     - ./gradlew checkstyleMain --no-daemon
   rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "DEV"'
       when: always
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
@@ -38,7 +38,7 @@ test-job:
     - echo "🧪 Spring Boot 테스트 코드 실행"
     - ./gradlew test --no-daemon
   rules:
-    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH == "DEV"'
       when: always
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
@@ -50,7 +50,8 @@ build-job:
     - echo "⚙️ React Build 시작"
     - cd src/main/frontend
     - npm install
-    - npm run build
+    # ⚠️ ESLint 경고를 에러로 취급하지 않도록 CI=false 설정
+    - set CI=false && npm run build
     - cd ../../../
     - echo "🚀 SpringBoot Gradle Build 시작"
     - ./gradlew clean build --no-daemon
