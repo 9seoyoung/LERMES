@@ -70,7 +70,8 @@ public class AuthSecurityConfig {
        c.setAllowedOrigins(List.of(
                "http://localhost:3000",
                "http://127.0.0.1:3000",
-               "http://192.168.0.14:3000"
+               "http://192.168.0.14:3000",
+               "http://onopco2.iptime.org:3000"
        ));
        c.setAllowCredentials(true);
        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
