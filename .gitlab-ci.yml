@@ -50,8 +50,8 @@ build-job:
     - echo "⚙️ React Build 시작"
     - cd src/main/frontend
     - npm install
-    # ⚠️ ESLint 경고를 에러로 취급하지 않도록 CI=false 설정
-    - set CI=false && npm run build
+    # PowerShell 환경에서 CI=false 설정
+    - $env:CI="false"; npm run build
     - cd ../../../
     - echo "🚀 SpringBoot Gradle Build 시작"
     - ./gradlew clean build --no-daemon
