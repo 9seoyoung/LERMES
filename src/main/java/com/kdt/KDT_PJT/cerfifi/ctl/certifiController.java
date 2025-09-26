@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class certifiController {
 
-    @PostMapping
-    public ResponseEntity<> createCalendar(
-            @AuthenticationPrincipal AuthCustomUserDetails me,
-            @RequestBody CalendarRequestDTO req
-    ) {
-        ResponseEntity<>
-    }
+//    @PostMapping
+//    public ResponseEntity<> createCalendar(
+//            @AuthenticationPrincipal AuthCustomUserDetails me,
+//            @RequestBody CalendarRequestDTO req
+//    ) {
+//        ResponseEntity<>
+//    }
 }
