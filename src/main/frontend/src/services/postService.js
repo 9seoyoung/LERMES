@@ -57,7 +57,6 @@ export const readInterviewList = ({ roleType, cohortSn }) => {
   return api.get(url); // filter는 쓰면 되고, 안 쓰면 백에서 무시 가능
 };
 
-
 /**
  * 면담 수정(확정) API 
  * @param {Number} itvSn 면담신청SN
@@ -94,3 +93,11 @@ export const readPostlistByfilter = ({filter, effectiveSn}) => api.get('/posts/l
  * @returns {Object} 게시글 내용
  */
 export const readPostByPostSn = ({postSn, effectiveSn}) => api.get('/posts/list/{filter}',{params: {postSn, effectiveSn}});
+
+
+/**
+ * 수강생 권한 - 학습 일정 메뉴, 필터별 API요청
+ * @param {String} url API요청 URL
+ * @returns {Array<Objects>} 전체 / 공식 / 내 일정/ 일지 / 면담 / 임시저장에 해당하는 게시물 목록
+ */
+export const callStudyPlanListByFilter = ({url, filter, effectiveSn}) => api.get(`${url}`, {params: {filter, effectiveSn}})

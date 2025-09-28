@@ -228,7 +228,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .checkInBtn {
   /* background-color: #62b6ff; */
   /* color: #f6f6f6; */
-  background-color: var(--color-secondary);
+  background-color: var(--color-checkin-btn);
   color: var(--color-light-bg);
   border-radius: 18px;
   width: 180px;
@@ -529,7 +529,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .ListHeader {
   /* background-color: #e1f1ff; */
-  background-color: var(--color-secondary-light);
+  background-color: var(--color-checkin-title);
   display: flex;
   gap: 16px;
   border-radius: 6px;
