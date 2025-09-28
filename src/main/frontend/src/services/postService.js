@@ -88,12 +88,14 @@ export const readAllOfPostList = ({effectiveSn}) => api.get('/posts/all', {param
  */
 export const readPostlistByfilter = ({filter, effectiveSn}) => api.get('/posts/list/{filter}',{params: {filter, effectiveSn}});
 
+
+
 /**
  * 게시글 상세보기
  * @param {Number} postSn 게시글 시리얼번호
  * @returns {Object} 게시글 내용
  */
-export const readPostByPostSn = ({postSn, effectiveSn}) => api.get('/posts/list/{filter}',{params: {postSn, effectiveSn}});
+export const readPostByPostSn = ({postSn, effectiveSn, filter}) => api.get(`/posts/list/${filter}`,{params: {postSn, effectiveSn}});
 
 
 /**

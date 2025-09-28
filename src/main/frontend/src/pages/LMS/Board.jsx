@@ -9,6 +9,10 @@ export default function Board(){
     const navigate = useNavigate();
     const [selectedIdx, setSelected] = useState(0) 
     const filterArr = ["전체", "공지", "자료실", "설문", "FAQ", "Q&A", "임시 저장"]
+    const [pullList, setPullList] = useState([]);
+    const [columnData, setColumnData] = useState([]);
+    const [postKey, setPostKey] = useState("");
+    const [whereTogo, setWhereToGo] = useState("");
 
     return (
         <div className="boardPage">
@@ -24,15 +28,16 @@ export default function Board(){
                 </div>
             </div>
             <div className="BigListBox">
-                <ul className={uiStyle.ListHeader}>
-                    <li>순번</li>
-                    <li>유형</li>
-                    <li>제목</li>
-                    <li>작성일</li>
-                    <li>작성자</li>
-                    <li>조회수</li>
-                </ul>
-                <ListTable></ListTable>
+                <ListTable
+                tableHead={['순번', '유형', '제목', '작성일', '작성자', '조회수']}
+                columnData={columnData}
+                apiData={pullList}
+                // 문자열로 지정
+                gridTemplate="0.5fr 1fr 5fr 1.25fr 1fr 1fr"
+                gap="12px"
+                postKey={postKey}
+                whereTogo={whereTogo}
+              /> 
             </div>
         </div>
     );

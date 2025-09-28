@@ -36,7 +36,7 @@ public class PostController {
     }
 
     // 게시글 목록 조회
-    @GetMapping
+    @GetMapping("/list/{filter}")
     public ResponseEntity<List<PostResponseDto>> getPosts(
             @AuthenticationPrincipal AuthCustomUserDetails auth,
             @RequestParam(required = false) Long cohortSn,   // 기수 필터
