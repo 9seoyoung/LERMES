@@ -3,16 +3,55 @@ import { useNavigate } from "react-router-dom";
 import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
 import FilterList from "../../components/ui/FilterList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { BOARD_MENU_FILTER_COLUMNDATA } from "../../utils/studentBoardFilter";
+import { callBoardList } from "../../services/postService";
+import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
+import { useAccount } from "../../auth/AuthContext";
+import { toast } from "react-toastify";
+import { formatDate } from "../../utils/dateformat";
 
 export default function Board(){
     const navigate = useNavigate();
+    const {effectiveSn} = useSelectedCompany();
+    const {user} = useAccount();
     const [selectedIdx, setSelected] = useState(0) 
     const filterArr = ["전체", "공지", "자료실", "설문", "FAQ", "Q&A", "임시 저장"]
     const [pullList, setPullList] = useState([]);
     const [columnData, setColumnData] = useState([]);
     const [postKey, setPostKey] = useState("");
     const [whereTogo, setWhereToGo] = useState("");
+
+    //게시물 목록 불러오기
+    useEffect(() => {
+        const cohortSn = user?.USER_COHORT_SN;
+        const bbsType = filterArr[selectedIdx];
+        console.log(filterArr[selectedIdx]);
+        setColumnData(BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
+        
+        const params = {
+        }
+
+        if(cohortSn != null) params.cohortSn = cohortSn;
+        if(bbsType != "전체") params.bbsType = bbsType;
+        // if(effectiveSn != null) params.effectiveSn = effectiveSn
+
+        console.log(user);
+
+        (async () => {
+            try{
+                const {data} = await callBoardList(params);
+                console.log(data);
+                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt),}));
+                setPullList(formattedData);
+
+                toast.success("정보 불러옴");
+            } catch(err) {
+                toast.error(err.message);
+            }
+        }
+    )();
+    }, [selectedIdx])
 
     return (
         <div className="boardPage">

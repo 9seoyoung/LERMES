@@ -5,29 +5,31 @@ import { readInterview } from "../services/postService"
 export const STUDENT_BOARD_MENU_FILTER = {
     // key는 선택한 필터의 인덱스 (=selectedIdx)
     0: "", // 전체
-    1: "공지", // 공식
-    2: "", //내 일정
-    3: "", //학습 일지
-    4: "/interview/my-requests", //면담
-    5: "" //임시저장
+    1: "공지", // 공지
+    2: "자료실", //자료실
+    3: "설문", //설문
+    4: "FAQ", //FAQ
+    5: "문의", //Q&A
+    6: "임시저장" //임시저장
 }
 
-export const MENU_FILTER_COLUMNDATA = {
-    0: [],
-    1: [],
-    2: [],
-    3: [],
-    4: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
-    5: []
+export const BOARD_MENU_FILTER_COLUMNDATA = {
+    0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    2: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    3: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    4: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    5: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"]
 }
 
 export const SELECT_POST_SN_KEY = {
-    0: "",
-    1: "",
-    2: "",
-    3: "",
-    4: "itvSn",
-    5: ""
+    0: "postSn",
+    1: "postSn",
+    2: "postSn",
+    3: "postSn",
+    4: "postSn",
+    5: "postSn"
 }
 
 export const SELECT_DETAIL_PAGE_PATH = {

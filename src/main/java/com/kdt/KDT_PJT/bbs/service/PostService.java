@@ -51,7 +51,12 @@ public class PostService {
 
     // 게시글 목록 조회
     public List<PostResponseDto> getPosts(AuthCustomUserDetails auth, Long filterCohortSn, String filterBbsType) {
-        List<PostResponseDto> posts = postMapper.findAll();
+//        List<PostResponseDto> posts = postMapper.findAll();
+
+        List<PostResponseDto> posts = postMapper.findByFilters(
+                filterCohortSn,
+                filterBbsType
+        );
 
         return posts.stream()
                 .filter(post -> canAccessPost(post, auth, filterCohortSn, filterBbsType))

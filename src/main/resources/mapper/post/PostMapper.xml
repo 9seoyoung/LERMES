@@ -60,6 +60,13 @@
         FROM TB_POST p
                  JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = 0
+            <if test="cohortSn != null">
+                AND p.COHORT_SN = #{cohortSn}
+            </if>
+            <if test="bbsType != null and bbsType != ''">
+                AND p.BBS_TYPE = #{bbsType}
+            </if>
+        ORDER BY p.POST_FRST_WRT_DT DESC
     </select>
 
     <!-- 수정 -->
