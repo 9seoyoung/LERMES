@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import FilterList from "../../../components/ui/FilterList";
 import { useAccount } from "../../../auth/AuthContext";
+import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { hortlistByCpSn } from "../../../services/cohortService";
 import TodayAttendList from "../../../components/layout/inho/TodayAttendList";
 import ScheduleList from "../../../components/ui/ScheduleList";
@@ -18,6 +19,7 @@ function formatYMD(d) {
 function GroupSet() {
   const navigate = useNavigate();
   const { user } = useAccount();
+  const {effectiveSn} = useSelectedCompany();
 
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(formatYMD(new Date())); // 문자열로 시작
@@ -77,7 +79,9 @@ function formatYMDfrom(year, month /* 0-based */, day) {
         const res = await hortlistByCpSn(Number(coSn));
         console.log(`${res.data}-회사SN으로 과정리스트 불러오기API 응답 <<<<<<<<<<<<<<<<<<<`)
         // if (!ignore) setHortList(res?.data ?? []);
-        if (!ignore) setHortList(res?.data || []);
+        if (!ignore) {
+          setHortList(res?.data.cohorts );
+        }
         console.log(`${hortlist}-회사SN으로 상태에 저장한 리스트`)
       } catch (e) {
         console.error("[GroupSet] hortlistByCpSn error:", e);
@@ -91,7 +95,7 @@ function formatYMDfrom(year, month /* 0-based */, day) {
 
   // 필터 배열
   useEffect(() => {
-    const names = (hortlist ?? []).map(h => h?.cohortNm).filter(Boolean);
+    const names = (hortlist || []).map(h => h?.cohortNm).filter(Boolean);
     setFilterArr(names);
   }, [hortlist]);
 

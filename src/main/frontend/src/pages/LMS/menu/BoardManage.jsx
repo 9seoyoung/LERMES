@@ -7,11 +7,13 @@ import FilterList from "../../../components/ui/FilterList";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
 import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter,matchedPostAPIAdminBoardFilter } from "../../../utils/readPageTypeReturn";
 import { toast } from "react-toastify";
+import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 
 export default function BoardManage(){
     const navigate = useNavigate();
     const [selectedIdx, setSelected] = useState(0)
     const {user} = useAccount();
+    const {effectiveSn} = useSelectedCompany();
     const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "임시저장"]
     // const [filter, setFilter] = useState("");
     const [whereTogo, setWhereToGo] = useState("/");
@@ -77,7 +79,7 @@ export default function BoardManage(){
             <div className="filterList">
 
                 <div className="ftList_L">
-                    <GroupDropdown coSn={user.USER_OGDP_CO_SN} setCohortSn={setCohortSn}></GroupDropdown>
+                    <GroupDropdown coSn={effectiveSn} setCohortSn={setCohortSn}></GroupDropdown>
                     <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </div>
 
