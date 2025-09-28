@@ -22,7 +22,6 @@ export default function BoardManage(){
     
     const filter = filterArr[selectedIdx];
     const path = useMemo(() => matchedPathAdminBoardFilter(filter), [filter]);
-    const handlePostReader = useMemo(() => matchedPostAPIAdminBoardFilter(filter), [filter]);
 
     const splitWroteDate = (v) => v.split("T", 1);
 
@@ -99,7 +98,6 @@ export default function BoardManage(){
                     gridTemplate="0.5fr 0.5fr 5fr 1fr 1fr 0.5fr "
                     gap="12px"
                     whereTogo = {path}
-                    handlePostReader = {handlePostReader}
                 />
             </div>
         </div>

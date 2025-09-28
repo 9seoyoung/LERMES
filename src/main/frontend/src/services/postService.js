@@ -43,7 +43,7 @@ export function createInterviewMemo(body) {
  * @param {Number} effectiveSn LMS 회사 시리얼 넘버 고정값 => 상준이가 수퍼메인페이지 API 만들고 나면 정해질 예정
  * @returns {Object} itvSn 에 해당하는 면담신청 데이터
  */
-export const readInterview = (itvSn) => api.get(`/read/${itvSn}`);
+export const readInterview = (itvSn) => api.get(`interview/read/${itvSn}`);
 
   // 면담신청 리스트 조회(관리자)
 // postService.js
@@ -94,3 +94,11 @@ export const readPostlistByfilter = ({filter, effectiveSn}) => api.get('/posts/l
  * @returns {Object} 게시글 내용
  */
 export const readPostByPostSn = ({postSn, effectiveSn}) => api.get('/posts/list/{filter}',{params: {postSn, effectiveSn}});
+
+
+/**
+ * 수강생 권한 - 학습 일정 메뉴, 필터별 API요청
+ * @param {String} url API요청 URL
+ * @returns {Array<Objects>} 전체 / 공식 / 내 일정/ 일지 / 면담 / 임시저장에 해당하는 게시물 목록
+ */
+export const callStudyPlanListByFilter = ({url, filter, effectiveSn}) => api.get(`${url}`, {params: {filter, effectiveSn}})

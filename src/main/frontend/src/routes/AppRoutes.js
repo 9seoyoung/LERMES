@@ -50,6 +50,8 @@ import Layout2 from '../components/layout/Real/Layout2.jsx';
 // 여기 추가
 import FindId from '../auth/loginPage/FindId.jsx';
 import FindPw from '../auth/loginPage/FindPw.jsx';
+import StudyPlan from '../pages/LMS/menu/StudyPlan.jsx';
+import InterviewRead from '../pages/LMS/readAndEdit/InterviewRead.jsx';
 
 function AppRoutes() {
   return (
@@ -155,15 +157,10 @@ function AppRoutes() {
             <Route element={<RoleRoute roles={[1, 5]} />}>
               <Route path="stdHome" element={<StdHome />} />
               <Route path="stdHome/board" element={<Board />} />
-              <Route
-                path="stdHome/board/createPost"
-                element={<CreatePost />}
-              ></Route>
-              <Route path="stdHome/studySched" element={<StudentManage />} />
-              <Route
-                path="stdHome/studySched/interviewPost"
-                element={<InterviewPost />}
-              ></Route>
+              <Route path="stdHome/board/createPost" element={<CreatePost />} />
+              <Route path="stdHome/studySched" element={<StudyPlan />} />
+              <Route path="stdHome/studySched/interviewPost" element={<InterviewPost />} />
+              <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />
               <Route path="stdHome/myPage" element={<StdMypage />} />
             </Route>
           </Route>

@@ -81,7 +81,7 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
         type={type}
         className={`${styles.input} ${addStyle}`}
         disabled={disabled}
-        id={`${inputId}-${name}`} autoComplete='false'name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+        id={`${inputId}-${name}`} autoComplete={ "off"} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
       <button
         type="button"
         className={styles2.iconBtn}
@@ -104,7 +104,7 @@ export function FormInput(props) {
   return (
     <div className={styles.inputSet}>
       <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addLabelStyle}`}>{labelNm}</label>
-      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={false} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={"off"} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }
