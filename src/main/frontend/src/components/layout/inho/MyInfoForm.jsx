@@ -14,8 +14,8 @@ const MyInfoForm = () => {
   });
   const [loading, setLoading] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // 카카오 주소 API 스크립트 로드
   useEffect(() => {
     if (window.daum && window.daum.Postcode) {
       setScriptLoaded(true);
@@ -29,7 +29,6 @@ const MyInfoForm = () => {
     document.body.appendChild(script);
   }, []);
 
-  // 내 상세 정보 조회
   const fetchMyDetail = async () => {
     try {
       setLoading(true);
@@ -56,38 +55,30 @@ const MyInfoForm = () => {
     fetchMyDetail();
   }, []);
 
-  // input 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 카카오 주소 검색
   const openPostcode = () => {
     if (!scriptLoaded) {
       toast.error('주소 검색 모듈이 아직 로드되지 않았습니다.');
       return;
     }
-
     new window.daum.Postcode({
       oncomplete: function (data) {
         setForm((prev) => ({
           ...prev,
-          address: data.roadAddress, // 선택된 도로명 주소
+          address: data.roadAddress,
         }));
       },
     }).open();
   };
 
-  // 저장
   const handleSave = async () => {
     try {
       setLoading(true);
-      const payload = {
-        ...form,
-      };
-
-      const res = await saveUserDetail(payload);
+      const res = await saveUserDetail(form);
       if (res) {
         toast.success('저장 성공');
         setForm({
@@ -115,95 +106,103 @@ const MyInfoForm = () => {
         <div>상세 정보</div>
         <button
           className="myInfoButton"
-          onClick={handleSave}
-          disabled={loading}
+          onClick={() => setOpen((prev) => !prev)}
         >
-          {loading ? '저장 중...' : '저장'}
+          {open ? '접기 ▲' : '펼치기 ▼'}
         </button>
       </h2>
 
-      <div className="myInfoForm">
-        <div className="myInfoRow">
-          <span className="myInfoLabel">생년월일</span>
-          <input
-            type="date"
-            name="birth"
-            value={form.birth}
-            onChange={handleChange}
-            className="myInfoInput"
-          />
-        </div>
+      {open && (
+        <div className="myInfoForm">
+          <div className="myInfoRow">
+            <span className="myInfoLabel">생년월일</span>
+            <input
+              type="date"
+              name="birth"
+              value={form.birth}
+              onChange={handleChange}
+              className="myInfoInput"
+            />
+          </div>
 
-        <div className="myInfoRow">
-          <span className="myInfoLabel">주소</span>
-          <input
-            type="text"
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            className="myInfoInput"
-            placeholder="주소 검색 버튼을 눌러주세요"
-            readOnly
-          />
-          <button
-            type="button"
-            onClick={openPostcode}
-            className="myInfoAddressButton"
-            disabled={!scriptLoaded}
-          >
-            주소 검색
-          </button>
-        </div>
+          <div className="myInfoRow">
+            <span className="myInfoLabel">주소</span>
+            <input
+              type="text"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              className="myInfoInput"
+              placeholder="주소 검색 버튼을 눌러주세요"
+              readOnly
+            />
+            <button
+              type="button"
+              onClick={openPostcode}
+              className="myInfoAddressButton"
+              disabled={!scriptLoaded}
+            >
+              주소 검색
+            </button>
+          </div>
 
-        <div className="myInfoRow">
-          <span className="myInfoLabel">상세 주소</span>
-          <input
-            type="text"
-            name="addressDetail"
-            value={form.addressDetail}
-            onChange={handleChange}
-            className="myInfoInput"
-            placeholder="상세 주소 입력"
-          />
-        </div>
+          <div className="myInfoRow">
+            <span className="myInfoLabel">상세 주소</span>
+            <input
+              type="text"
+              name="addressDetail"
+              value={form.addressDetail}
+              onChange={handleChange}
+              className="myInfoInput"
+              placeholder="상세 주소 입력"
+            />
+          </div>
 
-        <div className="myInfoRow">
-          <span className="myInfoLabel">전공</span>
-          <input
-            type="text"
-            name="major"
-            value={form.major}
-            onChange={handleChange}
-            className="myInfoInput"
-          />
-        </div>
+          <div className="myInfoRow">
+            <span className="myInfoLabel">전공</span>
+            <input
+              type="text"
+              name="major"
+              value={form.major}
+              onChange={handleChange}
+              className="myInfoInput"
+            />
+          </div>
 
-        <div className="myInfoRow">
-          <span className="myInfoLabel">보유자격</span>
-          <input
-            type="text"
-            name="cert"
-            value={form.cert}
-            onChange={handleChange}
-            className="myInfoInput"
-          />
-        </div>
+          <div className="myInfoRow">
+            <span className="myInfoLabel">보유자격</span>
+            <input
+              type="text"
+              name="cert"
+              value={form.cert}
+              onChange={handleChange}
+              className="myInfoInput"
+            />
+          </div>
 
-        <div className="myInfoRow">
-          <span className="myInfoLabel">보유기술</span>
-          <input
-            type="text"
-            name="skills"
-            value={form.skills}
-            onChange={handleChange}
-            className="myInfoInput"
-          />
-        </div>
-      </div>
+          <div className="myInfoRow">
+            <span className="myInfoLabel">보유기술</span>
+            <input
+              type="text"
+              name="skills"
+              value={form.skills}
+              onChange={handleChange}
+              className="myInfoInput"
+            />
+          </div>
 
-      {/* <button className="myInfoButton" onClick={handleSave} disabled={loading}>
-        {loading ? '저장 중...' : '저장'}
-      </button> */}
+          {/* ✅ 저장 버튼은 폼 맨 하단 오른쪽 */}
+          <div className="myInfoActions">
+            <button
+              className="myInfoButton"
+              onClick={handleSave}
+              disabled={loading}
+            >
+              {loading ? '저장 중...' : '저장'}
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

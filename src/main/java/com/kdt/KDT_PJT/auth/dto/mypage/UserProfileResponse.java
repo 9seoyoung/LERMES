@@ -14,4 +14,5 @@ public class UserProfileResponse {
 
     private String courseName;  // 과정명 (Cohort에서 가져옴)
     private String cohortName;  // 소속 그룹 (예: 10기)
+    private Long userProfileImage; // 유저 프로필 사진
 }

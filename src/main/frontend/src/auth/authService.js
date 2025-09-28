@@ -48,3 +48,15 @@ export const getUserDetail = () => ok(api.get('/user-detail'));
 
 // 유저 프로필 조회
 export const getUserProfile = () => ok(api.get('/user-profile'));
+
+// 프로필 사진 fileSn 반영 (DB USER_PROFILE_IMAGE 업데이트)
+export const updateUserProfilePhoto = (fileSn) => {
+  return api
+    .post('/user-profile/photo', { fileSn }) // JSON body 전송
+    .then((res) => res.data);
+};
+
+// 이메일 / 휴대폰 업데이트
+export const updateUserProfileInfo = (payload) => {
+  return api.post('/user-profile/info', payload).then((res) => res.data);
+};

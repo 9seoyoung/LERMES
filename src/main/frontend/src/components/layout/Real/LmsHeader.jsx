@@ -19,7 +19,7 @@ import {
 
 /** 공통 헤더 */
 export default function LmsHeader({ navToggle, setNavToggle }) {
-  const {fixedSn} = useSelectedCompany();
+  const { fixedSn } = useSelectedCompany();
   const { user } = useAccount();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -60,9 +60,10 @@ export default function LmsHeader({ navToggle, setNavToggle }) {
             console.log(user);
           }}
         >
-          {((user?.USER_AUTHRT_SN === 1 || user?.USER_AUTHRT_SN === 2) && (fixedSn == user?.USER_OGDP_CO_SN)) && (
-            <button className="tempBtn basicBtn">로고 변경</button>
-          )}
+          {(user?.USER_AUTHRT_SN === 1 || user?.USER_AUTHRT_SN === 2) &&
+            fixedSn == user?.USER_OGDP_CO_SN && (
+              <button className="tempBtn basicBtn">로고 변경</button>
+            )}
           <h2>{user?.CO_NM || user?.CO_SN}</h2>
         </div>
       </div>
