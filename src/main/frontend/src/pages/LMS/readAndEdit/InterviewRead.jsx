@@ -40,19 +40,22 @@ function InterviewRead() {
     mento: "-", // 담당자
     place: "", //장소
     comment: "", //기타 요청(수신측)
-    files: files
+    files: files,
+    viewCnt: 0,
+    itvSn: 0
   });
 
   useEffect(()=>{
     (async () => {
       try {
-        const { res }  = await readInterview(postSn);
-        console.log(res.data);
+        const {data}  = await readInterview(postSn);
+        toast.success("불러오기 성공");
+        setFormData((prev)=> ({...prev, itvAplyCn: data.itvAplyCn, itvAplyTtl: data.itvAplyTtl, itvAplcntNm: data.itvAplcntNm, itvSn: data.itvSn, viewCnt: data.viewCnt}))
       } catch(err) {
         toast.error(err);
       }
     })();
-  }, [postSn])
+  }, [])
 
   const changeType = (nextType) => {
     setPostType(nextType);                  // 라벨에만 쓰고 싶으면 유지, 아니면 없애도 됨
@@ -109,7 +112,7 @@ function InterviewRead() {
     <div className="boardPage">
       <h2>수강생 관리</h2>
       <div className="limitedHeightBox" style={{height: "706px"}}>
-        <h4 style={{ fontWeight: "500" }}>{formData.type} 등록하기</h4>
+        <h4 style={{ fontWeight: "500" }}>면담 신청 내역</h4>
 
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
           <div className="formArea_L">

@@ -43,7 +43,7 @@ export function createInterviewMemo(body) {
  * @param {Number} effectiveSn LMS 회사 시리얼 넘버 고정값 => 상준이가 수퍼메인페이지 API 만들고 나면 정해질 예정
  * @returns {Object} itvSn 에 해당하는 면담신청 데이터
  */
-export const readInterview = (itvSn) => api.get(`/read/${itvSn}`);
+export const readInterview = (itvSn) => api.get(`interview/read/${itvSn}`);
 
   // 면담신청 리스트 조회(관리자)
 // postService.js
@@ -56,6 +56,7 @@ export const readInterviewList = ({ roleType, cohortSn }) => {
     : `${base}/${cohortSn}`;
   return api.get(url); // filter는 쓰면 되고, 안 쓰면 백에서 무시 가능
 };
+
 
 /**
  * 면담 수정(확정) API 

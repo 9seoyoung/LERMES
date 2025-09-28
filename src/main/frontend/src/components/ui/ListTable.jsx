@@ -45,7 +45,7 @@ export default function ListTable({
             <li key={i} className={`${styles.row} ${styles.gridRow}`}
                 onClick={() => {
                     console.log(whereTogo);
-                    navigate(`${whereTogo}/${row.postKey}`);
+                    navigate(`${whereTogo}/${row[postKey]}`);
                 }} 
             >
                 <div key={`no${i}`} className={styles.cell}>{i + 1}</div>

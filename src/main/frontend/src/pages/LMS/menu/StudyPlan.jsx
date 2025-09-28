@@ -16,20 +16,17 @@ function StudyManage() {
     const [pullList, setPullList] = useState([]);
     const [columnData, setColumnData] = useState([]);
     const [postKey, setPostKey] = useState("");
-    const [detailApi, setDetailApi] = useState(null);
     const [whereTogo, setWhereToGo] = useState("");
     
   useEffect(() => {
     const url = STUDENT_STUDY_MENU_FILTER[selectedIdx];
     const column = MENU_FILTER_COLUMNDATA[selectedIdx];
     const postSn = SELECT_POST_SN_KEY[selectedIdx];
-    const readDetails = SELECT_DETAIL_API[selectedIdx];
     const path = SELECT_DETAIL_PAGE_PATH[selectedIdx];
 
 
     setColumnData(column);
     setPostKey(postSn);
-    setDetailApi(readDetails);
     setWhereToGo(path);
     console.log(columnData);
     (async () => {
