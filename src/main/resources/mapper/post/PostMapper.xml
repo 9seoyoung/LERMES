@@ -60,12 +60,35 @@
         FROM TB_POST p
                  JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = 0
-            <if test="cohortSn != null">
-                AND p.COHORT_SN = #{cohortSn}
-            </if>
-            <if test="bbsType != null and bbsType != ''">
-                AND p.BBS_TYPE = #{bbsType}
-            </if>
+        ORDER BY p.POST_FRST_WRT_DT DESC
+    </select>
+
+    <!-- 목록 조회 -->
+    <select id="findByFilters" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
+        SELECT
+        p.POST_SN,
+        p.BBS_NM,
+        p.POST_TTL,
+        p.POST_CN,
+        p.POST_WRTR_SN,
+        u.USER_NM AS postWriterName,
+        p.POST_FRST_WRT_DT,
+        p.POST_LAST_MDFCN_DT,
+        p.DEL_YN,
+        p.CO_SN,
+        p.COHORT_SN,
+        p.FORM_UUID,
+        p.BBS_TYPE,
+        p.BBS_SCOPE
+        FROM TB_POST p
+        JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
+        WHERE p.DEL_YN = 0
+        <if test="cohortSn != null">
+            AND p.COHORT_SN = #{cohortSn}
+        </if>
+        <if test="bbsType != null and bbsType != ''">
+            AND p.BBS_TYPE = #{bbsType}
+        </if>
         ORDER BY p.POST_FRST_WRT_DT DESC
     </select>
 

@@ -4,8 +4,8 @@ import { readInterview } from "../services/postService"
 
 export const STUDENT_BOARD_MENU_FILTER = {
     // key는 선택한 필터의 인덱스 (=selectedIdx)
-    0: "", // 전체
-    1: "공지", // 공지
+    0: null, // 전체
+    1: "NOTICE", // 공지
     2: "자료실", //자료실
     3: "설문", //설문
     4: "FAQ", //FAQ
