@@ -1,8 +1,9 @@
 package com.kdt.KDT_PJT.calendar.service;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO;
+import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
 import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
+import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class CalendarService {
     CmmnDao dao; //공용 DAO
 
     @Transactional
-    public CalendarDetailResponseDTO createCalendar(AuthCustomUserDetails me, CalendarRequestDTO req) {
+    public CalendarListResponseDTO createCalendar(AuthCustomUserDetails me, CalendarRequestDTO req) {
 
         // 0) 인증 확인
         if (me == null) {
@@ -88,18 +90,25 @@ public class CalendarService {
         Integer userSn = userSnNum == null ? null : userSnNum.intValue();
 
         // 5) 재조회 없이 응답 구성 (지금 m에 값 다 있으니 그대로 사용)
-        return CalendarDetailResponseDTO.builder()
+        return CalendarListResponseDTO.builder()
                 .calSn(calSn)
-                .cohortSn((Integer) m.get("COHORT_SN"))
+//                .cohortSn((Integer) m.get("COHORT_SN"))   //필요없을거같아서DTO에서뺌
                 .eventBgngDt((LocalDateTime) m.get("EVENT_BGNG_DT"))
                 .eventEndDt((LocalDateTime) m.get("EVENT_END_DT"))
                 .eventNm((String) m.get("EVENT_NM"))
-                .rmrkCn((String) m.get("RMRK_CN"))
-                .userSn(userSn)
+//                .rmrkCn((String) m.get("RMRK_CN"))        //필요없을거같아서DTO에서뺌
+//                .userSn(userSn)                           //필요없을거같아서DTO에서뺌
                 .eventRegDt((LocalDateTime) m.get("EVENT_REG_DT"))
                 .prvtYn((Byte) m.get("PRVT_YN"))
-                .coSn((Integer) m.get("CO_SN"))
+//                .coSn((Integer) m.get("CO_SN"))           //필요없을거같아서DTO에서뺌
                 .build();
+    }
+    public List<CalendarSimpleResponseDTO> getCalendarForDay(CalendarSimpleResponseDTO params){
+        return dao.selectList("selectSimpleByRange",params);
+    }
+
+    public List<CalendarSimpleResponseDTO> getCalendarForMonth(CalendarSimpleResponseDTO params){
+        return dao.selectList("selectSimpleByRange",params);
     }
 
 

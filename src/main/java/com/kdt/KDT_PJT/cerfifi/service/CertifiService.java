@@ -1,8 +1,5 @@
 package com.kdt.KDT_PJT.cerfifi.service;
 
-import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
 import com.kdt.KDT_PJT.cerfifi.dto.CertifiTemplateRequestDTO;
 import com.kdt.KDT_PJT.cerfifi.exception.CertifiDuplicateException;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
@@ -25,6 +22,7 @@ public class CertifiService {
         try {
             // DB에 등록 시도 (CmmnDao를 통해 MyBatis 실행)
             dao.insert("com.kdt.mapper.certifi.createCertifiTemplate", params);
+            System.out.println("params = " + params);
 
         } catch (DuplicateKeyException e) {
             // 2. DuplicateKeyException 발생 시 Custom 예외로 전환

@@ -17,7 +17,7 @@ public enum CertifiDataField {
 
 
     // 필요하다면 다른 정보 필드도 추가 가능 (예: 교육생 이름 등)
-//    USER_NM("TB_USER.USER_NM", "교육생 이름");
+    // USER_NM("TB_USER.USER_NM", "교육생 이름");
 
     private final String dbColumnName; // Mybatis 조인 쿼리에 사용될 실제 컬럼 경로/별칭
     private final String frontName; // 프론트엔드/UI에서 보여줄 이름

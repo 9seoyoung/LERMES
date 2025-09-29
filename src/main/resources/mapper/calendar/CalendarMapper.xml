@@ -40,7 +40,7 @@
 
     <!-- (선택) 생성 직후 PK로 상세 조회가 필요할 때 쓰는 쿼리 -->
     <select id="findById" parameterType="int"
-            resultType="com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO">
+            resultType="com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO">
         SELECT
         CAL_SN           AS calSn,
         COHORT_SN        AS cohortSn,
@@ -58,7 +58,7 @@
 
     <insert id="createPicCalendarByItvSn"
             parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
-            useGeneratedKeys="true" keyProperty="calSn">	-- 담당자 일정 추가 TODO CO_SN 넣어주기
+            useGeneratedKeys="true" keyProperty="calSn">
     INSERT INTO TB_CALENDAR
         (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN)
     SELECT
@@ -79,7 +79,7 @@
 
     <insert id="createAplcntCalendarByItvSn"
             parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
-            useGeneratedKeys="true" keyProperty="calSn"> -- TODO CO_SN 넣어주기
+            useGeneratedKeys="true" keyProperty="calSn">
         INSERT INTO TB_CALENDAR
             (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN)
         SELECT
@@ -96,5 +96,42 @@
         WHERE i.ITV_SN = #{itvSn}
           AND i.ITV_PIC_SN IS NOT NULL;
     </insert>
+
+    <select id="selectSimpleByRange" parameterType="com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO" resultType="com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO">
+        SELECT
+            c.CAL_SN,
+            c.EVENT_NM,
+            c.EVENT_BGNG_DT,
+            c.EVENT_END_DT,
+            c.PRVT_YN
+        FROM
+            TB_CALENDAR c
+        WHERE 1=1
+            -- 날짜 범위: [searchStartDate, endExclusive)
+            <if test="searchStartDate != null and searchEndDate != null">    -- 날짜 범위 포함 됐을경우 비교 수행
+                AND c.EVENT_BGNG_DT &gt;= #{searchStartDate}
+                AND c.EVENT_END_DT &lt;  #{searchEndDate}
+            </if>
+            <choose>
+                <when test="prvtYn != null and prvtYn == 1">                 -- switch문처럼 동작함 위에서부터 조건 걸리는거 하나만 실행.
+                    AND c.PRVT_YN = 1
+                    AND c.USER_SN = #{userSn}
+                </when>
+
+                <when test="prvtYn != null and prvtYn == 0">
+                    AND c.PRVT_YN = 0
+                    AND c.COHORT_SN = #{cohortSn}
+                </when>
+
+                <otherwise>    -- 전체 조회의 경우
+                    AND (
+                        (c.PRVT_YN = 1 AND c.USER_SN = #{userSn})
+                        OR
+                        (c.PRVT_YN = 0 AND c.COHORT_SN = #{cohortSn})
+                    )
+                </otherwise>
+            </choose>
+        ORDER BY CAL_SN ASC -- EVENT_REG_DT ASC
+    </select>
 
 </mapper>
