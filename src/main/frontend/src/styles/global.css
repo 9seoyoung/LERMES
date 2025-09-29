@@ -13,7 +13,7 @@
   margin: 0;
   padding: 0;
   /* color: #222; */
-  color: var(--color-text-main);
+  color: var(--color-font-main);
 }
 
 html {
@@ -518,7 +518,8 @@ footer>div:hover {
 .navCont{
   display: flex;
   width: 216px;
-  height: 702px;
+  height: calc(100vh - 112px);
+  max-height: 702px;
   /* background-color: #f6f6f6; */
   /* box-shadow: 2px 2px 2px #00000025; */
   background-color: var(--color-light-bg);
