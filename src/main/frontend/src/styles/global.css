@@ -163,8 +163,8 @@ h4 {
   height: 48px;
   /* background-color: #0088FF;
   color: #fff; */
-  background-color: var(--color-primary);
-  color: var(--color-text-primary);
+  background-color: var(--color-primary-bg);
+  color: var(--color-light-bg);
   font-weight: 500;
   border-radius: 24px;
   font-size: 1.4rem;
