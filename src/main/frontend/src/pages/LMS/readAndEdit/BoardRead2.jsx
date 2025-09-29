@@ -16,9 +16,9 @@ function BoardRead() {
   const { user } = useAccount();
   const {postSn} = useParams();
   const userAuth = user.USER_AUTHRT_SN;
+  const userSn = user.USER_SN;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [postType, setPostType] = useState("");
   const [editToggle, setEditToggle] = useState(true);
   const [files, setFiles] = useState([]);
   const { effectiveSn } = useSelectedCompany();
@@ -29,7 +29,7 @@ function BoardRead() {
     userSn: user.USER_SN,
     postTtl: "",
     postCn: "", //내용
-    type: postType,
+    type: "",
     bbsScope: "", //공개범위
     postFrstWrtDt: "",     // 최초 작성일시
     postLastMdfcnDt: "", // 최종 수정일시
@@ -51,32 +51,14 @@ function BoardRead() {
     (async () => {
       try {
         const {data}  = await readPostByPostSn(params);
-        console.log(data);
-        toast.success("불러오기 성공");
-        setFormData(data)
+        console.log(`${data} 받아온 데이터`);
+        setFormData(data);
+        console.log(`${formData} 폼데이터에 저장한 데이터`);
       } catch(err) {
         toast.error(err);
       }
     })();
   }, [])
-
-  const changeType = (nextType) => {
-    setPostType(nextType);                  // 라벨에만 쓰고 싶으면 유지, 아니면 없애도 됨
-    setFormData(prev => ({
-      ...prev,
-      type: nextType,
-      postTtl: "",//제목
-      postCn: "",//내용
-      bbsScope: "",  //공개범위
-      postFrstWrtDt: "",//면담확정일
-      postLastMdfcnDt: "",//면담예정시간
-      delYn: "-", // 담당자
-      place: "",//장소
-      comment: "",//기타내용
-    }));
-    setFiles([]); // 파일도 초기화하려면 같이
-  };
-
 
   const handleChange = (e) => {
 
@@ -85,6 +67,8 @@ function BoardRead() {
   };
 
   const tempSubmit = () => {};
+
+
   const saveSubmit = async (e) => {
     e.preventDefault();
 
@@ -98,23 +82,24 @@ function BoardRead() {
     console.time("[RecruitPost] createGroup");
 
     const params = {
-      formData: body,
+      formData: formData,
       postSn: postSn,
       effectiveSn: effectiveSn
     };
 
-   try {
-    const res = await editPostByPostSn(params);
-    toast.success("신청등록 되었습니다.")
-    console.log(Object.keys(snapshot)); 
-    console.log(Object.keys(snapshot.formData));
-    console.log("[RecruitPost] createGroup response:", res);
-    navigate(-1);
-  } catch (err) {
-    toast.error(err.message);
-    console.error("[RecruitPost] createGroup error:", err);
-  }
-};
+    try {
+      const res = await editPostByPostSn(params);
+      console.log(params);
+      toast.success("신청등록 되었습니다.")
+      console.log(Object.keys(snapshot)); 
+      console.log(Object.keys(snapshot.formData));
+      console.log("[RecruitPost] createGroup response:", res);
+      navigate(-1);
+    } catch (err) {
+      toast.error(err.message);
+      console.error("[RecruitPost] createGroup error:", err);
+    }
+  };
 
 
   return (
@@ -124,7 +109,7 @@ function BoardRead() {
         <h4 style={{ fontWeight: "500" }}>
           <div boxType="row">
           {`[${formData?.bbsType}] ${formData?.postTtl}`}
-          {editToggle ? 
+          { editToggle ? 
             <button type='button' onClick={() => setEditToggle(false)} style={{marginLeft: "8px", background: "var(--color-list-bg)", borderRadius:"4px", color:"white", padding:"2px 4px", marginTop: "4px" }} >edit</button>
             :
             <></>
@@ -133,7 +118,7 @@ function BoardRead() {
           {editToggle ? 
             <button type='button' onClick={() => navigate(-1)}>back</button>
             :
-            <SaveBtn type='button' onClick={(e) => {navigate(-1); setEditToggle(true); saveSubmit(e)}} style={{color: "#fff", marginTop: "4px"}} textType={"저장"}></SaveBtn>
+            <SaveBtn type='button' onClick={(e) => {setEditToggle(true); saveSubmit(e)}} style={{color: "#fff", marginTop: "4px"}} textType={"저장"}></SaveBtn>
         }
           </h4>
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
