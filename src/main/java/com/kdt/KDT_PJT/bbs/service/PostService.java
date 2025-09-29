@@ -117,14 +117,25 @@ public class PostService {
         BbsScope scope = post.getBbsScope();
 
         // 1. bbsType 필터
+//        if (filterBbsType != null) {
+//            try {
+//                BbsType filterType = BbsType.fromDescription(filterBbsType); //한글 매칭
+//            } catch (IllegalArgumentException e) {
+//                throw new IllegalArgumentException("잘못된 게시판 유형: " + filterBbsType);
+//            }
+//        }
+//        1. bbsType 필터 (영문 Enum.name() 기준)
         if (filterBbsType != null) {
             try {
-                BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase()); // 소문자 대응
+                BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase()); //
                 if (!type.equals(filterType)) return false;
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("잘못된 게시판 유형: " + filterBbsType);
+                throw new IllegalArgumentException("잘못된 게시판 유형(영문): " + filterBbsType);
             }
         }
+
+
+
 
         // 2. Role 권한 체크
         if (!role.canRead(type)) return false;

@@ -4,7 +4,7 @@ import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
 import FilterList from "../../components/ui/FilterList";
 import { useEffect, useState } from "react";
-import { BOARD_MENU_FILTER_COLUMNDATA, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
+import { BOARD_MENU_FILTER_COLUMNDATA, SELECT_DETAIL_PAGE_PATH, SELECT_POST_SN_KEY, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
 import { callBoardList } from "../../services/postService";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../auth/AuthContext";
@@ -26,9 +26,10 @@ export default function Board(){
     useEffect(() => {
         const cohortSn = user?.USER_COHORT_SN;
         const bbsType = STUDENT_BOARD_MENU_FILTER[selectedIdx];
+        setWhereToGo(SELECT_DETAIL_PAGE_PATH[selectedIdx]);
         console.log(filterArr[selectedIdx]);
         setColumnData(BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
-        
+        setPostKey(SELECT_POST_SN_KEY[selectedIdx]);        
         const params = {
         }
 
@@ -44,8 +45,6 @@ export default function Board(){
                 console.log(data);
                 const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt),}));
                 setPullList(formattedData);
-
-                toast.success("정보 불러옴");
             } catch(err) {
                 toast.error(err.message);
             }
