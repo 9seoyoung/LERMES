@@ -532,11 +532,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   list-style: none;
 }
 
-.ListHeader {
+#ListHeader {
   /* background-color: #e1f1ff; */
   background-color: var(--color-checkin-title);
-  display: flex;
-  gap: 16px;
+  height: 40px;
   border-radius: 6px;
   padding: 4px 0;
   align-items: center;
