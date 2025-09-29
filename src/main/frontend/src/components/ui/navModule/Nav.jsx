@@ -34,35 +34,38 @@ export function Nav({setNavToggle}) {
                     내 정보
                 </button> 
             </div>
-            <div className="navMenuList">
+            <div id="superNav">
             {effectiveSn !== myCoSn ? 
                 <div onClick={() => navigate('/visitorHome')}>홈</div>
                 :
                 <>
                     {user?.USER_AUTHRT_SN === 1 ? 
                         <>
-                            <div onClick={() => navigate('/adminHome')}>관리자 홈</div>
-                            <div onClick={() => navigate('/adminHome/groupSet')}>과정 관리</div>            
-                            <div onClick={() => navigate('/adminHome/boardSet')}>게시물 관리</div>
-                            <div onClick={() => navigate('/adminHome/accountSet')}>계정 관리</div>                
-                            <div onClick={() => navigate('/adminHome/docuSet')}>서류 관리</div>   
-                            <hr></hr>
-                            <div onClick={() => navigate('/tutorHome')}>강사 홈</div>
-                            <div onClick={() => navigate('/tutorHome/studySched')}>학습 관리</div>
-                            <div onClick={() => navigate('/tutorHome/studentManage')}>수강생 관리</div>                
-                            <div onClick={() => navigate('/tutorHome/board')}>게시판</div>              
-                            <hr></hr>
-                            <div onClick={() => navigate('/stdHome')}>수강생 홈</div>
-                            <div onClick={() => navigate('/stdHome/studySched')}>학습 일정</div>
-                            <div onClick={() => navigate('/stdHome/board')}>게시판</div>
-                            <hr></hr>
-                            <div onClick={() => navigate('/visitorHome')}>방문자 홈</div>
+                            <div className="navSet">
+                                <div className="superNav" onClick={() => navigate('/adminHome')}>관리자 홈</div>
+                                <div className="superNav" onClick={() => navigate('/adminHome/groupSet')}>과정 관리</div>            
+                                <div className="superNav" onClick={() => navigate('/adminHome/boardSet')}>게시물 관리</div>
+                                <div className="superNav" onClick={() => navigate('/adminHome/accountSet')}>계정 관리</div>                
+                                <div className="superNav" onClick={() => navigate('/adminHome/docuSet')}>서류 관리</div>   
+                            </div>
+                            <div className="navSet">
+                            <div className="superNav" onClick={() => navigate('/tutorHome')}>강사 홈</div>
+                            <div className="superNav" onClick={() => navigate('/tutorHome/studySched')}>학습 관리</div>
+                            <div className="superNav" onClick={() => navigate('/tutorHome/studentManage')}>수강생 관리</div>                
+                            <div className="superNav" onClick={() => navigate('/tutorHome/board')}>게시판</div>              
+                            </div>
+                            <div className="navSet">
+                            <div className="superNav" onClick={() => navigate('/stdHome')}>수강생 홈</div>
+                            <div className="superNav" onClick={() => navigate('/stdHome/studySched')}>학습 일정</div>
+                            <div className="superNav" onClick={() => navigate('/stdHome/board')}>게시판</div>
+                            </div>
+                            <div className="superNav" onClick={() => navigate('/visitorHome')}>방문자 홈</div>
                         </>
                         :
                         <>
                             { (user?.USER_AUTHRT_SN === 2) || (user?.USER_AUTHRT_SN === 3) ?
                                 <>
-                                    <div onClick={() => navigate('/adminHome')}>관리자 홈</div>
+                                    <div onClick={() => navigate('/adminHome')}>홈</div>
                                     <div onClick={() => navigate('/adminHome/groupSet')}>과정 관리</div>            
                                     <div onClick={() => navigate('/adminHome/boardSet')}>게시물 관리</div>
                                     <div onClick={() => navigate('/adminHome/accountSet')}>계정 관리</div>                
@@ -72,7 +75,7 @@ export function Nav({setNavToggle}) {
                                 <>
                                     {user?.USER_AUTHRT_SN === 4 ? 
                                         <>
-                                            <div onClick={() => navigate('/tutorHome')}>강사 홈</div>
+                                            <div onClick={() => navigate('/tutorHome')}>홈</div>
                                             <div onClick={() => navigate('/tutorHome/studySched')}>학습 관리</div>
                                             <div onClick={() => navigate('/tutorHome/studentManage')}>수강생 관리</div>                
                                             <div onClick={() => navigate('/tutorHome/board')}>게시판</div>        
@@ -80,7 +83,7 @@ export function Nav({setNavToggle}) {
                                         :
                                         <>
                                             {/** 권한 5 ------ 나머지는 회사SN이 없어서 자동 vistor메뉴 */}
-                                            <div onClick={() => navigate('/stdHome')}>수강생 홈</div>
+                                            <div onClick={() => navigate('/stdHome')}>홈</div>
                                             <div onClick={() => navigate('/stdHome/studySched')}>학습 일정</div>
                                             <div onClick={() => navigate('/stdHome/board')}>게시판</div>
                                         </>
