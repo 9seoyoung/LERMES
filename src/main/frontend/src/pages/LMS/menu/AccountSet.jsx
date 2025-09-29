@@ -1,21 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import FilterList from '../../../components/ui/FilterList';
 import ListTable from '../../../components/ui/ListTable';
 import {Settings} from "lucide-react";
 import ListEditTable from '../../../components/ui/ListEditTable';
+import { hortlistByCpSn } from '../../../services/cohortService';
+import { useSelectedCompany} from '../../../contexts/SelectedCompanyContext';
 
 export default function AccountSet() {
   const [manageState, setManageState] = useState(false);
   const [selectedIdx, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [cohortList, setCohortList] = useState([]);
   const [formData, setFormData] = useState({
     // formData 초기값
     // 0. 유저테이블 리스트 객체배열로 보내주셈
     // 1. useEffect로 마운트 시 유저테이블 리스트 불러오기
     // 2. 불러온 내용 setFormData로 펼쳐서 저장하기
   });
+  const { effectiveSn } = useSelectedCompany();
+
   const filterArr = ["직원", "강사", "수강생"];
+  
+  useEffect(() => {
+
+    ( async () => {
+      try {
+      const { data } = await hortlistByCpSn(effectiveSn);
+        console.log(data.cohorts);
+        setCohortList(data.cohorts);
+      } catch(err) {
+        console.log(err);
+      }
+    })();
+  }, [selectedIdx])
 
   // 직원 / 강사 / 수강생 관리(수정 + 저장)할 핸들러
   const handleSubmit = async () => {
@@ -76,7 +94,7 @@ export default function AccountSet() {
                 apiData={[{no: 1, name:"하이", email:"ㄴㄴ", tel:"ㅁ"}, {no: 1, name:"하이", email:"ㄷㄷ", tel:"ㄴ"}]}
                 gridTemplate="0.5fr 0.5fr 1fr 1fr 2fr 2fr 2fr 1fr 1fr"
                 formData={formData}
-                type = {['text', 'date', 'email', 'tel']}
+                type = {['text', 'text', 'text', 'email', 'tel', 'select', 'select' ]}
                 />
                 :
                 <ListTable
