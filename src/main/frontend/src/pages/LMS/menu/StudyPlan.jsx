@@ -4,7 +4,7 @@ import uiStyle from "../../../styles/UiComp.module.css"
 import FilterList from "../../../components/ui/FilterList";
 import { use, useEffect, useState } from "react";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
-import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH, SELECT_DETAIL_API } from "../../../utils/studentStudyFilter";
+import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH } from "../../../utils/studentStudyFilter";
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
 
