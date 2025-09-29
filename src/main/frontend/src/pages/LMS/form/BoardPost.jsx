@@ -137,7 +137,7 @@ function BoardPost() {
     content: formData.content,
     coSn: formData.coSn,
     type: formData.type,
-    cohortSn: formData.cohortSn,
+    cohortSn: cohortSn,
     scope: formData.scope,
     detailScope: formData.detailScope,
     detailScopeNm: formData.detailScopeNm,

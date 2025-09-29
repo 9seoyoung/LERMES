@@ -26,7 +26,7 @@ public class PostRequestDto {
     private Long postWrtrSn;    // 작성자 일련번호 (세션에서 꺼내서 넣을 수도 있음)
     @JsonProperty("coSn")
     private Long coSn;          // 회사 일련번호 (FK)
-    @JsonProperty("detailScope")
+    @JsonProperty("cohortSn")
     private Long cohortSn;      // 기수/과정 일련번호 (FK)
     @JsonProperty("type")
     private BbsType bbsType;     // 게시판 유형 (공지, 자료실, FAQ, 문의, 임시저장)

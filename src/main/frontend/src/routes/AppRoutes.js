@@ -53,7 +53,7 @@ import FindPw from '../auth/loginPage/FindPw.jsx';
 import StudyPlan from '../pages/LMS/menu/StudyPlan.jsx';
 import InterviewRead from '../pages/LMS/readAndEdit/InterviewRead.jsx';
 import BoardPost from '../pages/LMS/form/BoardPost.jsx';
-import BoardRead from '../pages/LMS/readAndEdit/boardRead.jsx';
+import BoardRead from '../pages/LMS/readAndEdit/BoardRead.jsx';
 
 function AppRoutes() {
   return (

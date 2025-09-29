@@ -29,13 +29,17 @@ export const SELECT_POST_SN_KEY = {
     2: "postSn",
     3: "postSn",
     4: "postSn",
-    5: "postSn"
+    5: "postSn",
+    6: "postSn"
 }
 
 export const SELECT_DETAIL_PAGE_PATH = {
     0: 0,
-    1: 1,
-    2: 2,
-    3: 3,
-    4: "/stdHome/studySched/interview" //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    1: "/stdHome/post",
+    2: "/stdHome/post",
+    3: "/stdHome/post",
+    4: "/stdHome/post", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/stdHome/post",
+    6: ""
+
 }

@@ -12,7 +12,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 
 
-// Interview.jsx
 
 function BoardRead() {
   const domFormId = useId();
