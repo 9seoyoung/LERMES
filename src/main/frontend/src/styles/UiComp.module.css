@@ -547,7 +547,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   grid-template-columns: var(--cols);
   column-gap: var(--gap, 8px);
   align-items: center;
+  height: 100%;
   width: 100%;
+  padding: 2px 0;
 }
 
 .row {
@@ -555,6 +557,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-color: var(--color-light-bg);
   border-radius: 4px;
   height: 3.2rem;
+  align-items: center;
 }
 
 .row:hover {
