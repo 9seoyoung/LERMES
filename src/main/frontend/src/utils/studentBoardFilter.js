@@ -6,11 +6,11 @@ export const STUDENT_BOARD_MENU_FILTER = {
     // key는 선택한 필터의 인덱스 (=selectedIdx)
     0: null, // 전체
     1: "NOTICE", // 공지
-    2: "자료실", //자료실
-    3: "설문", //설문
+    2: "CLASS_MATERIAL", //자료실
+    3: "SURVEY", //설문
     4: "FAQ", //FAQ
-    5: "문의", //Q&A
-    6: "임시저장" //임시저장
+    5: "QNA", //Q&A
+    6: "PRIVATE" //임시저장
 }
 
 export const BOARD_MENU_FILTER_COLUMNDATA = {

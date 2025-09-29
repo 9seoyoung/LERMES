@@ -119,8 +119,7 @@ public class PostService {
         // 1. bbsType 필터
         if (filterBbsType != null) {
             try {
-                BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase()); // 소문자 대응
-                if (!type.equals(filterType)) return false;
+                BbsType filterType = BbsType.fromDescription(filterBbsType); //한글 매칭
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("잘못된 게시판 유형: " + filterBbsType);
             }
