@@ -1,0 +1,208 @@
+import React, { useEffect, useId, useState, useRef } from 'react'
+import {FileList, FormInput, SaveBtn } from '../../../components/ui/UiComp';
+import { useAccount } from '../../../auth/AuthContext';
+import {v4 as uuidv4} from "uuid";
+import { editPostByPostSn, readPostByPostSn } from '../../../services/postService';
+
+import { toast } from 'react-toastify';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
+
+
+
+function BoardRead() {
+  const domFormId = useId();
+  const postId = useRef(uuidv4());
+  const { user } = useAccount();
+  const {postSn} = useParams();
+  const userAuth = user.USER_AUTHRT_SN;
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [postType, setPostType] = useState("");
+  const [editToggle, setEditToggle] = useState(true);
+  const [files, setFiles] = useState([]);
+  const { effectiveSn } = useSelectedCompany();
+
+  // 일반 게시글
+  const [formData, setFormData] = useState({
+    formUuid: postId.current,
+    userSn: user.USER_SN,
+    postTtl: "",
+    postCn: "", //내용
+    type: postType,
+    bbsScope: "", //공개범위
+    postFrstWrtDt: "",     // 최초 작성일시
+    postLastMdfcnDt: "", // 최종 수정일시
+    postWriterName: user?.USER_NM, // 작성자
+    delYn: "-", // 삭제 여부
+    files: files,
+    viewCnt: 0,
+    postSn: 0
+  });
+
+  useEffect(()=>{
+
+    const params = {
+      effectiveSn: effectiveSn,
+      postSn: postSn,
+      formData: formData
+    };
+
+    (async () => {
+      try {
+        const {data}  = await readPostByPostSn(params);
+        console.log(data);
+        toast.success("불러오기 성공");
+        setFormData(data)
+      } catch(err) {
+        toast.error(err);
+      }
+    })();
+  }, [])
+
+  const changeType = (nextType) => {
+    setPostType(nextType);                  // 라벨에만 쓰고 싶으면 유지, 아니면 없애도 됨
+    setFormData(prev => ({
+      ...prev,
+      type: nextType,
+      postTtl: "",//제목
+      postCn: "",//내용
+      bbsScope: "",  //공개범위
+      postFrstWrtDt: "",//면담확정일
+      postLastMdfcnDt: "",//면담예정시간
+      delYn: "-", // 담당자
+      place: "",//장소
+      comment: "",//기타내용
+    }));
+    setFiles([]); // 파일도 초기화하려면 같이
+  };
+
+
+  const handleChange = (e) => {
+
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const tempSubmit = () => {};
+  const saveSubmit = async (e) => {
+    e.preventDefault();
+
+  const snapshot = structuredClone
+    ? structuredClone({ formData })
+    : JSON.parse(JSON.stringify({ formData }));
+
+    const body = { ...snapshot.formData };
+    console.log("[will send to server]", JSON.stringify(body, null, 2));
+    console.table(snapshot.formData);
+    console.time("[RecruitPost] createGroup");
+
+    const params = {
+      formData: body,
+      postSn: postSn,
+      effectiveSn: effectiveSn
+    };
+
+   try {
+    const res = await editPostByPostSn(params);
+    toast.success("신청등록 되었습니다.")
+    console.log(Object.keys(snapshot)); 
+    console.log(Object.keys(snapshot.formData));
+    console.log("[RecruitPost] createGroup response:", res);
+    navigate(-1);
+  } catch (err) {
+    toast.error(err.message);
+    console.error("[RecruitPost] createGroup error:", err);
+  }
+};
+
+
+  return (
+    <div className="boardPage">
+      <h2>게시판</h2>
+      <div className="limitedHeightBox" style={{height: "706px"}}>
+        <h4 style={{ fontWeight: "500" }}>
+          <div boxType="row">
+          {`[${formData?.bbsType}] ${formData?.postTtl}`}
+          {editToggle ? 
+            <button type='button' onClick={() => setEditToggle(false)} style={{marginLeft: "8px", background: "var(--color-list-bg)", borderRadius:"4px", color:"white", padding:"2px 4px", marginTop: "4px" }} >edit</button>
+            :
+            <></>
+          }
+          </div>
+          {editToggle ? 
+            <button type='button' onClick={() => navigate(-1)}>back</button>
+            :
+            <SaveBtn type='button' onClick={(e) => {navigate(-1); setEditToggle(true); saveSubmit(e)}} style={{color: "#fff", marginTop: "4px"}} textType={"저장"}></SaveBtn>
+        }
+          </h4>
+        <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
+          <div className="formArea_L">
+              <BoardEditForm
+                  type={formData.type}
+                  postId={postId.current}
+                  domFormId={domFormId}
+                  handleChange={handleChange}
+                  formData={formData}
+                  FileList={FileList}
+                  files={files}
+                  setFiles={setFiles}
+                  editToggle={editToggle}
+              />
+          </div>
+
+          
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default BoardRead;
+
+
+function BoardEditForm({
+  domFormId, handleChange, formData, files, formId, setFiles, editToggle
+}) {
+
+  return (
+    <>
+      <div className='formHeader'>
+        <div className='inputSet inputTitleSet'>
+          <label className='formLabel' htmlFor={`${domFormId}_postTtl`}>제목</label>
+          <input
+            id={`${domFormId}_postTtl`}
+            className='formInput'
+            name='postTtl'
+            placeholder='제목을 입력하세요.'
+            value={formData.postTtl}
+            onChange={handleChange}
+            disabled = {editToggle}
+          />
+        </div>
+      </div>
+
+      <div className="formContent">
+            <textarea                 
+                id={`${formId}_postCn`}
+                name="postCn"
+                className='formTextarea'
+                placeholder='본문을 입력하세요.'
+                value={formData.postCn}
+                onChange={handleChange}
+                disabled = {editToggle}>
+            </textarea>
+            <div className='inputSet'>
+          </div>
+          <div className='inputGrid '>
+              <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
+              <FileList files={files} setFiles={setFiles}></FileList>
+            <div className='inputSet limitedInputSe'>
+              <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="postWriterName" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+              <FormInput type="text" labelNm="조회수" handleChange={handleChange} name="viewCnt" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+            </div>
+          </div>
+      </div>
+      </>
+  );
+}

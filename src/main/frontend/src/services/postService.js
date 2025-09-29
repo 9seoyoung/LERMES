@@ -94,7 +94,17 @@ export const readPostlistByfilter = ({filter, effectiveSn}) => api.get('/posts/l
  * @param {String} type 요청한 게시글 유형
  * @returns {Object} 게시글 내용
  */
-export const readPostByPostSn = ({postSn, effectiveSn, type}) => api.get(`/posts/${postSn}}`,{params: {postSn, effectiveSn, type}});
+export const readPostByPostSn = ({postSn, effectiveSn, type}) => api.get(`/posts/${postSn}`,{params: {postSn, effectiveSn, type}});
+
+/**
+ * 게시글 수정하기
+ * @param {Number} postSn 게시글 시리얼 번호
+ * @param {Number} effectiveSn 회사 시리얼 번호
+ * @param {Object} formData 게시글 데이터
+ * @returns 
+ */
+export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/posts/${postSn}`, formData, {params: {effectiveSn}});
+
 
 /**
  * 게시글 목록 조회

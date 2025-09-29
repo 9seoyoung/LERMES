@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.bbs.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kdt.KDT_PJT.bbs.enums.BbsScope;
 import com.kdt.KDT_PJT.bbs.enums.BbsType;
@@ -19,8 +20,10 @@ public class PostRequestDto {
     private Long postSn;        // 게시물 일련번호 (PK, 수정/삭제 시 필요)
     private String bbsNm;       // 게시판 이름/유형
     @JsonProperty("title")
+    @JsonAlias({"postTtl"})
     private String postTtl;     // 게시물 제목
     @JsonProperty("content")
+    @JsonAlias({"postCn"})
     private String postCn;      // 게시물 내용
     @JsonProperty("userSn")
     private Long postWrtrSn;    // 작성자 일련번호 (세션에서 꺼내서 넣을 수도 있음)

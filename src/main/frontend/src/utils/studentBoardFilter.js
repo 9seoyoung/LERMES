@@ -35,11 +35,11 @@ export const SELECT_POST_SN_KEY = {
 
 export const SELECT_DETAIL_PAGE_PATH = {
     0: 0,
-    1: "/stdHome/post",
-    2: "/stdHome/post",
-    3: "/stdHome/post",
-    4: "/stdHome/post", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
-    5: "/stdHome/post",
+    1: "/stdHome/board",
+    2: "/stdHome/board",
+    3: "/stdHome/board",
+    4: "/stdHome/board", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/stdHome/board",
     6: ""
 
 }

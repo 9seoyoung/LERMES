@@ -53,8 +53,7 @@ import FindPw from '../auth/loginPage/FindPw.jsx';
 import StudyPlan from '../pages/LMS/menu/StudyPlan.jsx';
 import InterviewRead from '../pages/LMS/readAndEdit/InterviewRead.jsx';
 import BoardPost from '../pages/LMS/form/BoardPost.jsx';
-import BoardRead from '../pages/LMS/readAndEdit/BoardRead.jsx';
-
+import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
 function AppRoutes() {
   return (
     <Routes>
@@ -132,6 +131,8 @@ function AppRoutes() {
             <Route element={<RoleRoute roles={[1, 4]} />}>
               <Route path="tutorHome" element={<TutorHome />} />
               <Route path="tutorHome/board" element={<Board />} />
+              <Route path="tutorHome/board/:postSn" element={<BoardRead2 />} />
+
               <Route
                 path="tutorHome/board/createPost"
                 element={<BoardPost />}
@@ -160,7 +161,7 @@ function AppRoutes() {
               <Route path="stdHome" element={<StdHome />} />
               <Route path="stdHome/board" element={<Board />} />
               <Route path="stdHome/board/createPost" element={<BoardPost />} />
-              <Route path="stdHome/board/:postSn" element={<BoardRead />} />
+              <Route path="stdHome/board/:postSn" element={<BoardRead2 />} />
               <Route path="stdHome/studySched" element={<StudyPlan />} />
               <Route path="stdHome/studySched/interviewPost" element={<InterviewPost />} />
               <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />

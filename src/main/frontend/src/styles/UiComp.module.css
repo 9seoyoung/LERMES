@@ -44,6 +44,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   max-width: max-content;
 }
 
+.inputSet .nolimitedInput input {
+  width: 100%;
+  display: flex;
+}
+
 .inputSet .inputLabel {
   font-size: 1.2rem;
 }

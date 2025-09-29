@@ -135,10 +135,10 @@ export function BlueBtn({ textType }) {
   );
 }
 // 회색 버튼
-export function GrayBtn({ textType }) {
+export function GrayBtn({ textType, style }) {
   return (
     <div>
-      <button className={styles.grayBtn}>{textType}</button>
+      <button className={styles.grayBtn} style={{style}}>{textType}</button>
     </div>
   );
 }
@@ -153,9 +153,9 @@ export function SchedAddBtn({ textType, onClick }) {
 }
 
 // 저장 버튼
-export function SaveBtn({ textType, onClick }) {
+export function SaveBtn({ textType, onClick, style }) {
   return (
-      <button className={`${styles.smallBtn} ${styles.saveBtn}`} onClick={onClick}>
+      <button className={`${styles.smallBtn} ${styles.saveBtn}`} style={style} onClick={onClick}>
         {textType}
       </button>
   );
