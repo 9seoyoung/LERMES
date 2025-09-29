@@ -22,7 +22,7 @@ function InterviewRead() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [postType, setPostType] = useState("면담신청");
-
+  const [editToggle, setEditToggle] = useState(true);
   const [files, setFiles] = useState([]);
 
   // 일반 게시글
@@ -110,10 +110,15 @@ function InterviewRead() {
 
   return (
     <div className="boardPage">
-      <h2>수강생 관리</h2>
+      <h2>학습 일정</h2>
       <div className="limitedHeightBox" style={{height: "706px"}}>
-        <h4 style={{ fontWeight: "500" }}>면담 신청 내역</h4>
-
+        <h4 style={{ fontWeight: "500" }}>
+          <div boxType="row">
+          면담 신청 내역
+        <button type='button' onClick={() => setEditToggle(false)} >edit</button>
+          </div>
+          <button type='button' onClick={() => navigate(-1)}>back</button>
+          </h4>
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
           <div className="formArea_L">
             {formData?.type === "면담신청" ?
@@ -126,6 +131,7 @@ function InterviewRead() {
                   FileList={FileList}
                   files={files}
                   setFiles={setFiles}
+                  editToggle={editToggle}
               />
               :
               <InterviewMemo
@@ -152,7 +158,7 @@ export default InterviewRead;
 
 
 function InterviewForm({
-  domFormId, handleChange, formData, files, formId, setFiles,
+  domFormId, handleChange, formData, files, formId, setFiles, editToggle
 }) {
 
   return (
@@ -167,6 +173,7 @@ function InterviewForm({
             placeholder='제목을 입력하세요.'
             value={formData.itvAplyTtl}
             onChange={handleChange}
+            disabled = {editToggle}
           />
         </div>
 
@@ -183,7 +190,8 @@ function InterviewForm({
                 className='formTextarea'
                 placeholder='본문을 입력하세요.'
                 value={formData.itvAplyCn}
-                onChange={handleChange}>
+                onChange={handleChange}
+                disabled = {editToggle}>
             </textarea>
             <div className='inputSet'>
           </div>
@@ -206,7 +214,7 @@ function InterviewForm({
 }
 
 function InterviewMemo({
-  domFormId, handleChange, formData, files, formId, setFiles,
+  domFormId, handleChange, formData, files, formId, setFiles,editToggle
 }) {
   return (
   <>
@@ -236,7 +244,8 @@ function InterviewMemo({
               className='formTextarea'
               placeholder='본문을 입력하세요.'
               value={formData.itvAplyCn}
-              onChange={handleChange}>
+              onChange={handleChange}
+              disabled= {editToggle}>
           </textarea>
           <div className='inputSet'>
         </div>

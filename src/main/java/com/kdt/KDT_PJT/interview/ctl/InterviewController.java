@@ -5,6 +5,7 @@ import com.kdt.KDT_PJT.calendar.service.CalendarService;
 import com.kdt.KDT_PJT.cmmn.Enum.AuthEnums;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
+import com.kdt.KDT_PJT.file.service.FileService;
 import com.kdt.KDT_PJT.interview.service.InterviewService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class InterviewController {
 
     private final InterviewService interviewService;
     private final CalendarService calendarService;
+    private final FileService fileService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -89,7 +91,7 @@ public class InterviewController {
                 // 내 기수, 선택한 기수
                 Long myCohort = me.getCohortSn();
                 if (myCohort == null) {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "강사 계정의 기수 정보가 없습니다. 관리자에게 문의하세요.");
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기수 정보가 없습니다. 관리자에게 문의하세요.");
                 }
                 resolvedCohortSn = Math.toIntExact(myCohort);
                 params.put("userSn", me.getId());
@@ -191,10 +193,15 @@ public class InterviewController {
         }
         CmmnMap resp = interviewService.readInterviewbyItvSn(params); //실제 상세 조회
 
+        String formUuid = resp.get("formUuid").toString();
+        List<CmmnMap> files = fileService.readFileSnAndNmbyFormUuid(formUuid); //formUuid로 파일명, 파일SN 받아옴 없으면 []
+        resp.put("files",files);
+
+
         return ResponseEntity.ok(resp);
     }
 
-    @Transactional                      //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
+    @Transactional                     //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
     @PutMapping("/confirm/{itvSn}") // 면담 확정
     public void confirmInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,

@@ -394,7 +394,24 @@ footer>div:hover {
   width: 10ch;
   min-width: 3ch;
   text-align: center;
+  max-width: 10ch;
 }
+
+.nolimitedInput {
+  text-align: center;
+}
+
+.limitedInputSet {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr 7fr 1fr;
+}
+
 
 .boardPage {
   display: flex;
@@ -825,7 +842,6 @@ footer>div:hover {
 
 .inputTitleSet {
   min-width: 400px;
-  max-width: 70%;
 }
 
 

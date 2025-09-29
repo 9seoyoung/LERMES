@@ -13,11 +13,6 @@ export function createGroup(body) {
   });
 }
 
-export function createPost(body) {
-  return api.post('/board/post', body, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
 
 export function createInterview(body) {
   return api.post('/interview/apply', body, {
@@ -31,7 +26,9 @@ export function createInterviewMemo(body) {
   });
 }
 
-
+export const createPost = (params) => api.post(`/posts`, params, {
+  headers: { 'Content-Type': 'application/json' },
+});
 
 
 
@@ -88,12 +85,36 @@ export const readAllOfPostList = ({effectiveSn}) => api.get('/posts/all', {param
  */
 export const readPostlistByfilter = ({filter, effectiveSn}) => api.get('/posts/list/{filter}',{params: {filter, effectiveSn}});
 
+
+
 /**
  * 게시글 상세보기
  * @param {Number} postSn 게시글 시리얼번호
+ * @param {Number} effectiveSn 선택되어있는 회사 시리얼 번호
+ * @param {String} type 요청한 게시글 유형
  * @returns {Object} 게시글 내용
  */
-export const readPostByPostSn = ({postSn, effectiveSn}) => api.get('/posts/list/{filter}',{params: {postSn, effectiveSn}});
+export const readPostByPostSn = ({postSn, effectiveSn, type}) => api.get(`/posts/${postSn}`,{params: {postSn, effectiveSn, type}});
+
+/**
+ * 게시글 수정하기
+ * @param {Number} postSn 게시글 시리얼 번호
+ * @param {Number} effectiveSn 회사 시리얼 번호
+ * @param {Object} formData 게시글 데이터
+ * @returns 
+ */
+export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/posts/${postSn}`, formData, {params: {effectiveSn}});
+
+
+/**
+ * 게시글 목록 조회
+ * @param {Number} cohortSn 선택한 기수 시리얼번호
+ * @param {String} filter 게시글 유형 필터
+ * @param {Number} effectiveSn 클릭으로 들어온 회사시리얼번호 or 내가 속한 회사 시리얼번호
+ * @returns {Array<Object>} 게시글 목록
+ */
+export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn}})
+
 
 
 /**

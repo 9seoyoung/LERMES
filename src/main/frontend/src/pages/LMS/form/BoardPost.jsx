@@ -14,7 +14,7 @@ import { useLocation } from 'react-router-dom';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 
 
-// CreatePost.jsx
+// BoardPost.jsx
 // ...import 생략
 
 function PostStatus(props) {
@@ -68,11 +68,12 @@ function PostStatus(props) {
 
 
 
-function CreatePost() {
+function BoardPost() {
   const domFormId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
+  const cohortSn = user.USER_COHORT_SN
   const userAuth = user.USER_AUTHRT_SN;
   const qAddRef = useRef(null);
   const scrollRef = useRef(null);
@@ -103,9 +104,11 @@ function CreatePost() {
     surveyStart: "",     // 설문조사
     surveyEnd: "",   // 설문조사
     files: files,
-    coSn: effectiveSn
+    coSn: effectiveSn,
+    cohortSn: cohortSn
   });
 
+  console.log(user)
 
   
   const handleChange = (e) => {
@@ -134,6 +137,7 @@ function CreatePost() {
     content: formData.content,
     coSn: formData.coSn,
     type: formData.type,
+    cohortSn: cohortSn,
     scope: formData.scope,
     detailScope: formData.detailScope,
     detailScopeNm: formData.detailScopeNm,
@@ -182,6 +186,10 @@ function CreatePost() {
       }
     })();
   }, [coSn]);
+
+  useEffect(() => {
+    
+  })
 
   return (
     <div className="boardPage">
@@ -241,17 +249,24 @@ function CreatePost() {
 
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
-                <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체 공개" }))}>전체 공개</p>
-                  {(userAuth === 5) ?
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
-                  :
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
-                  } 
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
-                </Dropdown>
+                  { userAuth === 1 || (( userAuth === 2 || userAuth === 3) && (effectiveSn === coSn)) ? <> 
+                  <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
+                  {/* 관리자 공개 범위 */}
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "회사공개" }))}>회사공개</p>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개" }))}>그룹공개</p>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                  </Dropdown>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
+                  </>: null }
+                  { ( userAuth === 4 || userAuth === 5) && (effectiveSn === coSn) ? <>
+                    <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개", cohortSn: cohortSn }))}>그룹공개</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                    </Dropdown>
+                  </>: null }
+                    
                 <input type="hidden" name="scope" value={formData.scope} />
               </div>
 
@@ -318,4 +333,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default BoardPost;

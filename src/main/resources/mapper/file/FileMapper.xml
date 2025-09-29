@@ -47,10 +47,19 @@
     <select id="findFileSnByFormUuid" parameterType="String" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"> -- com.kdt.KDT_PJT.cmmn.map.CmmnMap
         SELECT
             FILE_SN             AS fileSn
-             , ORGNL_FILE_NM    AS originalFileName
-             , STRG_FILE_NM     AS storedFileName
+             , ORGNL_FILE_NM    AS orgnlFileNm
+             , STRG_FILE_NM     AS strgFileNm
              , FILE_SZ          AS size
              , FORM_UUID        AS formUuid
+        FROM TB_FILE
+        WHERE FORM_UUID = #{formUuid}
+        ORDER BY FILE_SN ASC
+    </select>
+
+    <select id="readFileSnAndNmbyFormUuid" parameterType="String" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
+        SELECT
+            FILE_SN             AS fileSn,
+            ORGNL_FILE_NM       AS orgnlFileNm
         FROM TB_FILE
         WHERE FORM_UUID = #{formUuid}
         ORDER BY FILE_SN ASC
