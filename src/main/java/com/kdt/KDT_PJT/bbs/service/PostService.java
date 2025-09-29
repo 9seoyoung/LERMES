@@ -51,17 +51,12 @@ public class PostService {
 
     // 게시글 목록 조회
     public List<PostResponseDto> getPosts(AuthCustomUserDetails auth, Long filterCohortSn, String filterBbsType) {
-//        List<PostResponseDto> posts = postMapper.findAll();
-
-        List<PostResponseDto> posts = postMapper.findByFilters(
-                filterCohortSn,
-                filterBbsType
-        );
-
+        List<PostResponseDto> posts = postMapper.findAll(); // 또는 findAllByCohort
         return posts.stream()
                 .filter(post -> canAccessPost(post, auth, filterCohortSn, filterBbsType))
                 .toList();
     }
+
 
     // 게시글 수정
     public PostResponseDto updatePost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
@@ -112,19 +107,12 @@ public class PostService {
     // 공통 권한 + Scope 체크
     private boolean canAccessPost(PostResponseDto post, AuthCustomUserDetails auth,
                                   Long filterCohortSn, String filterBbsType) {
+
         BbsRole role = resolveRole(auth);
         BbsType type = post.getBbsType();
         BbsScope scope = post.getBbsScope();
 
         // 1. bbsType 필터
-//        if (filterBbsType != null) {
-//            try {
-//                BbsType filterType = BbsType.fromDescription(filterBbsType); //한글 매칭
-//            } catch (IllegalArgumentException e) {
-//                throw new IllegalArgumentException("잘못된 게시판 유형: " + filterBbsType);
-//            }
-//        }
-//        1. bbsType 필터 (영문 Enum.name() 기준)
         if (filterBbsType != null) {
             try {
                 BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase()); //
@@ -134,11 +122,17 @@ public class PostService {
             }
         }
 
-
-
-
         // 2. Role 권한 체크
         if (!role.canRead(type)) return false;
+
+        if (type == BbsType.QNA) {
+            if (role == BbsRole.GENERAL) {
+                return post.getPostWrtrSn().equals(auth.getId()); // General은 자기 글만
+            }
+            if (role == BbsRole.TENANT || role == BbsRole.EMPLOYEE || role == BbsRole.SUPER_ADMIN) {
+                return true; // 관리자/직원/슈퍼어드민은 모든 QNA 열람 가능
+            }
+        }
 
         // 3. Scope 권한 체크
         if (scope == BbsScope.PUBLIC) {

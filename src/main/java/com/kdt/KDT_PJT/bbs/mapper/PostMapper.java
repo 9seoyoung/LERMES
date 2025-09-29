@@ -11,11 +11,9 @@ public interface PostMapper {
     void insertPost(@Param("dto") PostRequestDto dto,
                     @Param("uuid") String uuid);
     PostResponseDto findById(Long postSn);
-    List<PostResponseDto> findAll();
-    List<PostResponseDto> findByFilters(
-            @Param("cohortSn") Long cohortSn,
-            @Param("bbsType") String bbsType
-    );
+    List<PostResponseDto> findAllByCohort(@Param("coSn") Long coSn,
+                                          @Param("cohortSn") Long cohortSn,
+                                          @Param("bbsType") String bbsType);
     void updatePost(PostRequestDto dto);
     void softDelete(Long postSn);
 }
