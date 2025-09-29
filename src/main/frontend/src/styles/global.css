@@ -674,7 +674,7 @@ footer>div:hover {
 #ftClicked {
   /* background-color: #0088FF;
   color: #FCFEFF; */
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-bg);
   color: var(--color-sec-bg);
 }
 
