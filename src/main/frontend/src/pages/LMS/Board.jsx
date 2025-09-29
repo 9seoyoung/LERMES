@@ -45,8 +45,6 @@ export default function Board(){
                 console.log(data);
                 const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt),}));
                 setPullList(formattedData);
-
-                toast.success("정보 불러옴");
             } catch(err) {
                 toast.error(err.message);
             }
