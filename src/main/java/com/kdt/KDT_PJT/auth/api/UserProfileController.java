@@ -58,5 +58,4 @@ public class UserProfileController {
                 ))
                 .build();
     }
-
 }

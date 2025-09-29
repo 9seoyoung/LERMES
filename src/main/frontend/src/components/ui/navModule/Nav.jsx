@@ -26,7 +26,9 @@ export function Nav({ setNavToggle }) {
           <img
             src={
               user?.USER_PROFILE_IMAGE
-                ? `http://localhost:940/api/files/id/${user.USER_PROFILE_IMAGE}`
+                ? `http://localhost:940/api/files/id/${
+                    user.USER_PROFILE_IMAGE
+                  }?t=${Date.now()}`
                 : '/default-avatar.png' // 기본 이미지 경로
             }
             alt="사용자 프로필"

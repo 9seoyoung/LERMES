@@ -1,11 +1,13 @@
 .myInfoSection {
-    background: #fff;
+    background: #f9f9f9;
     border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 0px;
     margin: 0 auto;
     width: 500px;
-    /* 기본 너비 */
+}
+
+.myInfoSection.myInfoSectionB {
+    height: 360px;
 }
 
 /* 제목 영역 */
@@ -14,19 +16,9 @@
     font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
     position: relative;
 }
 
-/* 제목 밑에 구분선 */
-.myInfoTitle::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #ccc;
-    margin-left: 8px;
-}
 
 /* 폼 본문 */
 .myInfoForm {
@@ -63,7 +55,7 @@
     border-radius: 6px;
     font-size: 14px;
     color: #333;
-    min-width: 200px;
+    min-width: 150px;
 }
 
 /* 버튼 기본 스타일 */
@@ -108,5 +100,19 @@
 .myInfoActions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 16px;
+    margin-top: 0;
+    position: relative;
+    top: -310px;
+    /* 위로 올리기 */
+    right: -350px;
+    /* 오른쪽 이동 */
+}
+
+.myDetailInfoInput {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #333;
+    min-width: 150px;
 }

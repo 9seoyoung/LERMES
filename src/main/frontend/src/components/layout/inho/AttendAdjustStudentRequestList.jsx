@@ -76,7 +76,7 @@ const fmtDate = (s) => (s ? String(s).slice(0, 10) : '');
 
 export default function AttendAdjustStudentRequestList() {
   const [pageNo, setPageNo] = useState(0);
-  const [size] = useState(7);
+  const [size] = useState(5);
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);

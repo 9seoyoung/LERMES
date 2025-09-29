@@ -101,15 +101,15 @@ const MyInfoForm = () => {
   };
 
   return (
-    <section className="myInfoSection">
-      <h2 className="myInfoTitle">
+    <section className="myInfoSection myInfoSectionB">
+      {/* ✅ 제목 전체를 클릭하면 토글 */}
+      <h2
+        className="myInfoTitle"
+        onClick={() => setOpen((prev) => !prev)}
+        style={{ cursor: 'pointer' }}
+      >
         <div>상세 정보</div>
-        <button
-          className="myInfoButton"
-          onClick={() => setOpen((prev) => !prev)}
-        >
-          {open ? '접기 ▲' : '펼치기 ▼'}
-        </button>
+        <span style={{ border: 'none' }}>({open ? '접기' : '펼치기'})</span>
       </h2>
 
       {open && (
@@ -121,7 +121,7 @@ const MyInfoForm = () => {
               name="birth"
               value={form.birth}
               onChange={handleChange}
-              className="myInfoInput"
+              className="myDetailInfoInput"
             />
           </div>
 
@@ -132,8 +132,8 @@ const MyInfoForm = () => {
               name="address"
               value={form.address}
               onChange={handleChange}
-              className="myInfoInput"
-              placeholder="주소 검색 버튼을 눌러주세요"
+              className="myDetailInfoInput"
+              placeholder="주소 검색 버튼 클릭"
               readOnly
             />
             <button
@@ -153,7 +153,7 @@ const MyInfoForm = () => {
               name="addressDetail"
               value={form.addressDetail}
               onChange={handleChange}
-              className="myInfoInput"
+              className="myDetailInfoInput"
               placeholder="상세 주소 입력"
             />
           </div>
@@ -165,7 +165,7 @@ const MyInfoForm = () => {
               name="major"
               value={form.major}
               onChange={handleChange}
-              className="myInfoInput"
+              className="myDetailInfoInput"
             />
           </div>
 
@@ -176,7 +176,7 @@ const MyInfoForm = () => {
               name="cert"
               value={form.cert}
               onChange={handleChange}
-              className="myInfoInput"
+              className="myDetailInfoInput"
             />
           </div>
 
@@ -187,11 +187,11 @@ const MyInfoForm = () => {
               name="skills"
               value={form.skills}
               onChange={handleChange}
-              className="myInfoInput"
+              className="myDetailInfoInput"
             />
           </div>
 
-          {/* ✅ 저장 버튼은 폼 맨 하단 오른쪽 */}
+          {/* ✅ 저장 버튼은 맨 하단에 고정 */}
           <div className="myInfoActions">
             <button
               className="myInfoButton"

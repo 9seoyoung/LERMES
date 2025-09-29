@@ -9,7 +9,7 @@ import { useAccount } from '../../../auth/AuthContext';
 import { toast } from 'react-toastify';
 
 export default function UserProfile() {
-  const { patchUser } = useAccount();
+  const { user, patchUser } = useAccount();
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,6 @@ export default function UserProfile() {
     userProfileImage: null,
   });
 
-  // ✅ 프로필 불러오기
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -45,11 +44,30 @@ export default function UserProfile() {
     }
   };
 
+  const formatPhone = (phone) => {
+    if (!phone) return '-';
+    const onlyNum = phone.replace(/\D/g, '');
+    if (onlyNum.length === 11) {
+      return onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    }
+    if (onlyNum.length === 10) {
+      return onlyNum.replace(/(\d{2,3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+    }
+    return phone;
+  };
+
+  const formatBrNo = (brno) => {
+    if (!brno || brno.length !== 10) return brno;
+    return `${brno.substring(0, 3)}-${brno.substring(3, 5)}-${brno.substring(
+      5
+    )}`;
+  };
+
   useEffect(() => {
     fetchProfile();
   }, []);
 
-  // ✅ 프로필 사진 업로드 (edit 버튼 누르기 전까지 formData에만 반영)
+  // ✅ 프로필 사진 업로드
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -68,18 +86,16 @@ export default function UserProfile() {
     }
   };
 
-  // ✅ edit 버튼 눌러야 DB 반영 + 전역 상태 갱신
+  // ✅ edit 버튼 → DB 반영
   const handleSave = async () => {
-    // 휴대폰 번호 유효성 검사
     if (!formData.phoneNumber || formData.phoneNumber.length !== 11) {
       toast.error('휴대폰 번호는 숫자 11자리여야 합니다.');
       return;
     }
 
-    // 이메일 유효성 검사 (aaa@bbb 형식까지 허용)
     const emailRegex = /^[^\s@]+@[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
-      toast.error('올바른 이메일 주소를 입력하세요. (예: user@domain)');
+      toast.error('올바른 이메일 주소를 입력하세요.');
       return;
     }
 
@@ -90,7 +106,6 @@ export default function UserProfile() {
         userProfileImage: formData.userProfileImage,
       });
 
-      // 👉 전역 user 갱신 (Nav에서도 즉시 반영됨)
       patchUser({
         ...profile,
         USER_PROFILE_IMAGE: formData.userProfileImage,
@@ -99,7 +114,7 @@ export default function UserProfile() {
       });
 
       toast.success('프로필이 수정되었습니다.');
-      fetchProfile(); // 화면도 다시 갱신
+      fetchProfile();
     } catch (err) {
       console.error(err);
       toast.error('수정 실패');
@@ -109,120 +124,20 @@ export default function UserProfile() {
   if (loading) return <p>로딩 중...</p>;
   if (!profile) return <p>데이터 없음</p>;
 
+  // ✅ 권한 번호
+  const authSn = user?.USER_AUTHRT_SN;
+
   return (
     <section className="myInfoSection">
-      <style>{`
-        .myInfoSection {
-          padding: 20px;
-          border: 1px solid #ddd;
-          border-radius: 12px;
-          background: #fff;
-          max-width: 600px;
-          margin: 0 auto;
-        }
-
-        .myInfoTitle {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          font-size: 20px;
-          font-weight: bold;
-        }
-
-        .myInfoEditBtn {
-          font-size: 12px;
-          background: #4caf50;
-          color: #fff;
-          border: none;
-          border-radius: 4px;
-          padding: 4px 10px;
-          cursor: pointer;
-        }
-
-        .myInfoDivider {
-          margin: 10px 0;
-          border: none;
-          border-top: 1px solid #ccc;
-        }
-
-        .myInfoContent {
-          display: flex;
-          gap: 20px;
-        }
-
-        .myInfoPhoto {
-          width: 120px;
-          height: 150px;
-          background: #ddd;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 14px;
-          color: #555;
-          border-radius: 8px;
-          overflow: hidden;
-          cursor: pointer;
-        }
-
-        .myInfoDetails {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 16.5px;
-        }
-
-        .myInfoRow {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-        }
-
-        .myInfoLabel {
-          flex: 0 0 100px;
-          text-align: right;
-          font-weight: 600;
-          color: #555;
-          background: #f5f5f5;
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-size: 14px;
-        }
-
-        .myInfoValue,
-        .myInfoInput {
-          flex: 1;
-          font-size: 14px;
-        }
-
-        .myInfoInput {
-          padding: 4px 6px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-
-        .deleteBtn {
-          margin-top: 6px;
-          font-size: 12px;
-          background: #f44336;
-          color: #fff;
-          border: none;
-          border-radius: 4px;
-          padding: 2px 8px;
-          cursor: pointer;
-        }
-      `}</style>
-
-      <h2 className="myInfoTitle">
+      <h2 className="myInfoTitle myInfoTitleA">
         {profile.name} ({profile.status})
         <button className="myInfoEditBtn" onClick={handleSave}>
           edit
         </button>
       </h2>
 
-      <hr className="myInfoDivider" />
-
       <div className="myInfoContent">
-        {/* 사진 */}
+        {/* 프로필 사진 */}
         <div
           style={{
             display: 'flex',
@@ -266,20 +181,41 @@ export default function UserProfile() {
 
         {/* 상세 정보 */}
         <div className="myInfoDetails">
-          <div className="myInfoRow">
-            <span className="myInfoLabel">과정명</span>
-            <span className="myInfoValue">{profile.courseName}</span>
-          </div>
-          <div className="myInfoRow">
-            <span className="myInfoLabel">소속 그룹</span>
-            <span className="myInfoValue">{profile.cohortName}</span>
-          </div>
+          {/* 학생(5) / 강사(4) */}
+          {(authSn === 4 || authSn === 5) && (
+            <>
+              <div className="myInfoRow">
+                <span className="myInfoLabel">과정명</span>
+                <span className="myInfoValue">{profile.courseName}</span>
+              </div>
+              <div className="myInfoRow">
+                <span className="myInfoLabel">소속 그룹</span>
+                <span className="myInfoValue">{profile.cohortName}</span>
+              </div>
+            </>
+          )}
+
+          {/* 테넌트 관리자(2) / 직원(3) */}
+          {(authSn === 2 || authSn === 3) && (
+            <>
+              <div className="myInfoRow">
+                <span className="myInfoLabel">회사명</span>
+                <span className="myInfoValue">{profile.companyName}</span>
+              </div>
+              <div className="myInfoRow">
+                <span className="myInfoLabel">사업자번호</span>
+                <span className="myInfoValue">{formatBrNo(profile.brNo)}</span>
+              </div>
+            </>
+          )}
+
+          {/* 공통 */}
           <div className="myInfoRow">
             <span className="myInfoLabel">휴대폰 번호</span>
             <input
               type="text"
               className="myInfoInput"
-              value={formData.phoneNumber}
+              value={formatPhone(profile.phoneNumber)}
               maxLength={11}
               onChange={(e) =>
                 setFormData((prev) => ({

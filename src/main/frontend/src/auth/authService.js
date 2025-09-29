@@ -60,3 +60,31 @@ export const updateUserProfilePhoto = (fileSn) => {
 export const updateUserProfileInfo = (payload) => {
   return api.post('/user-profile/info', payload).then((res) => res.data);
 };
+
+// 회사 스몰 로고 업로드
+export const updateCompanySmallLogo = (companyId, fileSn) => {
+  return api
+    .post(`/company/${companyId}/logo/small`, null, {
+      params: { fileSn }, // ← 파일이 아니라 숫자만 전송
+    })
+    .then((res) => res.data);
+};
+
+// 회사 조회
+export const fetchCompany = (companyId) =>
+  api.get(`/company/${companyId}`).then(({ data }) => data);
+
+// 회사 스몰 로고 삭제
+export const deleteCompanySmallLogo = (companyId) =>
+  api.delete(`/company/${companyId}/logo/small`).then(({ data }) => data);
+
+// 회사 빅 로고 업로드
+export const updateCompanyBigLogo = (companyId, fileSn) => {
+  return api
+    .post(`/company/${companyId}/logo/big`, null, { params: { fileSn } })
+    .then((res) => res.data);
+};
+
+// 회사 빅 로고 삭제
+export const deleteCompanyBigLogo = (companyId) =>
+  api.delete(`/company/${companyId}/logo/big`).then(({ data }) => data);
