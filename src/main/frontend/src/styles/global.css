@@ -593,6 +593,44 @@ footer>div:hover {
   font-size: 1.6rem;
 }
 
+
+#superNav{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+#superNav > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: var(--color-light-bg);
+  padding: 8px 12px;
+}
+
+.superNav {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.superNav:hover {
+  background-color: #ebeff4;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+
 .navMenuList {
   display: flex;
   align-items: center;
