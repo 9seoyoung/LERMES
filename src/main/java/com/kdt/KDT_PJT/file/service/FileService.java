@@ -106,4 +106,8 @@ public class FileService {
     public List<CmmnMap> findFileSnByFormUuid(String formUuid){
         return cmmnDao.selectList("com.kdt.mapper.file.FileMapper.findFileSnByFormUuid", formUuid);
     }
+
+    public List<CmmnMap> readFileSnAndNmbyFormUuid(String formUuid){
+        return cmmnDao.selectList("com.kdt.mapper.file.FileMapper.readFileSnAndNmbyFormUuid", formUuid);
+    }
 }
