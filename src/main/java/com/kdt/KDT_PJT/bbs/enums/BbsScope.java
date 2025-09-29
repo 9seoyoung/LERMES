@@ -11,7 +11,7 @@ public enum BbsScope {
     PUBLIC("전체공개"),
     COMPANY("회사공개"),
     COHORT("그룹공개"),
-    PRIVATE("비공개");
+    PRIVATE("비공개");     //임시저장
 
     private final String description;
     // JSON 직렬화 시 한글(description)으로 반환

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kdt.KDT_PJT.bbs.enums.BbsScope;
 import com.kdt.KDT_PJT.bbs.enums.BbsType;
-import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,19 +40,3 @@ public class PostRequestDto {
     private LocalDateTime postLastMdfcnDt;
 
 }
-
-
-/** 프론트에서 보내는 정보
- *     id: postId.current, // 폼ID
- *     userSn: user.USER_SN, // 유저 SN
- *     title: "", //제목
- *     content: "", // 내용 => 설문조사는 JSON으로 담김
- *     type: "", // 게시글 유형
- *     scope: "", // 공개범위
- *     detailScope: "", //세부 공개 범위
- *     detailScopeNm: "", //세부 공개 범위 이름
- *     surveyStart: "",     // 설문조사
- *     surveyEnd: "",   // 설문조사
- *     files: files // 파일 배열
- *
- * */
