@@ -9,7 +9,7 @@ variables:
   REACT_BUILD_DIR: "src/main/frontend/build"
   FRONTEND_TARGET: "C:/Pack_CICD/kdt10_3dpjt/app/frontend"
   BACKEND_TARGET: "C:/Pack_CICD/kdt10_3dpjt/app/backend"
-  REACT_APP_API_URL: "http://onopco2.iptime.org:940"  # 배포용 API URL
+  # REACT_APP_API_URL: "http://onopco2.iptime.org:940"  # 배포용 API URL
 
 before_script:
   - Remove-Item Env:\CI_SERVER_TLS_CA_FILE -ErrorAction SilentlyContinue
