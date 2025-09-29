@@ -34,7 +34,7 @@ export function Nav({setNavToggle}) {
                     내 정보
                 </button> 
             </div>
-            <div className="navMenuList">
+            <div id="superNav">
             {effectiveSn !== myCoSn ? 
                 <div onClick={() => navigate('/visitorHome')}>홈</div>
                 :
