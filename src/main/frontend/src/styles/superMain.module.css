@@ -26,7 +26,8 @@
 
 /* 카드 하단 영역 */
 .card_bottom {
-  background: var(--color-light-bg, #fff);
+  /* background: var(--color-light-bg, #fff); */
+  background-color: var(--color-light-bg);
   height: 120px;
   border-radius: 0 0 16px 16px;
   padding: 8px;
@@ -38,7 +39,7 @@
 .title {
   display: flex;
   align-items: center;
-  color: var(--color-font-main, #222);
+  color: var(--color-text-main, #222);
   font-weight: 500;
   font-size: 1rem;
 }
@@ -58,7 +59,6 @@
 .card_bottom>p:nth-child(2) {
   font-size: 1.4rem;
   font-weight: 400;
-
 }
 
 /* 버튼 */

@@ -11,10 +11,12 @@
   align-items: center;
   padding: 0 12px;
   cursor: pointer;
-  background-color: #f6f6f6;
+  /* background-color: #f6f6f6; */
+  background-color: var(--color-light-bg);
 }
 
 .subMenuList:hover {
   background: #00000025;
-  color: #f6f6f6;
+  /* color: #f6f6f6; */
+  color: var(--color-light-bg);
 }
