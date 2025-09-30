@@ -231,11 +231,11 @@ public class AttendController {
 
     /**
      * 관리자: 출석 인정 요청 전체 조회 (페이징)
-     * 예) GET /api/attend/adjust/admin?page=0&size=10
+     * 예) GET /api/attend/adjust/admin?page=0&size=5
      */
     @GetMapping("/admin")
 //    @PreAuthorize("hasAnyRole('EMPLOYEE','TENANT_ADMIN')")
-    public Page<AttendDocumentResponse> adminList(@PageableDefault(size = 10, sort = "attendDcmntSn", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<AttendDocumentResponse> adminList(@PageableDefault(size = 5, sort = "attendDcmntSn", direction = Sort.Direction.DESC) Pageable pageable) {
         return attendDocumentService.findAllForAdmin(pageable);
     }
 

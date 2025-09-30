@@ -41,18 +41,17 @@
 }
 
 .schedTitle {
-border: none;
-padding: 0 5px;
+  border: none;
+  padding: 0 5px;
 }
 
 .schedTitle:focus {
-border: 1px solid #000;
-
+  border: 1px solid #000;
 }
 
 .popUpBtn {
-display: flex;
-gap: 5px;
+  display: flex;
+  gap: 5px;
 }
 
 .memo {
@@ -90,24 +89,24 @@ gap: 5px;
 }
 
 .content {
-display: flex;
-justify-content: space-between;
-padding: 2px;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px;
 }
 
 .content input {
-width: 220px;
-padding: 0 3px;
-box-sizing: border-box;
+  width: 220px;
+  padding: 0 3px;
+  box-sizing: border-box;
 }
 
 /* 시간 설정 */
 .timeInput {
-display: flex;
-align-items: center;
-gap: 1px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
 }
 
 .timeInput  input{
-width: 105px;
+  width: 105px;
 }
