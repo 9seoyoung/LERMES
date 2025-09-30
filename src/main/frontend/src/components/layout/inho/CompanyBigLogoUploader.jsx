@@ -9,7 +9,6 @@ import {
 import { useAccount } from '../../../auth/AuthContext';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import { uploadEvidenceFile } from '../../../attend/attendService';
-import cardStyle from '../../../styles/superMain.module.css'; // 카드 CSS 재사용
 
 export default function CompanyBigLogoUploader() {
   const { user } = useAccount();
@@ -66,95 +65,166 @@ export default function CompanyBigLogoUploader() {
   };
 
   return (
-    <div
-      className="companyCardRoot"
-      style={{
-        padding: '40px 0px 48px 130px',
-        borderLeft: '1px solid #D9D9D9',
-      }}
-    >
-      <div className={cardStyle.company_card}>
-        {/* 상단: 로고 영역 */}
-        <div
-          style={{
-            flex: 1,
-            width: '345px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            backgroundImage: logoFileSn
-              ? `url(http://localhost:940/api/files/id/${logoFileSn})`
-              : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        >
-          {!logoFileSn && <div style={{ color: '#666' }}>회사 빅 로고</div>}
+    <>
+      {/* 컴포넌트 전용 스타일 */}
+      <style>
+        {`
+          .cbl-logoWrapper {
+            position: relative;
+            border-radius: 12px 12px 0px 0px;
+            background-color: #ACACAC;
+          }
+          .cbl-logoOverlay {
+            position: absolute;
+            top: 160px;
+            right: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.2s;
+          }
+          .cbl-logoWrapper:hover .cbl-logoOverlay {
+            opacity: 1;
+          }
+          .cbl-overlayBtn {
+            background: rgba(0,0,0,0.75);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 20px;
+            padding: 4px 30px;
+            cursor: pointer;
+            text-align: center;
+          }
+          .cbl-card {
+            width: 300px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background: #fff;
+          }
+          .cbl-cardBottom {
+            padding: 16px;
+            background-color: #F6F6F6;
+            border-radius: 0px 0px 12px 12px;
+          }
+          .cbl-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+          }
+          .cbl-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+          }
+          .cbl-row button {
+            flex: 1;
+            background: #e0e0e0;
+            border: none;
+            padding: 8px;
+            cursor: default; 
+            border-radius: 8px;
+          }
+            .cbl-subject {
+              position: absolute;
+              margin-top: 22px;
+              margin-left: 30px;
+              font-weight: 600;
+              font-size: 20px;
+            }
+            .cbl-root {
+              margin-top:10px;
+              padding: 90px 0px 85px 130px;
+            }
+              .cbl-logoWrapper {
+              position: relative;
+              border-radius: 12px 12px 0px 0px;
+              background-color: #ACACAC;
+              overflow: hidden;
+            }
+              /* hover 시 전체 어두워지는 오버레이 */
+            .cbl-logoOverlay {
+              position: absolute;
+              inset: 0; /* top, right, bottom, left 전부 0 */
+              background: rgba(0,0,0,0.55);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 20px;
+              opacity: 0;
+              transition: opacity 0.25s;
+            }
+            .cbl-logoWrapper:hover .cbl-logoOverlay {
+              opacity: 1;
+            }
 
-          {canEdit && (
-            <div
-              style={{
-                position: 'absolute',
-                top: '8px',
-                right: '8px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '6px',
-              }}
-            >
-              <label
-                htmlFor="bigLogoUpload"
-                style={{
-                  background: 'rgba(0,0,0,0.75)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.8rem',
-                  padding: '4px 10px',
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                }}
-              >
-                변경
-              </label>
-              <input
-                id="bigLogoUpload"
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-              />
-              <button
-                onClick={handleDelete}
-                style={{
-                  background: 'rgba(0,0,0,0.75)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '6px',
-                  fontSize: '0.8rem',
-                  padding: '4px 10px',
-                  cursor: 'pointer',
-                }}
-              >
-                삭제
-              </button>
+            .cbl-overlayBtn {
+              background: rgba(0,0,0,0.85);
+              color: #fff;
+              border: none;
+              border-radius: 6px;
+              font-size: 18px;
+              padding: 8px 24px;
+              cursor: pointer;
+            }
+        `}
+      </style>
+      <div className="cbl-subject">부트캠프 배너 변경</div>
+      <div className="cbl-root">
+        <div className="cbl-card">
+          {/* 상단: 로고 영역 */}
+          <div
+            className="cbl-logoWrapper"
+            style={{
+              flex: 1,
+              width: '300px',
+              height: '270px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundImage: logoFileSn
+                ? `url(http://localhost:940/api/files/id/${logoFileSn})`
+                : 'none',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            {!logoFileSn && <div style={{ color: '#666' }}>홍보 배너 자리</div>}
+
+            {canEdit && (
+              <div className="cbl-logoOverlay">
+                <label htmlFor="bigLogoUpload" className="cbl-overlayBtn">
+                  변경
+                </label>
+                <input
+                  id="bigLogoUpload"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleFileChange}
+                />
+                <button onClick={handleDelete} className="cbl-overlayBtn">
+                  삭제
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* 하단: 회사 정보 + 버튼 */}
+          <div className="cbl-cardBottom">
+            <p className="cbl-title">{company?.name || '회사명 없음'}</p>
+            <p>소재지 {company?.address || 'undefined'}</p>
+
+            <div className="cbl-row">
+              <button>LMS 바로가기</button>
+              <button style={{ color: 'blue' }}>모집 예정</button>
             </div>
-          )}
-        </div>
-
-        {/* 하단: 회사 정보 + 버튼 */}
-        <div className={cardStyle.card_bottom}>
-          <p className={cardStyle.title}>{company?.name || '회사명 없음'}</p>
-          <p>소재지 {company?.address || 'undefined'}</p>
-
-          <div className={cardStyle.row}>
-            <button>LMS 바로가기</button>
-            <button>상태변수</button>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -26,7 +26,9 @@ export default function CompanySmallLogoUploader() {
   }, [effectiveSn]);
 
   const canEdit =
-    (user?.USER_AUTHRT_SN === 1 || user?.USER_AUTHRT_SN === 2) &&
+    (user?.USER_AUTHRT_SN === 1 ||
+      user?.USER_AUTHRT_SN === 2 ||
+      user?.USER_AUTHRT_SN === 3) &&
     String(effectiveSn) === String(user?.USER_OGDP_CO_SN);
 
   // 파일 업로드
