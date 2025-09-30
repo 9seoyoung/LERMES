@@ -24,7 +24,8 @@
 
 /* 카드 하단 영역 */
 .card_bottom {
-  background: var(--color-light-bg, #fff);
+  /* background: var(--color-light-bg, #fff); */
+  background-color: var(--color-light-bg);
   height: 120px;
   border-radius: 0 0 16px 16px;
   padding: 8px;
@@ -36,7 +37,7 @@
 .title {
   display: flex;
   align-items: center;
-  color: var(--color-font-main, #222);
+  color: var(--color-text-main, #222);
   font-weight: 500;
   font-size: 1rem;
 }
@@ -55,7 +56,6 @@
 .card_bottom > p:nth-child(2){
   font-size: 1.4rem;
   font-weight: 400;
-
 }
 
 /* 버튼 */
@@ -74,6 +74,6 @@
   filter: brightness(0.97);
 }
 .row > button:focus-visible {
-  outline: 2px solid var(--color-primary-bg, #08F);
+  outline: 2px solid var(--color-primary, #08F);
   outline-offset: 2px;
 }
