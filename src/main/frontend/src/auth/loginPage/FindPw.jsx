@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { sendPasswordResetCode, resetPassword } from '../authService';
 import '../../styles/sj.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function FindPw() {
   const navigate = useNavigate();
@@ -137,6 +137,11 @@ export default function FindPw() {
             <p>이제 로그인 페이지로 이동하세요.</p>
           </div>
         )}
+      </div>
+      <div className="findIdPw" style={{ gap: 20 }}>
+        <Link to="/welcome/login">
+          <span>로그인</span>
+        </Link>
       </div>
     </div>
   );

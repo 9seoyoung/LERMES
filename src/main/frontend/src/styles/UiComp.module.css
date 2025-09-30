@@ -1,7 +1,8 @@
 /* 인풋 */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-  opacity: 0; /* 기본 아이콘 숨김 (필요할 때만) */
+  opacity: 0;
+  /* 기본 아이콘 숨김 (필요할 때만) */
 }
 
 
@@ -83,7 +84,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .blueBtn {
   /* background-color: #0088ff;
   color: #fff; */
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-bg);
   color: var(--color-text-primary);
 }
 
@@ -120,13 +121,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* 일정등록 버튼 */
 .schedAddBtn {
-width: 80px;
-height: 35px;
-border-radius: 4px;
-font-size: 12px;
-font-weight: bold;
-background-color: var(--color-main-bg);
-color: var(--color-text-sec);
+  width: 80px;
+  height: 35px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  background-color: var(--color-main-bg);
+  color: var(--color-text-sec);
 }
 
 .schedAddBtn:hover,
@@ -347,7 +348,7 @@ color: var(--color-text-sec);
   /* background-color: #e1f1ff;
   color: #0088ff; */
   background-color: var(--color-secondary-light);
-  color: var(--color-primary);
+  color: var(--color-primary-bg);
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -419,7 +420,7 @@ color: var(--color-text-sec);
   vertical-align: middle;
 }
 
-.checkBox input:checked + .checkmark::after {
+.checkBox input:checked+.checkmark::after {
   content: '✔';
   font-size: 12px;
 }
@@ -432,7 +433,7 @@ color: var(--color-text-sec);
   border-radius: 4px;
 }
 
-.orangeCheck input:checked + .checkmark::after {
+.orangeCheck input:checked+.checkmark::after {
   /* color: #e9623a; */
   color: var(--color-accent);
 }
@@ -444,9 +445,9 @@ color: var(--color-text-sec);
   border: 1px solid #000;
 }
 
-.blueCheck input:checked + .checkmark::after {
+.blueCheck input:checked+.checkmark::after {
   /* color: #0088ff; */
-  color: var(--color-primary);
+  color: var(--color-primary-bg);
 }
 
 /* 파일 첨부 */
@@ -458,7 +459,7 @@ color: var(--color-text-sec);
   padding: 4px;
   font-size: 12px;
   /* color: #08f; */
-  color: var(--color-primary);
+  color: var(--color-primary-bg);
   display: flex;
   justify-content: center;
   cursor: pointer;
@@ -480,7 +481,7 @@ color: var(--color-text-sec);
   text-align: center;
 }
 
-.table thead th{
+.table thead th {
   /* background-color: #E1F1FF !important; */
   background-color: var(--color-secondary-light);
 }
@@ -514,7 +515,7 @@ color: var(--color-text-sec);
   border-bottom-right-radius: 4px;
 }
 
- /* ListTable */
+/* ListTable */
 
 .ListTbBg {
   display: flex;
@@ -530,7 +531,7 @@ color: var(--color-text-sec);
   /* background-color: #e1f1ff; */
   background-color: var(--color-secondary-light);
   display: flex;
-  gap: 16px;      
+  gap: 16px;
   border-radius: 6px;
   padding: 4px 0;
   align-items: center;
@@ -557,7 +558,8 @@ color: var(--color-text-sec);
   border-radius: 4px;
 }
 
-.row:active, .row:active .cell {
+.row:active,
+.row:active .cell {
   border-radius: 4px;
   /* background-color: #ACACAC;
   color: #f6f6f6; */

@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  getAdminAttendAdjustPage,
-  updateAttendAdjustStatus,
-} from '../../../attend/attendService';
+import { getAdminAttendAdjustPage, updateAttendAdjustStatus } from '../../../attend/attendService';
 
 const TYPE_KO = {
   SICK_LEAVE: '병가',
@@ -23,7 +20,7 @@ export default function AttendAdjustAdminPage() {
   const fetchPage = async (p = 0) => {
     try {
       setLoading(true);
-      const res = await getAdminAttendAdjustPage({ page: p, size: 10 });
+      const res = await getAdminAttendAdjustPage({ page: p, size: 7 });
       if (res?.ok) setPage(res.data);
       else alert(res?.message || '조회 실패');
     } finally {
@@ -111,7 +108,7 @@ export default function AttendAdjustAdminPage() {
                   fontSize: '14px',
                 }}
               >
-                <td style={{ padding: '8px' }}>{pageNo * 10 + idx + 1}</td>
+                <td style={{ padding: '8px' }}>{pageNo * 7 + idx + 1}</td>
                 <td style={{ padding: '8px' }}>
                   {TYPE_KO[r.attendDtlTypeNm] || r.attendDtlTypeNm}
                 </td>
@@ -124,7 +121,7 @@ export default function AttendAdjustAdminPage() {
                 <td style={{ padding: '8px' }}>
                   {r.hasFile ? (
                     <a
-                      href={`http://localhost:940/api/files/${r.fileSn}`}
+                      href={`http://localhost:940/api/files/id/${r.fileSn}`}
                       target="_blank"
                       rel="noreferrer"
                       style={{
