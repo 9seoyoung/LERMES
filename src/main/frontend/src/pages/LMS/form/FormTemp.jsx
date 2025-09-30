@@ -15,7 +15,7 @@ function FormTemp() {
             </form>
             <div className="BigListBox">
                 <ul className={uiStyle.ListHeader}>
-                    <li>순번</li>
+                    <li>#</li>
                     <li>유형</li>
                     <li>제목</li>
                     <li>작성일</li>

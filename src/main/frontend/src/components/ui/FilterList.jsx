@@ -2,13 +2,17 @@
 // import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter } from "../../utils/readPageTypeReturn";
 // import { toast } from "react-toastify";
 
+import { useLocation } from "react-router-dom";
+import GroupDropdown from "../ui/GroupDropdown";
+
 function FilterList(props) {
-  const {arr, children, selectedIdx, setSelected } = props;
+  const {arr, children, selectedIdx, setSelected, setCohortSn, effectiveSn } = props;
 //   const [pullList, setPullList] = useState([]);
   // const filter = filterArr[selectedIdx];
   // console.log(`1. ${filter} 필터 누름`);
   // setFilter(filter);
   console.log(`2. setFilter 상태훅 사용`)
+  const location = useLocation();
 
 
 return (
@@ -26,8 +30,13 @@ return (
       }
       {/* 추가 버튼 생성 및 눌렀을 때 배열에 데이터 추가하기 위한 버튼 */}
       {children}
+      {location.pathname === "/adminHome/accountSet" ? 
+      <GroupDropdown coSn={effectiveSn} setCohortSn={setCohortSn}></GroupDropdown>
+      :
+      <>
+      </>}
       </ul>
-  )
+  );
 }
 
 // 전체에 스타일 기본,

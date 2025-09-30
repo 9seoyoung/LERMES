@@ -16,6 +16,6 @@ public class CompanyDto {
     private String name;          // 회사명
     private boolean active;       // 활성여부
     private LocalDateTime registeredAt; // 등록일자
-    private Integer fileSn;       // 파일 순번 (null 허용)
+    private Integer fileSn;       // 파일 # (null 허용)
 
 }

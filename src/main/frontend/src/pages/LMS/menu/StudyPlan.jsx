@@ -59,7 +59,7 @@ function StudyManage() {
             </div>
             <div className="BigListBox">
                 <ListTable
-                tableHead={['순번', '유형', '제목', '작성일', '작성자', '조회수']}
+                tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
                 columnData={columnData}
                 apiData={pullList}
                 // 문자열로 지정
