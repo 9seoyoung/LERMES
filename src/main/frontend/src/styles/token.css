@@ -26,7 +26,10 @@
     
     --color-table-bg: #F2F3F0;
 
+    --opacity-25: 25%;
 
+    /* 폰트 컬러 */
+    --font-color-white: #fcfeff;
 
     /* 폰트 크기 */
 }
