@@ -30,11 +30,6 @@ return (
       }
       {/* 추가 버튼 생성 및 눌렀을 때 배열에 데이터 추가하기 위한 버튼 */}
       {children}
-      {location.pathname === "/adminHome/accountSet" ? 
-      <GroupDropdown coSn={effectiveSn} setCohortSn={setCohortSn}></GroupDropdown>
-      :
-      <>
-      </>}
       </ul>
   );
 }

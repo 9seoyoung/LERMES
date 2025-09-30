@@ -29,7 +29,11 @@
     --opacity-25: 25%;
 
     /* 폰트 컬러 */
+    --font-color-base: #222;
     --font-color-white: #fcfeff;
+    --font-color-gray1: #d9d9d9;
+    --font-color-blue1: #08f;
+
 
     /* 폰트 크기 */
 }

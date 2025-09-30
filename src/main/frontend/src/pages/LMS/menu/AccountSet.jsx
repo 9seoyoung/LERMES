@@ -9,6 +9,7 @@ import { useSelectedCompany} from '../../../contexts/SelectedCompanyContext';
 import { pullAllAccount } from '../../../services/accountService';
 import styles from '../../../styles/account.module.css';
 import { FaArrowLeft } from "react-icons/fa";
+import GroupDropdown from '../../../components/ui/GroupDropdown';
 
 
 export default function AccountSet() {
@@ -18,6 +19,7 @@ export default function AccountSet() {
   const [selectedIdx, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [cohortList, setCohortList] = useState([]);
+  const [cohortSn, setCohortSn] = useState();
   const [accountList, setAccountList] = useState([]);
   const [formData, setFormData] = useState({
     // formData 초기값
@@ -40,7 +42,7 @@ export default function AccountSet() {
         console.log(err);
       }
     })();
-  }, [selectedIdx, cohortList, effectiveSn])
+  }, [selectedIdx, cohortSn, effectiveSn])
 
   // 직원 / 강사 / 수강생 관리(수정 + 저장)할 핸들러
   const handleSubmit = async () => {
@@ -180,6 +182,9 @@ export default function AccountSet() {
                       <div className="ftList_R"></div>
                     </div>
                 <div id={`${styles.boxCol}`}>
+                  <div style={{border: "1px solid var(--font-color-base)", maxWidth: "300px", borderRadius: "8px"}}>
+                    <GroupDropdown coSn={effectiveSn} setCohortSn={setCohortSn}></GroupDropdown>
+                  </div>
                   {/* 강사 */}
                   <div className={`${styles.tutorBox}`}>
                   <h4 className='filterList'>강사 관리
