@@ -5,6 +5,7 @@ import MyInfoForm from '../components/layout/inho/MyInfoForm';
 import UserProfile from '../components/layout/inho/UserProfile';
 import '../components/layout/inho/Mypage.css';
 import CompanyBigLogoUploader from '../components/layout/inho/CompanyBigLogoUploader';
+import CompanyInfoForm from '../components/layout/inho/CompanyInfoForm';
 
 export default function Mypage() {
   return (
@@ -27,7 +28,7 @@ export function AdminMypage() {
       <div className="my-page-div">
         <section>
           <UserProfile />
-          <MyInfoForm />
+          <CompanyInfoForm />
         </section>
         <section className="admin-my-page-second">
           <CompanyBigLogoUploader />
