@@ -100,7 +100,7 @@ body {
   border-radius: 48px;
   /* background-color: #0088ff;
   color: #fff; */
-  background-color: var(--color-primary-bg);
+  background-color: var(--color-primary);
   color: var(--color-text-primary);
   font-size: 16px;
 }
@@ -112,7 +112,7 @@ body {
   border-radius: 48px;
   /* background-color: #0088ff;
   color: #fff; */
-  background-color: var(--color-primary-bg);
+  background-color: var(--color-primary);
   color: var(--color-text-primary);
   font-size: 20px;
   font-weight: bold;
