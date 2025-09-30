@@ -10,10 +10,12 @@ import java.util.List;
 public interface PostMapper {
     void insertPost(@Param("dto") PostRequestDto dto,
                     @Param("uuid") String uuid);
+    List<PostResponseDto> findAll();
+    
     PostResponseDto findById(Long postSn);
-    List<PostResponseDto> findAllByCohort(@Param("coSn") Long coSn,
-                                          @Param("cohortSn") Long cohortSn,
-                                          @Param("bbsType") String bbsType);
+    List<PostResponseDto> findByFilters(
+                                        @Param("cohortSn") Long cohortSn,
+                                        @Param("bbsType") String bbsType);
     void updatePost(PostRequestDto dto);
     void softDelete(Long postSn);
 }
