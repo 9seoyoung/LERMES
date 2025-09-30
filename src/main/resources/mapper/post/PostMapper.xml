@@ -7,15 +7,15 @@
     <!-- 등록 -->
     <insert id="insertPost" useGeneratedKeys="true" keyProperty="dto.postSn">
         INSERT INTO TB_POST (
-        BBS_NM, POST_TTL, POST_CN, POST_WRTR_SN, CO_SN, COHORT_SN,
-        FORM_UUID, BBS_TYPE, BBS_SCOPE, POST_FRST_WRT_DT, POST_LAST_MDFCN_DT
+            BBS_NM, POST_TTL, POST_CN, POST_WRTR_SN, CO_SN, COHORT_SN,
+            FORM_UUID, BBS_TYPE, BBS_SCOPE, POST_FRST_WRT_DT, POST_LAST_MDFCN_DT
         ) VALUES (
-        #{dto.bbsNm}, #{dto.postTtl}, #{dto.postCn}, #{dto.postWrtrSn},
-        #{dto.coSn}, #{dto.cohortSn}, #{uuid},
-        #{dto.bbsType},
-        #{dto.bbsScope},
-        #{dto.postFrstWrtDt}, #{dto.postLastMdfcnDt}
-        )
+                     #{dto.bbsNm}, #{dto.postTtl}, #{dto.postCn}, #{dto.postWrtrSn},
+                     #{dto.coSn}, #{dto.cohortSn}, #{uuid},
+                     #{dto.bbsType},
+                     #{dto.bbsScope},
+                     #{dto.postFrstWrtDt}, #{dto.postLastMdfcnDt}
+                 )
     </insert>
 
     <!-- 단건 조회 -->
@@ -83,6 +83,9 @@
         FROM TB_POST p
         JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = 0
+        <if test="coSn != null">
+            AND p.CO_SN = #{coSn}
+        </if>
         <if test="cohortSn != null">
             AND p.COHORT_SN = #{cohortSn}
         </if>
@@ -96,10 +99,10 @@
     <update id="updatePost" parameterType="com.kdt.KDT_PJT.bbs.dto.PostRequestDto">
         UPDATE TB_POST
         SET POST_TTL = #{postTtl},
-        POST_CN = #{postCn},
-        BBS_SCOPE = #{bbsScope},
-        BBS_TYPE = #{bbsType},
-        POST_LAST_MDFCN_DT = NOW()
+            POST_CN = #{postCn},
+            BBS_SCOPE = #{bbsScope},
+            BBS_TYPE = #{bbsType},
+            POST_LAST_MDFCN_DT = NOW()
         WHERE POST_SN = #{postSn}
     </update>
 

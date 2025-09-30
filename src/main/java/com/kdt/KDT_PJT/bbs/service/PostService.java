@@ -8,13 +8,18 @@ import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.bbs.enums.BbsRole;
 import com.kdt.KDT_PJT.bbs.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -29,7 +34,8 @@ public class PostService {
         if (!role.canCreate(type)) {
             throw new AccessDeniedException("작성 권한 없음");
         }
-//      작성일자
+
+        // 작성일자
         LocalDateTime now = LocalDateTime.now();
         requestDto.setPostFrstWrtDt(now);
         requestDto.setPostLastMdfcnDt(now);
@@ -39,82 +45,10 @@ public class PostService {
         return postMapper.findById(requestDto.getPostSn());
     }
 
-    // 게시글 단건 조회
-    public PostResponseDto getPost(Long postSn, AuthCustomUserDetails auth) {
-        PostResponseDto post = postMapper.findById(postSn);
-
-        if (!canAccessPost(post, auth, null, null)) {
-            throw new AccessDeniedException("조회 권한 없음");
-        }
-        return post;
-    }
-
-    // 게시글 목록 조회
-    public List<PostResponseDto> getPosts(AuthCustomUserDetails auth, Long filterCohortSn, String filterBbsType) {
-        // List<PostResponseDto> posts = postMapper.findAll(); // 또는 findAllByCohort
-
-
-        List<PostResponseDto> posts = postMapper.findByFilters(
-            filterCohortSn,
-            filterBbsType
-        );
-
-        return posts.stream()
-                .filter(post -> canAccessPost(post, auth, filterCohortSn, filterBbsType))
-                .toList();
-    }
-
-
-    // 게시글 수정
-    public PostResponseDto updatePost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
-        PostResponseDto existing = postMapper.findById(requestDto.getPostSn());
-
-        if (!canAccessPost(existing, auth, null, null)) { // 권한/Scope 체크 통일
-            throw new AccessDeniedException("수정 권한 없음");
-        }
-
-        requestDto.setPostLastMdfcnDt(LocalDateTime.now());
-
-        postMapper.updatePost(requestDto);
-        return postMapper.findById(requestDto.getPostSn());
-    }
-
-    // 게시글 삭제 (Soft Delete)
-    public void deletePost(Long postSn, AuthCustomUserDetails auth) {
-        PostResponseDto existing = postMapper.findById(postSn);
-        BbsRole role = resolveRole(auth);
-        BbsType type = existing.getBbsType();
-        BbsScope scope = existing.getBbsScope();
-
-        // PRIVATE → 본인만
-        if (scope == BbsScope.PRIVATE) {
-            if (!existing.getPostWrtrSn().equals(auth.getId())) {
-                throw new AccessDeniedException("비공개 글은 본인만 삭제 가능");
-            }
-        }
-        // 공지/FAQ/자료실/QNA → 관리자 or 작성자 본인
-        else if (type == BbsType.CLASS_MATERIAL || type == BbsType.QNA
-                || type == BbsType.NOTICE || type == BbsType.FAQ) {
-            if (!(role == BbsRole.SUPER_ADMIN || role == BbsRole.TENANT || role == BbsRole.EMPLOYEE)) {
-                if (!existing.getPostWrtrSn().equals(auth.getId())) {
-                    throw new AccessDeniedException("본인만 삭제 가능");
-                }
-            }
-        }
-        // 그 외 → 본인만
-        else {
-            if (!existing.getPostWrtrSn().equals(auth.getId())) {
-                throw new AccessDeniedException("본인만 삭제 가능");
-            }
-        }
-
-        postMapper.softDelete(postSn);
-    }
-
-    // 공통 권한 + Scope 체크
-    private boolean canAccessPost(PostResponseDto post, AuthCustomUserDetails auth,
+    // 🔹 공통 권한 체크 로직 (분리 전 로직 유지)
+    private boolean canAccessPost(PostResponseDto post,
+                                  AuthCustomUserDetails auth,
                                   Long filterCohortSn, String filterBbsType) {
-
         BbsRole role = resolveRole(auth);
         BbsType type = post.getBbsType();
         BbsScope scope = post.getBbsScope();
@@ -122,7 +56,7 @@ public class PostService {
         // 1. bbsType 필터
         if (filterBbsType != null) {
             try {
-                BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase()); //
+                BbsType filterType = BbsType.valueOf(filterBbsType.toUpperCase());
                 if (!type.equals(filterType)) return false;
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("잘못된 게시판 유형(영문): " + filterBbsType);
@@ -134,43 +68,126 @@ public class PostService {
 
         if (type == BbsType.QNA) {
             if (role == BbsRole.GENERAL) {
-                return post.getPostWrtrSn().equals(auth.getId()); // General은 자기 글만
+                return Objects.equals(post.getPostWrtrSn(), auth.getId());
             }
-            if (role == BbsRole.TENANT || role == BbsRole.EMPLOYEE || role == BbsRole.SUPER_ADMIN) {
-                return true; // 관리자/직원/슈퍼어드민은 모든 QNA 열람 가능
+            if (role == BbsRole.TENANT || role == BbsRole.EMPLOYEE
+                    || role == BbsRole.SUPER_ADMIN || role == BbsRole.INSTRUCTOR) { // 👈 INSTRUCTOR 추가됨
+                return true;
             }
         }
 
         // 3. Scope 권한 체크
         if (scope == BbsScope.PUBLIC) {
             if (type == BbsType.NOTICE) {
-                return true; //  공지 + PUBLIC → Visitor도 열람 가능
+                return true; // 공지 + PUBLIC → Visitor도 열람 가능
             }
-            return auth != null && auth.isEnabled(); // FAQ/자료실/QnA는 로그인 필요
+            return auth != null && auth.isEnabled();
         }
         if (auth == null || !auth.isEnabled()) return false;
 
+        log.info("check role={}, post.coSn={}, auth.coSn={}, post.cohortSn={}, auth.cohortSn={}",
+                role, post.getCoSn(), auth.getCompanySn(), post.getCohortSn(), auth.getCohortSn());
 
         return switch (scope) {
-            case PRIVATE -> post.getPostWrtrSn().equals(auth.getId());
-            case COMPANY -> post.getCoSn().equals(auth.getCompanySn());
+            case PRIVATE -> Objects.equals(post.getPostWrtrSn(), auth.getId());
+            case COMPANY -> Objects.equals(post.getCoSn(), auth.getCompanySn());
             case COHORT -> {
                 if (role == BbsRole.SUPER_ADMIN || role == BbsRole.TENANT || role == BbsRole.EMPLOYEE) {
-                    yield post.getCoSn().equals(auth.getCompanySn())
+                    yield Objects.equals(post.getCoSn(), auth.getCompanySn())
                             && (filterCohortSn == null || post.getCohortSn().equals(filterCohortSn));
-                } else {
-                    yield post.getCoSn().equals(auth.getCompanySn())
-                            && post.getCohortSn().equals(auth.getCohortSn());
-                }
+                } else if (role == BbsRole.INSTRUCTOR || role == BbsRole.STUDENT) {
+                    yield Objects.equals(post.getCoSn(), auth.getCompanySn())
+                            &&Objects.equals(post.getCohortSn(), filterCohortSn);
+                } else yield false;
             }
             default -> false;
         };
+    }
+
+    // 🔹 단건 조회 전용 권한 체크 메서드 (신규 추가)
+    private boolean canAccessPostForSingle(PostResponseDto post, AuthCustomUserDetails auth) { // 👈 추가됨
+        return canAccessPost(post, auth, auth.getCohortSn(), post.getBbsType().name());
+    }
+
+    // 🔹 리스트 조회 전용 권한 체크 메서드 (신규 추가)
+    private boolean canAccessPostForList(PostResponseDto post,
+                                         AuthCustomUserDetails auth,
+                                         Long filterCohortSn,
+                                         String filterBbsType) { // 👈 추가됨
+        return canAccessPost(post, auth, filterCohortSn, filterBbsType);
+    }
+
+    // 수정/삭제 권한 체크
+    private boolean canModifyPost(PostResponseDto post, AuthCustomUserDetails auth) {
+        BbsRole role = resolveRole(auth);
+
+        if (role == BbsRole.SUPER_ADMIN || role == BbsRole.TENANT) {
+            return true;
+        }
+        return  Objects.equals(post.getPostWrtrSn(), auth.getId());
+    }
+
+    // 게시글 목록 조회
+    public List<PostResponseDto> getPosts(AuthCustomUserDetails auth, Long filterCohortSn, String filterBbsType) {
+        BbsRole role = resolveRole(auth);
+
+        Long companySn = auth.getCompanySn();
+        if (role == BbsRole.SUPER_ADMIN) {
+            companySn = null;
+        }
+
+        List<PostResponseDto> posts = postMapper.findByFilters(companySn, filterCohortSn, filterBbsType);
+
+        return posts.stream()
+                .filter(post -> canAccessPostForList(post, auth, filterCohortSn, filterBbsType)) // 👈 변경됨
+                .toList();
+    }
+
+    // 게시글 단건 조회
+    @Transactional(readOnly = true)
+    public PostResponseDto getPost(Long postSn, AuthCustomUserDetails auth) {
+        PostResponseDto post = postMapper.findById(postSn);
+
+        if (post == null) {
+            throw new NoSuchElementException("게시글을 찾을 수 없습니다. postSn=" + postSn);
+        }
+
+        if (!canAccessPostForSingle(post, auth)) { // 👈 변경됨
+            throw new AccessDeniedException("조회 권한 없음");
+        }
+        return post;
+    }
+
+    // 게시글 수정
+    public PostResponseDto updatePost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
+        PostResponseDto existing = postMapper.findById(requestDto.getPostSn());
+
+        if (!canModifyPost(existing, auth)) {
+            throw new AccessDeniedException("수정 권한 없음");
+        }
+
+        requestDto.setPostLastMdfcnDt(LocalDateTime.now());
+        postMapper.updatePost(requestDto);
+        return postMapper.findById(requestDto.getPostSn());
+    }
+
+    // 게시글 삭제 (Soft Delete)
+    public void deletePost(Long postSn, AuthCustomUserDetails auth) {
+        PostResponseDto existing = postMapper.findById(postSn);
+
+        if (!canModifyPost(existing, auth)) {
+            throw new AccessDeniedException("삭제 권한 없음");
+        }
+
+        postMapper.softDelete(postSn);
     }
 
     private BbsRole resolveRole(AuthCustomUserDetails auth) {
         if (auth == null || !auth.isEnabled()) {
             return BbsRole.VISITOR;
         }
-        return BbsRole.fromCode(auth.getRoleType());
+        BbsRole role = BbsRole.fromCode(auth.getRoleType());
+        log.info("Resolved Role: {}, from roleType={}", role, auth.getRoleType());
+        return role;
     }
 }
