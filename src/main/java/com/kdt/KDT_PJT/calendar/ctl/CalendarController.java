@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.calendar.ctl;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
+import com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO;
 import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
 import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
 import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
@@ -39,12 +40,12 @@ public class CalendarController {
     // AttendExceptionHandler.java 참고하기
 
     @PostMapping
-    public ResponseEntity<CalendarListResponseDTO> createCalendar(
+    public ResponseEntity<CalendarDetailResponseDTO> createCalendar(
             @AuthenticationPrincipal AuthCustomUserDetails me,
             @RequestBody CalendarRequestDTO req
     ) {
         // 개인/공식 분기 및 권한 체크는 서비스에서 처리
-        CalendarListResponseDTO resp = calendarService.createCalendar(me, req);
+        CalendarDetailResponseDTO resp = calendarService.createCalendar(me, req);
         return ResponseEntity.ok(resp);
     }
 
@@ -86,6 +87,9 @@ public class CalendarController {
             // [start, end) : 해당일 00:00:00 ~ 다음날 00:00:00 직전
             LocalDateTime startInclusive = targetDay.atStartOfDay();
             LocalDateTime endExclusive   = targetDay.plusDays(1).atStartOfDay();
+            System.out.println("일 단위 함수 실행");
+            System.out.println("startInclusive = " + startInclusive);
+            System.out.println("endExclusive = " + endExclusive);
 
             //검색 값 DTO에 실어줌
             params.setSearchStartDate(startInclusive);  // 해당 값 이상
@@ -101,6 +105,9 @@ public class CalendarController {
             // [start, end) : 해당월 1일 00:00:00 ~ 다음달 1일 00:00:00 직전
             LocalDateTime startInclusive = ym.atDay(1).atStartOfDay();
             LocalDateTime endExclusive   = ym.plusMonths(1).atDay(1).atStartOfDay();
+            System.out.println("월 단위 조회 함수 실행");
+            System.out.println("startInclusive = " + startInclusive);
+            System.out.println("endExclusive = " + endExclusive);
 
             //검색 값 DTO에 실어줌
             params.setSearchStartDate(startInclusive);
@@ -119,7 +126,34 @@ public class CalendarController {
             @RequestParam(required = false) Boolean isPrivate
             // null: 전체, true: 개인, false: 공식
     ){
-        List<CalendarListResponseDTO> emptyList = Collections.emptyList(); // TODO 더미 반환중, 수정필요
-        return ResponseEntity.ok(emptyList);
+        // 강사 학생은 코호트번호 가져옴
+        Integer roleType = me.getRoleType().intValue();
+        if(roleType == 4 || roleType == 5){     // 강사 or 학생
+            cohortSn = me.getCohortSn().intValue(); //자신의 기수를 넣음 이 기수로 긁어올거임
+        }
+
+        // 검색용 DTO 생성
+        CalendarSimpleResponseDTO params = CalendarSimpleResponseDTO.builder()
+                .cohortSn(cohortSn)
+                .userSn(me.getId().intValue())
+                .prvtYn(isPrivate != null ? (isPrivate ? (byte) 1 : (byte) 0) : null)
+                .build();
+
+        System.out.println("cohortSn = " + cohortSn);
+
+//        if(params.getCohortSn() == null){ //기수번호 없다면 (안실어서 보냇거나 기수번호 뽑았는데 없거나)
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기수 번호 갖고 오이소");
+//        }
+        // 기수에서 말고 그냥 내 개인 리스트 조회 할수도있으니까 없애기
+
+        return ResponseEntity.ok(calendarService.getCalendarList(params));
+    }
+
+    /*
+    * 일정 상세보기, 조회수 +1 하면서 일정 받아옴
+    * 권한체크는 안하겠음 추후 접근권한 비교 로직 추가 필요*/
+    @GetMapping("/{calSn}")
+    public ResponseEntity<CalendarDetailResponseDTO> getCalendarDetailByCalSn(@PathVariable Integer calSn){
+        return ResponseEntity.ok(calendarService.getCalendarDetailByCalSn(calSn));
     }
 }
