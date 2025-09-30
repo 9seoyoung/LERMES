@@ -13,8 +13,10 @@ export default function Mypage() {
       <header className="my-page-header">내 정보</header>
       <div className="my-page-div">
         <section>
-          <UserProfile />
-          <MyInfoForm />
+          <div style={{ display: 'flex' }}>
+            <UserProfile />
+            <MyInfoForm />
+          </div>
         </section>
       </div>
     </div>
@@ -23,14 +25,21 @@ export default function Mypage() {
 
 export function AdminMypage() {
   return (
-    <div>
-      <header className="my-page-header">내 정보</header>
-      <div className="my-page-div">
-        <section>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+        width: '100%',
+      }}
+    >
+      <h2>내 정보</h2>
+      <div className="my-page-div" style={{ minHeight: '646px' }}>
+        <section style={{ display: 'flex', flexDirection: 'column' }}>
           <UserProfile />
           <CompanyInfoForm />
         </section>
-        <section className="admin-my-page-second">
+        <section style={{ width: '100%' }}>
           <CompanyBigLogoUploader />
         </section>
       </div>

@@ -43,4 +43,13 @@ public class Company {
 
     @Column(name = "COMPANY_SMALL_LOGO_FILE_SN")
     private Long smallLogoFileSn;
+
+    @Column(name = "COMPANY_TEL")
+    private String companyTel; // 회사 전화번호
+
+    @Column(name = "COMPANY_ADDRESS")
+    private String companyAddress; // 회사 주소
+
+    @Column(name = "COMPANY_ADDRESS_DETAIL")
+    private String companyAddressDetail; // 회사 상세주소
 }

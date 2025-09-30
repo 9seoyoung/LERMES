@@ -199,7 +199,7 @@ export default function UserProfile() {
           {(authSn === 2 || authSn === 3) && (
             <>
               <div className="myInfoRow">
-                <span className="myInfoLabel">회사명</span>
+                <span className="myInfoLabel">상호명</span>
                 <span className="myInfoValue">{profile.companyName}</span>
               </div>
               <div className="myInfoRow">

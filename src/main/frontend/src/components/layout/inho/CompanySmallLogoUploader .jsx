@@ -83,7 +83,7 @@ export default function CompanySmallLogoUploader() {
       {canEdit && (
         <div
           className="logoButtons"
-          style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}
+          style={{ display: 'none', flexDirection: 'column', gap: '5px' }}
         >
           <label htmlFor="smallLogoUpload" className="btn">
             변경

@@ -2,25 +2,45 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
-  getCompanyDetail,
   saveCompanyDetail,
-  updateCompanyLogo,
+  updateCompanySmallLogo,
+  deleteCompanySmallLogo,
+  fetchCompany,
 } from '../../../auth/authService';
-import '../../../styles/MyInfo.css';
+import { uploadEvidenceFile } from '../../../attend/attendService'; // 파일 업로드용
+import { useAccount } from '../../../auth/AuthContext'; // 로그인 유저 정보
+import './CompanyInfoForm.css';
 
 const CompanyInfoForm = () => {
+  const { user } = useAccount();
+  const companyId = user?.USER_OGDP_CO_SN;
+
   const [form, setForm] = useState({
+    companyId: null,
     companyName: '',
     companyTel: '',
     companyAddress: '',
     companyAddressDetail: '',
     companyLogo: null,
-    bizLicenseNo: '제 2025-서울강남-12345호', // 하드코딩
+    bizLicenseNo: '제 2025-서울강남-12345호',
   });
   const [loading, setLoading] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [open, setOpen] = useState(false);
 
+  // ✅ 전화번호 포맷 함수
+  const formatPhone = (tel) => {
+    if (!tel) return '';
+    const digits = tel.replace(/\D/g, '');
+    if (digits.length === 10) {
+      return digits.replace(/(\d{2})(\d{4})(\d{4})/, '$1-$2-$3');
+    } else if (digits.length === 11) {
+      return digits.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    }
+    return tel;
+  };
+
+  // Daum 주소검색 API 로드
   useEffect(() => {
     if (window.daum && window.daum.Postcode) {
       setScriptLoaded(true);
@@ -34,22 +54,26 @@ const CompanyInfoForm = () => {
     document.body.appendChild(script);
   }, []);
 
+  // 회사 상세 조회
   const fetchCompanyDetail = async () => {
+    if (!companyId) return;
     try {
       setLoading(true);
-      const detail = await getCompanyDetail();
+      const detail = await fetchCompany(companyId);
+      console.log('📌 회사 정보 응답:', detail);
       if (detail) {
         setForm({
-          companyName: detail.companyName || '',
-          companyTel: detail.companyTel || '',
+          companyId: detail.id || companyId,
+          companyName: detail.name || '',
+          companyTel: formatPhone(detail.companyTel) || '', // ✅ 포맷 적용
           companyAddress: detail.companyAddress || '',
           companyAddressDetail: detail.companyAddressDetail || '',
-          companyLogo: detail.companyLogo || null,
+          companyLogo: detail.smallLogoFileSn || null,
           bizLicenseNo: '제 2025-서울강남-12345호',
         });
       }
     } catch (e) {
-      console.error(e);
+      console.error('❌ 회사 정보 불러오기 실패:', e);
       toast.error('회사 정보 불러오기 실패');
     } finally {
       setLoading(false);
@@ -58,13 +82,21 @@ const CompanyInfoForm = () => {
 
   useEffect(() => {
     fetchCompanyDetail();
-  }, []);
+  }, [companyId]);
 
+  // input 값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    if (name === 'companyTel') {
+      // 입력 중에도 포맷 적용
+      const digits = value.replace(/\D/g, '');
+      setForm((prev) => ({ ...prev, companyTel: formatPhone(digits) }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
+  // 주소검색 팝업
   const openPostcode = () => {
     if (!scriptLoaded) {
       toast.error('주소 검색 모듈이 아직 로드되지 않았습니다.');
@@ -80,11 +112,14 @@ const CompanyInfoForm = () => {
     }).open();
   };
 
+  // 회사 로고 업로드
   const handleLogoChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     try {
-      const uploaded = await updateCompanyLogo(file);
+      const uploaded = await uploadEvidenceFile(file);
+      await updateCompanySmallLogo(form.companyId, uploaded.fileSn);
+
       setForm((prev) => ({ ...prev, companyLogo: uploaded.fileSn }));
       toast.success('회사 로고 변경 완료');
     } catch (e) {
@@ -93,20 +128,51 @@ const CompanyInfoForm = () => {
     }
   };
 
+  // 회사 로고 삭제
+  const handleLogoDelete = async () => {
+    try {
+      await deleteCompanySmallLogo(form.companyId);
+      setForm((prev) => ({ ...prev, companyLogo: null }));
+      toast.success('회사 로고 삭제 완료');
+    } catch (e) {
+      console.error(e);
+      toast.error('회사 로고 삭제 실패');
+    }
+  };
+
+  // 저장
   const handleSave = async () => {
+    if (!form.companyId) {
+      toast.error('회사 ID가 없습니다.');
+      return;
+    }
+
     try {
       setLoading(true);
-      const res = await saveCompanyDetail(form);
+
+      // 전화번호 저장 시 하이픈 제거
+      const payload = {
+        name: form.companyName,
+        companyTel: form.companyTel.replace(/-/g, ''), // ← DB에는 - 없이 저장
+        companyAddress: form.companyAddress,
+        companyAddressDetail: form.companyAddressDetail,
+        smallLogoFileSn: form.companyLogo,
+      };
+
+      // companyId 따로 넘겨줌
+      const res = await saveCompanyDetail(form.companyId, payload);
+
       if (res) {
         toast.success('회사 정보 저장 성공');
-        setForm({
-          companyName: res.companyName || '',
-          companyTel: res.companyTel || '',
+        setForm((prev) => ({
+          ...prev,
+          companyId: res.id || form.companyId,
+          companyName: res.name || '',
+          companyTel: formatPhone(res.companyTel) || '',
           companyAddress: res.companyAddress || '',
           companyAddressDetail: res.companyAddressDetail || '',
-          companyLogo: res.companyLogo || null,
-          bizLicenseNo: '제 2025-서울강남-12345호',
-        });
+          companyLogo: res.smallLogoFileSn || null,
+        }));
       } else {
         toast.error('회사 정보 저장 실패');
       }
@@ -117,6 +183,7 @@ const CompanyInfoForm = () => {
       setLoading(false);
     }
   };
+
   return (
     <section className="companyInfoSection companyInfoSectionB">
       <h2
@@ -193,6 +260,13 @@ const CompanyInfoForm = () => {
               onChange={handleLogoChange}
               className="companyDetailInfoInput"
             />
+            <button
+              type="button"
+              className="companyInfoButton"
+              onClick={handleLogoDelete}
+            >
+              삭제
+            </button>
           </div>
 
           <div className="companyInfoRow">

@@ -29,7 +29,9 @@ function signUp() {
                   />
                 </button>
               </div>
-              <span className={styles.imgCaption}>*이미지 크기 180px X 60px</span>
+              <span className={styles.imgCaption}>
+                *이미지 크기 180px X 60px
+              </span>
             </div>
             <input
               className={styles.input}
@@ -51,7 +53,7 @@ function signUp() {
             <hr />
             <input
               className={styles.input}
-              placeholder="회사명을 입력하세요. (국문 표기)"
+              placeholder="상호명을 입력하세요. (국문 표기)"
             />
             <input
               className={styles.input}
