@@ -47,7 +47,7 @@ public class InterviewController {
      * @author : 김동식
      * @date : 2025.09.19
      */
-    @PostMapping("/apply") //TODO 면담 신청 API 컨트롤러
+    @PostMapping("/apply")
     public ResponseEntity<CmmnMap> applyInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,
             @RequestBody CmmnMap params){
@@ -118,8 +118,8 @@ public class InterviewController {
         // 강사는 나중에 기수테이블에서 자기 이름?(pk) 박힌거 있으면 그거 다 긁어와야 할 듯
         // 이건 나중에 진령언니랑 얘기해보겠음. 일단 화면 안봐서 킵 ㅋㅋ
         // if (resolvedCohortSn == null && resolvedCohortSn == 0) { 
-        //     // 동식이가 만든 xml 복사할 예정. cohortSn만 안들어갈꺼임, 회사SN은 필요한디 모든회사꺼 나오면 곤란 >> fixedSn 꺼내쓴다.
-        //     //@params 안에 cohortSn, fixedSn 사용 예정
+        //     // 동식이가 만든 xml 복사할 예정. cohortSn만 안들어갈꺼임, 회사SN은 필요한디 모든회사꺼 나오면 곤란 >> effectiveSn 꺼내쓴다.
+        //     //@params 안에 cohortSn, effectiveSn 사용 예정
             List<CmmnMap> resp = interviewService.getMyInterviewRequestsAll(params);
 //            resp에 게시물 유형 추가해서 반환
         //     log.debug("getMyInterviewRequests result rows={}", (resp != null ? resp.size() : 0));

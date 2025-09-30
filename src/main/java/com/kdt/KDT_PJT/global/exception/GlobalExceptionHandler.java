@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.global.exception;
 
+import com.kdt.KDT_PJT.cerfifi.exception.CertifiDuplicateException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         ex.printStackTrace(); // 필요 시 로그 레벨 조절
         return buildResponse("요청 처리 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST);
+    }
+
+
+    /** 증명서 서식 중복 등록 예외 (DB Duplicate Key) → 409 Conflict */
+    @ExceptionHandler(CertifiDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleCertifiDuplicateException(CertifiDuplicateException ex) {
+        // 409 Conflict는 자원의 현재 상태와 충돌하여 요청을 처리할 수 없을 때 사용됩니다.
+        return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     /** 공통 응답 생성 */

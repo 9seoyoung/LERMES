@@ -54,10 +54,12 @@ public class FileStorageService {
         return target;
     }
 
+    /*
+    * 파일 저장 이름을 이용하여 실제 경로에 파일이 존재하는지 확인 후 있으면 파일 객체를 리턴 */
     public Resource loadAsResource(String storedFileName) {
-        Path p = resolveFilename(storedFileName);
-        if (!Files.exists(p)) throw new RuntimeException("file not found: " + storedFileName);
-        return new FileSystemResource(p);
+        Path p = resolveFilename(storedFileName);   // 파일 저장된 경로 생성
+        if (!Files.exists(p)) throw new RuntimeException("file not found: " + storedFileName);  //해당 저장 경로에 파일 없으면 예외발생, 있으면 파일 객체를 반환(업로드시에는 MultipartFile타입(input용 클래스)이었는데)
+        return new FileSystemResource(p); // 다운로드시에는 Resource 타입 객체로 만들어서 리턴함 (Output용 클래스)
     }
 
     public String detectContentType(Path p) {

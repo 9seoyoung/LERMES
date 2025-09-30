@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.file.service;
 
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
+import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import com.kdt.KDT_PJT.file.dto.FileDTO;
 import com.kdt.KDT_PJT.file.dto.UploadResultDTO;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class FileService {
 
         cmmnDao.insert("com.kdt.mapper.file.FileMapper.insertTbFile", dto); //DB 쿼리에 담음, fileSn 자동증가로 값 추가됨
 
-        return new UploadResultDTO(dto.getFileSn(), original, stored, size);        // fileSn은 새로 생긴거 담고, 나머지 저장할때 썼던거 담아서 리턴
+        return new UploadResultDTO(dto.getFileSn(), original, stored, size, formUuid);        // fileSn은 새로 생긴거 담고, 나머지 저장할때 썼던거 담아서 리턴
     }
 
     @Transactional //하나의 원자적 단위로, 실패시 롤백 ㄱㄴ하도록
@@ -69,7 +70,7 @@ public class FileService {
 //            formUuid = UUID.randomUUID().toString().replace("-", "");
 //        }
 
-        // 파일 개수가 2개 이상일 경우에만 formUuid를 새로 생성, 해당 코드 사용시 위 블록 주석처리 필요
+        // 파일 개수가 2개 이상일 경우에만 formUuid를 생성, 해당 코드 사용시 위 블록 주석처리 필요
         if (files.size() > 1 && (formUuid == null || formUuid.isBlank())) {
             formUuid = UUID.randomUUID().toString().replace("-", "");
         }
@@ -100,5 +101,9 @@ public class FileService {
 
     public FileDTO getMeta(int fileSn) {
         return cmmnDao.selectOne("com.kdt.mapper.file.FileMapper.selectTbFileBySn", fileSn);
+    }
+
+    public List<CmmnMap> findFileSnByFormUuid(String formUuid){
+        return cmmnDao.selectList("com.kdt.mapper.file.FileMapper.findFileSnByFormUuid", formUuid);
     }
 }

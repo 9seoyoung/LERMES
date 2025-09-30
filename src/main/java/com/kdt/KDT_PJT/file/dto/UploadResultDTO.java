@@ -12,6 +12,7 @@ public class UploadResultDTO {
     private String originalFileName;
     private String storedFileName;
     private long size;
+    private String formUuid;
 
 //    public UploadResultDTO() {}
 //    public UploadResultDTO(Integer fileSn, String originalFileName, String storedFileName, long size) {

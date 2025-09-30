@@ -120,6 +120,7 @@ public class AuthController {
         data.put("USER_OGDP_CO_SN", me.getCompanySn());// null이어도 OK
         data.put("USER_COHORT_SN", me.getCohortSn());  // null이어도 OK
         data.put("HOME_PATH", nextPath);
+        data.put("USER_PROFILE_IMAGE", me.getUserProfileImage()); // null이어도 OK
 
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.noStore())

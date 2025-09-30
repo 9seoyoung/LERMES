@@ -56,7 +56,7 @@ public class AttendDocument {
     private String rmrkCn;
 
     // 첨부 파일 식별자
-    @Column(name = "FILE_SN", nullable = false)
+    @Column(name = "FILE_SN")
     private Long fileSn;
 
     // 승인 일시(없을 수 있음)
