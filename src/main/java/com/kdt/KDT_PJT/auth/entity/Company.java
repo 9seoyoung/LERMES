@@ -37,4 +37,10 @@ public class Company {
 
     @Column(name = "FILE_SN")
     private Integer fileSn;
+
+    @Column(name = "COMPANY_BIG_LOGO_FILE_SN")
+    private Long bigLogoFileSn;
+
+    @Column(name = "COMPANY_SMALL_LOGO_FILE_SN")
+    private Long smallLogoFileSn;
 }

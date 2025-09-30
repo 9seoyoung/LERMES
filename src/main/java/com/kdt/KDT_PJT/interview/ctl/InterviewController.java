@@ -5,6 +5,7 @@ import com.kdt.KDT_PJT.calendar.service.CalendarService;
 import com.kdt.KDT_PJT.cmmn.Enum.AuthEnums;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
+import com.kdt.KDT_PJT.file.service.FileService;
 import com.kdt.KDT_PJT.interview.service.InterviewService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class InterviewController {
 
     private final InterviewService interviewService;
     private final CalendarService calendarService;
+    private final FileService fileService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -63,7 +65,7 @@ public class InterviewController {
      * - 강사(INSTRUCTOR=4): url에 cohortSn 없으면 본인 cohortSn 사용, 그것도 없으면 400
      * - 대표/직원(TENANT=2, EMPLOYEE=3): url에 cohortSn 필수
      */
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR', 'STUDENT')") // 권한 체크
     @GetMapping({"/my-requests", "/my-requests/{cohortSn}"}) // 강사/대표/직원 공용
     public List<CmmnMap> getMyInterviewRequests(
             @AuthenticationPrincipal AuthCustomUserDetails me,
@@ -83,6 +85,20 @@ public class InterviewController {
 
         Integer resolvedCohortSn = pathCohortSn;
         switch (roleType) {
+            //---------서영추가---------------
+            case 5: // 수강생 본인이 신청한 내역
+                if (resolvedCohortSn == null) {
+                // 내 기수, 선택한 기수
+                Long myCohort = me.getCohortSn();
+                if (myCohort == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "기수 정보가 없습니다. 관리자에게 문의하세요.");
+                }
+                resolvedCohortSn = Math.toIntExact(myCohort);
+                params.put("userSn", me.getId());
+                log.info("userSn" + me.getId());
+            }
+                break;
+            //-------------------------------
             case 4: // 강사인 경우
                 if (resolvedCohortSn == null) {
                     // 내 기수, 선택한 기수
@@ -137,7 +153,7 @@ public class InterviewController {
     /**
      * 면담 요청 상세보기
      */
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR')") // 권한 체크
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR', 'STUDENT')") // 권한 체크
     @GetMapping("/read/{itvSn}")
     public ResponseEntity<CmmnMap> readInterview(@AuthenticationPrincipal AuthCustomUserDetails me,
                                                  @PathVariable Long itvSn,
@@ -177,10 +193,15 @@ public class InterviewController {
         }
         CmmnMap resp = interviewService.readInterviewbyItvSn(params); //실제 상세 조회
 
+        String formUuid = resp.get("formUuid").toString();
+        List<CmmnMap> files = fileService.readFileSnAndNmbyFormUuid(formUuid); //formUuid로 파일명, 파일SN 받아옴 없으면 []
+        resp.put("files",files);
+
+
         return ResponseEntity.ok(resp);
     }
 
-    @Transactional                      //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
+    @Transactional                     //너무길어지는데 걍 여기 트랜잭션으로 가야겠음
     @PutMapping("/confirm/{itvSn}") // 면담 확정
     public void confirmInterview(
             @AuthenticationPrincipal AuthCustomUserDetails me,

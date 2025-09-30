@@ -2,6 +2,7 @@ package com.kdt.KDT_PJT.bbs.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.kdt.KDT_PJT.survey.mapper.SurveyMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,8 +12,9 @@ public enum BbsType {
     NOTICE("공지"),               /*작성+수정 : 테넌트, 직원 / 열람권한: 전체공개*/
     CLASS_MATERIAL("자료실"),     /*작성+수정+열람 : cohort_sn을 가진 강사, 수강생*/
     FAQ("FAQ"),                  /*작성+수정 : 테넌트, 직원 / 열람권한 : cohort_sn을 가진 강사, 수강생*/
-    QNA("문의"),                  /*작성+수정+열람 : 테넌트, 직원, cohort_sn을 가진 강사, 수강생*/
-    PRIVATE("임시저장");           /* 나만보기(비공개) :user_sn */
+    QNA("문의"),
+    SURVEY("설문조사");                 /*작성+수정+열람 : 테넌트, 직원, cohort_sn을 가진 강사, 수강생*/
+
 
     private final String description;
 

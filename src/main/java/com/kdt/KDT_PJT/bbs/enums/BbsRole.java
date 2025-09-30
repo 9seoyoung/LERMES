@@ -11,20 +11,20 @@ public enum BbsRole {
     TENANT {
         @Override public boolean canCreate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE -> true;
+                case NOTICE, FAQ, QNA -> true;
                 default -> false;
             };
         }
         @Override public boolean canRead(BbsType type) { return true; }
         @Override public boolean canUpdate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE-> true;
+                case NOTICE, FAQ, QNA -> true;
                 default -> false;
             };
         }
         @Override public boolean canDelete(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE-> true;
+                case NOTICE, FAQ, QNA -> true;
                 default -> false;
             };
         }
@@ -33,26 +33,26 @@ public enum BbsRole {
     EMPLOYEE {
         @Override public boolean canCreate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE -> true;
+                case NOTICE, FAQ, QNA -> true;
                 default -> false;
             };
         }
         @Override public boolean canRead(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE -> true;
+                case NOTICE, FAQ, QNA -> true;
                 default -> false;
             };
         }
 
         @Override public boolean canUpdate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE -> true;
+                case NOTICE, FAQ, QNA  -> true;
                 default -> false;
             };
         }
         @Override public boolean canDelete(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA, PRIVATE -> true;
+                case NOTICE, FAQ, QNA -> true;
                 default -> false;
             };
         }
@@ -61,7 +61,7 @@ public enum BbsRole {
     INSTRUCTOR {
         @Override public boolean canCreate(BbsType type) {
             return switch (type) {
-                case CLASS_MATERIAL, QNA, PRIVATE -> true;
+                case CLASS_MATERIAL, QNA -> true;
                 default -> false;
             };
         }
@@ -69,13 +69,13 @@ public enum BbsRole {
 
         @Override public boolean canUpdate(BbsType type) {
             return switch (type) {
-                case CLASS_MATERIAL, QNA, PRIVATE -> true;
+                case CLASS_MATERIAL, QNA  -> true;
                 default -> false;
             };
         }
         @Override public boolean canDelete(BbsType type) {
             return switch (type) {
-                case CLASS_MATERIAL, QNA, PRIVATE -> true;
+                case CLASS_MATERIAL, QNA -> true;
                 default -> false;
             };
         }
@@ -84,7 +84,7 @@ public enum BbsRole {
     STUDENT {
         @Override public boolean canCreate(BbsType type) {
             return switch (type) {
-                case CLASS_MATERIAL, QNA, PRIVATE -> true;
+                case CLASS_MATERIAL, QNA -> true;
                 default -> false;
             };
         }
@@ -92,13 +92,13 @@ public enum BbsRole {
 
         @Override public boolean canUpdate(BbsType type) {
             return switch (type) {
-                case CLASS_MATERIAL, QNA, PRIVATE -> true;
+                case CLASS_MATERIAL, QNA -> true;
                 default -> false;
             };
         }
         @Override public boolean canDelete(BbsType type) {
             return switch (type) {
-                case CLASS_MATERIAL, QNA, PRIVATE -> true;
+                case CLASS_MATERIAL, QNA -> true;
                 default -> false;
             };
         }
@@ -106,14 +106,21 @@ public enum BbsRole {
 
     GENERAL {
         @Override public boolean canCreate(BbsType type) { return type == BbsType.QNA; }
-        @Override public boolean canRead(BbsType type) { return type == BbsType.NOTICE; }
+        @Override public boolean canRead(BbsType type) {
+            return switch (type) {
+                case NOTICE, QNA, FAQ -> true;
+                default -> false;
+            };
+        }
         @Override public boolean canUpdate(BbsType type) { return false; }
         @Override public boolean canDelete(BbsType type) { return false; }
     },
 
     VISITOR {
         @Override public boolean canCreate(BbsType type) { return false; } // 글 작성 불가
-        @Override public boolean canRead(BbsType type) { return type == BbsType.NOTICE; } // 공지만 열람 가능
+        @Override public boolean canRead(BbsType type) {
+            return type == BbsType.NOTICE || type == BbsType.FAQ; // 공지 + FAQ 열람 가능
+        }
         @Override public boolean canUpdate(BbsType type) { return false; }
         @Override public boolean canDelete(BbsType type) { return false; }
     };

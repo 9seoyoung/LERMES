@@ -10,6 +10,8 @@ import {v4 as uuidv4} from "uuid";
 import { createSurvey, createPost } from '../../../services/postService';
 import { uploadFiles } from '../../../services/fileService';
 import { toast } from 'react-toastify';
+import { useLocation } from 'react-router-dom';
+import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 
 
 // CreatePost.jsx
@@ -74,6 +76,8 @@ function CreatePost() {
   const userAuth = user.USER_AUTHRT_SN;
   const qAddRef = useRef(null);
   const scrollRef = useRef(null);
+  const locate = useLocation();
+  const {effectiveSn} = useSelectedCompany();
   // const [loading, setLoading] = useState(false);
 
   const [hortlist, setHortList] = useState([]);
@@ -92,12 +96,14 @@ function CreatePost() {
     title: "",
     content: "",
     type: "",
+    typeNm: "",
     scope: "",
     detailScope: "",
     detailScopeNm: "",
     surveyStart: "",     // 설문조사
     surveyEnd: "",   // 설문조사
-    files: files
+    files: files,
+    coSn: effectiveSn
   });
 
 
@@ -126,6 +132,7 @@ function CreatePost() {
     userSn: formData.userSn,
     title: formData.title,
     content: formData.content,
+    coSn: formData.coSn,
     type: formData.type,
     scope: formData.scope,
     detailScope: formData.detailScope,
@@ -169,7 +176,7 @@ function CreatePost() {
     (async () => {
       try {
         const data = await hortlistByCpSn(coSn);
-        setHortList(data.data);
+        setHortList(data.data.cohorts);
       } catch (e) {
         console.log(e.message);
       }
@@ -205,23 +212,29 @@ function CreatePost() {
               <div className="dropSet" style={{ zIndex: "8" }}>
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
-                  {(userAuth === 2 || userAuth === 3) ?
+                  {(userAuth === 2 || userAuth === 3 || userAuth === 1) ?
                       <>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "공지사항" }))}>공지사항</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "FAQ" }))}>FAQ</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
                       </>
                   : ""}
-                  {(userAuth === 4 || userAuth === 5) ? (
+                  {(userAuth === 4) ? (
                     <>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
                     </>
                   ) : ""}
+                  {(userAuth === 5) && (locate.pathname === "/stdHome/board/createPost") ? <>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({...s, type: "자료실"}))}>자료실</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
+                  </> : null}
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
               </div>
@@ -229,8 +242,12 @@ function CreatePost() {
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체" }))}>전체</p>
+                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체 공개" }))}>전체 공개</p>
+                  {(userAuth === 5) ?
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
+                  :
+                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
+                  } 
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
                   <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>

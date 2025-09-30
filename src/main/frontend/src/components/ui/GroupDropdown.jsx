@@ -15,7 +15,7 @@ function GroupDropdown({coSn, setCohortSn}) {
           // console.log(`>>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출`)
           const data = await hortlistByCpSn(coSn);
           // console.log(`<<<<<<<<<<<<<<< 반환 ${data.data}`)
-          setHortList(data.data || []);
+          setHortList(data.data.cohorts || []);
           // console.log(data.data.map((value, idx)=> `${value.cohortNm} + ${idx}`))
         } catch (e) {
           console.log(e.message);

@@ -1,17 +1,26 @@
 package com.kdt.KDT_PJT.calendar.ctl;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO;
+import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
 import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
+import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
 import com.kdt.KDT_PJT.calendar.service.CalendarService;
-import com.kdt.KDT_PJT.file.dto.UploadResultDTO;
+import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
+import java.util.Collections;
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/calendar")
@@ -30,12 +39,12 @@ public class CalendarController {
     // AttendExceptionHandler.java 참고하기
 
     @PostMapping
-    public ResponseEntity<CalendarDetailResponseDTO> createCalendar(
+    public ResponseEntity<CalendarListResponseDTO> createCalendar(
             @AuthenticationPrincipal AuthCustomUserDetails me,
             @RequestBody CalendarRequestDTO req
     ) {
         // 개인/공식 분기 및 권한 체크는 서비스에서 처리
-        CalendarDetailResponseDTO resp = calendarService.createCalendar(me, req);
+        CalendarListResponseDTO resp = calendarService.createCalendar(me, req);
         return ResponseEntity.ok(resp);
     }
 
@@ -43,4 +52,74 @@ public class CalendarController {
 //    public ResponseEntity<CalendarDetailResponseDTO> getCalendar() {
 //        return ResponseEntity.ok();
 //    }
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR','STUDENT')")
+    @GetMapping(params = {"year", "month"})         //기간 파라미터 있는 경우 YYYYMMDD
+    public ResponseEntity<List<CalendarSimpleResponseDTO>> getCalendarByRange(
+            @AuthenticationPrincipal AuthCustomUserDetails me,
+            @RequestParam(required = false) Integer cohortSn, // 직원등급 이상이면 기수번호 특정해서 요청해야함
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam(required = false) Integer day,
+            @RequestParam(required = false) Boolean isPrivate
+            // null: 전체, true: 개인, false: 공식
+    ){
+        Integer roleType = me.getRoleType().intValue();
+        if(roleType == 4 || roleType == 5){     // 강사 or 학생
+            cohortSn = me.getCohortSn().intValue(); //자신의 기수를 넣음 이 기수로 긁어올거임
+        }
+
+        // 2. DTO 생성 및 공통 필드 세팅
+        CalendarSimpleResponseDTO params = CalendarSimpleResponseDTO.builder()
+                .cohortSn(cohortSn)
+                .userSn(me.getId().intValue())
+                .prvtYn(isPrivate != null ? (isPrivate ? (byte) 1 : (byte) 0) : null)
+                .build();
+
+        // 3. DATETIME 검색 범위 계산 및 설정 로직
+        LocalDateTime searchStartDate;
+        LocalDateTime searchEndDate;
+
+        if (day != null){ //일별 검색 메서드 실행
+            // 검색용 값) 해당 일자의 시작시각, 익일 00:00:00 제작
+            LocalDate targetDay = LocalDate.of(year, month, day);
+
+            // [start, end) : 해당일 00:00:00 ~ 다음날 00:00:00 직전
+            LocalDateTime startInclusive = targetDay.atStartOfDay();
+            LocalDateTime endExclusive   = targetDay.plusDays(1).atStartOfDay();
+
+            //검색 값 DTO에 실어줌
+            params.setSearchStartDate(startInclusive);  // 해당 값 이상
+            params.setSearchEndDate(endExclusive);      // 해당 값 미만
+
+            List<CalendarSimpleResponseDTO> response = calendarService.getCalendarForDay(params);
+            return ResponseEntity.ok(response);
+
+        } else {          //월별 검색 메서드 실행
+            // 검색용 값 ) 해당 월의 시작, 익월 00:00:00 제작
+            YearMonth ym = YearMonth.of(year, month);
+
+            // [start, end) : 해당월 1일 00:00:00 ~ 다음달 1일 00:00:00 직전
+            LocalDateTime startInclusive = ym.atDay(1).atStartOfDay();
+            LocalDateTime endExclusive   = ym.plusMonths(1).atDay(1).atStartOfDay();
+
+            //검색 값 DTO에 실어줌
+            params.setSearchStartDate(startInclusive);
+            params.setSearchEndDate(endExclusive);
+
+            List<CalendarSimpleResponseDTO> response = calendarService.getCalendarForMonth(params);
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR','STUDENT')")
+    @GetMapping(params = {"!year", "!month", "!day"})//기간 파라미터 없는 경우 TODO 얘 해야함. 기간없이 리스트로 반환해주는거, 그리고 본문까지 확인 가능한 detail보기 컨트롤러도 만들어야함.
+    public ResponseEntity<List<CalendarListResponseDTO>> getCalendarListAll(
+            @AuthenticationPrincipal AuthCustomUserDetails me,
+            @RequestParam(required = false) Integer cohortSn, // 직원등급 이상이면 특정해서 요청해야함
+            @RequestParam(required = false) Boolean isPrivate
+            // null: 전체, true: 개인, false: 공식
+    ){
+        List<CalendarListResponseDTO> emptyList = Collections.emptyList(); // TODO 더미 반환중, 수정필요
+        return ResponseEntity.ok(emptyList);
+    }
 }

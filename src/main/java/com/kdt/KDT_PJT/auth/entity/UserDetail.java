@@ -40,6 +40,9 @@ public class UserDetail {
     @Column(name = "BIRTH")
     private LocalDate birth;
 
+    @Column(name = "MEMO")
+    private String memo;
+
     public void update(String address,String addressDetail , String major, String cert, String skills, LocalDate birth) {
         this.address = address;
         this.addressDetail = addressDetail;

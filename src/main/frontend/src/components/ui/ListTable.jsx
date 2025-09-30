@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/UiComp.module.css";
-import { useEffect } from "react";
 
 // @apiData api 호출해서 구조분해할당한 것., 백에서 객체 배열로 보내줘야됨
 export default function ListTable({
@@ -11,7 +10,7 @@ export default function ListTable({
     gridTemplate,
     gap = 0,
     whereTogo, //클릭 시 페이지 이동 될 함수
-    handlePostReader // 읽어올 API
+    postKey // 게시물 SN
 }) {
     // 선언부-------------------------------------------------------------
     const navigate = useNavigate();
@@ -33,7 +32,7 @@ export default function ListTable({
         style={{ ['--cols']: resolvedTemplate, ['--gap']: gap }}
     >
         {tableHead?.length > 0 ? 
-                <li className={`${styles.ListHeader} ${styles.gridRow}`}>
+                <li id={`${styles.ListHeader}`} className={` ${styles.gridRow}`}>
         {            tableHead.map((col, idx) => (
                     <div key={`th-${idx}`} className={styles.cell}>{col}</div>
                 ))
@@ -46,8 +45,7 @@ export default function ListTable({
             <li key={i} className={`${styles.row} ${styles.gridRow}`}
                 onClick={() => {
                     console.log(whereTogo);
-                    navigate(whereTogo);
-                    handlePostReader(row.postSn);
+                    navigate(`${whereTogo}/${row[postKey]}`);
                 }} 
             >
                 <div key={`no${i}`} className={styles.cell}>{i + 1}</div>

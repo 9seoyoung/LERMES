@@ -16,10 +16,11 @@ import {
   checkout,
   getActiveAttendCode,
 } from '../../../attend/attendService';
+import CompanySmallLogoUploader from '../inho/CompanySmallLogoUploader ';
 
 /** 공통 헤더 */
 export default function LmsHeader({ navToggle, setNavToggle }) {
-  const {fixedSn} = useSelectedCompany();
+  const { effectiveSn } = useSelectedCompany();
   const { user } = useAccount();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -53,17 +54,8 @@ export default function LmsHeader({ navToggle, setNavToggle }) {
         </button>
 
         {/* 회사 로고/이름 영역 */}
-        <div
-          className="logoBox"
-          onClick={() => {
-            navigate(`/${navKind}`);
-            console.log(user);
-          }}
-        >
-          {((user?.USER_AUTHRT_SN === 1 || user?.USER_AUTHRT_SN === 2) && (fixedSn == user?.USER_OGDP_CO_SN)) && (
-            <button className="tempBtn basicBtn">로고 변경</button>
-          )}
-          <h2>{user?.CO_NM || user?.CO_SN}</h2>
+        <div className="logoBox">
+          <CompanySmallLogoUploader />
         </div>
       </div>
 
@@ -72,7 +64,7 @@ export default function LmsHeader({ navToggle, setNavToggle }) {
   );
 }
 
-/** 수강생 헤더: 단일 버튼(출석/퇴실) + 상태 표시 */
+/** 수강생 헤더 */
 export function StdHeader() {
   const [showAttendModal, setShowAttendModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -81,18 +73,14 @@ export function StdHeader() {
   const [loading, setLoading] = useState(true);
   const { user } = useAccount();
 
-  console.log(user?.USER_EML_ADDR); // null 대비
-
   // 오늘 상태 갱신
   const refreshStatus = useCallback(async () => {
-    // 로그인 정보 없으면 API 호출하지 않음
     if (!user) {
       setInTime(null);
       setOutTime(null);
       setLoading(false);
       return;
     }
-    // (선택) 특정 계정 제외 로직이 필요하면 아래처럼
     if (user?.USER_EML_ADDR === 'hash@com') {
       setLoading(false);
       return;
@@ -100,7 +88,7 @@ export function StdHeader() {
 
     try {
       setLoading(true);
-      const r = await getTodayStatus(); // { ok, checkinTime, checkoutTime }
+      const r = await getTodayStatus();
       if (r?.ok) {
         setInTime(r.checkinTime ?? null);
         setOutTime(r.checkoutTime ?? null);
@@ -119,13 +107,12 @@ export function StdHeader() {
 
   const isCheckedIn = !!inTime;
   const isCheckedOut = !!outTime;
-  const actionLabel = !isCheckedIn ? '출석' : !isCheckedOut ? '퇴실' : '출석'; // 퇴실 완료면 '출석'(비활성)
-  const buttonDisabled = loading || isCheckedOut || !user; // 로그인/세션 확인 전에도 안전
+  const actionLabel = !isCheckedIn ? '출석' : !isCheckedOut ? '퇴실' : '출석';
+  const buttonDisabled = loading || isCheckedOut || !user;
 
-  // 헤더 단일 버튼 클릭 분기
   const onClickAction = () => {
-    if (!isCheckedIn) setShowAttendModal(true); // 출석(코드입력)
-    else if (!isCheckedOut) setShowConfirm(true); // 퇴실 확인
+    if (!isCheckedIn) setShowAttendModal(true);
+    else if (!isCheckedOut) setShowConfirm(true);
   };
 
   const fmt = (t) => (t ? t : '00:00');
@@ -135,10 +122,9 @@ export function StdHeader() {
     second: '2-digit',
   });
 
-  // 퇴실 확정
   const doCheckout = async () => {
     try {
-      const r = await checkout(); // ok 래퍼 기준: { ok, message, checkoutTime }
+      const r = await checkout();
       if (r?.ok) {
         await refreshStatus();
       } else {
@@ -160,7 +146,6 @@ export function StdHeader() {
         <div>{loading ? '- : -' : fmt(outTime)}</div>
       </div>
 
-      {/* 단일 버튼: 출석 ↔ 퇴실 ↔ 출석(비활성) */}
       <button
         type="button"
         onClick={onClickAction}
@@ -174,7 +159,6 @@ export function StdHeader() {
         {actionLabel}
       </button>
 
-      {/* 출석 모달(입실) */}
       {showAttendModal && (
         <StdAttendModal
           onClose={async () => {
@@ -184,7 +168,6 @@ export function StdHeader() {
         />
       )}
 
-      {/* 퇴실 확인 모달(헤더에서 직접 띄움) */}
       {showConfirm && (
         <CheckoutConfirmModal
           nowStr={nowStr}
@@ -203,7 +186,7 @@ export function TutorHeader() {
 
   const refreshCode = async () => {
     try {
-      const r = await getActiveAttendCode(); // { data: { code: "65" } }
+      const r = await getActiveAttendCode();
       setActiveCode(r?.data?.code ?? null);
     } catch {
       setActiveCode(null);
@@ -225,28 +208,11 @@ export function TutorHeader() {
         출석 코드 생성
       </button>
 
-      {/* 최신 코드 표시 */}
-      {/* {activeCode && (
-        <span
-          style={{
-            width: 120,
-            display: 'flex',
-            justifyContent: 'center',
-            border: 'none',
-            marginLeft: 12,
-            fontWeight: 700,
-            fontSize: 18,
-          }}
-        >
-          현재 코드: {activeCode}
-        </span>
-      )} */}
-
       {modalOpen && (
         <TutorAttendModal
           onClose={() => {
             setModalOpen(false);
-            refreshCode(); // ✅ 모달 닫힐 때 최신 코드 다시 불러오기
+            refreshCode();
           }}
         />
       )}
@@ -255,11 +221,9 @@ export function TutorHeader() {
 }
 
 export function AdminHeader() {
-  const { user } = useAccount();
   return <></>;
 }
 
 export function VisitorHeader() {
-  const { user } = useAccount();
   return <></>;
 }

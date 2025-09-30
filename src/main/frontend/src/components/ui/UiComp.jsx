@@ -81,7 +81,7 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
         type={type}
         className={`${styles.input} ${addStyle}`}
         disabled={disabled}
-        id={`${inputId}-${name}`} autoComplete='false'name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+        id={`${inputId}-${name}`} autoComplete={ "off"} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
       <button
         type="button"
         className={styles2.iconBtn}
@@ -104,7 +104,7 @@ export function FormInput(props) {
   return (
     <div className={styles.inputSet}>
       <label htmlFor={`${inputId}-${name}`} className={`${styles.inputLabel} ${addLabelStyle}`}>{labelNm}</label>
-      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={false} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
+      <input disabled={disabled} id={`${inputId}-${name}`} autoComplete={"off"} className={`${styles.input} ${addStyle}`} type={type} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
     </div>
   );
 }
@@ -135,10 +135,10 @@ export function BlueBtn({ textType }) {
   );
 }
 // 회색 버튼
-export function GrayBtn({ textType }) {
+export function GrayBtn({ textType, style }) {
   return (
     <div>
-      <button className={styles.grayBtn}>{textType}</button>
+      <button className={styles.grayBtn} style={{style}}>{textType}</button>
     </div>
   );
 }
@@ -153,9 +153,9 @@ export function SchedAddBtn({ textType, onClick }) {
 }
 
 // 저장 버튼
-export function SaveBtn({ textType, onClick }) {
+export function SaveBtn({ textType, onClick, style }) {
   return (
-      <button className={`${styles.smallBtn} ${styles.saveBtn}`} onClick={onClick}>
+      <button className={`${styles.smallBtn} ${styles.saveBtn}`} style={style} onClick={onClick}>
         {textType}
       </button>
   );

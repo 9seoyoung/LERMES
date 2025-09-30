@@ -44,6 +44,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   max-width: max-content;
 }
 
+.inputSet .nolimitedInput input {
+  width: 100%;
+  display: flex;
+}
+
 .inputSet .inputLabel {
   font-size: 1.2rem;
 }
@@ -84,7 +89,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .blueBtn {
   /* background-color: #0088ff;
   color: #fff; */
-  background-color: var(--color-primary-bg);
+  background-color: var(--color-primary);
   color: var(--color-text-primary);
 }
 
@@ -94,7 +99,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border: 1px solid #0088ff;
   outline: none;
 }
-
 
 /* 회색 버튼 ex. 비밀번호 변경, ←back */
 .grayBtn {
@@ -254,7 +258,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 /* 퇴실 버튼 */
 .checkOutBtn {
   /* background-color: #ffb5a0; */
-  background-color: var(--color-accent-light);
+  background-color: var(--color-accent-subtle);
 }
 
 .checkOutBtn:hover,
@@ -348,7 +352,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   /* background-color: #e1f1ff;
   color: #0088ff; */
   background-color: var(--color-secondary-light);
-  color: var(--color-primary-bg);
+  color: var(--color-primary);
   font-size: 1.2rem;
   font-weight: bold;
 }
@@ -431,6 +435,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   /* background-color: #fff; */
   background-color: var(--color-sec-bg);
   border-radius: 4px;
+  border: none;
 }
 
 .orangeCheck input:checked+.checkmark::after {
@@ -447,7 +452,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .blueCheck input:checked+.checkmark::after {
   /* color: #0088ff; */
-  color: var(--color-primary-bg);
+  color: var(--color-primary);
 }
 
 /* 파일 첨부 */
@@ -459,7 +464,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   padding: 4px;
   font-size: 12px;
   /* color: #08f; */
-  color: var(--color-primary-bg);
+  color: var(--color-primary);
   display: flex;
   justify-content: center;
   cursor: pointer;
@@ -516,7 +521,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 /* ListTable */
-
 .ListTbBg {
   display: flex;
   flex-direction: column;
@@ -527,11 +531,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   list-style: none;
 }
 
-.ListHeader {
+#ListHeader {
   /* background-color: #e1f1ff; */
   background-color: var(--color-secondary-light);
-  display: flex;
-  gap: 16px;
+  height: 40px;
   border-radius: 6px;
   padding: 4px 0;
   align-items: center;
@@ -542,7 +545,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   grid-template-columns: var(--cols);
   column-gap: var(--gap, 8px);
   align-items: center;
+  height: 100%;
   width: 100%;
+  padding: 2px 0;
 }
 
 .row {
@@ -550,6 +555,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   background-color: var(--color-light-bg);
   border-radius: 4px;
   height: 3.2rem;
+  align-items: center;
 }
 
 .row:hover {

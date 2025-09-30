@@ -13,11 +13,6 @@ export function createGroup(body) {
   });
 }
 
-export function createPost(body) {
-  return api.post('/board/post', body, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
 
 export function createInterview(body) {
   return api.post('/interview/apply', body, {
@@ -31,7 +26,9 @@ export function createInterviewMemo(body) {
   });
 }
 
-
+export const createPost = (params) => api.post(`/posts`, params, {
+  headers: { 'Content-Type': 'application/json' },
+});
 
 
 
@@ -43,7 +40,7 @@ export function createInterviewMemo(body) {
  * @param {Number} effectiveSn LMS 회사 시리얼 넘버 고정값 => 상준이가 수퍼메인페이지 API 만들고 나면 정해질 예정
  * @returns {Object} itvSn 에 해당하는 면담신청 데이터
  */
-export const readInterview = (itvSn) => api.get(`/read/${itvSn}`);
+export const readInterview = (itvSn) => api.get(`interview/read/${itvSn}`);
 
   // 면담신청 리스트 조회(관리자)
 // postService.js
@@ -88,9 +85,41 @@ export const readAllOfPostList = ({effectiveSn}) => api.get('/posts/all', {param
  */
 export const readPostlistByfilter = ({filter, effectiveSn}) => api.get('/posts/list/{filter}',{params: {filter, effectiveSn}});
 
+
+
 /**
  * 게시글 상세보기
  * @param {Number} postSn 게시글 시리얼번호
+ * @param {Number} effectiveSn 선택되어있는 회사 시리얼 번호
+ * @param {String} type 요청한 게시글 유형
  * @returns {Object} 게시글 내용
  */
-export const readPostByPostSn = ({postSn, effectiveSn}) => api.get('/posts/list/{filter}',{params: {postSn, effectiveSn}});
+export const readPostByPostSn = ({postSn, effectiveSn, type}) => api.get(`/posts/${postSn}`,{params: {postSn, effectiveSn, type}});
+
+/**
+ * 게시글 수정하기
+ * @param {Number} postSn 게시글 시리얼 번호
+ * @param {Number} effectiveSn 회사 시리얼 번호
+ * @param {Object} formData 게시글 데이터
+ * @returns 
+ */
+export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/posts/${postSn}`, formData, {params: {effectiveSn}});
+
+
+/**
+ * 게시글 목록 조회
+ * @param {Number} cohortSn 선택한 기수 시리얼번호
+ * @param {String} filter 게시글 유형 필터
+ * @param {Number} effectiveSn 클릭으로 들어온 회사시리얼번호 or 내가 속한 회사 시리얼번호
+ * @returns {Array<Object>} 게시글 목록
+ */
+export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn}})
+
+
+
+/**
+ * 수강생 권한 - 학습 일정 메뉴, 필터별 API요청
+ * @param {String} url API요청 URL
+ * @returns {Array<Objects>} 전체 / 공식 / 내 일정/ 일지 / 면담 / 임시저장에 해당하는 게시물 목록
+ */
+export const callStudyPlanListByFilter = ({url, filter, effectiveSn}) => api.get(`${url}`, {params: {filter, effectiveSn}})
