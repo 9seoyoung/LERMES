@@ -6,12 +6,14 @@ import {Settings} from "lucide-react";
 import ListEditTable from '../../../components/ui/ListEditTable';
 import { hortlistByCpSn } from '../../../services/cohortService';
 import { useSelectedCompany} from '../../../contexts/SelectedCompanyContext';
+import { pullAllAccount } from '../../../services/accountService';
 
 export default function AccountSet() {
   const [manageState, setManageState] = useState(false);
   const [selectedIdx, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [cohortList, setCohortList] = useState([]);
+  const [accountList, setAccountList] = useState([]);
   const [formData, setFormData] = useState({
     // formData 초기값
     // 0. 유저테이블 리스트 객체배열로 보내주셈
@@ -29,6 +31,9 @@ export default function AccountSet() {
       const { data } = await hortlistByCpSn(effectiveSn);
         console.log(data.cohorts);
         setCohortList(data.cohorts);
+      const account = await pullAllAccount(effectiveSn);
+        console.log(account.data);
+        setAccountList(account.data);
       } catch(err) {
         console.log(err);
       }
@@ -89,20 +94,21 @@ export default function AccountSet() {
             <div className="BigListBox">
               {manageState ? 
                 <ListEditTable 
-                tableHead={['순번', '직책' ,'이름', '이메일', '전화번호', '담당그룹', '권한레벨', '블랙']}
-                columnData={['no', 'hat', 'name','email', 'tel', 'duty', 'authLv', 'blacklist']}
-                apiData={[{no: 1, name:"하이", email:"ㄴㄴ", tel:"ㅁ"}, {no: 1, name:"하이", email:"ㄷㄷ", tel:"ㄴ"}]}
-                gridTemplate="0.5fr 0.5fr 1fr 1fr 2fr 2fr 2fr 1fr 1fr"
+                tableHead={['순번','이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
+                columnData={[ 'name','email', 'userTelno', 'memo','roleType', 'enabled']}
+                apiData={accountList}
+                gridTemplate="0.5fr 0.5fr 1.5fr 2fr 1.6fr 1.5fr 0.7fr 1fr "
                 formData={formData}
                 type = {['text', 'text', 'text', 'email', 'tel', 'select', 'select' ]}
+                options = {cohortList}
                 />
                 :
                 <ListTable
-                tableHead={['순번', '직책' ,'이름', '이메일', '전화번호', '담당그룹', '권한레벨', '블랙']}
-                columnData={['no', 'hat', 'name','email', 'tel', 'duty', 'authLv', 'blacklist']}
-                apiData={[{no: 1, name:"하이", email:"ㄴㄴ", tel:"ㅁ"}]}
+                tableHead={['순번', '이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
+                columnData={['name','email', 'userTelno', 'duty', 'roleType', 'enabled']}
+                apiData={ accountList }
                 // 문자열로 지정
-                gridTemplate="0.5fr 1fr 1fr 2fr 2fr 2fr 1fr 1fr"
+                gridTemplate="0.5fr 1fr 1fr 2fr 2fr 2fr 1fr"
                 gap="12px"
                 handleChange = {handleChange}
               /> 

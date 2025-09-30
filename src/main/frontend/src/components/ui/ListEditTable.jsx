@@ -302,7 +302,7 @@ export default function ListEditTable({
   return (
     <>
       {/* 툴바 */}
-      <ul style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}>
+      <ul style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 , justifyContent: "space-between"}}>
         <li>
           <label style={{ display: "inline-flex", gap: 6, alignItems: "center", cursor: "pointer" }}>
             <input
@@ -316,9 +316,10 @@ export default function ListEditTable({
         </li>
         <li>
           <button
+            id="accountD_Btn"
             onClick={handleBulkDelete}
             disabled={selected.size === 0}
-            style={{ opacity: selected.size === 0 ? 0.5 : 1 }}
+            style={{ opacity: selected.size === 0 ? 0.5 : 1 , color: selected.size  === 0 ? null : "#E9623A"}}
           >
             선택삭제 ({selected.size})
           </button>
@@ -357,9 +358,11 @@ export default function ListEditTable({
                     checked={checked}
                     onChange={() => toggleRow(rowKey)}
                     value={rowKey}
+    
                   />
                 )}
               </div>
+               <div key={`no${i}`} className={styles.cell}>{i + 1}</div>
 
               {/* 데이터 컬럼 */}
               {columnData.map((col, j) => {
@@ -385,9 +388,11 @@ export default function ListEditTable({
                     key={`${rowKey}-${j}`}
                     className={styles.cell}
                     onKeyDown={commonHandlers.onKeyDown}
+
                   >
                     {type[j] === "date" || type[j] === "time" ? (
                       <input
+                    
                         type={type[j]}
                         handleChange={(e, m) =>
                           onCellChange(e, { ...m, rowIndex: i, col, colIndex: j })
@@ -405,6 +410,11 @@ export default function ListEditTable({
                         value={row[col] ?? ""}
                         autoComplete="off"
                         {...commonHandlers}
+                        style={{
+                          width: "100%",
+                          padding: "0 12px",
+                          margin: "0 12px"
+                        }}
                       />
                     )}
                   </div>
