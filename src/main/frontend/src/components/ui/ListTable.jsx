@@ -32,7 +32,7 @@ export default function ListTable({
         style={{ ['--cols']: resolvedTemplate, ['--gap']: gap }}
     >
         {tableHead?.length > 0 ? 
-                <li className={`${styles.ListHeader} ${styles.gridRow}`}>
+                <li id={`${styles.ListHeader}`} className={` ${styles.gridRow}`}>
         {            tableHead.map((col, idx) => (
                     <div key={`th-${idx}`} className={styles.cell}>{col}</div>
                 ))
