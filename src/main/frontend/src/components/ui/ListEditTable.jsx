@@ -149,6 +149,7 @@ export default function ListEditTable({
   gridTemplate,
   gap = 0,
   type = [],
+  
 }) {
   // ---------- 유틸 ----------
   const makeEmptyRow = () => {
@@ -330,7 +331,7 @@ export default function ListEditTable({
         style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
       >
         {tableHead?.length > 0 && (
-          <li key="tableHead" className={`${styles.ListHeader} ${styles.gridRow}`}>
+          <li key="tableHead" id={`${styles.ListHeader}`} className={` ${styles.gridRow}`}>
             <div className={styles.cell} />
             {tableHead.map((col, idx) => (
               <div key={`th-${idx}`} className={styles.cell}>
@@ -346,13 +347,13 @@ export default function ListEditTable({
           const checked = !isPh && selected.has(rowKey);
 
           return (
-            <li key={rowKey} className={`${styles.editRow} ${styles.gridRow}`}>
+            <li key={rowKey} className={`${styles.row} ${styles.gridRow}`}>
               {/* 체크박스: 플레이스홀더면 표시X */}
               <div className={styles.cell}>
                 {isPh ? (
                   <span style={{ opacity: 0.4 }}>—</span>
                 ) : (
-                  <OrangeCheckbox
+                  <input type="checkbox"
                     checked={checked}
                     onChange={() => toggleRow(rowKey)}
                     value={rowKey}
@@ -386,7 +387,7 @@ export default function ListEditTable({
                     onKeyDown={commonHandlers.onKeyDown}
                   >
                     {type[j] === "date" || type[j] === "time" ? (
-                      <DateTimeInput
+                      <input
                         type={type[j]}
                         handleChange={(e, m) =>
                           onCellChange(e, { ...m, rowIndex: i, col, colIndex: j })
