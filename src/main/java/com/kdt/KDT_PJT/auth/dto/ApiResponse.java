@@ -1,15 +1,13 @@
 package com.kdt.KDT_PJT.auth.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ApiResponse {
     private boolean ok;
     private String message;

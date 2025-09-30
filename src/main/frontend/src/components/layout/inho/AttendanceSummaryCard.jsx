@@ -17,7 +17,7 @@ function AttendanceSummaryCard() {
     <section className="att-card">
       <div className="att-card__head">
         <h2 className="att-card__title">출석 현황</h2>
-        <span className="att-card__period">{summary.period}</span>
+        <span className="att-card__period">({summary.period})</span>
       </div>
 
       <div className="att-card__divider" />

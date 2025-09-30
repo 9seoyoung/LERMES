@@ -13,7 +13,7 @@
   margin: 0;
   padding: 0;
   /* color: #222; */
-  color: var(--color-font-main);
+  color: var(--color-text-main);
 }
 
 html {
@@ -163,8 +163,8 @@ h4 {
   height: 48px;
   /* background-color: #0088FF;
   color: #fff; */
-  background-color: var(--color-primary-bg);
-  color: var(--color-light-bg);
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
   font-weight: 500;
   border-radius: 24px;
   font-size: 1.4rem;
@@ -206,7 +206,7 @@ h4 {
   height: 8rem;
   /* background-color: #0088FF; */
   /* color: #fff; */
-  background-color: var(--color-primary-bg);
+  background-color: var(--color-primary);
   color: var(--color-text-primary);
   font-size: 3.2rem;
   padding: 16px 24px;
@@ -294,6 +294,7 @@ footer>div:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  object-fit: contain;
   border-radius: 16px;
   /* box-shadow: 4px -4px 4px #00000025; */
     box-shadow: 4px 4px 4px var(--shadow-color);
@@ -319,8 +320,6 @@ footer>div:hover {
   border: 0;
   border-radius: 6px;
 }
-
-
 
 .mainCont_Lms_Row {
   display: flex;
@@ -409,7 +408,6 @@ footer>div:hover {
   opacity: 60%;
 }
 
-
 .createBtn {
   /* background-color: #FCFEFF; */
   background-color: var(--color-sec-bg);
@@ -485,7 +483,6 @@ footer>div:hover {
   color: var(--color-light-bg);
 }
 
-
 /* 더보기 버튼 */
 .specificBtn {
   display: flex;
@@ -516,7 +513,6 @@ footer>div:hover {
   background: #888;
   border-radius: 4px;
 }
-
 
 /* nav */
 .navCont{
@@ -615,7 +611,8 @@ footer>div:hover {
   justify-content: center;
   flex-direction: column;
   border-radius: 8px;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: var(--color-sec-bg);
   padding: 8px 12px;
 }
 
@@ -685,7 +682,7 @@ footer>div:hover {
 #ftClicked {
   /* background-color: #0088FF;
   color: #FCFEFF; */
-  background-color: var(--color-primary-bg);
+  background-color: var(--color-primary);
   color: var(--color-sec-bg);
 }
 
@@ -768,7 +765,6 @@ footer>div:hover {
   align-items: center;
   justify-content: space-between;
 }
-
 
 /* 드롭 다운 */
 .selectBoxArea {
@@ -879,8 +875,6 @@ footer>div:hover {
   max-width: 70%;
 }
 
-
-
 .formLabel{
   justify-content: center;
   align-items: center;
@@ -967,7 +961,8 @@ footer>div:hover {
 }
 
 .questionAdd:hover {
-  background-color: #c6e4ff;
+  /* background-color: #c6e4ff; */
+  background-color: var(--color-secondary-light);
   font-size: 1.2rem;
 }
 
@@ -1002,7 +997,6 @@ footer>div:hover {
   /* color: #d9d9d9; */
   color: var(--color-main-bg);
   outline: none;
-
 }
 
 .questionTitle:focus {
@@ -1020,7 +1014,6 @@ footer>div:hover {
   border: 1px solid #dedede;
   padding: 8px 12px;
 }
-
 
 .questionTypeBox .dropSet p {
   padding: 4px 12px;
@@ -1092,8 +1085,7 @@ footer>div:hover {
   /* background-color: #E1F1FF; */
   background-color: var(--color-secondary-light);
   border-radius: 8px;
-  width: 100%
-  ;
+  width: 100%;
 }
 
 .yScroll80rem {
