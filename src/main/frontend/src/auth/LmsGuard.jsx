@@ -35,7 +35,7 @@ export default function LmsGuard() {
 
     const arrive = authLvPath?.myCoAuth;
 
-    if (authLvPath?.[myCoAuth]) {
+    if (authLvPath[myCoAuth]) {
 
     <Navigate to = {`${arrive}`} replace></Navigate>
     } else {

@@ -30,7 +30,9 @@ export default function SuperMain() {
       try {
         const res = await pullAllCompany();
         console.log(res.data);
+        console.log(res);
         setCompanyList(res.data);
+        // 상준아 상태값 내놔.
         toast.success('정보 불러옴');
       } catch (err) {
         toast.error(err.message);
@@ -39,7 +41,7 @@ export default function SuperMain() {
     };
 
     fetchCompanies();
-  }, []);
+  }, [effectiveSn]);
 
   const handleGoLms = (selectedCoSn) => {
     // 상태는 비동기이므로 분기엔 클릭값을 직접 사용
@@ -83,7 +85,7 @@ export default function SuperMain() {
                 >
                   LMS 바로가기
                 </button>
-                <button type="button">상태변수</button>
+                <button type="button">{`${v.stts}`}</button>
               </div>
             </div>
           </div>
