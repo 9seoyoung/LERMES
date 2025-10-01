@@ -1,10 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAccount } from "../auth/AuthContext";
 import { useSelectedCompany } from "../contexts/SelectedCompanyContext";
 
 export default function LmsGuard() {
   const { user, loading } = useAccount();
   const { effectiveSn } = useSelectedCompany();
+  const loc = useLocation();
 
   if (loading) return null;
   if (!user) return <Navigate to="/visitorHome" replace />;
@@ -14,7 +15,12 @@ export default function LmsGuard() {
   );
   const selected = Number(effectiveSn ?? NaN);
 
+
   // 남의 회사
+  if (loc.pathname.startsWith("/visitorHome/applyRecruitPoster/")) {
+    return
+  }
+
   if (myCompany != selected) {
     return <Navigate to="/visitorHome" replace />;
   }
@@ -30,7 +36,7 @@ export default function LmsGuard() {
       4: "tutorHome",
       5: "stdHome",
       6: "visitorHome",
-      7: "visitorHome"
+      7: "unknownHome"
     }
 
     const arrive = authLvPath?.myCoAuth;

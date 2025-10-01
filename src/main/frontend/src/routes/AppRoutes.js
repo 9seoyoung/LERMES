@@ -91,8 +91,8 @@ function AppRoutes() {
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
-        <Route path="visitorHome" element={<VisitorHome />} />
-        <Route path="applyRecruitPoster" element={<RecuritRead/>}/>
+        <Route path="unknownHome" element={<VisitorHome />} />
+        
 
         <Route element={<RoleRoute roles={[1, 2, 3, 4, 5]} />}>
           {/* 로그인이 필요한 테스트 페이지 */}
@@ -103,6 +103,9 @@ function AppRoutes() {
 
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
+            <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
+          <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecuritRead/>}/>
+            <Route path="visitorHome" element={<VisitorHome />} />
             <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
             {/* 관리자(테넌트, 직원) */}
             <Route element={<RoleRoute roles={[1, 2, 3]} />}>
@@ -170,6 +173,7 @@ function AppRoutes() {
               <Route path="stdHome/myPage" element={<StdMypage />} />
             </Route>
           </Route>
+        </Route>
         </Route>
       </Route>
     </Routes>

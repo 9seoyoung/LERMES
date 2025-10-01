@@ -13,6 +13,14 @@ export function createGroup(body) {
   });
 }
 
+export function applyGroup(body) {
+  return api.post('/cohort-member/apply', body, {
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
+
+export const readRecruitPoster = (recruitSn) => api.get(`/cohorts/${recruitSn}`)
+
 
 export function createInterview(body) {
   return api.post('/interview/apply', body, {
