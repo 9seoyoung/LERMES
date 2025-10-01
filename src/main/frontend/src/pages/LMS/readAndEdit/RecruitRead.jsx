@@ -44,7 +44,7 @@ function RecruitRead() {
     groupName: "", //그룹명
     type: "모집공고",
     content: "",
-    scope: "",
+    scope: [1, 2, 3],
     surveyStart: "",     // 모집시작
     surveyEnd: "",
     startDate:"",
@@ -131,14 +131,55 @@ function RecruitRead() {
     console.log("[change]", name, value);
   };
 
+// 응답 요약을 사람이 읽기 좋은 문자열로 합치기
+const flattenAnswers = (answersMap) => {
+  const parts = [];
+  for (const [qid, v] of Object.entries(answersMap || {})) {
+    if (!v) continue;
+    // single: {id, label}
+    if (v && typeof v === "object" && "label" in v && "id" in v) {
+      parts.push(v.label);
+      continue;
+    }
+    // multiple: [{id,label}, ...]
+    if (Array.isArray(v)) {
+      const labels = v.map(x => x?.label).filter(Boolean).join(", ");
+      if (labels) parts.push(labels);
+      continue;
+    }
+    // text/image: { text: "..." }
+    if (v && typeof v === "object" && "text" in v) {
+      if (v.text?.trim()) parts.push(v.text.trim());
+      continue;
+    }
+  }
+  return parts.join(" | ");
+};
+
+
+const buildAnswersMap = (surveyForm) => {
+  const out = {};
+  for (const p of surveyForm.pages || []) {
+    for (const q of p.questions || []) {
+      if (q.type === "single") out[q.qid] = q.answer ? { ...q.answer } : null;
+      else if (q.type === "multiple") out[q.qid] = (q.selected || []).map(x => ({ ...x }));
+      else out[q.qid] = { text: q.answerText ?? "" };
+    }
+  }
+  return out;
+};
   const saveSubmit = async (e) => {
-    e.preventDefault();
+   e.preventDefault();
 
   const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
     : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
-  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
+  const answersMap = buildAnswersMap(snapshot.surveyForm);
+  const flatAnswer = flattenAnswers(answersMap); // ★ 요약 문자열 생성
+
+
+  const body = { ...snapshot.formData, answer: flatAnswer, surveyForm: snapshot.surveyForm,  surveyAnswers: answersMap };
 
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.table(snapshot.formData);

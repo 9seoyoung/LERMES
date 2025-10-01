@@ -64,7 +64,7 @@ const QuestionType = forwardRef(function QuestionType(
           <p onClick={() => onSetType(q.qid, "single")}>객관식(단일)</p>
           <p onClick={() => onSetType(q.qid, "multiple")}>객관식(중복)</p>
           <p onClick={() => onSetType(q.qid, "text")}>주관식</p>
-          <p onClick={() => onSetType(q.qid, "image")}>이미지</p>
+          {/* <p onClick={() => onSetType(q.qid, "image")}>이미지</p> */}
         </Dropdown>
 
         <label style={{ display: "inline-flex", gap: 6, alignItems: "center", marginLeft: 12 }}>

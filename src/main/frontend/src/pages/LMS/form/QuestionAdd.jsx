@@ -17,8 +17,12 @@ export const makeQuestion = () => ({
     { id: uuid(), label: "" },
     { id: uuid(), label: "" },
   ],
-  answer: "",
+  // 응답 필드들
+  answer: null,         // single
+  selected: [],         // multiple
+  answerText: "",       // text
 });
+
 
 const ensureOptions = (opts = []) => {
   const next = (opts || []).map(o => ({ id: o.id || uuid(), label: o.label ?? "" }));

@@ -156,21 +156,34 @@ const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange
         : q
     ));
 
-    const onSetAnswer = (qid, val) => {
-      onChange(prev => prev.map(q => {
-        if (q.qid !== qid) return q;
-        if (q.type === "multiple") {
-          // val: string[] (selectedIds)
-          return { ...q, selectedIds: Array.isArray(val) ? val : [], answer: "" };
-        } else if (q.type === "single") {
-          // val: string (opt id)
-          return { ...q, answer: val, selectedIds: [] };
-        } else {
-          // text/image 등
-          return { ...q, answer: val };
-        }
-      }));
-    };
+const onSetAnswer = (qid, val) => {
+  onChange(prev =>
+    prev.map(q => {
+      if (q.qid !== qid) return q;
+
+      if (q.type === "multiple") {
+        // val: { id, label }가 추가/제거 이벤트로 들어오게 설계
+        const cur = Array.isArray(q.selected) ? q.selected : [];
+        const exists = cur.findIndex(x => x.id === val.id);
+        const next =
+          val.__remove // 체크 해제 플래그
+            ? (exists >= 0 ? cur.filter(x => x.id !== val.id) : cur)
+            : (exists >= 0 ? cur : [...cur, { id: val.id, label: val.label }]);
+        return { ...q, selected: next, answer: null, answerText: q.answerText ?? "" };
+      }
+
+      if (q.type === "single") {
+        // val: { id, label }
+        return { ...q, answer: { id: val.id, label: val.label }, selected: [] };
+      }
+
+      // text / image 등
+      // val: string
+      return { ...q, answerText: val };
+    })
+  );
+};
+
     
     const onToggleRequired = (qid, required) => {
       onChange(prev => prev.map(q => q.qid === qid ? { ...q, required } : q));

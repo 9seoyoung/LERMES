@@ -104,49 +104,48 @@ const QuestionType = forwardRef(function QuestionType(
         )}
 
         {/* 객관식: 항목 편집 + 미리보기 */}
-        {isChoice && (
-          <div className="multipleSet">
-            {q.options.map((opt) => {
-              const inputId = `q-${q.qid}-opt-${opt.id}`;
-              const checked =
-                isRadio ? q.answer === opt.id
-                        : Array.isArray(q.selectedIds) && q.selectedIds.includes(opt.id);
+{isChoice && (
+  <div className="multipleSet">
+    {q.options.map((opt) => {
+      const inputId = `q-${q.qid}-opt-${opt.id}`;
+      const checked = q.type === "single"
+        ? q.answer?.id === opt.id
+        : Array.isArray(q.selected) && q.selected.some(x => x.id === opt.id);
 
-              const handleSelect = (e) => {
-                const { checked } = e.target;
-                if (isRadio) {
-                  onSetAnswer?.(q.qid, opt.id); // 단일: answer에 opt.id 저장
-                } else {
-                  // 다중: selectedIds 배열 유지
-                  const next = new Set(q.selectedIds || []);
-                  if (checked) next.add(opt.id);
-                  else next.delete(opt.id);
-                  onSetAnswer?.(q.qid, Array.from(next)); // answer 대신 selectedIds로 쓰고 싶으면 onSetAnswer의 처리 변경
-                }
-              };
+      const handleSelect = (e) => {
+        const payload = { id: opt.id, label: opt.label };
+        if (q.type === "single") {
+          onSetAnswer?.(q.qid, payload);           // 선택값 교체
+        } else {
+          onSetAnswer?.(q.qid, e.target.checked    // 추가/제거
+            ? payload
+            : { ...payload, __remove: true });
+        }
+      };
 
-              return (
-                <div key={opt.id} style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }}>
-                  <input
-                    id={inputId}
-                    type={isRadio ? "radio" : "checkbox"}
-                    name={`preview-${q.qid}`}
-                    checked={!!checked}
-                    onChange={handleSelect}
-                  />
-                  <input
-                    className={styles.input}
-                    type="text"
-                    value={opt.label}
-                    disabled={true}
-                    style={{ flex: 1, border: "none", color: "var(--font-color-base)", background: "var(--color-sec-bg)" }}
-                  />
-                  <label htmlFor={inputId} />
-                </div>
-              );
-            })}
-          </div>
-        )}
+      return (
+        <div key={opt.id} style={{ display:"flex", gap:8, alignItems:"center", marginBottom:6 }}>
+          <input
+            id={inputId}
+            type={isRadio ? "radio" : "checkbox"}
+            name={`preview-${q.qid}`}
+            checked={!!checked}
+            onChange={handleSelect}
+          />
+          <input
+            className={styles.input}
+            type="text"
+            value={opt.label}
+            disabled={true}
+            style={{ flex:1, border:"none", color:"var(--font-color-base)", background:"var(--color-sec-bg)" }}
+          />
+          <label htmlFor={inputId} />
+        </div>
+      );
+    })}
+  </div>
+)}
+
       </div>
     </div>
   );
