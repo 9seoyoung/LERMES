@@ -43,4 +43,15 @@ public class Company {
 
     @Column(name = "COMPANY_SMALL_LOGO_FILE_SN")
     private Long smallLogoFileSn;
+
+
+
+    @Column(name = "COMPANY_ADDRESS", length = 255)
+    private String companyAddress;
+
+    @Column(name = "COMPANY_ADDRESS_DETAIL", length = 255)
+    private String companyAddressDetail;
+
+    @Column(name = "COMPANY_TEL", length = 50)
+    private String companyTel;
 }

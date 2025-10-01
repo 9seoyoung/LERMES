@@ -157,10 +157,25 @@ public class CalendarController {
     /*
     * 일정 업데이트*/
     @PatchMapping("/{calSn}")
-    public ResponseEntity<CalendarDetailResponseDTO> putCalendarDetailByCalSn(@PathVariable Integer calSn,
-                                                                             @RequestBody CalendarUpdateRequestDTO params){
+    public ResponseEntity<CalendarDetailResponseDTO> putCalendarDetailByCalSn(@AuthenticationPrincipal AuthCustomUserDetails me,
+                                                                              @PathVariable Integer calSn,
+                                                                              @RequestBody CalendarUpdateRequestDTO params){
+        // url에 실려온값 DTO에 실어주겠음
         params.setCalSn(calSn);
+        params.setUserSn(me.getId().intValue());    //수정하면 수정자로 sn 바꿔야함
+        // 실려온 값에 prvtYn = 0 (관리자만 가능) 값이 있으면 관리자인지 확인드가자
+        if(params.getPrvtYn() == 0){
+            //관리자맞니?
+            int roleType = me.getRoleType().intValue();
+            if(roleType == 1 || roleType == 2 || roleType == 3){ // 관리자 맞네
+                return ResponseEntity.ok(calendarService.putCalendarDetailByCalSn(params));
+            } else { // 관리자 아니네
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "관리자만 공식 손댈수있슴");
+            }
+        }
+        // 개인 글이면 걍 원래대로
         return ResponseEntity.ok(calendarService.putCalendarDetailByCalSn(params));
+
     }
 
     /*

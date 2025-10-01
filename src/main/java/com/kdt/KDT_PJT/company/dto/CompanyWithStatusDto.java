@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CompanyDto {
+public class CompanyWithStatusDto {
 
     private Long id;              // 회사 PK
     private String brno;          // 사업자등록번호
@@ -20,4 +20,5 @@ public class CompanyDto {
     private String companyAddress;         // 회사 소재지
     private String companyAddressDetail;   // 회사 상세주소
     private String companyTel;             // 회사 전화번호
+    private String stts; // 코호트 상태(RECRUITING 여부)
 }

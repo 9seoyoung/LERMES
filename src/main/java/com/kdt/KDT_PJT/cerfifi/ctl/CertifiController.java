@@ -2,6 +2,7 @@ package com.kdt.KDT_PJT.cerfifi.ctl;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
+import com.kdt.KDT_PJT.cerfifi.dto.CertifiResponseDTO;
 import com.kdt.KDT_PJT.cerfifi.dto.CertifiTemplateRequestDTO;
 import com.kdt.KDT_PJT.cerfifi.service.CertifiService;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
@@ -21,6 +22,9 @@ public class CertifiController {
 
     private final CertifiService certifiService;
 
+
+    /*
+    * 증명서 등록*/
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE')") // 권한 체크
     @PostMapping("/template")
     public ResponseEntity<Void> registerCertifiTemplate(
@@ -31,5 +35,12 @@ public class CertifiController {
         certifiService.createCertifiTemplate(params);
         return ResponseEntity.noContent().build();
     }
+// TODO
+//    @PreAuthorize("hasAnyRole('STUDENT')")
+//    @GetMapping
+//    public ResponseEntity<CertifiResponseDTO> getCertifi(@AuthenticationPrincipal AuthCustomUserDetails me){
+//
+//        return ResponseEntity.of(certifiService.getCertifiByCertifiTypeNm());
+//    }
 
 }
