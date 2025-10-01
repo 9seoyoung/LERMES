@@ -54,7 +54,7 @@ import StudyPlan from '../pages/LMS/menu/StudyPlan.jsx';
 import InterviewRead from '../pages/LMS/readAndEdit/InterviewRead.jsx';
 import BoardPost from '../pages/LMS/form/BoardPost.jsx';
 import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
-import RecuritRead from '../pages/LMS/readAndEdit/RecuritRead.jsx';
+import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
 function AppRoutes() {
   return (
     <Routes>
@@ -104,7 +104,7 @@ function AppRoutes() {
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
             <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
-          <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecuritRead/>}/>
+          <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecruitRead/>}/>
             <Route path="visitorHome" element={<VisitorHome />} />
             <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
             {/* 관리자(테넌트, 직원) */}

@@ -7,8 +7,8 @@ import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import {v4 as uuidv4} from "uuid";
 
-import { applyGroup, createGroup } from '../../../services/postService';
-import { useNavigate } from "react-router-dom";
+import { applyGroup, readRecruitPoster } from '../../../services/postService';
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 
@@ -17,24 +17,25 @@ import { toast } from "react-toastify";
 
 function RecruitRead() {
   const domFormId = useId();
+  const {recruitSn} = useParams();
   const domId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
   const qAddRef = useRef(null);
   const navigate = useNavigate();
-    const scrollRef = useRef(null);
+  const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
-
+  
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
-
+  
   // 설문 폼 (초기 페이지 하나 생성)
   const [surveyForm, setSurveyForm] = useState({
     id: postId.current,
     pages: [{ id: uuidv4(), questions: [] }],
   });
-
+  
   const [formData, setFormData] = useState({
     id: postId.current,
     userSn: user.USER_OGDP_CO_SN, //유저같지만 회사임
@@ -53,8 +54,23 @@ function RecruitRead() {
     classEnd: "", //수업종료시간
     files: [{qid: "", fid: ""}, {qid: "", fid: ""}]
   });
+  
+  
+    useEffect(() => {
+      console.log(recruitSn);
 
-
+      (async () => {
+        try {
+          const res = await readRecruitPoster(recruitSn);
+          console.log(res);
+          setFormData(res.data);
+        } catch (e) {
+          console.log(e.message);
+          console.log("잉")
+        }
+      })();
+    }, []);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -75,7 +91,7 @@ function RecruitRead() {
 
   const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  // console.groupCollapsed("[RecruitRead] createGroup payload");
+  // console.groupCollapsed("[RecruitRead] readRecruitPoster payload");
   // console.table(
   //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
   //     idx: i + 1, qid: q.qid, type: q.type,
@@ -90,33 +106,21 @@ function RecruitRead() {
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.table(snapshot.formData);
 
-  console.time("[RecruitRead] createGroup");
+  console.time("[RecruitRead] readRecruitPoster");
   try {
-    // const res = await createGroup(payload);
     const res = await applyGroup(body);
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
-    console.log("[RecruitRead] createGroup response:", res);
+    console.log("[RecruitRead] readRecruitPoster response:", res);
     toast.success("게시 성공");
     navigate(-1);
   } catch (err) {
-    console.error("[RecruitRead] createGroup error:", err);
+    console.error("[RecruitRead] readRecruitPoster error:", err);
     toast.error(err.message);
   }
 };
 
 
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await hortlistByCpSn(coSn);
-        setHortList(data.data);
-      } catch (e) {
-        console.log(e.message);
-      }
-    })();
-  }, [user]);
 
   return (
     <div className="boardPage">

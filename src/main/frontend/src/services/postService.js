@@ -19,7 +19,7 @@ export function applyGroup(body) {
   });
 }
 
-export const readRecruitPoster = (recruitSn) => api.get(`/cohorts/${recruitSn}`)
+export const readRecruitPoster = (id) => api.get(`/cohorts/${id}`)
 
 
 export function createInterview(body) {
