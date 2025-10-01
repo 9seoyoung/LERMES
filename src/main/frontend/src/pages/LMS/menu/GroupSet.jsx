@@ -77,6 +77,7 @@ function formatYMDfrom(year, month /* 0-based */, day) {
         console.log(`${coSn}-회사SN으로 과정리스트 불러오기API 실행 >>>>>>>>>>>>>>>>>>`)
         setLoading(true);
         const res = await hortlistByCpSn(Number(coSn));
+        console.log(res);
         console.log(`${res.data}-회사SN으로 과정리스트 불러오기API 응답 <<<<<<<<<<<<<<<<<<<`)
         // if (!ignore) setHortList(res?.data ?? []);
         if (!ignore) {
