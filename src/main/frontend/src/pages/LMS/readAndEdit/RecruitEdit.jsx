@@ -1,5 +1,5 @@
-// RecruitRead.jsx
-import QuestionRead from "./QuestionRead"; 
+// RecruitEdit.jsx
+import QuestionAdd from "../form/QuestionAdd"; 
 
 import React, { useEffect, useId, useState, useRef } from 'react'
 import {FileList, FormInput, DateTimeInput } from '../../../components/ui/UiComp';
@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 // CreatePost.jsx
 // ...import 생략
 
-function RecruitRead() {
+function RecruitEdit() {
   const domFormId = useId();
   const {recruitSn} = useParams();
   const domId = useId();
@@ -27,6 +27,7 @@ function RecruitRead() {
   const scrollRef = useRef(null);
   // const [loading, setLoading] = useState(false);
   
+  const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
   
   // 설문 폼 (초기 페이지 하나 생성)
@@ -99,7 +100,7 @@ function RecruitRead() {
             pages: [{ id: first.id, questions: restoredQs }],
           }));
         } catch (e) {
-          console.warn("[RecruitRead] crclmCn JSON parse 실패:", e);
+          console.warn("[RecruitEdit] crclmCn JSON parse 실패:", e);
         }
       }
   
@@ -117,9 +118,9 @@ function RecruitRead() {
           classEnd:    c?.attendEndTm   ?? "",
           place:       c?.cohortPl ?? "",
         }));
-        console.log("[RecruitRead] recruitSn =", recruitSn, c);
+        console.log("[RecruitEdit] recruitSn =", recruitSn, c);
       } catch (e) {
-        console.log("[RecruitRead] read error:", e?.message, e);
+        console.log("[RecruitEdit] read error:", e?.message, e);
       }
     })();
   }, [recruitSn]);
@@ -144,7 +145,7 @@ function RecruitRead() {
 
   const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  // console.groupCollapsed("[RecruitRead] readRecruitPoster payload");
+  // console.groupCollapsed("[RecruitEdit] readRecruitPoster payload");
   // console.table(
   //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
   //     idx: i + 1, qid: q.qid, type: q.type,
@@ -159,16 +160,16 @@ function RecruitRead() {
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.table(snapshot.formData);
 
-  console.time("[RecruitRead] readRecruitPoster");
+  console.time("[RecruitEdit] readRecruitPoster");
   try {
     const res = await applyGroup(body);
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
-    console.log("[RecruitRead] readRecruitPoster response:", res);
+    console.log("[RecruitEdit] readRecruitPoster response:", res);
     toast.success("게시 성공");
     navigate(-1);
   } catch (err) {
-    console.error("[RecruitRead] readRecruitPoster error:", err);
+    console.error("[RecruitEdit] readRecruitPoster error:", err);
     toast.error(err.message);
   }
 };
@@ -177,19 +178,11 @@ function RecruitRead() {
 
   return (
     <div className="boardPage">
-      <div className="BigListBox" ref={scrollRef} style={{position: "relative"}}>
+      <div className="limitedHeightBox" ref={scrollRef}>
         <h2 style={{ fontWeight: "500" }}>[모집공고] {formData?.title} {formData.groupName}</h2>
 
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
           <div className="formArea_L">
-            <div className="selectBoxArea" style={{ position: "relative" }}>
-                <FormInput labelNm="그룹명" type="text" name="groupName" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
-                <FormInput labelNm="교육장소" type="text" name="place" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
-                <DateTimeInput labelNm="개강일" type="date" name="startDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
-                <DateTimeInput labelNm="종강일" type="date" name="endDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
-                <DateTimeInput labelNm="수업 시작" type="time" name="classStart" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
-                <DateTimeInput labelNm="수업 종료" type="time" name="classEnd" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
-            </div>
             <RecruitForm
                 type={formData.type}
                 postId={postId.current}
@@ -197,7 +190,7 @@ function RecruitRead() {
                 handleChange={handleChange}
                 formData={formData}
                 setFormData={setFormData}
-                surveyForm={surveyForm}D
+                surveyForm={surveyForm}
                 setSurveyForm={setSurveyForm}
                 FileList={FileList}
                 files={files}
@@ -207,9 +200,18 @@ function RecruitRead() {
             />
           </div>
 
-          <div className="formArea_R" >
+          <div className="formArea_R">
+            <div className="selectBoxArea" style={{ position: "relative" }}>
+                <FormInput labelNm="그룹명" type="text" name="groupName" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
+                <FormInput labelNm="교육장소" type="text" name="place" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
+                <DateTimeInput labelNm="개강일" type="date" name="startDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
+                <DateTimeInput labelNm="종강일" type="date" name="endDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
+                <DateTimeInput labelNm="수업 시작" type="time" name="classStart" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
+                <DateTimeInput labelNm="수업 종료" type="time" name="classEnd" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
+            </div>
 
-              <ul style={{position: "fixed", background: "var(--color-table-bg)"}}>
+            <div className="r_bottom">
+              <ul>
                 {surveyForm.pages.map((page) => (
                     <React.Fragment key={page.id}>
                       {page.questions.map((q, i) => (
@@ -240,13 +242,14 @@ function RecruitRead() {
                 {/* <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>제출</button> */}
               </div>
             </div>
+          </div>
         </form>
       </div>
     </div>
   );
 }
 
-export default RecruitRead;
+export default RecruitEdit;
 
 
 function RecruitForm({
@@ -260,6 +263,18 @@ function RecruitForm({
   return (
     <>
       <div className='formHeader'>
+        <div className='inputSet'>
+          <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
+          <input
+            id={`${domFormId}_title`}
+            className='formInput'
+            name='title'
+            placeholder='과정명을 입력하세요.'
+            value={formData.title}
+            onChange={handleChange}
+          />
+        </div>
+
         <div className='inputSet inputFlex1'>
           <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
           <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
@@ -268,7 +283,7 @@ function RecruitForm({
 
       <div className="formContent" ref={qContainerRef}>
         {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
-          <QuestionRead
+          <QuestionAdd
               ref={questionAddRef}
               setFiles = {setFiles}
               containerRef={containerRef}
