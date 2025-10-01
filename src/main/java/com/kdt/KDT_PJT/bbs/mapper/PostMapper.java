@@ -16,4 +16,5 @@ public interface PostMapper {
                                        @Param("bbsType") String bbsType);
     void updatePost(PostRequestDto dto);
     void softDelete(Long postSn);
+    void increaseViewCnt(Long postSn);
 }

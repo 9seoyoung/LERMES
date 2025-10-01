@@ -96,9 +96,11 @@ public class PostService {
                     yield Objects.equals(post.getCoSn(), auth.getCompanySn())
                             && (filterCohortSn == null || post.getCohortSn().equals(filterCohortSn));
                 } else if (role == BbsRole.INSTRUCTOR || role == BbsRole.STUDENT) {
+                    // 강사와 학생은 같은 로직: 같은 회사 && 같은 코호트면 조회 허용
                     yield Objects.equals(post.getCoSn(), auth.getCompanySn())
-                            &&Objects.equals(post.getCohortSn(), filterCohortSn);
+                            && Objects.equals(post.getCohortSn(), auth.getCohortSn());
                 } else yield false;
+
             }
             default -> false;
         };
@@ -146,6 +148,7 @@ public class PostService {
     // 게시글 단건 조회
     @Transactional(readOnly = true)
     public PostResponseDto getPost(Long postSn, AuthCustomUserDetails auth) {
+
         PostResponseDto post = postMapper.findById(postSn);
 
         if (post == null) {
@@ -155,7 +158,11 @@ public class PostService {
         if (!canAccessPostForSingle(post, auth)) { // 👈 변경됨
             throw new AccessDeniedException("조회 권한 없음");
         }
-        return post;
+
+        postMapper.increaseViewCnt(postSn);
+
+        // 4. 다시 조회해서 최신 조회수 반영
+        return postMapper.findById(postSn);
     }
 
     // 게시글 수정

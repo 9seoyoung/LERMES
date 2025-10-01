@@ -28,5 +28,5 @@ public class PostResponseDto {
     private String formUuid;              // UUID
     private BbsType bbsType;              // 게시판 유형 (영문 Enum)
     private BbsScope bbsScope;            // 공개 범위
-
+    private Integer VIEW_CNT;                   //조회수
 }
