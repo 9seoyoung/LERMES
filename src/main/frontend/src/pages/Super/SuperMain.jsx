@@ -103,6 +103,7 @@ import { toast } from 'react-toastify';
 import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../../auth/AuthContext';
+import CardBack from '../../components/ui/CardBack';
 
 export default function SuperMain() {
   const { user } = useAccount();
@@ -119,7 +120,6 @@ export default function SuperMain() {
       try {
         const res = await pullAllCompany();
         setCompanyList(res.data ?? []);
-        toast.success('정보 불러옴');
       } catch (err) {
         toast.error(err.message);
         console.log('회사불러오기 실패', err);
@@ -197,26 +197,7 @@ export default function SuperMain() {
         
             {/* 뒷면: 동일 크기, 다른 내용 */}
             <div className={`${cardStyle.company_card} ${cardStyle.card_back}`}>
-              <div></div>
-              <div className={cardStyle.card_bottom}>
-                <p className={cardStyle.title} data-title-type="3">{v?.name}</p>
-                <p className={cardStyle.title}>상태: {v?.stts ?? '-'}</p>
-                <div className={cardStyle.row}>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setFixedSn(v.id);
-                      handleGoLms(v.id);
-                    }}
-                  >
-                    {user?.USER_OGDP_CO_SN === v.id ? '내 LMS로' : '방문자 모드'}
-                  </button>
-                  <button type="button" onClick={(e) => { e.stopPropagation(); setFlipped(null); }}>
-                    뒤집기 닫기
-                  </button>
-                </div>
-              </div>
+              <CardBack effectiveSn={effectiveSn}></CardBack>
             </div>
           </div>
         </div>

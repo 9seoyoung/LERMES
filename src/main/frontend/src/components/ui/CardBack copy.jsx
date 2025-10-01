@@ -27,7 +27,7 @@ function CardBack({ effectiveSn }) {
     (async () => {
       try {
         const res = await hortlistByCpSn(effectiveSn);
-        const payload = res?.data.cohorts;
+        const payload = res?.data;
         const list = Array.isArray(payload)
           ? payload
           : Array.isArray(payload?.list)
@@ -36,7 +36,7 @@ function CardBack({ effectiveSn }) {
           ? [payload]
           : [];
         setHortList(list);
-        setCohort(list.cohorts)
+        setCohort(list.cohorts);
       } catch (e) {
         setError(e?.message ?? "failed to load");
         setHortList([]);
@@ -65,15 +65,15 @@ function CardBack({ effectiveSn }) {
   return (
     <div className={styles.cardContainer}>
       <h4>교육 목록</h4>
+
       {!hortlist?.length ? (
         <div className={styles.empty}>목록이 없습니다.</div>
       ) : (
-        <ul style={{height: "400px", overflowY: "scroll"}}>
+        <ul>
           {hortlist.map((v, idx) => {
             const items = Array.isArray(v?.cohorts) && v.cohorts.length ? v.cohorts : [v];
 
             return (
-              <div className={styles.listContainer}>
               <li
                 key={`hort-${idx}`}
                 className={cn(styles.liContainer, {
@@ -96,19 +96,18 @@ function CardBack({ effectiveSn }) {
                       }
                     }}
                   >
-                    <div className={v?.cohortSttsNm === "RECRUITING" ? styles.sttsCellOn : styles.sttsCellOff}>
-                      {recruitState[v?.cohortSttsNm] ?? "-"}
+                    <div className={v?.stts === "RECRUITING" ? styles.sttsCellOn : styles.sttsCellOff}>
+                      {recruitState[v?.stts] ?? "-"}
                     </div>
 
                     <div className={styles.crclmCell}>{item?.crclmNm ?? v?.crclmNm ?? "-"}</div>
-
-                    <div className={styles.crclmCell}>
+                        <div className={styles.crclmCell}>
                       <button
-                        className={v?.cohortSttsNm === "RECRUITING" ? styles.applyBtnOn : styles.applyBtnOff}
+                        className={v?.stts === "RECRUITING" ? styles.applyBtnOn : styles.applyBtnOff}
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          v?.cohortSttsNm === "RECRUITING" && navigate("applyRecruitPoster");
+                          navigate("applyRecruitPoster");
                         }}
                       >
                         신청
@@ -118,9 +117,9 @@ function CardBack({ effectiveSn }) {
                 ))}
 
                 {/* 상세 영역 */}
+                <div className={styles.can}></div>
                 {openRow === idx && (
-                  <div className={styles.detailWrapper} onClick={(e) => {
-                    e.stopPropagation();}}>
+                  <div className={styles.detailWrapper}>
                     {(() => {
                       const row = v;
                       const item =
@@ -171,12 +170,11 @@ function CardBack({ effectiveSn }) {
                   </div>
                 )}
               </li>
-          </div>
             );
           })}
         </ul>
       )}
-      </div>
+    </div>
   );
 }
 
