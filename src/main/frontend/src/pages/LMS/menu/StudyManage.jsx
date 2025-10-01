@@ -25,7 +25,7 @@ function StudyManage() {
             </div>
             <div className="BigListBox">
                 <ListTable
-                tableHead={['순번', '유형', '제목', '시작일', '종료일', '작성일', '작성자', '조회수']}
+                tableHead={['#', '유형', '제목', '시작일', '종료일', '작성일', '작성자', '조회수']}
                 columnData={['no', 'type', 'title', 'startDate', 'endDate', 'postDate', 'author', 'views']}
                 apiData={[{no: "columnData", type:"는", title:"프로퍼티", startDate:"이름", endDate: "apiData", postDate:"는", author:"객체", views:"배열"}]}
                 // 문자열로 지정

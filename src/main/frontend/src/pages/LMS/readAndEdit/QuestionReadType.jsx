@@ -1,4 +1,4 @@
-// QuestionType.jsx (updated)
+// QuestionReadType.jsx
 import React, { useRef, useImperativeHandle, forwardRef } from "react";
 import FilePreview from "../../../components/ui/FilePreview";
 import { AddBtn, DeleteBtn } from "../../../components/ui/UiComp";
@@ -58,41 +58,16 @@ const QuestionType = forwardRef(function QuestionType(
 
   return (
     <div ref={rootRef} className="questionBox" data-qid={q.qid}>
-      <div className="questionTypeBox">
-        <p>질문 유형</p>
-        <Dropdown label={changeTypeName(q.type)} className="dropSet">
-          <p onClick={() => onSetType(q.qid, "single")}>객관식(단일)</p>
-          <p onClick={() => onSetType(q.qid, "multiple")}>객관식(중복)</p>
-          <p onClick={() => onSetType(q.qid, "text")}>주관식</p>
-          {/* <p onClick={() => onSetType(q.qid, "image")}>이미지</p> */}
-        </Dropdown>
-
-        <label style={{ display: "inline-flex", gap: 6, alignItems: "center", marginLeft: 12 }}>
-          <input
-            type="checkbox"
-            checked={!!q.required}
-            onChange={(e) => onToggleRequired?.(q.qid, e.target.checked)}
-          />
-          필수
-        </label>
-
-        <button
-          type="button"
-          style={{ background: "#E9623A", color: "#fff", padding: "4px 12px", borderRadius: "4px", marginLeft: "auto" }}
-          onClick={() => onRemoveQuestion(q.qid)}
-        >
-          삭제
-        </button>
-      </div>
-
       <div className="qCont">
         <div className="qTitle">
           <p>{`Q${qNum}.`}</p>
           <input
             ref={titleRef}
+            style={{color: "var(--font-color-base)", background: "var(--color-sec-bg)"}}
             placeholder="제목을 입력하세요."
             value={q.title}
             onChange={(e) => onSetTitle(q.qid, e.target.value)}
+            disabled={true}
           />
         </div>
 
@@ -101,15 +76,17 @@ const QuestionType = forwardRef(function QuestionType(
           placeholder="질문 설명"
           value={q.explain}
           onChange={(e) => onSetExplain(q.qid, e.target.value)}
+          style={{color: "var(--font-color-base)", border: "none", background: "var(--color-sec-bg)"}}
+          disabled={true}
         />
 
         <hr className="hrSt2" />
-{/* 
+
         {q.type === "image" && (
           <div style={{ width: "100%", overflow: "hidden" }}>
             <FilePreview qid={q.qid} setFiles={setFiles} />
           </div>
-        )} */}
+        )}
 
         {/* ✅ 주관식: 실제 응답 입력칸(미리보기) */}
         {q.type === "text" && (
@@ -121,41 +98,54 @@ const QuestionType = forwardRef(function QuestionType(
               value={q.answer ?? ""}
               onChange={(e) => onSetAnswer?.(q.qid, e.target.value)}
               rows={4}
-              disabled={true}
+              style={{color: "var(--font-color-base)"}}
             />
           </div>
         )}
 
         {/* 객관식: 항목 편집 + 미리보기 */}
-        {isChoice && (
-          <div className="multipleSet">
-            {q.options.map((opt) => {
-              const inputId = `q-${q.qid}-opt-${opt.id}`;
-              return (
-                <div key={opt.id} style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }}>
-                  <input id={inputId} type={isRadio ? "radio" : "checkbox"} name={`preview-${q.qid}`} disabled />
+{isChoice && (
+  <div className="multipleSet">
+    {q.options.map((opt) => {
+      const inputId = `q-${q.qid}-opt-${opt.id}`;
+      const checked = q.type === "single"
+        ? q.answer?.id === opt.id
+        : Array.isArray(q.selected) && q.selected.some(x => x.id === opt.id);
 
-                  <input
-                    className={styles.input}
-                    type="text"
-                    placeholder="항목을 입력하세요."
-                    value={opt.label}
-                    onChange={(e) => onUpdateOption(q.qid, opt.id, e.target.value)}
-                    style={{ flex: 1 }}
-                  />
+      const handleSelect = (e) => {
+        const payload = { id: opt.id, label: opt.label };
+        if (q.type === "single") {
+          onSetAnswer?.(q.qid, payload);           // 선택값 교체
+        } else {
+          onSetAnswer?.(q.qid, e.target.checked    // 추가/제거
+            ? payload
+            : { ...payload, __remove: true });
+        }
+      };
 
-                  <label htmlFor={inputId} />
+      return (
+        <div key={opt.id} style={{ display:"flex", gap:8, alignItems:"center", marginBottom:6 }}>
+          <input
+            id={inputId}
+            type={isRadio ? "radio" : "checkbox"}
+            name={`preview-${q.qid}`}
+            checked={!!checked}
+            onChange={handleSelect}
+          />
+          <input
+            className={styles.input}
+            type="text"
+            value={opt.label}
+            disabled={true}
+            style={{ flex:1, border:"none", color:"var(--font-color-base)", background:"var(--color-sec-bg)" }}
+          />
+          <label htmlFor={inputId} />
+        </div>
+      );
+    })}
+  </div>
+)}
 
-                  <DeleteBtn type="button" onClick={() => onRemoveOption(q.qid, opt.id)} />
-                </div>
-              );
-            })}
-
-            <button type="button" className="basicBtn" onClick={() => onAddOption(q.qid)}>
-              <AddBtn textType={"항목 추가"} />
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

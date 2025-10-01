@@ -528,6 +528,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 4px;
   padding: 0;
   margin: 0;
+  width: 100%;
   list-style: none;
 }
 
@@ -538,6 +539,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: 6px;
   padding: 4px 0;
   align-items: center;
+  display: grid;
 }
 
 .gridRow {
@@ -551,7 +553,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 .row {
-  /* background-color: #f6f6f6; */
+  /* background-color: #fff; */
   background-color: var(--color-light-bg);
   border-radius: 4px;
   height: 3.2rem;

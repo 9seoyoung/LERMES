@@ -1,10 +1,10 @@
-// QuestionAdd.jsx
+// QuestionRead.jsx
 import React, {
   forwardRef, useRef, useImperativeHandle, createRef, useEffect, setFiles
 } from "react";
 import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
-import QuestionType from "./QuestionType";
+import QuestionReadType from "./QuestionReadType";
 
 // ───────── utils ─────────
 export const makeQuestion = () => ({
@@ -17,12 +17,8 @@ export const makeQuestion = () => ({
     { id: uuid(), label: "" },
     { id: uuid(), label: "" },
   ],
-  // 응답 필드들
-  answer: null,         // single
-  selected: [],         // multiple
-  answerText: "",       // text
+  answer: "",
 });
-
 
 const ensureOptions = (opts = []) => {
   const next = (opts || []).map(o => ({ id: o.id || uuid(), label: o.label ?? "" }));
@@ -66,7 +62,7 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, containerRef }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef }, ref) {
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
 
@@ -160,44 +156,65 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
         : q
     ));
 
-    const onSetAnswer = (qid, val) => {
-      onChange(prev => prev.map(q => q.qid === qid ? { ...q, answer: val } : q));
-    };
+const onSetAnswer = (qid, val) => {
+  onChange(prev =>
+    prev.map(q => {
+      if (q.qid !== qid) return q;
+
+      if (q.type === "multiple") {
+        // val: { id, label }가 추가/제거 이벤트로 들어오게 설계
+        const cur = Array.isArray(q.selected) ? q.selected : [];
+        const exists = cur.findIndex(x => x.id === val.id);
+        const next =
+          val.__remove // 체크 해제 플래그
+            ? (exists >= 0 ? cur.filter(x => x.id !== val.id) : cur)
+            : (exists >= 0 ? cur : [...cur, { id: val.id, label: val.label }]);
+        return { ...q, selected: next, answer: null, answerText: q.answerText ?? "" };
+      }
+
+      if (q.type === "single") {
+        // val: { id, label }
+        return { ...q, answer: { id: val.id, label: val.label }, selected: [] };
+      }
+
+      // text / image 등
+      // val: string
+      return { ...q, answerText: val };
+    })
+  );
+};
+
     
     const onToggleRequired = (qid, required) => {
       onChange(prev => prev.map(q => q.qid === qid ? { ...q, required } : q));
     };
-    
 
   return (
     <>
       <div className="questionContainer">
         {questions.map((q, idx) => (
-          <QuestionType
-            key={q.qid}
-            ref={getRef(q.qid)}
-            q={q}
-            onSetAnswer={onSetAnswer}
-            onToggleRequired={onToggleRequired}
-            qNum={idx + 1}
-            onRemoveQuestion={removeQuestion}
-            onSetType={setType}
-            onSetTitle={setTitle}
-            onSetExplain={setExplain}
-            onAddOption={addOption}
-            onUpdateOption={updateOption}
-            onRemoveOption={removeOption}
-            setFiles={setFiles}
+          <QuestionReadType
+          key={q.qid}
+          ref={getRef(q.qid)}
+          q={q}
+          onSetAnswer={onSetAnswer}
+          onToggleRequired={onToggleRequired}
+          qNum={idx + 1}
+          onRemoveQuestion={removeQuestion}
+          onSetType={setType}
+          onSetTitle={setTitle}
+          onSetExplain={setExplain}
+          onAddOption={addOption}
+          onUpdateOption={updateOption}
+          onRemoveOption={removeOption}
+          setFiles={setFiles}
           />
         ))}
       </div>
 
-      <button type="button" className="questionAdd" onClick={addQuestionAndFocus}>
-        <Plus color="#0088FF" strokeWidth={4} />
-        <p>질문추가</p>
-      </button>
+
     </>
   );
 });
 
-export default QuestionAdd;
+export default QuestionRead;

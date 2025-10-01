@@ -91,7 +91,7 @@ export default function BoardManage(){
 
             <div className="BigListBox">
                 <ListTable
-                    tableHead={['순번', '유형', '제목', '작성일', '작성자', '조회수']}
+                    tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
                     columnData={['type', 'title', 'wroteDate', 'author', 'views']}
                     apiData={reUseArray}
                     // 문자열로 지정
