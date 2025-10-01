@@ -156,6 +156,15 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
         : q
     ));
 
+    const onSetAnswer = (qid, val) => {
+      onChange(prev => prev.map(q => q.qid === qid ? { ...q, answer: val } : q));
+    };
+    
+    const onToggleRequired = (qid, required) => {
+      onChange(prev => prev.map(q => q.qid === qid ? { ...q, required } : q));
+    };
+    
+
   return (
     <>
       <div className="questionContainer">
@@ -164,6 +173,8 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
             key={q.qid}
             ref={getRef(q.qid)}
             q={q}
+            onSetAnswer={onSetAnswer}
+            onToggleRequired={onToggleRequired}
             qNum={idx + 1}
             onRemoveQuestion={removeQuestion}
             onSetType={setType}

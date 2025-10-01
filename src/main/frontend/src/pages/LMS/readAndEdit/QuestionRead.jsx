@@ -156,23 +156,45 @@ const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange
         : q
     ));
 
+    const onSetAnswer = (qid, val) => {
+      onChange(prev => prev.map(q => {
+        if (q.qid !== qid) return q;
+        if (q.type === "multiple") {
+          // val: string[] (selectedIds)
+          return { ...q, selectedIds: Array.isArray(val) ? val : [], answer: "" };
+        } else if (q.type === "single") {
+          // val: string (opt id)
+          return { ...q, answer: val, selectedIds: [] };
+        } else {
+          // text/image 등
+          return { ...q, answer: val };
+        }
+      }));
+    };
+    
+    const onToggleRequired = (qid, required) => {
+      onChange(prev => prev.map(q => q.qid === qid ? { ...q, required } : q));
+    };
+
   return (
     <>
       <div className="questionContainer">
         {questions.map((q, idx) => (
           <QuestionReadType
-            key={q.qid}
-            ref={getRef(q.qid)}
-            q={q}
-            qNum={idx + 1}
-            onRemoveQuestion={removeQuestion}
-            onSetType={setType}
-            onSetTitle={setTitle}
-            onSetExplain={setExplain}
-            onAddOption={addOption}
-            onUpdateOption={updateOption}
-            onRemoveOption={removeOption}
-            setFiles={setFiles}
+          key={q.qid}
+          ref={getRef(q.qid)}
+          q={q}
+          onSetAnswer={onSetAnswer}
+          onToggleRequired={onToggleRequired}
+          qNum={idx + 1}
+          onRemoveQuestion={removeQuestion}
+          onSetType={setType}
+          onSetTitle={setTitle}
+          onSetExplain={setExplain}
+          onAddOption={addOption}
+          onUpdateOption={updateOption}
+          onRemoveOption={removeOption}
+          setFiles={setFiles}
           />
         ))}
       </div>

@@ -13,11 +13,7 @@ export function createGroup(body) {
   });
 }
 
-export function applyGroup(body) {
-  return api.post('/cohort-member/apply', body, {
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
+export const applyGroup = ({ userSn, cohortSn }) =>  api.post('/cohort-member/apply', null, { params: { userSn, cohortSn }});
 
 export const readRecruitPoster = (id) => api.get(`/cohorts/${id}`)
 

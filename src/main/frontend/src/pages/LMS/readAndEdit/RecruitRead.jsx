@@ -36,8 +36,9 @@ function RecruitRead() {
   });
   
   const [formData, setFormData] = useState({
+    cohortSn: recruitSn,
     id: postId.current,
-    userSn: user.USER_OGDP_CO_SN, //유저같지만 회사임
+    userSn: user.USER_SN, //유저같지만 회사임
     title: "", //과정명
     answer: "", // 신청자 답변
     groupName: "", //그룹명
@@ -62,7 +63,7 @@ function RecruitRead() {
         const res = await readRecruitPoster(recruitSn);
         const c = res?.data;
   
-      // ── 설문 복원: crclmCn(JSON 문자열) → surveyForm 주입 ──
+      // 설문 복원 crclmCn(JSON 문자열) >> surveyForm
       if (typeof c?.crclmCn === "string" && c.crclmCn.trim()) {
         try {
           const parsed = JSON.parse(c.crclmCn); // { id, pages: [{ id, questions: [...] }] }
@@ -105,7 +106,7 @@ function RecruitRead() {
   
         setFormData(prev => ({
           ...prev,
-          content:     c?.crclmCn ?? "",     // ← 원문도 필요하면 보존
+          content:     c?.crclmCn ?? "", 
           groupName:   c?.cohortNm ?? "",
           answer:      c?.answer ?? "",
           title:       c?.crclmNm ?? "",
@@ -130,13 +131,8 @@ function RecruitRead() {
     console.log("[change]", name, value);
   };
 
-  const tempSubmit = () => {};
   const saveSubmit = async (e) => {
     e.preventDefault();
-
-  // const payload = structuredClone
-  //   ? structuredClone({ surveyForm, formData })
-  //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
   const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
@@ -144,18 +140,6 @@ function RecruitRead() {
 
   const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  // console.groupCollapsed("[RecruitRead] readRecruitPoster payload");
-  // console.table(
-  //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
-  //     idx: i + 1, qid: q.qid, type: q.type,
-  //     title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
-  //   })) || []
-  // );
-  // console.groupEnd();
-
-  // console.log("[payload snapshot]", snapshot);
-  // console.log("[formData]", snapshot.formData);
-  // console.log("[surveyForm]", snapshot.surveyForm);
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.table(snapshot.formData);
 
@@ -197,7 +181,7 @@ function RecruitRead() {
                 handleChange={handleChange}
                 formData={formData}
                 setFormData={setFormData}
-                surveyForm={surveyForm}D
+                surveyForm={surveyForm}
                 setSurveyForm={setSurveyForm}
                 FileList={FileList}
                 files={files}
@@ -237,7 +221,7 @@ function RecruitRead() {
                 ))}
               </ul>
               <div className="save_box">
-                {/* <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>제출</button> */}
+                <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>제출</button>
               </div>
             </div>
         </form>
