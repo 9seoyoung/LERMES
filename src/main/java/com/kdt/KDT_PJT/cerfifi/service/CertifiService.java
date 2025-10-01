@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.cerfifi.service;
 
+import com.kdt.KDT_PJT.cerfifi.dto.CertifiResponseDTO;
 import com.kdt.KDT_PJT.cerfifi.dto.CertifiTemplateRequestDTO;
 import com.kdt.KDT_PJT.cerfifi.exception.CertifiDuplicateException;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
@@ -43,5 +44,10 @@ public class CertifiService {
             throw new RuntimeException("증명서 서식 등록 중 알 수 없는 오류 발생", e);
         }
     }
+
+    //TODO
+//    public CertifiResponseDTO getCertifiByCertifiTypeNm(){
+//
+//    }
 
 }

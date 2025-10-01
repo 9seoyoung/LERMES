@@ -74,7 +74,7 @@ export default function AttendAdjustAdminPage() {
       >
         <thead>
           <tr style={{ background: '#f3f4f6' }}>
-            <th style={{ padding: '10px' }}>순번</th>
+            <th style={{ padding: '10px' }}>#</th>
             <th style={{ padding: '10px' }}>유형</th>
             <th style={{ padding: '10px' }}>기수</th>
             <th style={{ padding: '10px' }}>이름</th>

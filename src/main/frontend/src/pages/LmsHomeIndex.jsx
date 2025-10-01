@@ -74,6 +74,7 @@ export default function LmsHomeIndex() {
   if (auth === 4) return <Navigate to="/tutorHome" replace />;
   if (auth === 5) return <Navigate to="/stdHome" replace />;
   if (auth === 6) return <Navigate to="/visitorHome" replace />;
+  if (!user) return <Navigate to="/unknownHome" replace/>;
 
   return <Navigate to="/403" replace />;
 }

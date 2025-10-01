@@ -22,15 +22,25 @@ export function bindUnauthorizedHandler(fn) {
   onUnauthorized = fn;
 }
 
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err?.response?.status === 401 && onUnauthorized) onUnauthorized();
-    // 에러 메시지 정규화
-    const msg =
-      err?.response?.data?.message || err?.message || '요청 처리 중 오류 발생';
-    return Promise.reject(new Error(msg));
-  }
-);
+if (typeof window !== "undefined") {
+  api.interceptors.request.use((config) => {
+    const finalUrl = api.getUri(config);
+    console.log("[REQ]", (config.method || "get").toUpperCase(), finalUrl);
+    return config;
+  });
+
+  api.interceptors.response.use(
+    (res) => {
+      console.log("[RES]", res.status, api.getUri(res.config));
+      return res;
+    },
+    (err) => {
+      try {
+        console.log("[ERR]", err.response?.status, api.getUri(err.config));
+      } catch (err) {console.log(err)}
+      return Promise.reject(err);
+    }
+  );
+}
 
 export default api;

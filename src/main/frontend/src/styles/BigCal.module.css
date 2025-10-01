@@ -1,5 +1,5 @@
 .cal{
-  width: 430px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -31,12 +31,31 @@
   overflow-y: hidden;
 }
 
+.calendarCell:hover {
+  background-color: var(--color-light-bg);
+  border-radius: 16px;
+}
+
 .selected {
-  border: 2px solid black;
+  position: relative;
+  color: var(--font-color-white);
+  font-weight: 800;
+}
+
+.selected::after {
+  content: "";
+  display: inline-block;    
+  position: absolute;
+  left: calc((100% - 30px ) / 2);
+  top: 4px;
+  width: 30px;               
+  height: 30px;
+  background: var(--color-accent);         
+  border-radius: 50%;     
+  opacity: var(--opacity-25);   
 }
 
 .unselected {
-  border: 1px solid #ddd;
 }
 
 /* 일정 표시 */
