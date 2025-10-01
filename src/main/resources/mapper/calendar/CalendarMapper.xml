@@ -23,7 +23,8 @@
             USER_SN,
             EVENT_REG_DT,
             PRVT_YN,
-            CO_SN
+            CO_SN,
+            FRST_REG_USER_SN
         ) VALUES (
             #{COHORT_SN},
             #{EVENT_BGNG_DT},
@@ -34,7 +35,8 @@
             #{USER_SN},
             #{EVENT_REG_DT},
             #{PRVT_YN},
-            #{CO_SN}
+            #{CO_SN},
+            #{USER_SN}
         )
     </insert>
 
@@ -60,7 +62,7 @@
             parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
             useGeneratedKeys="true" keyProperty="calSn">
     INSERT INTO TB_CALENDAR
-        (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN)
+        (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN, FRST_REG_USER_SN)
     SELECT
         up.OGDP_COHORT_SN,
         #{itvPrnmntDt},
@@ -68,7 +70,8 @@
         CONCAT('[면담 일정] ', #{itvTime}, ' ', ua.USER_NM, ' -> ', up.USER_NM),
         up.USER_SN,
         1,
-        #{coSn}
+        #{coSn},
+        up.USER_SN
     FROM TB_INTERVIEW i
              JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
              JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
@@ -81,7 +84,7 @@
             parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
             useGeneratedKeys="true" keyProperty="calSn">
         INSERT INTO TB_CALENDAR
-            (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN)
+            (COHORT_SN, EVENT_BGNG_DT, EVENT_END_DT, EVENT_NM, USER_SN, PRVT_YN, CO_SN, FRST_REG_USER_SN)
         SELECT
             ua.OGDP_COHORT_SN,
             #{itvPrnmntDt},
@@ -89,7 +92,8 @@
             CONCAT('[면담 일정] ', #{itvTime} ,' ' , ua.USER_NM, ' -> ', up.USER_NM),
             ua.USER_SN,
             1,
-            #{coSn}
+            #{coSn},
+            up.USER_SN
         FROM TB_INTERVIEW i
                  JOIN TB_USER ua ON ua.USER_SN = i.ITV_APLCNT_SN
                  JOIN TB_USER up ON up.USER_SN = i.ITV_PIC_SN
@@ -212,6 +216,15 @@
             <if test="rmrkCn != null">
                 c.RMRK_CN = #{rmrkCn},
             </if>
+
+            <if test="prvtYn != null">
+                c.PRVT_YN = #{prvtYn},
+            </if>
+
+                c.USER_SN = #{userSn},
+                c.LAST_MDFCN_USER_SN = #{userSn}
+
+
         </set>
         WHERE c.CAL_SN = #{calSn}
             AND DEL_YN = 0

@@ -8,6 +8,7 @@ import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import com.kdt.KDT_PJT.file.service.FileService;
 import com.kdt.KDT_PJT.interview.service.InterviewService;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Delete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,15 @@ public class InterviewController {
         CmmnMap resp= interviewService.createInterviewRequest(me, params);
 
         return ResponseEntity.ok(resp);
+    }
+
+    /*
+    * 면담 확정 전 삭제*/ //TODO
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE','INSTRUCTOR', 'STUDENT')") // 뭐 삭제 관리자도 할수잇을듯
+    @DeleteMapping("/delete/{itvSn}") // 아 조회하는거 걍 {itvSn} 할걸
+    public ResponseEntity<Void> deleteInterviewApplyBeforeConfirm(@PathVariable Integer itvSn){
+        interviewService.deleteInterviewApplyBeforeConfirm(itvSn);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -266,6 +276,9 @@ public class InterviewController {
         dao.update("com.kdt.mapper.interview.insertCalendarSnToInterview",m);
         // 지금 calender 추가하는것 까지는 완료
     }
+
+    //TODO 면담 확정후 시간이나 그런거 수정할수있는 API 만들기~
+    //수정하면 그에맞게 캘린더 시간도 update해줘야함.
 
 
 
