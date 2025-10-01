@@ -93,12 +93,13 @@ public class AuthSecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/login",
-                                "/api/signup/**",
-                                "/api/email/code/**",
-                                "/api/find-id",
-                                "/api/new-password/**",
-                                "/api/user-detail/**"
+//                                "/api/login",
+//                                "/api/signup/**",
+//                                "/api/email/code/**",
+//                                "/api/find-id",
+//                                "/api/new-password/**",
+//                                "/api/user-detail/**"
+                                "/api/**"
                         ).permitAll()
                         .requestMatchers("/api/files/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
