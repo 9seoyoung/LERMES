@@ -146,23 +146,25 @@ public class PostService {
     }
 
     // 게시글 단건 조회
-    @Transactional(readOnly = true)
+    @Transactional
     public PostResponseDto getPost(Long postSn, AuthCustomUserDetails auth) {
+        // 1. 조회수 먼저 증가
+        postMapper.increaseViewCnt(postSn);
 
+        // 2. 글 상세 가져오기
         PostResponseDto post = postMapper.findById(postSn);
 
         if (post == null) {
-            throw new NoSuchElementException("게시글을 찾을 수 없습니다. postSn=" + postSn);
+            throw new NoSuchElementException("게시글 없음: postSn=" + postSn);
         }
 
-        if (!canAccessPostForSingle(post, auth)) { // 👈 변경됨
+        // 3. 권한 체크
+        if (!canAccessPostForSingle(post, auth)) {
             throw new AccessDeniedException("조회 권한 없음");
         }
 
-        postMapper.increaseViewCnt(postSn);
-
-        // 4. 다시 조회해서 최신 조회수 반영
-        return postMapper.findById(postSn);
+        // 4. 최신 조회수 포함된 데이터 리턴
+        return post;
     }
 
     // 게시글 수정

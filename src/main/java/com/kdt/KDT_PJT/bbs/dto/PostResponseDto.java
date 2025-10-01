@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PostResponseDto {
     private Long postSn;                  // 게시물 일련번호 (PK)
-    private String bbsNm;                 // 게시판 이름/유형
     private String postTtl;               // 게시물 제목
     private String postCn;                // 게시물 내용
     private Long postWrtrSn;              // 작성자 일련번호
@@ -28,5 +27,5 @@ public class PostResponseDto {
     private String formUuid;              // UUID
     private BbsType bbsType;              // 게시판 유형 (영문 Enum)
     private BbsScope bbsScope;            // 공개 범위
-    private Integer VIEW_CNT;                   //조회수
+    private Integer VIEW_CNT;             //조회수
 }

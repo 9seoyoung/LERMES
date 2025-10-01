@@ -7,10 +7,10 @@
     <!-- 등록 -->
     <insert id="insertPost" useGeneratedKeys="true" keyProperty="dto.postSn">
         INSERT INTO TB_POST (
-            BBS_NM, POST_TTL, POST_CN, POST_WRTR_SN, CO_SN, COHORT_SN,
+           POST_TTL, POST_CN, POST_WRTR_SN, CO_SN, COHORT_SN,
             FORM_UUID, BBS_TYPE, BBS_SCOPE, POST_FRST_WRT_DT, POST_LAST_MDFCN_DT
         ) VALUES (
-                     #{dto.bbsNm}, #{dto.postTtl}, #{dto.postCn}, #{dto.postWrtrSn},
+                     #{dto.postTtl}, #{dto.postCn}, #{dto.postWrtrSn},
                      #{dto.coSn}, #{dto.cohortSn}, #{uuid},
                      #{dto.bbsType},
                      #{dto.bbsScope},
@@ -22,7 +22,6 @@
     <select id="findById" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
         SELECT
             p.POST_SN,
-            p.BBS_NM,
             p.POST_TTL,
             p.POST_CN,
             p.POST_WRTR_SN,
@@ -74,7 +73,6 @@
     <select id="findByFilters" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
         SELECT
         p.POST_SN,
-        p.BBS_NM,
         p.POST_TTL,
         p.POST_CN,
         p.POST_WRTR_SN,
