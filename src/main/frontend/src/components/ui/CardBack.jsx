@@ -4,8 +4,10 @@ import styles from "../../styles/cardBack.module.css";
 import { useState, useEffect } from "react";
 import { formatTime } from "../../utils/dateformat";
 import cn from "classnames";
+import { useAccount } from "../../auth/AuthContext";
 
 function CardBack({ effectiveSn }) {
+  const {user} = useAccount();
   const [hortlist, setHortList] = useState([]);
   const [cohort, setCohort] = useState([]);
   const [error, setError] = useState(null);
@@ -108,7 +110,7 @@ function CardBack({ effectiveSn }) {
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          v?.cohortSttsNm === "RECRUITING" && navigate("applyRecruitPoster");
+                          v?.cohortSttsNm === "RECRUITING" && user ? navigate("applyRecruitPoster"): navigate("/welcome/login");
                         }}
                       >
                         신청
