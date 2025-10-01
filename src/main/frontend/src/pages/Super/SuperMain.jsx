@@ -11,6 +11,7 @@ export default function SuperMain() {
   const { user } = useAccount();
   const { effectiveSn, setFixedSn, fixedSn } = useSelectedCompany();
   const [companyList, setCompanyList] = useState();
+  const [flipped, setFlipped] = useState(null); 
   const navigate = useNavigate();
   const myCoSn = user?.USER_OGDP_CO_SN;
   const myAuth = user?.USER_AUTHRT_SN;
@@ -59,7 +60,7 @@ export default function SuperMain() {
         <>
           <div
             key={idx}
-            className={cardStyle.company_card}
+            className={`${cardStyle.company_card} ${cardStyle.flipCard}`}
             style={{
               backgroundImage: v?.bigLogoFileSn
                 ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
