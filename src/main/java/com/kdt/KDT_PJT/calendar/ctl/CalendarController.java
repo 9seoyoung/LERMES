@@ -1,10 +1,7 @@
 package com.kdt.KDT_PJT.calendar.ctl;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
+import com.kdt.KDT_PJT.calendar.dto.*;
 import com.kdt.KDT_PJT.calendar.service.CalendarService;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
@@ -155,5 +152,23 @@ public class CalendarController {
     @GetMapping("/{calSn}")
     public ResponseEntity<CalendarDetailResponseDTO> getCalendarDetailByCalSn(@PathVariable Integer calSn){
         return ResponseEntity.ok(calendarService.getCalendarDetailByCalSn(calSn));
+    }
+
+    /*
+    * 일정 업데이트*/
+    @PatchMapping("/{calSn}")
+    public ResponseEntity<CalendarDetailResponseDTO> putCalendarDetailByCalSn(@PathVariable Integer calSn,
+                                                                             @RequestBody CalendarUpdateRequestDTO params){
+        params.setCalSn(calSn);
+        return ResponseEntity.ok(calendarService.putCalendarDetailByCalSn(params));
+    }
+
+    /*
+    * 일정 삭제*/
+    @DeleteMapping("/{calSn}")
+    public ResponseEntity<Void> deleteCalendarByCalSn(@PathVariable Integer calSn){
+        calendarService.deleteCalendarByCalSn(calSn);
+
+        return ResponseEntity.noContent().build();
     }
 }

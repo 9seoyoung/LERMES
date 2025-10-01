@@ -107,12 +107,12 @@
         FROM
             TB_CALENDAR c
         WHERE 1=1
+            AND DEL_YN = 0
             -- 날짜 범위: [searchStartDate, endExclusive)
             <if test="searchStartDate != null and searchEndDate != null">
                 -- 일정 시작 &lt; 검색 종료 AND 검색 시작 &lt;= 일정 종료 일때 참
                 AND(c.EVENT_BGNG_DT &lt; #{searchEndDate})
                 AND(#{searchStartDate} &lt;= c.EVENT_END_DT)
-
             </if>
             <choose>
                 <when test="prvtYn != null and prvtYn == 1">                 -- switch문처럼 동작함 위에서부터 조건 걸리는거 하나만 실행.
@@ -150,6 +150,7 @@
         FROM TB_CALENDAR c
         LEFT JOIN TB_USER u ON c.USER_SN = u.USER_SN
         WHERE c.CAL_SN = #{calSn}
+            AND DEL_YN = 0
     </select>
 
     <update id="incCalendarViewCnt" parameterType="Integer">
@@ -171,6 +172,7 @@
         FROM TB_CALENDAR c
         LEFT JOIN TB_USER u ON u.USER_SN = c.USER_SN
         WHERE 1=1
+            AND DEL_YN = 0
             <choose>
                 <when test="prvtYn != null and prvtYn == 1">                 -- switch문처럼 동작함 위에서부터 조건 걸리는거 하나만 실행.
                     AND c.PRVT_YN = 1
@@ -191,5 +193,35 @@
             </choose>
         ORDER BY CAL_SN ASC -- EVENT_REG_DT ASC
     </select>
+
+    <update id="putCalendarDetailByCalSn" parameterType="com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO">
+        UPDATE TB_CALENDAR c
+        <set> -- 마지막쉼표 자동제거
+            <if test="eventBgngDt != null">
+                c.EVENT_BGNG_DT = #{eventBgngDt},
+            </if>
+
+            <if test="eventEndDt != null">
+                c.EVENT_END_DT = #{eventEndDt},
+            </if>
+
+            <if test="eventNm != null and eventNm != ''">
+                c.EVENT_NM = #{eventNm},
+            </if>
+
+            <if test="rmrkCn != null">
+                c.RMRK_CN = #{rmrkCn},
+            </if>
+        </set>
+        WHERE c.CAL_SN = #{calSn}
+            AND DEL_YN = 0
+    </update>
+
+    <update id="deleteCalendarByCalSn" parameterType="Integer">
+        UPDATE TB_CALENDAR
+        SET
+            DEL_YN = 1
+        WHERE CAL_SN = #{calSn}
+    </update>
 
 </mapper>

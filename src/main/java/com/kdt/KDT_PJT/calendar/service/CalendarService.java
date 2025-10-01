@@ -1,10 +1,7 @@
 package com.kdt.KDT_PJT.calendar.service;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
+import com.kdt.KDT_PJT.calendar.dto.*;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -108,9 +106,36 @@ public class CalendarService {
         return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
     }
 
-    @Transactional
     public List<CalendarListResponseDTO> getCalendarList(CalendarSimpleResponseDTO params){
         return dao.selectList("com.kdt.mapper.calendar.getCalendarList",params);
+    }
+
+    /*
+    * 업데이트*/
+    @Transactional
+    public CalendarDetailResponseDTO putCalendarDetailByCalSn(CalendarUpdateRequestDTO params){
+        int u = dao.update("com.kdt.mapper.calendar.putCalendarDetailByCalSn",params);
+        if(u!=0){
+            System.out.println("성공~");
+        }else{
+            System.out.println("실패~");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "업뎃실패요");
+        }
+        Integer calSn = params.getCalSn();
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+    }
+
+    /*
+    * 삭제(soft)*/
+    @Transactional
+    public void deleteCalendarByCalSn(Integer calSn){
+        int u = dao.update("com.kdt.mapper.calendar.deleteCalendarByCalSn",calSn);
+        if(u!=0){
+            System.out.println("성공~");
+        }else{
+            System.out.println("실패~");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "삭제실패임");
+        }
     }
 
 
