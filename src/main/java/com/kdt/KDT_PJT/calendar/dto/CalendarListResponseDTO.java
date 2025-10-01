@@ -19,8 +19,6 @@ public class CalendarListResponseDTO { // 상세보기 들어가기 전, 리스�
     private LocalDateTime eventEndDt;   //EVENT_END_DT
     private String eventNm;             //EVENT_NM 이벤트 이름
 //    private String rmrkCn;              //RMRK_CN 이벤트 설명 -> 상세보기에서 보여주기
-//    @JsonIgnore
-//    private Integer userSn;             //USER_SN 사용자 일련번호 이거는 보내줄필요없을듯,
     private String userNm;                // 작성자명, TB_USER에서 userSn으로 조인해서 가져오기
     private LocalDateTime eventRegDt;   //EVENT_REG_DT 작성일
     private Byte prvtYn;                //PRVT_YN 개인일정이면1 아니면 0
@@ -29,4 +27,5 @@ public class CalendarListResponseDTO { // 상세보기 들어가기 전, 리스�
     // CalendarSimpleResponseDTO (조회 조건 필드)
     @JsonIgnore private LocalDateTime searchStartDate;
     @JsonIgnore private LocalDateTime searchEndDate;
+    @JsonIgnore private Integer userSn;
 }

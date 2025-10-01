@@ -1,9 +1,7 @@
 package com.kdt.KDT_PJT.calendar.service;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
+import com.kdt.KDT_PJT.calendar.dto.*;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
 import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -25,7 +24,7 @@ public class CalendarService {
     CmmnDao dao; //공용 DAO
 
     @Transactional
-    public CalendarListResponseDTO createCalendar(AuthCustomUserDetails me, CalendarRequestDTO req) {
+    public CalendarDetailResponseDTO createCalendar(AuthCustomUserDetails me, CalendarRequestDTO req) {
 
         // 0) 인증 확인
         if (me == null) {
@@ -84,24 +83,11 @@ public class CalendarService {
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "무결성 제약 위반: 입력값을 확인하세요.");
         }
-        Number calSnNum = (Number) m.get("CAL_SN");
-        Integer calSn = calSnNum == null ? null : calSnNum.intValue();
-        Number userSnNum = (Number) m.get("USER_SN");
-        Integer userSn = userSnNum == null ? null : userSnNum.intValue();
 
-        // 5) 재조회 없이 응답 구성 (지금 m에 값 다 있으니 그대로 사용)
-        return CalendarListResponseDTO.builder()
-                .calSn(calSn)
-//                .cohortSn((Integer) m.get("COHORT_SN"))   //필요없을거같아서DTO에서뺌
-                .eventBgngDt((LocalDateTime) m.get("EVENT_BGNG_DT"))
-                .eventEndDt((LocalDateTime) m.get("EVENT_END_DT"))
-                .eventNm((String) m.get("EVENT_NM"))
-//                .rmrkCn((String) m.get("RMRK_CN"))        //필요없을거같아서DTO에서뺌
-//                .userSn(userSn)                           //필요없을거같아서DTO에서뺌
-                .eventRegDt((LocalDateTime) m.get("EVENT_REG_DT"))
-                .prvtYn((Byte) m.get("PRVT_YN"))
-//                .coSn((Integer) m.get("CO_SN"))           //필요없을거같아서DTO에서뺌
-                .build();
+        // calSn으로 detailResponseDTO 리턴해줘야겠음 -> 상세정보 이름 조인해서 조회해오는거
+        Integer calSn = Integer.parseInt(m.get("CAL_SN").toString());
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+
     }
     public List<CalendarSimpleResponseDTO> getCalendarForDay(CalendarSimpleResponseDTO params){
         return dao.selectList("selectSimpleByRange",params);
@@ -109,6 +95,47 @@ public class CalendarService {
 
     public List<CalendarSimpleResponseDTO> getCalendarForMonth(CalendarSimpleResponseDTO params){
         return dao.selectList("selectSimpleByRange",params);
+    }
+
+    /*
+    * 일정 상세 보기
+    * 조회수 +1 하면서 받아옴*/
+    @Transactional
+    public CalendarDetailResponseDTO getCalendarDetailByCalSn(Integer calSn){
+        dao.update("com.kdt.mapper.calendar.incCalendarViewCnt",calSn);
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+    }
+
+    public List<CalendarListResponseDTO> getCalendarList(CalendarSimpleResponseDTO params){
+        return dao.selectList("com.kdt.mapper.calendar.getCalendarList",params);
+    }
+
+    /*
+    * 업데이트*/
+    @Transactional
+    public CalendarDetailResponseDTO putCalendarDetailByCalSn(CalendarUpdateRequestDTO params){
+        int u = dao.update("com.kdt.mapper.calendar.putCalendarDetailByCalSn",params);
+        if(u!=0){
+            System.out.println("성공~");
+        }else{
+            System.out.println("실패~");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "업뎃실패요");
+        }
+        Integer calSn = params.getCalSn();
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+    }
+
+    /*
+    * 삭제(soft)*/
+    @Transactional
+    public void deleteCalendarByCalSn(Integer calSn){
+        int u = dao.update("com.kdt.mapper.calendar.deleteCalendarByCalSn",calSn);
+        if(u!=0){
+            System.out.println("성공~");
+        }else{
+            System.out.println("실패~");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "삭제실패임");
+        }
     }
 
 
