@@ -1,5 +1,4 @@
-// 일정 등록 팝업창
-
+// src/components/calendar/SchedListPopUp.jsx
 import React, { useState, useMemo } from "react";
 import { SaveBtn, CancelBtn, DateTimeInput } from "./UiComp.jsx";
 import styles from "../../styles/SchedListPopUp.module.css";
@@ -14,9 +13,10 @@ function getInitialDate(selectedDate) {
 
 function SchedListPopUp({ onClose, onSave, selectedDate }) {
   const initialDate = useMemo(() => getInitialDate(selectedDate), [selectedDate]);
-  const {user} = useAccount();
-  const {pathname} = useLocation();
+  const { user } = useAccount();
+  const { pathname } = useLocation();
   const [showOptions, setShowOptions] = useState(false);
+
   const [formData, setFormData] = useState({
     title: "",
     memo: "",
@@ -28,7 +28,6 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
     isPrivate: true,
   });
 
-  // 공통 변경 핸들러 (input/textarea 모두 지원)
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -38,7 +37,6 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
   };
 
   const handleSave = async () => {
-    // 기본 검증
     if (typeof formData.title !== "string" || !formData.title.trim()) {
       alert("제목을 입력해줘.");
       return;
@@ -56,11 +54,8 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
       return;
     }
 
-    // 서버 저장
     try {
-      console.log(formData);
-      const res = await registToDo(formData); // ← formData 전달
-      // 부모에게 알려주기 (응답 데이터 우선, 없으면 formData)
+      const res = await registToDo(formData);
       onSave?.(res?.data ?? formData);
     } catch (err) {
       console.error("[SchedListPopUp] registToDo error:", err);
@@ -106,49 +101,76 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
           <div>
             <span className={`${styles.arrow} ${showOptions ? styles.arrowOpen : ""}`}>▼</span>
             상세보기
-        </div>
-        { user.USER_AUTHRT_SN <= 3 && pathname != "/adminHome" ?
+          </div>
+          { user?.USER_AUTHRT_SN <= 3 && pathname !== "/adminHome" ? (
             <div className={styles.private}>
-                <input
-                  type="checkbox"
-                  name="isPrivate"
-                  checked={!!formData.isPrivate}
-                  onChange={handleChange}
-                  id="privateBox"
-                  />
-            <label htmlFor="privateBox">
-              비공개
-            </label>
+              <input
+                type="checkbox"
+                name="isPrivate"
+                checked={!!formData.isPrivate}
+                onChange={handleChange}
+                id="privateBox"
+              />
+              <label htmlFor="privateBox">비공개</label>
             </div>
-          :
-          ""
-        }
+          ) : null}
         </div>
 
         {/* 옵션 내용 */}
         {showOptions && (
           <div className={styles.optionsContent}>
             <div className={styles.content}>
-              <DateTimeInput type="date" name="startDate" addLabelStyle="formLabel" labelNm={"시작일"} value={formData.startDate} formData={formData} onChange={handleChange} />
+              <DateTimeInput
+                type="date"
+                name="startDate"
+                addLabelStyle="formLabel"
+                labelNm={"시작일"}
+                value={formData.startDate}
+                formData={formData}
+                disabled={false}
+                handleChange={handleChange}
+              />
             </div>
 
             <div className={styles.content}>
-              <DateTimeInput type="date" name="endDate" labelNm={"종료일"}  addLabelStyle="formLabel" value={formData.endDate}  formData={formData} onChange={handleChange} />
+              <DateTimeInput
+                type="date"
+                name="endDate"
+                labelNm={"종료일"}
+                addLabelStyle="formLabel"
+                value={formData.endDate}
+                formData={formData}
+                handleChange={handleChange}
+                disabled={false}
+              />
             </div>
 
             <div className={styles.content}>
               <div className={styles.timeInput}>
-                <DateTimeInput type="time" name="startTime" labelNm={"시간"}  addLabelStyle="formLabel"value={formData.startTime} onChange={handleChange} />
+                <DateTimeInput
+                  type="time"
+                  name="startTime"
+                  labelNm={"시간"}
+                  addLabelStyle="formLabel"
+                  value={formData.startTime}
+                disabled={false}
+                handleChange={handleChange}
+                />
                 <div>~</div>
-                <DateTimeInput type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
+                <DateTimeInput
+                  type="time"
+                  name="endTime"
+                  value={formData.endTime}
+                disabled={false}
+                handleChange={handleChange}
+                />
               </div>
             </div>
 
             <div className={styles.content}>
               <label className="formLabel">장소</label>
-              <input type="text" name="location" value={formData.location} onChange={handleChange} />
+              <input type="text" name="location" value={formData.location} handleChange={handleChange} />
             </div>
-
           </div>
         )}
       </div>
