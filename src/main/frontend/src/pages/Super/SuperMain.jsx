@@ -6,8 +6,6 @@ import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../../auth/AuthContext';
 import CardBack from '../../components/ui/CardBack';
-import { FaHome } from "react-icons/fa";   // FontAwesome
-import { AiFillHome } from "react-icons/ai"; // Ant Design Icons
 import { MdHome } from "react-icons/md";
 
 export default function SuperMain() {
@@ -93,9 +91,9 @@ export default function SuperMain() {
                   >
                     <MdHome></MdHome>
                   </button> */}
-                  <button type="button" style={{display:"flex", height: "100%", padding:"2px 4px", alignItems: "end", fontSize: "1.2rem", fontWeight: "700"}} className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
+                  {/* <button type="button" style={{display:"flex", height: "100%", padding:"2px 4px", alignItems: "end", fontSize: "1.2rem", fontWeight: "700"}} className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
                     {`${!v.stts ? "" : "모집중" }`}
-                  </button>
+                  </button> */}
                 </p>
                 <p className={cardStyle.title}>{`${(v?.companyAddress ?? "소재지" )+ " " + ( v?.companyAddressDetail ?? "정보 없음" )}`}</p>
                 <div className={cardStyle.row} data-box-type="row">
@@ -107,12 +105,11 @@ export default function SuperMain() {
                       handleGoLms(v.id);
                     }}
                   >
-                    <MdHome></MdHome>
                     LMS 바로가기
                   </button>
-                  {/* <button type="button" className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
+                  <button type="button" className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
                     {`${!v.stts ? "-" : "모집중" }`}
-                  </button> */}
+                  </button>
                 </div>
               </div>
             </div>

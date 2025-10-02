@@ -138,7 +138,7 @@ function formatYMDfrom(year, month /* 0-based */, day) {
           <div className='dashBoardModule' style={{ height: '232px' }}>
             <ScheduleList selectedDate={selectedDateStr} />    
           </div>
-          <div className='dashBoardModule' style={{ height: '470px' }}>
+          <div className='dashBoardModule' style={{ height: '470px', overflow:"hidden" }}>
             <TodayAttendList />
           </div>
         </div>

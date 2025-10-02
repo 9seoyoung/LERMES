@@ -55,6 +55,7 @@ import InterviewRead from '../pages/LMS/readAndEdit/InterviewRead.jsx';
 import BoardPost from '../pages/LMS/form/BoardPost.jsx';
 import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
 import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
+import UnknownHome from '../pages/LMS/UnknownHome.jsx';
 function AppRoutes() {
   return (
     <Routes>
@@ -91,7 +92,7 @@ function AppRoutes() {
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
-        <Route path="unknownHome" element={<VisitorHome />} />
+        <Route path="unknownHome" element={<UnknownHome />} />
         
 
         <Route element={<RoleRoute roles={[1, 2, 3, 4, 5]} />}>
