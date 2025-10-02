@@ -34,7 +34,7 @@ const CalSched = () => {
       } else {
         setDisplayDate('선택된 날짜 없음');
       }
-    }, [,selectedDate]);
+    }, [selectedDate]);
 
   return (
   <>

@@ -2,6 +2,7 @@ package com.kdt.KDT_PJT.calendar.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,8 @@ public class CalendarRequestDTO {
     @JsonProperty("memo")
     private String rmrkCn;              //RMRK_CN 이벤트 설명
     private Integer userSn;             //USER_SN 사용자 일련번호
-    private Byte prvtYn;                //PRVT_YN 개인일정이면1 아니면 0
+    @JsonProperty("isPrivate")
+    private Boolean prvtYn;                //PRVT_YN 개인일정이면1 아니면 0
 
     @JsonIgnore private LocalDateTime eventBgngDt;  //저장용
     @JsonIgnore private LocalDateTime eventEndDt;   //저장용
