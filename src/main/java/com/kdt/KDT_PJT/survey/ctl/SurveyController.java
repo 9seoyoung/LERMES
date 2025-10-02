@@ -20,19 +20,35 @@ public class SurveyController {
     private final SurveyService surveyService;
     // 설문 등록
     @PostMapping("/post")
-    public ResponseEntity<ResponseSurveyDto> createSurvey(@RequestBody RequestSurveyDto requestDto) {
-        ResponseSurveyDto responseDto = surveyService.createSurvey(requestDto);
+    public ResponseEntity<ResponseSurveyDto> createSurvey(@RequestBody RequestSurveyDto requestDto,
+                                                          @AuthenticationPrincipal AuthCustomUserDetails auth) {
+        Long userSn = auth.getId();
+        Long roleId = auth.getRoleType();
+
+        requestDto.setUserSn(userSn);
+
+        ResponseSurveyDto responseDto = surveyService.createSurvey(requestDto, userSn, roleId);
         return ResponseEntity.ok(responseDto);
     }
 
     // 설문 단건 조회
     @GetMapping("/{srvySn}")
-    public ResponseEntity<ResponseSurveyDto> getSurvey(@PathVariable Long srvySn) {
-        return ResponseEntity.ok(surveyService.getSurvey(srvySn));
+    public ResponseEntity<ResponseSurveyDto> getSurvey(
+            @PathVariable Long srvySn,
+            @AuthenticationPrincipal AuthCustomUserDetails auth) {
+
+        Long roleId = auth.getRoleType();
+        Long userSn = auth.getId();
+        Long coSn = auth.getCompanySn();
+        Long cohortSn = auth.getCohortSn();
+
+        return ResponseEntity.ok(
+                surveyService.getSurvey(srvySn, roleId, userSn, coSn, cohortSn)
+        );
     }
 
     // 목록 조회
-    @GetMapping("list/{coSn}")
+    @GetMapping("/list/{coSn}")
     public ResponseEntity<List<ResponseSurveyDto>> getSurveyList(
             @PathVariable Long coSn,
             @RequestParam(value = "cohortSn", required = false) Long cohortSn,
@@ -50,6 +66,17 @@ public class SurveyController {
         Long roleId = auth.getRoleType(); // 롤 타입 (숫자)
         surveyService.updateSurvey(srvySn, requestDto, userSn, roleId);
         return ResponseEntity.ok("수정 성공");
+    }
+    //설문 삭제 (본인 or 권한자)
+    @DeleteMapping("/{srvySn}")
+    public ResponseEntity<String> deleteSurvey(@PathVariable Long srvySn,
+                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
+        Long userSn = auth.getId();
+        Long roleId = auth.getRoleType();
+        Long coSn = auth.getCompanySn();
+        Long cohortSn = auth.getCohortSn();
+        surveyService.deleteSurvey(srvySn, userSn, roleId, coSn, cohortSn);
+        return ResponseEntity.ok("삭제 성공");
     }
 
 }

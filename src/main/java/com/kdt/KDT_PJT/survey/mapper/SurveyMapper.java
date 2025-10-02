@@ -25,7 +25,11 @@ public interface SurveyMapper {
                                                     @Param("bbsType") BbsType bbsType);
 
 
-    void updateSurvey(@Param("srvySn") Long srvySn, @Param("dto") RequestSurveyDto dto);
+
+    void updateSurveyOwner(@Param("srvySn") Long srvySn, @Param("dto") RequestSurveyDto dto);
+
+
+    void updateSurveyByAdmin(@Param("srvySn") Long srvySn, @Param("dto") RequestSurveyDto dto);
 
 
     void softDeleteSurvey(@Param("srvySn") Long srvySn,

@@ -5,8 +5,7 @@
 
 <mapper namespace="com.kdt.KDT_PJT.survey.mapper.SurveyMapper">
     <!-- 설문 등록 -->
-    <insert id="insertSurvey" parameterType="com.kdt.KDT_PJT.survey.dto.RequestSurveyDto"
-            useGeneratedKeys="true" keyProperty="srvySn">
+    <insert id="insertSurvey" useGeneratedKeys="true" keyProperty="dto.srvySn">
         INSERT INTO TB_BBS_SURVEY
         (
         SRVY_TTL,
@@ -23,15 +22,15 @@
         )
         VALUES
         (
-        #{srvyTtl},
-        #{srvyQitem},
-        #{coSn},
-        #{cohortSn},
-        #{srvyBgngDt},
-        #{srvyEndDt},
-        #{srvyScope},
-        COALESCE(#{bbsType}, 'SURVEY'),
-        #{userSn},
+        #{dto.srvyTtl},
+        #{dto.srvyQitem},
+        #{dto.coSn},
+        #{dto.cohortSn},
+        #{dto.srvyBgngDt},
+        #{dto.srvyEndDt},
+        #{dto.srvyScope},
+        COALESCE(#{dto.bbsType}, 'SURVEY'),
+        #{dto.userSn},
         NOW(),
         #{uuid}
         )
@@ -104,8 +103,8 @@
     </select>
 
 
-    <!-- 수정 -->
-    <update id="updateSurvey">
+    <!-- 수정 (작성자용) -->
+    <update id="updateSurveyOwner">
         UPDATE TB_BBS_SURVEY
         SET
         SRVY_TTL     = #{dto.srvyTtl},
@@ -117,8 +116,24 @@
         SRVY_SCOPE   = #{dto.srvyScope},
         BBS_TYPE     = #{dto.bbsType},
         SRVY_LAST_MDFCN_DT = NOW()
-        WHERE SRVY_SN = #{id}
+        WHERE SRVY_SN = #{srvySn}
         AND USER_SN = #{dto.userSn}
+    </update>
+
+    <!-- 수정 (관리자용: 작성자 제약 없음) -->
+    <update id="updateSurveyByAdmin">
+        UPDATE TB_BBS_SURVEY
+        SET
+        SRVY_TTL     = #{dto.srvyTtl},
+        SRVY_QITEM   = #{dto.srvyQitem},
+        CO_SN        = #{dto.coSn},
+        COHORT_SN    = #{dto.cohortSn},
+        SRVY_BGNG_DT = #{dto.srvyBgngDt},
+        SRVY_END_DT  = #{dto.srvyEndDt},
+        SRVY_SCOPE   = #{dto.srvyScope},
+        BBS_TYPE     = #{dto.bbsType},
+        SRVY_LAST_MDFCN_DT = NOW()
+        WHERE SRVY_SN = #{srvySn}
     </update>
 
     <!-- 삭제 (작성자만) -->
