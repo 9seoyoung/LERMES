@@ -13,6 +13,10 @@ export function createGroup(body) {
   });
 }
 
+export const applyGroup = ({ userSn, cohortSn }) =>  api.post('/cohort-member/apply', null, { params: { userSn, cohortSn }});
+
+export const readRecruitPoster = (id) => api.get(`/cohorts/${id}`)
+
 
 export function createInterview(body) {
   return api.post('/interview/apply', body, {

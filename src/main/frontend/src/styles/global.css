@@ -88,10 +88,11 @@ hr {
 
 textarea {
   display: flex;
+  align-items: baseline;
   width: 100%;
   flex: 1;
   resize: none;
-  padding: 16px 12px;
+  padding: 0 12px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   outline: none;
@@ -169,6 +170,10 @@ h4 {
   border-radius: 24px;
   font-size: 1.4rem;
   padding: 0 0.2rem;
+}
+
+#accountD_Btn:active{
+  scale: 0.95;
 }
 
 .header_L {
@@ -320,7 +325,7 @@ footer>div:hover {
 .mainCont_Lms_Row {
   display: flex;
   width: 100%;
-  height: 100%;
+  min-height: 702px;
   gap: 24px;
 }
 
@@ -667,6 +672,12 @@ footer>div:hover {
   background: #ebeff4;
   /* color: #333; */
   color: var(--color-text-sec);
+}
+
+.ftList_R {
+  display: flex;
+  align-items: end;
+  justify-content: center;
 }
 
 #ftClicked {
@@ -1076,4 +1087,12 @@ footer>div:hover {
   background-color: var(--color-secondary-light);
   border-radius: 8px;
   width: 100%;
+}
+
+.yScroll80rem {
+  height: 8rem;
+}
+
+#tableBg{
+  background-color: var(--color-light-bg) !important;
 }

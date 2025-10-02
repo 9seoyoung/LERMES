@@ -121,7 +121,7 @@ export default function AttendAdjustStudentRequestList() {
       <div style={sx.tableWrap}>
         <table style={sx.table}>
           <colgroup>
-            <col style={{ width: '40px' }} /> {/* 순번 */}
+            <col style={{ width: '40px' }} /> {/* # */}
             <col style={{ width: '60px' }} /> {/* 유형 */}
             <col style={{ width: '110px' }} /> {/* 사유 */}
             <col style={{ width: '110px' }} /> {/* 신청일 */}
@@ -130,7 +130,7 @@ export default function AttendAdjustStudentRequestList() {
           </colgroup>
           <thead>
             <tr>
-              <th style={sx.th}>순번</th>
+              <th style={sx.th}>#</th>
               <th style={sx.th}>유형</th>
               <th style={sx.th}>사유</th>
               <th style={sx.th}>신청일</th>

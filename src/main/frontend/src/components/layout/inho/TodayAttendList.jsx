@@ -34,7 +34,7 @@ export default function TodayAttendList() {
         <table className="listTable" style={{ width: '100%' }}>
           <thead>
             <tr>
-              <th>순번</th>
+              <th>#</th>
               <th>이름</th>
               <th>입실</th>
               <th>퇴실</th>
@@ -44,7 +44,7 @@ export default function TodayAttendList() {
           <tbody>
             {rows.map((s, idx) => (
               <tr key={s.userSn} className="table-body">
-                <td>{idx + 1}</td> {/* 순번 */}
+                <td>{idx + 1}</td> {/* # */}
                 <td>{s.username}</td>
                 <td>{s.checkInTime ?? '-'}</td>
                 <td>{s.checkOutTime ?? '-'}</td>

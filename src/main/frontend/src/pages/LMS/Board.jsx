@@ -10,6 +10,7 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../auth/AuthContext";
 import { toast } from "react-toastify";
 import { formatDate } from "../../utils/dateformat";
+import {SELECT_TEACHER_DETAIL_PAGE_PATH} from "../../utils/teacherBoardFilter";
 
 export default function Board(){
     const navigate = useNavigate();
@@ -26,10 +27,10 @@ export default function Board(){
     useEffect(() => {
         const cohortSn = user?.USER_COHORT_SN;
         const bbsType = STUDENT_BOARD_MENU_FILTER[selectedIdx];
-        setWhereToGo(SELECT_DETAIL_PAGE_PATH[selectedIdx]);
+        setWhereToGo(user.USER_AUTHRT_SN === 4 ? SELECT_TEACHER_DETAIL_PAGE_PATH[selectedIdx] : SELECT_DETAIL_PAGE_PATH[selectedIdx]);
         console.log(filterArr[selectedIdx]);
         setColumnData(BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
-        setPostKey(SELECT_POST_SN_KEY[selectedIdx]);        
+        setPostKey(SELECT_POST_SN_KEY[selectedIdx]);
         const params = {
         }
 
@@ -67,7 +68,7 @@ export default function Board(){
             </div>
             <div className="BigListBox">
                 <ListTable
-                tableHead={['순번', '유형', '제목', '작성일', '작성자', '조회수']}
+                tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
                 columnData={columnData}
                 apiData={pullList}
                 // 문자열로 지정

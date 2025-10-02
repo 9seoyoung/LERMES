@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum BbsType {
-    NOTICE("공지"),               /*작성+수정 : 테넌트, 직원 / 열람권한: 전체공개*/
-    CLASS_MATERIAL("자료실"),     /*작성+수정+열람 : cohort_sn을 가진 강사, 수강생*/
-    FAQ("FAQ"),                  /*작성+수정 : 테넌트, 직원 / 열람권한 : cohort_sn을 가진 강사, 수강생*/
+    NOTICE("공지"),
+    CLASS_MATERIAL("자료실"),
+    FAQ("FAQ"),
     QNA("문의"),
-    SURVEY("설문조사");                 /*작성+수정+열람 : 테넌트, 직원, cohort_sn을 가진 강사, 수강생*/
+    SURVEY("설문조사");
 
 
     private final String description;

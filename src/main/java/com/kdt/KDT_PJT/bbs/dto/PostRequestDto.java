@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PostRequestDto {
     private Long postSn;        // 게시물 일련번호 (PK, 수정/삭제 시 필요)
-    private String bbsNm;       // 게시판 이름/유형
     @JsonProperty("title")
     @JsonAlias({"postTtl"})
     private String postTtl;     // 게시물 제목
