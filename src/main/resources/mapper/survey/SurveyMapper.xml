@@ -52,13 +52,13 @@
         S.BBS_TYPE         AS bbsType,
         S.FORM_UUID        AS formUuid,
         S.VIEW_CNT         AS viewCnt,
-        S.SRVY_DEL_YN      AS delYn,
+        S.DEL_YN      AS delYn,
         S.SRVY_FRST_WRT_DT AS srvyFrstWrtDt,
         S.SRVY_LAST_MDFCN_DT AS srvyLastMdfcnDt
         FROM TB_BBS_SURVEY S
         JOIN TB_USER U ON S.USER_SN = U.USER_SN
         WHERE S.SRVY_SN = #{srvySn}
-        AND S.SRVY_DEL_YN = FALSE
+        AND S.DEL_YN = FALSE
     </select>
 
     <!-- 단건조회시 조회수 증가 -->
@@ -84,12 +84,12 @@
         S.BBS_TYPE         AS bbsType,
         S.FORM_UUID        AS formUuid,
         S.VIEW_CNT         AS viewCnt,
-        S.SRVY_DEL_YN      AS delYn,
+        S.DEL_YN     AS delYn,
         S.SRVY_FRST_WRT_DT AS srvyFrstWrtDt,
         S.SRVY_LAST_MDFCN_DT AS srvyLastMdfcnDt
         FROM TB_BBS_SURVEY S
         JOIN TB_USER U ON S.USER_SN = U.USER_SN
-        WHERE S.SRVY_DEL_YN = FALSE
+        WHERE S.DEL_YN = FALSE
         <if test="coSn != null">
             AND S.CO_SN = #{coSn}
         </if>
@@ -139,7 +139,7 @@
     <!-- 삭제 (작성자만) -->
     <update id="softDeleteSurvey">
         UPDATE TB_BBS_SURVEY
-        SET SRVY_DEL_YN = TRUE,
+        SET DEL_YN = TRUE,
         SRVY_LAST_MDFCN_DT = NOW()
         WHERE SRVY_SN = #{srvySn}
         AND USER_SN = #{userSn}
@@ -148,7 +148,7 @@
     <!-- 삭제 (관리자/강사) -->
     <update id="softDeleteSurveyByAdmin">
         UPDATE TB_BBS_SURVEY
-        SET SRVY_DEL_YN = TRUE,
+        SET DEL_YN = TRUE,
         SRVY_LAST_MDFCN_DT = NOW()
         WHERE SRVY_SN = #{srvySn}
     </update>
