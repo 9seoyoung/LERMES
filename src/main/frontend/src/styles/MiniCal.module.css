@@ -6,6 +6,7 @@
   --bar-bg: var(--bg-color-red2);
 }
 
+
 .cal { width: 100%; }
 
 .monthNav {
@@ -77,6 +78,7 @@
   gap: var(--cell-gap);
   z-index: 5;                 /* 셀 위로 */
   padding-top: 0;             /* cellsGrid와 시각적으로 정렬 */
+  height: calc(var(--cell-height) - 30px);
 }
 
 /* 이벤트 바 */
@@ -90,7 +92,11 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
+  
   /* 셀보다 위에 떠있게 */
   box-shadow: 0 2px 4px rgba(0,0,0,0.12);
 }
+
+.bar[calendar-type = "private"] {
+    --bar-bg: var(--bg-color-gray2);
+  }
