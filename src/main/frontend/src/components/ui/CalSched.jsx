@@ -4,6 +4,7 @@ import SchedList from './SchedList';
 import styles from '../../styles/CalSched.module.css';
 import { useAccount } from '../../auth/AuthContext';
 import { pullToDoList } from "../../services/calService.js";
+import { period } from '../../utils/dateformat.js';
 
 const CalSched = () => {
   const { user } = useAccount();
@@ -14,7 +15,7 @@ const CalSched = () => {
   const [events, setEvents] = useState({});
   const [monthlyTodo, setMonthlyTodo] = useState({
     // 동적키 [date]: 배열[ 일정1, 일정2, 일정3]
-    // 
+    // 이거 지금 받아와서 >> 맵돌려서 일자별로 >> 기간 계산해서 >> 블록 길이로 쓰고 블록에 호버하면 이름 / 기간 띄울까 싶은데
   });
 
   const z2 = (n) => String(n).padStart(2, '0');
