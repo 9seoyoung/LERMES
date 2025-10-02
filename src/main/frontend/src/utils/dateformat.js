@@ -7,7 +7,7 @@ export function formatDate(value, format = DEFAULT_FORMAT) {
   return dayjs(value).format(format);
 }
 
-export function formatTime(value, format = "hh:mm") {
+export function formatTime(value) {
   if (!value) return "-";
   
   const [hour, minutes] = value.split(':');

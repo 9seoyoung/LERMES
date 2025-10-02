@@ -6,6 +6,7 @@ import MiniCal from '../../components/ui/MiniCal';
 import CalSched from '../../components/ui/CalSched';
 
 export default function AdminHome() {
+  
   return (
     <div className="mainCont_Lms_Row" >
       <div className="main_L" style={{ width: '40%', maxHeight: "702px" }}>

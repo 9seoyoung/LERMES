@@ -5,7 +5,6 @@ import { SchedAddBtn } from './UiComp.jsx';
 import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
 import '../../styles/token.css';
-import { pullToDoList } from "../../services/calService.js";
 import { useAccount } from "../../auth/AuthContext.jsx";
 
 function SchedList({selectedDate, displayDate, setDisplayDate}) {
@@ -26,16 +25,6 @@ function SchedList({selectedDate, displayDate, setDisplayDate}) {
       };
 
       setDisplayDate(`${month}월 ${day}일`);
-      (async () => {
-        try {
-          console.log(params);
-          const res = await pullToDoList(params);
-          console.log(res);
-        } catch(err) {
-          console.log(err.message);
-        }
-
-      })();
     } else {
       setDisplayDate('선택된 날짜 없음');
     }
