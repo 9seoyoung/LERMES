@@ -20,8 +20,6 @@
   border-radius: 8px;
 }
 
-
-
 .detailInfo {
   display: none;
 }
@@ -113,7 +111,6 @@
 }
 .applyBtnOn:active {
   background-color: var(--bg-color-blue3);
-
   font-size: 0.9rem;
 }
 

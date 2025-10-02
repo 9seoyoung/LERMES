@@ -68,7 +68,8 @@ input {
   padding: 12px 14px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #fff;
+  /* background: #fff; */
+  background: var(--bg);
   outline: none;
   transition: border-color .15s, box-shadow .15s;
 }
