@@ -15,9 +15,9 @@ export default function CohortAbsenceCard() {
   if (!rows.length) return null;
 
   return (
-    <section className="coh-card">
+    <>
       <div className="coh-card__head">
-        <h2 className="coh-card__title">교육 과정별 결석 현황</h2>
+        <h className="coh-card__title">교육 과정별 결석 현황</h>
         <span className="coh-card__period">
           {new Date().toLocaleDateString()}
         </span>
@@ -36,6 +36,6 @@ export default function CohortAbsenceCard() {
           </div>
         ))}
       </div>
-    </section>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 .sched {
-  width: 440px;
-  height: 410px;
-  background-color: var(--color-list-bg);
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-color-gray5);
   border-radius: 16px;
   padding: 16px;
   box-sizing: border-box;
@@ -30,7 +30,7 @@ font-size: 14px;
 }
 
 .schedList li {
-  margin-bottom: 8px;
-  color: var(--color-text-primary);
-  font-size: 18px;
+  list-style-type: square;
+  color: var(--font-color-base);
+  font-size: 1.4rem;
 }
