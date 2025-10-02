@@ -110,23 +110,60 @@ export function splitIntoWeekSegments(item, year, month, cellIndexMap) {
   return segments;
 }
 
-/**
- * 오버레이 바 목록 만들기 + 같은 셀 시작점에서의 스택 인덱스 계산
- * 반환: [{ id, title, row, colStart, span, z, stackIndex, fullDays }]
- */
+// /**
+//  * 오버레이 바 목록 만들기 + 같은 셀 시작점에서의 스택 인덱스 계산
+//  * 반환: [{ id, title, row, colStart, span, z, stackIndex, fullDays }]
+//  */
+// export function buildOverlayBars(monthlyList, year, month) {
+//   const weeks = buildWeeks(year, month);
+//   const cellMap = makeCellIndexMap(year, month, weeks);
+
+//   // 1) 모든 이벤트를 주 경계로 쪼갠 세그먼트로 변환
+//   const allSegs = [];
+//   for (const it of (monthlyList ?? [])) {
+//     allSegs.push(...splitIntoWeekSegments(it, year, month, cellMap));
+//   }
+
+//   // 2) 같은 (row, colStart) 같은 날에 겹치는 바를 세로로 쌓기
+//   //    key = `${row}-${colStart}`
+//   const buckets = new Map();
+//   for (const seg of allSegs) {
+//     const k = `${seg.row}-${seg.colStart}`;
+//     if (!buckets.has(k)) buckets.set(k, []);
+//     buckets.get(k).push(seg);
+//   }
+
+//   const bars = [];
+//   for (const [k, list] of buckets.entries()) {
+//     // 같은 칸에서의 쌓임 순서(원하면 정렬 규칙 부여 가능: 길이 긴 것 우선 등)
+//     list.sort((a, b) => (a.raw?.priority ?? 0) - (b.raw?.priority ?? 0));
+//     list.forEach((seg, idx) => {
+//       bars.push({
+//         ...seg,
+//         stackIndex: idx,
+//         z: 10 + idx, // 위로 쌓이게 z-index
+//       });
+//     });
+//   }
+
+//   return { weeks, bars };
+// }
+
+
+// src/utils/calendarBars.js
+const MAX_BARS_PER_CELL = 4;
+
 export function buildOverlayBars(monthlyList, year, month) {
+  if (!Array.isArray(monthlyList)) monthlyList = [];
   const weeks = buildWeeks(year, month);
   const cellMap = makeCellIndexMap(year, month, weeks);
 
-  // 1) 모든 이벤트를 주 경계로 쪼갠 세그먼트로 변환
   const allSegs = [];
   for (const it of (monthlyList ?? [])) {
     allSegs.push(...splitIntoWeekSegments(it, year, month, cellMap));
   }
 
-  // 2) 같은 (row, colStart) 같은 날에 겹치는 바를 세로로 쌓기
-  //    key = `${row}-${colStart}`
-  const buckets = new Map();
+  const buckets = new Map(); // key = `${row}-${colStart}`
   for (const seg of allSegs) {
     const k = `${seg.row}-${seg.colStart}`;
     if (!buckets.has(k)) buckets.set(k, []);
@@ -135,15 +172,35 @@ export function buildOverlayBars(monthlyList, year, month) {
 
   const bars = [];
   for (const [k, list] of buckets.entries()) {
-    // 같은 칸에서의 쌓임 순서(원하면 정렬 규칙 부여 가능: 길이 긴 것 우선 등)
+    // 정렬 규칙: 필요시 바꿔도 됨 (길이/우선순위 등)
     list.sort((a, b) => (a.raw?.priority ?? 0) - (b.raw?.priority ?? 0));
-    list.forEach((seg, idx) => {
-      bars.push({
-        ...seg,
-        stackIndex: idx,
-        z: 10 + idx, // 위로 쌓이게 z-index
-      });
-    });
+
+   list.forEach((seg, idx) => {
+     bars.push({ ...seg, stackIndex: idx, z: 10 + idx });
+   });
+   // 상위 MAX만 노출
+   const visible = list.slice(0, MAX_BARS_PER_CELL);
+   const hidden = Math.max(0, list.length - MAX_BARS_PER_CELL);
+
+   visible.forEach((seg, idx) => {
+     bars.push({ ...seg, stackIndex: idx, z: 10 + idx });
+   });
+
+   // 숨겨진 게 있으면 n 표시 바 추가 (해당 셀 첫 칸에만, span=1)
+   if (hidden > 0) {
+     const any = visible[visible.length - 1] ?? list[0];
+     bars.push({
+       id: `more-${k}`,
+       title: `${hidden}`,
+       row: any.row,
+       colStart: any.colStart,
+       span: 1,
+       stackIndex: visible.length, // 바로 아래 줄에 배치
+       z: 100,
+       isMore: true,
+       fullDays: hidden, // 의미상 값, 사용하진 않음
+     });
+   }
   }
 
   return { weeks, bars };
