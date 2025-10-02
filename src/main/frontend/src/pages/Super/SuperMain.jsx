@@ -6,6 +6,9 @@ import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../../auth/AuthContext';
 import CardBack from '../../components/ui/CardBack';
+import { FaHome } from "react-icons/fa";   // FontAwesome
+import { AiFillHome } from "react-icons/ai"; // Ant Design Icons
+import { MdHome } from "react-icons/md";
 
 export default function SuperMain() {
   const { user } = useAccount();
@@ -78,8 +81,23 @@ export default function SuperMain() {
             >
               <div></div>
               <div className={cardStyle.card_bottom}>
-                <p className={cardStyle.title} data-title-type="3">{v?.name}</p>
-                <p className={cardStyle.title}>{`소재지 ${v?.coPl}`}</p>
+                <p className={cardStyle.title} data-title-type="3">{v?.name}
+                  {/* <button
+                    style={{display:"flex", height: "100%", padding:"4px", alignItems: "end"}}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation(); // 카드 뒤집힘 방지
+                      setFixedSn(v.id);
+                      handleGoLms(v.id);
+                    }}
+                  >
+                    <MdHome></MdHome>
+                  </button> */}
+                  <button type="button" style={{display:"flex", height: "100%", padding:"2px 4px", alignItems: "end", fontSize: "1.2rem", fontWeight: "700"}} className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
+                    {`${!v.stts ? "" : "모집중" }`}
+                  </button>
+                </p>
+                <p className={cardStyle.title}>{`${(v?.companyAddress ?? "소재지" )+ " " + ( v?.companyAddressDetail ?? "정보 없음" )}`}</p>
                 <div className={cardStyle.row} data-box-type="row">
                   <button
                     type="button"
@@ -89,11 +107,12 @@ export default function SuperMain() {
                       handleGoLms(v.id);
                     }}
                   >
+                    <MdHome></MdHome>
                     LMS 바로가기
                   </button>
-                  <button type="button" onClick={(e) => e.stopPropagation()}>
-                    {`${v.stts}`}
-                  </button>
+                  {/* <button type="button" className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
+                    {`${!v.stts ? "-" : "모집중" }`}
+                  </button> */}
                 </div>
               </div>
             </div>

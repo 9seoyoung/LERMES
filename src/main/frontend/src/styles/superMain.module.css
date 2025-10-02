@@ -108,6 +108,10 @@
   inset: 0;
 }
 
+.sttsBtn {
+  color: var(--font-color-blue1);
+}
+
 /* 뒷면 */
 .card_back {
   transform: rotateY(180deg);
