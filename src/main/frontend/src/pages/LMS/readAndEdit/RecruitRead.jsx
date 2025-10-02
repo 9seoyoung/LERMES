@@ -10,7 +10,8 @@ import {v4 as uuidv4} from "uuid";
 import { applyGroup, readRecruitPoster } from '../../../services/postService';
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { formatTime } from "../../../utils/dateformat";
+import styles from "../../../styles/form.module.css";
 
 // CreatePost.jsx
 // ...import 생략
@@ -25,7 +26,7 @@ function RecruitRead() {
   const qAddRef = useRef(null);
   const navigate = useNavigate();
   const scrollRef = useRef(null);
-  // const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   
   const [files, setFiles] = useState([]);
   
@@ -204,17 +205,21 @@ const buildAnswersMap = (surveyForm) => {
     <div className="boardPage">
       <div className="BigListBox" ref={scrollRef} style={{position: "relative"}}>
         <h2 style={{ fontWeight: "500" }}>[모집공고] {formData?.title} {formData.groupName}</h2>
-
+        {showForm ? 
+            <>
+        <div className={styles.explainBox}>
+            <div className="selectBoxArea" style={{ position: "relative" }}>
+              <div> 모집 기간: {formData.surveyStart} - {formData.surveyEnd}</div>
+              <div> 교육 기간: {formData.startDate} - {formData.endDate}</div>
+              <div> 수업 시간: {formatTime(formData.classStart)} ~ {formatTime(formData.classEnd)}</div>
+              <div> 교육 장소: {formData.place}</div>
+            </div>
+            <button className={styles.applyBtn} type="button" onClick={() => setShowForm(true)}>신청하러 가기</button>
+        </div>
+        </>
+        :
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
           <div className="formArea_L">
-            <div className="selectBoxArea" style={{ position: "relative" }}>
-                <FormInput labelNm="그룹명" type="text" name="groupName" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
-                <FormInput labelNm="교육장소" type="text" name="place" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></FormInput>
-                <DateTimeInput labelNm="개강일" type="date" name="startDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
-                <DateTimeInput labelNm="종강일" type="date" name="endDate" handleChange={handleChange} textType={"그룹명을 입력하세요."} formData={formData}></DateTimeInput>
-                <DateTimeInput labelNm="수업 시작" type="time" name="classStart" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
-                <DateTimeInput labelNm="수업 종료" type="time" name="classEnd" handleChange={handleChange} textType={"-- : --"} formData={formData}></DateTimeInput>
-            </div>
             <RecruitForm
                 type={formData.type}
                 postId={postId.current}
@@ -229,43 +234,11 @@ const buildAnswersMap = (surveyForm) => {
                 setFiles={setFiles}
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
+                saveSubmit={saveSubmit}
             />
           </div>
-
-          <div className="formArea_R" >
-
-              <ul style={{position: "fixed", background: "var(--color-table-bg)"}}>
-                {surveyForm.pages.map((page) => (
-                    <React.Fragment key={page.id}>
-                      {page.questions.map((q, i) => (
-                          <li key={q.qid}>
-                            <button
-                              type="button"
-                              className="specificBtn"
-                              onClick={() =>
-                              {
-                                // r_bottom 버튼 onClick 직전에 찍어봐
-                                console.log('child root?', qAddRef.current?.focusQuestion ? 'ok' : 'no');
-
-                                qAddRef.current?.focusQuestion(q.qid, {
-                                behavior: "smooth",
-                                offsetTop: 8, // 고정 헤더 있으면 px 조절
-                              })}}
-                            >
-                              {q.title?.trim()
-                              ? `Q${i + 1} ${q.title}`
-                              : `Q${i + 1} (제목 없음)`} · {q.type}
-                            </button>
-                          </li>
-                      ))}
-                    </React.Fragment>
-                ))}
-              </ul>
-              <div className="save_box">
-                <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>제출</button>
-              </div>
-            </div>
         </form>
+          }
       </div>
     </div>
   );
@@ -276,7 +249,7 @@ export default RecruitRead;
 
 function RecruitForm({
   domFormId, handleChange, formData, setFiles,
-  surveyForm, setSurveyForm, questionAddRef, containerRef 
+  surveyForm, setSurveyForm, questionAddRef, containerRef ,saveSubmit
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
   // const firstPage = surveyForm.pages[0];
@@ -285,10 +258,7 @@ function RecruitForm({
   return (
     <>
       <div className='formHeader'>
-        <div className='inputSet inputFlex1'>
-          <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
-          <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
-        </div>
+        
       </div>
 
       <div className="formContent" ref={qContainerRef}>
@@ -298,6 +268,7 @@ function RecruitForm({
               setFiles = {setFiles}
               containerRef={containerRef}
               questions={surveyForm.pages[0].questions}
+              saveSubmit={saveSubmit}
               onChange={(updaterOrQs) => {
                   setSurveyForm(prev => {
                       const page = prev.pages[0];
@@ -312,6 +283,33 @@ function RecruitForm({
               }}
           />
       </div>
+              <ul style={{position: "fixed", background: "var(--color-table-bg)", right: "0", padding: "16px 12px", display: 'flex', gap: "8px", flexDirection: "column"}}>
+                {surveyForm.pages.map((page) => (
+                    <React.Fragment key={page.id}>
+                      {page.questions.map((q, i) => (
+                          <li key={q.qid}>
+                            <button
+                              type="button"
+                              className="specificBtn"
+                              onClick={() =>
+                              {
+                                // r_bottom 버튼 onClick 직전에 찍어봐
+                                console.log('child root?', questionAddRef.current?.focusQuestion ? 'ok' : 'no');
+
+                                questionAddRef.current?.focusQuestion(q.qid, {
+                                behavior: "smooth",
+                                offsetTop: 8, // 고정 헤더 있으면 px 조절
+                              })}}
+                            >
+                              {q.title?.trim()
+                              ? `Q${i + 1} ${q.title}`
+                              : `Q${i + 1} (제목 없음)`} · {q.type}
+                            </button>
+                          </li>
+                      ))}
+                    </React.Fragment>
+                ))}
+              </ul>
     </>
   );
 }

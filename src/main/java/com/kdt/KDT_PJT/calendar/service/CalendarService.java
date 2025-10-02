@@ -3,18 +3,14 @@ package com.kdt.KDT_PJT.calendar.service;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.calendar.dto.*;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
-import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -31,6 +27,7 @@ public class CalendarService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");
         }
 
+        req.buildDateTime(); // 테이블 저장용 시간 만들어냄, 현재 시각도 이때 넣음.
         // 1) 기본 유효성
         if (req.getEventBgngDt() == null || req.getEventEndDt() == null
                 || !req.getEventEndDt().isAfter(req.getEventBgngDt())) {
@@ -42,7 +39,7 @@ public class CalendarService {
 
         // 2) 개인/공식 분기 + 권한 & cohort 결정
         Integer cohortSnFinal;
-        if (req.getPrvtYn() == 1) { // 개인 일정
+        if (req.getPrvtYn() == true) { // 개인 일정
             Long userCohort = me.getCohortSn();     //로그인 유저의 기수SN 가져옴
             Long userRoleType = me.getRoleType();   //로그인 유저의 권한 가져옴
             //개인일정이며 학생/교사일 경우
@@ -65,27 +62,34 @@ public class CalendarService {
         }
 
         // 3) DTO -> CmmnMap 평탄화 + 서버 주입
-        CmmnMap m = new CmmnMap();
-        m.put("COHORT_SN",     cohortSnFinal);
-        m.put("EVENT_BGNG_DT", req.getEventBgngDt());
-        m.put("EVENT_END_DT",  req.getEventEndDt());
-        m.put("EVENT_NM",      req.getEventNm());
-        m.put("RMRK_CN",       req.getRmrkCn());
-        m.put("DEL_YN",        (byte) 0);
-        m.put("USER_SN",       me.getId());                   // 등록자(항상 서버에서)
-        m.put("PRVT_YN",       req.getPrvtYn());
-        m.put("EVENT_REG_DT",  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));          // << 서버에서 세팅
-        m.put("CO_SN",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
+//        CmmnMap m = new CmmnMap();
+//        m.put("COHORT_SN",     cohortSnFinal);
+//        m.put("EVENT_BGNG_DT", req.getEventBgngDt());
+//        m.put("EVENT_END_DT",  req.getEventEndDt());
+//        m.put("EVENT_NM",      req.getEventNm());
+//        m.put("RMRK_CN",       req.getRmrkCn());
+//        m.put("DEL_YN",        (byte) 0);
+//        m.put("USER_SN",       me.getId());                   // 등록자(항상 서버에서)
+//        m.put("PRVT_YN",       req.getPrvtYn());
+//        m.put("EVENT_REG_DT",  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));          // << 서버에서 세팅
+//        m.put("CO_SN",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
+
+        req.setCohortSn(cohortSnFinal);
+//        req.buildDateTime(); // 테이블 저장용 시간 만들어냄, 현재 시각도 이때 넣음.
+        req.setUserSn(me.getId().intValue()); // 등록자
+        req.setCoSn(me.getCompanySn().intValue());
+        System.out.println("req : " + req);
 
         // 4) INSERT (PK 반환)
         try {
-            dao.insert("com.kdt.mapper.calendar.saveCalendar", m);
+            dao.insert("com.kdt.mapper.calendar.saveCalendar", req);
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "무결성 제약 위반: 입력값을 확인하세요.");
         }
 
         // calSn으로 detailResponseDTO 리턴해줘야겠음 -> 상세정보 이름 조인해서 조회해오는거
-        Integer calSn = Integer.parseInt(m.get("CAL_SN").toString());
+//        Integer calSn = Integer.parseInt(m.get("CAL_SN").toString());
+        Integer calSn = req.getCalSn();
         return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
 
     }

@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.calendar.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class CalendarListResponseDTO { // 상세보기 들어가기 전, 리스�
 //    private Integer cohortSn;           //COHORT_SN
     private LocalDateTime eventBgngDt;  //EVENT_BGNG_DT
     private LocalDateTime eventEndDt;   //EVENT_END_DT
+    @JsonProperty("title")
     private String eventNm;             //EVENT_NM 이벤트 이름
 //    private String rmrkCn;              //RMRK_CN 이벤트 설명 -> 상세보기에서 보여주기
     private String userNm;                // 작성자명, TB_USER에서 userSn으로 조인해서 가져오기
