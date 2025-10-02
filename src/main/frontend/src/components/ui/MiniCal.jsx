@@ -136,7 +136,7 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
                 {day || ''}
 
                 {/* 일정 모두 표시 */}
-                {/* {dateKey && events[dateKey] && events[dateKey].length > 0 && (
+                {dateKey && events[dateKey] && events[dateKey].length > 0 && (
                   <div className={styles.eventCell}>
                     {events[dateKey].map((event, i) => (
                       <div key={i} className={styles.event}>
@@ -144,7 +144,7 @@ const MiniCal = ({selectedDate, setSelectedDate}) => {
                       </div>
                     ))}
                   </div>
-                )} */}
+                )}
               </div>
             );
           })}

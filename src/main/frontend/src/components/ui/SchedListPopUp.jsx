@@ -4,6 +4,8 @@ import React, { useState, useMemo } from "react";
 import { SaveBtn, CancelBtn, DateTimeInput } from "./UiComp.jsx";
 import styles from "../../styles/SchedListPopUp.module.css";
 import { registToDo } from "../../services/calService.js";
+import { useAccount } from "../../auth/AuthContext.jsx";
+import { useLocation } from "react-router-dom";
 
 function getInitialDate(selectedDate) {
   // yyyy-mm-dd
@@ -12,7 +14,8 @@ function getInitialDate(selectedDate) {
 
 function SchedListPopUp({ onClose, onSave, selectedDate }) {
   const initialDate = useMemo(() => getInitialDate(selectedDate), [selectedDate]);
-
+  const {user} = useAccount();
+  const {pathname} = useLocation();
   const [showOptions, setShowOptions] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -99,50 +102,53 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
         </div>
 
         {/* 옵션 토글 */}
-        <div className={styles.optionsToggle} onClick={() => setShowOptions((s) => !s)}>
-          <span className={`${styles.arrow} ${showOptions ? styles.arrowOpen : ""}`}>▼</span>
-          상세보기
+        <div className={`${styles.optionsToggle} ${styles.optionHeader}`} onClick={() => setShowOptions((s) => !s)}>
+          <div>
+            <span className={`${styles.arrow} ${showOptions ? styles.arrowOpen : ""}`}>▼</span>
+            상세보기
+        </div>
+        { user.USER_AUTHRT_SN <= 3 && pathname != "/adminHome" ?
+            <div className={styles.private}>
+                <input
+                  type="checkbox"
+                  name="isPrivate"
+                  checked={!!formData.isPrivate}
+                  onChange={handleChange}
+                  id="privateBox"
+                  />
+            <label htmlFor="privateBox">
+              비공개
+            </label>
+            </div>
+          :
+          ""
+        }
         </div>
 
         {/* 옵션 내용 */}
         {showOptions && (
           <div className={styles.optionsContent}>
             <div className={styles.content}>
-              <label>시작일</label>
-              <DateTimeInput type="date" name="startDate" value={formData.startDate} onChange={handleChange} />
+              <DateTimeInput type="date" name="startDate" addLabelStyle="formLabel" labelNm={"시작일"} value={formData.startDate} formData={formData} onChange={handleChange} />
             </div>
 
             <div className={styles.content}>
-              <label>종료일</label>
-              <DateTimeInput type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
+              <DateTimeInput type="date" name="endDate" labelNm={"종료일"}  addLabelStyle="formLabel" value={formData.endDate}  formData={formData} onChange={handleChange} />
             </div>
 
             <div className={styles.content}>
-              <label>시간</label>
               <div className={styles.timeInput}>
-                <DateTimeInput type="time" name="startTime" value={formData.startTime} onChange={handleChange} />
+                <DateTimeInput type="time" name="startTime" labelNm={"시간"}  addLabelStyle="formLabel"value={formData.startTime} onChange={handleChange} />
                 <div>~</div>
                 <DateTimeInput type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
               </div>
             </div>
 
             <div className={styles.content}>
-              <label>장소</label>
+              <label className="formLabel">장소</label>
               <input type="text" name="location" value={formData.location} onChange={handleChange} />
             </div>
 
-            <div className={styles.content}>
-              <label>
-                <input
-                  type="checkbox"
-                  name="isPrivate"
-                  checked={!!formData.isPrivate}
-                  onChange={handleChange}
-                  style={{ marginRight: 6 }}
-                />
-                비공개
-              </label>
-            </div>
           </div>
         )}
       </div>
