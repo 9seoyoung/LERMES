@@ -11,20 +11,20 @@ public enum BbsRole {
     TENANT {
         @Override public boolean canCreate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL-> true;
                 default -> false;
             };
         }
         @Override public boolean canRead(BbsType type) { return true; }
         @Override public boolean canUpdate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL -> true;
                 default -> false;
             };
         }
         @Override public boolean canDelete(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL -> true;
                 default -> false;
             };
         }
@@ -33,26 +33,26 @@ public enum BbsRole {
     EMPLOYEE {
         @Override public boolean canCreate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL -> true;
                 default -> false;
             };
         }
         @Override public boolean canRead(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL -> true;
                 default -> false;
             };
         }
 
         @Override public boolean canUpdate(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA  -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL  -> true;
                 default -> false;
             };
         }
         @Override public boolean canDelete(BbsType type) {
             return switch (type) {
-                case NOTICE, FAQ, QNA -> true;
+                case NOTICE, FAQ, QNA, CLASS_MATERIAL -> true;
                 default -> false;
             };
         }
@@ -112,7 +112,9 @@ public enum BbsRole {
                 default -> false;
             };
         }
-        @Override public boolean canUpdate(BbsType type) { return false; }
+        @Override public boolean canUpdate(BbsType type) {
+            return type == BbsType.QNA;   // QNA는 본인 글 수정 가능
+        }
         @Override public boolean canDelete(BbsType type) { return false; }
     },
 
@@ -131,10 +133,16 @@ public enum BbsRole {
     public abstract boolean canUpdate(BbsType type);
     public abstract boolean canDelete(BbsType type);
 
-    // 👇 DB roleType(숫자) → Enum 변환 메서드
-    public static BbsRole fromCode(Long roleId) {
+   // DB roleType(숫자) → Enum 변환 메서드
+    public static BbsRole fromCode(Long roleId) { //수정됨 (Long 지원)
         if (roleId == null) return VISITOR;
-        return switch (roleId.intValue()) {
+        return fromCode(roleId.intValue()); // int 버전 호출
+    }
+
+
+    // DB roleType(숫자) → Enum 변환 메서드
+    public static BbsRole fromCode(int roleId) {
+        return switch (roleId) {
             case 1 -> SUPER_ADMIN;
             case 2 -> TENANT;
             case 3 -> EMPLOYEE;
