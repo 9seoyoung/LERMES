@@ -127,10 +127,10 @@ export function WhiteBtn({ textType }) {
   );
 }
 // 파란색 버튼
-export function BlueBtn({ textType }) {
+export function BlueBtn({ textType, onClick }) {
   return (
     <div>
-      <button className={styles.blueBtn}>{textType}</button>
+      <button className={styles.blueBtn} onClick={onClick} >{textType}</button>
     </div>
   );
 }

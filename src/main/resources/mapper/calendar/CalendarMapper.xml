@@ -4,9 +4,9 @@
 
     <!-- 캘린더 저장 -->
     <insert id="saveCalendar"
-            parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap"
+            parameterType="com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO"
             useGeneratedKeys="true"
-            keyProperty="CAL_SN">
+            keyProperty="calSn">
         /*
         QueryID      : com.kdt.mapper.calendar.saveCalendar
         Description  : 캘린더 일정 등록
@@ -19,24 +19,24 @@
             EVENT_END_DT,
             EVENT_NM,
             RMRK_CN,
-            DEL_YN,
             USER_SN,
             EVENT_REG_DT,
             PRVT_YN,
             CO_SN,
-            FRST_REG_USER_SN
+            FRST_REG_USER_SN,
+            EVENT_PLC
         ) VALUES (
-            #{COHORT_SN},
-            #{EVENT_BGNG_DT},
-            #{EVENT_END_DT},
-            #{EVENT_NM},
-            #{RMRK_CN},
-            #{DEL_YN},
-            #{USER_SN},
-            #{EVENT_REG_DT},
-            #{PRVT_YN},
-            #{CO_SN},
-            #{USER_SN}
+            #{cohortSn},
+            #{eventBgngDt},
+            #{eventEndDt},
+            #{eventNm},
+            #{rmrkCn},
+            #{userSn},
+            #{eventRegDt},
+            #{prvtYn},
+            #{coSn},
+            #{userSn},
+            #{eventPlc}
         )
     </insert>
 
@@ -147,6 +147,7 @@
             c.EVENT_END_DT,
             c.EVENT_NM,
             c.RMRK_CN,
+            c.EVENT_PLC,
             c.EVENT_REG_DT,
             c.PRVT_YN,
             c.VIEW_CNT,

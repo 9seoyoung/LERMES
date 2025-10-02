@@ -58,13 +58,13 @@
 ------------------------- */
 .att-card {
     width: 100%;
-    background: #fff;
+    /* background: #fff; */
+    background: var(--color-sec-bg);
     border: 1px solid #e6e6e6;
     border-radius: 16px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
     padding: 20px;
     width: 570px;
-
 }
 
 .att-card__head {
@@ -77,7 +77,8 @@
     margin: 0;
     font-size: 20px;
     font-weight: 600;
-    color: #222;
+    /* color: #222; */
+    color: var(--color-text-main);
 }
 
 .att-card__period {
@@ -121,24 +122,24 @@
 
 /* 색상 톤 */
 .att--present {
-    color: #1d78ff;
+    /* color: #1d78ff; */
+    color: var(--color-primary);
     /* 파란색 */
 }
 
 .att--leoe {
-    color: #f6a38a;
+    /* color: #f6a38a; */
+    color: var(--color-accent-light);
     /* 살구색 */
 }
 
 .att--absent {
-    color: #ff7a45;
+    /* color: #ff7a45; */
+    color: var(--color-accent);
     /* 주황 */
 }
 
-
-/* 
-    금일 모든 기수 출결 조회 용
- */
+/* 금일 모든 기수 출결 조회 용 */
 .coh-card {
     max-width: 720px;
     height: 200px;
@@ -172,8 +173,8 @@
 }
 
 .coh-card__divider {
-    border-top: 2px solid #222;
-    margin: 12px 0 18px
+    border-top: 2px solid var(--font-color-gray1);
+    margin: 4px 0 18px 0
 }
 
 /* 그리드(기수 나열) */

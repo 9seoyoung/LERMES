@@ -20,8 +20,6 @@
   border-radius: 8px;
 }
 
-
-
 .detailInfo {
   display: none;
 }
@@ -100,24 +98,25 @@
 }
 
 .applyBtnOn{
-  background-color: var(--color-primary-bg);
   padding: 4px 8px;
   border-radius: 8px;
   color: var(--font-color-white);
+  background-color: var(--bg-color-blue1);
   font-size: 1rem;
 }
 
 .applyBtnOn:hover {
-  background-color: var(--bg-color-gray2);
+  background-color: var(--bg-color-blue2);
+  
 }
 .applyBtnOn:active {
-  background-color: var(--bg-color-gray1);
+  background-color: var(--bg-color-blue3);
   font-size: 0.9rem;
 }
 
 .applyBtnOff{
   font-size: 1rem;
-  background-color: var(--color-text-nav);
+  background-color: var(--bg-color-gray2);
   padding: 4px 8px;
   border-radius: 8px;
   color: var(--font-color-white);

@@ -5,6 +5,7 @@ import React, {
 import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
 import QuestionReadType from "./QuestionReadType";
+import styles from "../../../styles/form.module.css";
 
 // ───────── utils ─────────
 export const makeQuestion = () => ({
@@ -62,7 +63,7 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit }, ref) {
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
 
@@ -211,8 +212,9 @@ const onSetAnswer = (qid, val) => {
           />
         ))}
       </div>
-
-
+      <div className={styles.can}>
+            <button className={styles.applyBtn} type="button" onClick={() => saveSubmit()}>제출하기</button>
+      </div>
     </>
   );
 });

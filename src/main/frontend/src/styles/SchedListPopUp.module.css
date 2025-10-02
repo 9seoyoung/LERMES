@@ -26,14 +26,6 @@
   z-index: 9999; /* 다른 요소 위에 뜨게 */
 }
 
-.containerExpanded {
-  height: 380px;
-}
-
-.containerCollapsed {
-  height: 220px;
-}
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -66,6 +58,7 @@
   font-weight: bold;
   display: inline-flex;
   align-items: center;
+  width: 100%;
 }
 
 .arrow {
@@ -88,17 +81,14 @@
   padding: 10px;
 }
 
+
 .content {
   display: flex;
   justify-content: space-between;
   padding: 2px;
+  width: 100%;
 }
 
-.content input {
-  width: 220px;
-  padding: 0 3px;
-  box-sizing: border-box;
-}
 
 /* 시간 설정 */
 .timeInput {
@@ -109,4 +99,17 @@
 
 .timeInput  input{
   width: 105px;
+}
+
+.private { 
+  display: flex;
+  justify-content: end;
+  gap: 4px;
+  font-weight: normal;
+}
+
+.optionHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }

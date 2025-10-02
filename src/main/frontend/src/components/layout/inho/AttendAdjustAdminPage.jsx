@@ -44,15 +44,8 @@ export default function AttendAdjustAdminPage() {
   };
 
   return (
-    <section
-      style={{
-        background: '#fff',
-        borderRadius: '12px',
-        padding: '20px',
-        boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
-        marginTop: '20px',
-      }}
-    >
+    <>
+      <div>
       <h2
         style={{
           fontSize: '20px',
@@ -156,7 +149,7 @@ export default function AttendAdjustAdminPage() {
             ))}
         </tbody>
       </table>
-
+            </div>
       {/* 페이지네이션 */}
       <div
         style={{
@@ -197,6 +190,6 @@ export default function AttendAdjustAdminPage() {
           다음
         </button>
       </div>
-    </section>
+    </>
   );
 }
