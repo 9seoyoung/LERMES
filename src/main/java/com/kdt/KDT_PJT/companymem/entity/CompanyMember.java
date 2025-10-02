@@ -1,6 +1,5 @@
 package com.kdt.KDT_PJT.companymem.entity;
 
-import com.kdt.KDT_PJT.auth.entity.UserRoleType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -26,7 +25,7 @@ public class CompanyMember {
     private Long userSn;
 
     @Column(name = "USER_AUTHRT_SN", nullable = false)
-    private UserRoleType userAuthrtSn;
+    private Long userAuthrtSn;
 
     @Column(name = "OGDP_BGNG_DT")
     private LocalDateTime orgStartDate;

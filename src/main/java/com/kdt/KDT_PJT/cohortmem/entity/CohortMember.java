@@ -25,7 +25,7 @@ public class CohortMember {
     private Long userSn;
 
     @Column(name = "USER_AUTHRT_SN")
-    private Integer userAuthrtSn;
+    private Long userAuthrtSn;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "COHORT_MEM_STTS")
