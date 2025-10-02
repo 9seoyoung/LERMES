@@ -8,10 +8,10 @@ import '../../styles/token.css';
 import { useAccount } from "../../auth/AuthContext.jsx";
 // import { api } from "../../services/api"; // 실제 axios 인스턴스 사용한다면
 
-function SchedList({ selectedDate, displayDate, setDisplayDate }) {
-  const [schedules, setSchedules] = useState({});      // 날짜별 일정 저장
+function SchedList({ selectedDate, displayDate, setDisplayDate, schedules, setSchedules, events, setEvents }) {
+  // const [schedules, setSchedules] = useState({});      // 날짜별 일정 저장
+  // const [events, setEvents] = useState({});            // ✅ 문자열 → 객체로
   const [showPopup, setShowPopup] = useState(false);
-  const [events, setEvents] = useState({});            // ✅ 문자열 → 객체로
   const { user } = useAccount();
 
   // 안전한 패딩 유틸
