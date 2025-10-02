@@ -1,55 +1,96 @@
-.cal{
-  width: 100%;
+:root {
+  --cell-gap: 4px;
+  --cell-height: 84px;
+  --bar-height: 10px;
+  --bar-gap: 2px;
+  --bar-bg: var(--bg-color-red2);
 }
 
-/* 현재 연도,월 */
-.month {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 5px;
-  margin-top: 10px;
-  font-size: 15px;
+.cal { width: 100%; }
+
+.monthNav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 8px;
 }
 
-.day {
+.weekdayHeader {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: var(--cell-gap); margin-bottom: var(--cell-gap);
+}
+.weekdayCell {
+  font-weight: 700; text-align: center;
+}
+
+.calendarFrame {
+  position: relative;
+  /* 오버레이와 동일한 영역 크기를 보장하기 위해 block 컨테이너 */
+}
+
+.cellsGrid {
+  display: grid;
+  grid-template-rows: repeat(auto-fit, var(--cell-height)); /* 행 높이 */
+  gap: var(--cell-gap);
+}
+
+.rowGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  margin-bottom: 2px;
+  gap: var(--cell-gap);
 }
 
-/* 날짜 셀 */
-.calendarCell {
-  box-sizing: border-box;
-  padding: 8px;
-  height: 100%;
-  background-color: #fff;
+.cell {
   position: relative;
-  font-size: 14px;
-  user-select: none;
-  overflow-y: hidden;
+  background: #f7f7f7;
+  border-radius: 10px;
+  min-height: var(--cell-height);
+  padding: 4px 6px;
+  box-shadow: inset 0 0 0 1px #00000010;
 }
-
-.calendarCell:hover {
-  background-color: var(--color-light-bg);
-  border-radius: 16px;
-}
-
+.cell.empty { background: transparent; box-shadow: none; }
 .selected {
   position: relative;
   color: var(--font-color-white);
   font-weight: 800;
 }
-
 .selected::after {
   content: "";
   display: inline-block;    
   position: absolute;
-  left: calc((100% - 30px ) / 2);
+  left: 3px;
   top: 4px;
-  width: 30px;               
-  height: 30px;
+  width: 20px;               
+  height: 20px;
   background: var(--color-accent);         
   border-radius: 50%;     
   opacity: var(--opacity-25);   
+}
+.dateLabel { font-size: 12px; font-weight: 700;}
+
+/* 오버레이 레이어: 셀 그리드와 동일한 7열 x N행 그리드 */
+.barsOverlay {
+  position: absolute; inset: 30px 0;
+  pointer-events: none;       /* 바 클릭 필요 없으면 */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  /* 행 수 = weeks.length, 각 행 높이 = --cell-height + 행 사이 gap 을 맞추려면 아래처럼 */
+  grid-auto-rows: var(--cell-height);
+  gap: var(--cell-gap);
+  z-index: 5;                 /* 셀 위로 */
+  padding-top: 0;             /* cellsGrid와 시각적으로 정렬 */
+}
+
+/* 이벤트 바 */
+.bar {
+  height: var(--bar-height);
+  line-height: var(--bar-height);
+  background: var(--bar-bg);
+  border-radius: 6px;
+  padding: 0 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  /* 셀보다 위에 떠있게 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
 }
