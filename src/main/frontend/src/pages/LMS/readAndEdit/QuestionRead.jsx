@@ -1,6 +1,7 @@
 // QuestionRead.jsx
 import React, {
-  forwardRef, useRef, useImperativeHandle, createRef, useEffect, setFiles
+  forwardRef, useRef, useImperativeHandle, createRef, useEffect,
+  useState
 } from "react";
 import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
@@ -64,6 +65,7 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 
 // ───────── component ─────────
 const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit }, ref) {
+  const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
 
