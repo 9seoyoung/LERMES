@@ -11,4 +11,6 @@ public interface CohortMemberRepository extends JpaRepository<CohortMember, Long
 
     boolean existsByUserSnAndCohortSn(Long userSn, Long cohortSn);
 
+    List<CohortMember> findByCohortSnAndUserCompanySnAndUserRoleType(Long cohortSn, Long companySn, Long roleType);
+
 }

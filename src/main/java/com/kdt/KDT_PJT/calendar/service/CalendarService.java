@@ -1,21 +1,16 @@
 package com.kdt.KDT_PJT.calendar.service;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.calendar.dto.CalendarListResponseDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarRequestDTO;
-import com.kdt.KDT_PJT.calendar.dto.CalendarSimpleResponseDTO;
+import com.kdt.KDT_PJT.calendar.dto.*;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
-import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -25,13 +20,14 @@ public class CalendarService {
     CmmnDao dao; //공용 DAO
 
     @Transactional
-    public CalendarListResponseDTO createCalendar(AuthCustomUserDetails me, CalendarRequestDTO req) {
+    public CalendarDetailResponseDTO createCalendar(AuthCustomUserDetails me, CalendarRequestDTO req) {
 
         // 0) 인증 확인
         if (me == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 필요");
         }
 
+        req.buildDateTime(); // 테이블 저장용 시간 만들어냄, 현재 시각도 이때 넣음.
         // 1) 기본 유효성
         if (req.getEventBgngDt() == null || req.getEventEndDt() == null
                 || !req.getEventEndDt().isAfter(req.getEventBgngDt())) {
@@ -43,7 +39,7 @@ public class CalendarService {
 
         // 2) 개인/공식 분기 + 권한 & cohort 결정
         Integer cohortSnFinal;
-        if (req.getPrvtYn() == 1) { // 개인 일정
+        if (req.getPrvtYn() == true) { // 개인 일정
             Long userCohort = me.getCohortSn();     //로그인 유저의 기수SN 가져옴
             Long userRoleType = me.getRoleType();   //로그인 유저의 권한 가져옴
             //개인일정이며 학생/교사일 경우
@@ -66,42 +62,36 @@ public class CalendarService {
         }
 
         // 3) DTO -> CmmnMap 평탄화 + 서버 주입
-        CmmnMap m = new CmmnMap();
-        m.put("COHORT_SN",     cohortSnFinal);
-        m.put("EVENT_BGNG_DT", req.getEventBgngDt());
-        m.put("EVENT_END_DT",  req.getEventEndDt());
-        m.put("EVENT_NM",      req.getEventNm());
-        m.put("RMRK_CN",       req.getRmrkCn());
-        m.put("DEL_YN",        (byte) 0);
-        m.put("USER_SN",       me.getId());                   // 등록자(항상 서버에서)
-        m.put("PRVT_YN",       req.getPrvtYn());
-        m.put("EVENT_REG_DT",  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));          // << 서버에서 세팅
-        m.put("CO_SN",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
+//        CmmnMap m = new CmmnMap();
+//        m.put("COHORT_SN",     cohortSnFinal);
+//        m.put("EVENT_BGNG_DT", req.getEventBgngDt());
+//        m.put("EVENT_END_DT",  req.getEventEndDt());
+//        m.put("EVENT_NM",      req.getEventNm());
+//        m.put("RMRK_CN",       req.getRmrkCn());
+//        m.put("DEL_YN",        (byte) 0);
+//        m.put("USER_SN",       me.getId());                   // 등록자(항상 서버에서)
+//        m.put("PRVT_YN",       req.getPrvtYn());
+//        m.put("EVENT_REG_DT",  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));          // << 서버에서 세팅
+//        m.put("CO_SN",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
+
+        req.setCohortSn(cohortSnFinal);
+//        req.buildDateTime(); // 테이블 저장용 시간 만들어냄, 현재 시각도 이때 넣음.
+        req.setUserSn(me.getId().intValue()); // 등록자
+        req.setCoSn(me.getCompanySn().intValue());
+        System.out.println("req : " + req);
 
         // 4) INSERT (PK 반환)
         try {
-            dao.insert("com.kdt.mapper.calendar.saveCalendar", m);
+            dao.insert("com.kdt.mapper.calendar.saveCalendar", req);
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "무결성 제약 위반: 입력값을 확인하세요.");
         }
-        Number calSnNum = (Number) m.get("CAL_SN");
-        Integer calSn = calSnNum == null ? null : calSnNum.intValue();
-        Number userSnNum = (Number) m.get("USER_SN");
-        Integer userSn = userSnNum == null ? null : userSnNum.intValue();
 
-        // 5) 재조회 없이 응답 구성 (지금 m에 값 다 있으니 그대로 사용)
-        return CalendarListResponseDTO.builder()
-                .calSn(calSn)
-//                .cohortSn((Integer) m.get("COHORT_SN"))   //필요없을거같아서DTO에서뺌
-                .eventBgngDt((LocalDateTime) m.get("EVENT_BGNG_DT"))
-                .eventEndDt((LocalDateTime) m.get("EVENT_END_DT"))
-                .eventNm((String) m.get("EVENT_NM"))
-//                .rmrkCn((String) m.get("RMRK_CN"))        //필요없을거같아서DTO에서뺌
-//                .userSn(userSn)                           //필요없을거같아서DTO에서뺌
-                .eventRegDt((LocalDateTime) m.get("EVENT_REG_DT"))
-                .prvtYn((Byte) m.get("PRVT_YN"))
-//                .coSn((Integer) m.get("CO_SN"))           //필요없을거같아서DTO에서뺌
-                .build();
+        // calSn으로 detailResponseDTO 리턴해줘야겠음 -> 상세정보 이름 조인해서 조회해오는거
+//        Integer calSn = Integer.parseInt(m.get("CAL_SN").toString());
+        Integer calSn = req.getCalSn();
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+
     }
     public List<CalendarSimpleResponseDTO> getCalendarForDay(CalendarSimpleResponseDTO params){
         return dao.selectList("selectSimpleByRange",params);
@@ -109,6 +99,47 @@ public class CalendarService {
 
     public List<CalendarSimpleResponseDTO> getCalendarForMonth(CalendarSimpleResponseDTO params){
         return dao.selectList("selectSimpleByRange",params);
+    }
+
+    /*
+    * 일정 상세 보기
+    * 조회수 +1 하면서 받아옴*/
+    @Transactional
+    public CalendarDetailResponseDTO getCalendarDetailByCalSn(Integer calSn){
+        dao.update("com.kdt.mapper.calendar.incCalendarViewCnt",calSn);
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+    }
+
+    public List<CalendarListResponseDTO> getCalendarList(CalendarSimpleResponseDTO params){
+        return dao.selectList("com.kdt.mapper.calendar.getCalendarList",params);
+    }
+
+    /*
+    * 업데이트*/
+    @Transactional
+    public CalendarDetailResponseDTO putCalendarDetailByCalSn(CalendarUpdateRequestDTO params){
+        int u = dao.update("com.kdt.mapper.calendar.putCalendarDetailByCalSn",params);
+        if(u!=0){
+            System.out.println("성공~");
+        }else{
+            System.out.println("실패~");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "업뎃실패요");
+        }
+        Integer calSn = params.getCalSn();
+        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+    }
+
+    /*
+    * 삭제(soft)*/
+    @Transactional
+    public void deleteCalendarByCalSn(Integer calSn){
+        int u = dao.update("com.kdt.mapper.calendar.deleteCalendarByCalSn",calSn);
+        if(u!=0){
+            System.out.println("성공~");
+        }else{
+            System.out.println("실패~");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "삭제실패임");
+        }
     }
 
 

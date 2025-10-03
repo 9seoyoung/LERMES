@@ -1,63 +1,87 @@
-// 일정 목록
-
+// src/components/calendar/SchedList.jsx
 import React, { useState, useEffect } from "react";
 import { SchedAddBtn } from './UiComp.jsx';
 import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
 import '../../styles/token.css';
+import { useAccount } from "../../auth/AuthContext.jsx";
 
-function SchedList({selectedDate}) {
-  const [schedules, setSchedules] = useState({});   // 날짜별 일정 저장
-  const [showPopup, setShowPopup] = useState(false); // 💡 팝업 상태 추가
-  const [displayDate, setDisplayDate] = useState('');
+function SchedList({
+  selectedDate,
+  displayDate,
+  setDisplayDate,
+  schedules,
+  setSchedules,
+  events,
+  setEvents
+}) {
+  const [showPopup, setShowPopup] = useState(false);
+  const { user } = useAccount();
+
+  const z2 = (n) => String(n).padStart(2, '0');
 
   useEffect(() => {
-    if (selectedDate) {
-      // selectedDate는 'YYYY-MM-DD' 문자열
-      const [ , month, day] = selectedDate.split('-').map(Number);
-      setDisplayDate(`${month}월 ${day}일`);
-    } else {
+    if (!selectedDate) {
       setDisplayDate('선택된 날짜 없음');
+      return;
     }
-  }, [selectedDate]);
+    const [y, m, d] = selectedDate.split('-').map(Number);
+    setDisplayDate(`${m}월 ${d}일`);
 
-    // 팝업창에서 제목, 시작일 받아서 일정 추가
-    const handleSaveSchedule = ({ title, startDate }) => {
-      if (title.trim() !== "" && selectedDate) {
-        setSchedules(prev => {
-          const prevList = prev[selectedDate] || [];
-          return {
-            ...prev,
-            [selectedDate]: [...prevList, title]
-          };
-        });
-      }
-      setShowPopup(false);
-    };
+    // 필요 시 여기서 selectedDate기준 새로 로딩할 수도 있음
+    // const params = {
+    //   year: y, month: m, day: d,
+    //   isPrivate: (user?.USER_AUTHRT_SN ?? 9) <= 3 ? 1 : 0,
+    // };
+  }, [selectedDate, user, setDisplayDate]);
 
-      // 현재 날짜의 일정만 가져오기
-      const currentDateSchedules = schedules[selectedDate] || [];
+  // 팝업에서 저장 클릭 시
+  const handleSaveSchedule = ({ title, startDate }) => {
+    if (!selectedDate) return;
+    if (!title || title.trim() === "") return;
+
+    const [y, m, d] = selectedDate.split('-').map(Number);
+    const dateKey = `${y}-${z2(m)}-${z2(d)}`;
+
+    // 사이드 목록(텍스트)
+    setSchedules(prev => {
+      const prevList = prev[selectedDate] || [];
+      return { ...prev, [selectedDate]: [...prevList, title] };
+    });
+
+    // 이벤트(객체) 누적 - 여기선 제목 문자열만 넣었지만 실제론 객체 쓰면 좋음
+    setEvents(prev => {
+      const prevEvents = prev[dateKey] || [];
+      return { ...prev, [dateKey]: [...prevEvents, title] };
+    });
+
+    setShowPopup(false);
+  };
+
+  const currentDateSchedules = schedules[selectedDate] || [];
 
   return (
     <div className={styles.sched}>
       <div className={styles.schedDateBox}>
-         <div className={styles.schedDate}>등록된 일정 ({displayDate})</div>
+        <div className={styles.schedDate}>등록된 일정 ({displayDate})</div>
         <SchedAddBtn textType="+ 일정등록" onClick={() => setShowPopup(true)} />
       </div>
 
       <ul className={styles.schedList}>
-      {currentDateSchedules.length === 0 ? (
-      <li>등록된 일정이 없습니다.</li>
-      ) : (
-      currentDateSchedules.map((item, index) => <li key={index}>{item}</li>)
-      )}
+        {currentDateSchedules.length === 0 ? (
+          <li>등록된 일정이 없습니다.</li>
+        ) : (
+          currentDateSchedules.map((item, index) => <li key={index}>{item}</li>)
+        )}
       </ul>
 
-      {showPopup && <SchedListPopUp onClose={() => setShowPopup(false)}
-       /* title={input} */
-       onSave={handleSaveSchedule}
-       selectedDate={selectedDate}
-       />}
+      {showPopup && (
+        <SchedListPopUp
+          onClose={() => setShowPopup(false)}
+          onSave={handleSaveSchedule}
+          selectedDate={selectedDate}
+        />
+      )}
     </div>
   );
 }

@@ -17,5 +17,7 @@ public class CompanyDto {
     private boolean active;       // 활성여부
     private LocalDateTime registeredAt; // 등록일자
     private Integer fileSn;       // 파일 순번 (null 허용)
-
+    private String companyAddress;         // 회사 소재지
+    private String companyAddressDetail;   // 회사 상세주소
+    private String companyTel;             // 회사 전화번호
 }

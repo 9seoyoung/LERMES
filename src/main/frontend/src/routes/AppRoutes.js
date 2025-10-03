@@ -54,6 +54,8 @@ import StudyPlan from '../pages/LMS/menu/StudyPlan.jsx';
 import InterviewRead from '../pages/LMS/readAndEdit/InterviewRead.jsx';
 import BoardPost from '../pages/LMS/form/BoardPost.jsx';
 import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
+import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
+import UnknownHome from '../pages/LMS/UnknownHome.jsx';
 function AppRoutes() {
   return (
     <Routes>
@@ -90,9 +92,10 @@ function AppRoutes() {
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
-        <Route path="visitorHome" element={<VisitorHome />} />
+        <Route path="unknownHome" element={<UnknownHome />} />
+        
 
-        <Route element={<RoleRoute roles={[1, 2, 3, 4, 5]} />}>
+        <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
           {/* 로그인이 필요한 테스트 페이지 */}
           <Route path="testInterview" element={<InterviewEditPost />}></Route>
           <Route path="/tableall" element={<TableAll />} />
@@ -101,6 +104,9 @@ function AppRoutes() {
 
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
+            <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
+          <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecruitRead/>}/>
+            <Route path="visitorHome" element={<VisitorHome />} />
             <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
             {/* 관리자(테넌트, 직원) */}
             <Route element={<RoleRoute roles={[1, 2, 3]} />}>
@@ -168,6 +174,7 @@ function AppRoutes() {
               <Route path="stdHome/myPage" element={<StdMypage />} />
             </Route>
           </Route>
+        </Route>
         </Route>
       </Route>
     </Routes>

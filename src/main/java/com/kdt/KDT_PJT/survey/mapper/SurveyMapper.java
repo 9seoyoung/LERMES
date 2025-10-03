@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.survey.mapper;
 
+import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
 import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,17 +10,35 @@ import java.util.List;
 
 @Mapper
 public interface SurveyMapper {
-    // 등록
-    void insertSurvey(RequestSurveyDto requestDto);
 
-    // 단건 조회
-    ResponseSurveyDto findSurveyById(Long srvySn);
+    void insertSurvey(@Param("dto") RequestSurveyDto dto,
+                      @Param("uuid") String uuid);
 
-    // 회사별 목록 조회
-    List<ResponseSurveyDto> findSurveyListByCompany(Long coSn);
 
-    // 수정
-    void updateSurvey(@Param("id") Long id, @Param("dto") RequestSurveyDto dto);
+    ResponseSurveyDto findSurveyById(@Param("srvySn") Long srvySn);
 
+    void increaseViewCnt(@Param("srvySn") Long srvySn);
+
+
+    List<ResponseSurveyDto> findSurveyList(@Param("coSn") Long coSn,
+                                                    @Param("cohortSn") Long cohortSn,
+                                                    @Param("bbsType") BbsType bbsType);
+
+
+
+    void updateSurveyOwner(@Param("srvySn") Long srvySn, @Param("dto") RequestSurveyDto dto);
+
+
+    void updateSurveyByAdmin(@Param("srvySn") Long srvySn, @Param("dto") RequestSurveyDto dto);
+
+
+    void softDeleteSurvey(@Param("srvySn") Long srvySn,
+                          @Param("userSn") Long userSn);
+
+
+    void softDeleteSurveyByAdmin(@Param("srvySn") Long srvySn);
 
 }
+
+
+

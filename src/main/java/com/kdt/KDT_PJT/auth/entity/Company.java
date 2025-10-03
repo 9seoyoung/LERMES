@@ -44,12 +44,12 @@ public class Company {
     @Column(name = "COMPANY_SMALL_LOGO_FILE_SN")
     private Long smallLogoFileSn;
 
-    @Column(name = "COMPANY_TEL")
-    private String companyTel; // 회사 전화번호
-
-    @Column(name = "COMPANY_ADDRESS")
+    @Column(name = "COMPANY_ADDRESS", length = 255)
     private String companyAddress; // 회사 주소
 
-    @Column(name = "COMPANY_ADDRESS_DETAIL")
+    @Column(name = "COMPANY_ADDRESS_DETAIL", length = 255)
     private String companyAddressDetail; // 회사 상세주소
+
+    @Column(name = "COMPANY_TEL", length = 50)
+    private String companyTel; // 회사 전화번호
 }

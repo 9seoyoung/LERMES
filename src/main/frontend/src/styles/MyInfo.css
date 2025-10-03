@@ -38,7 +38,8 @@
 /* 라벨 */
 .myInfoLabel {
     font-weight: 600;
-    color: #333;
+    /* color: #333; */
+    color: var(--color-text-sec);
     min-width: 80px;
     background: #f5f5f5;
     border-radius: 4px;
@@ -54,7 +55,8 @@
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 14px;
-    color: #333;
+    /* color: #333; */
+    color: var(--color-text-sec);
     min-width: 150px;
 }
 
@@ -65,7 +67,8 @@
     border-radius: 6px;
     border: 1px solid #000;
     background: #000;
-    color: #fff;
+    /* color: #fff; */
+    color: var(--color-text-primary);
     font-size: 13px;
     cursor: pointer;
     transition: background 0.2s;
@@ -86,7 +89,8 @@
     border-radius: 6px;
     border: 1px solid #000;
     background: #000;
-    color: #fff;
+    /* color: #fff; */
+    color: var(--color-text-primary);
     font-size: 13px;
     cursor: pointer;
     transition: background 0.2s;
@@ -113,6 +117,7 @@
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 14px;
-    color: #333;
+    /* color: #333; */
+    color: var(--color-text-sec);
     min-width: 150px;
 }

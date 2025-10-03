@@ -1,159 +1,111 @@
-// 미니 캘린더 + 데일리 일정
+// src/components/calendar/MiniCal.jsx
+import React, { useEffect, useMemo, useState } from "react";
+import styles from "../../styles/MiniCal.module.css";
+import { buildOverlayBars, buildWeeks } from "../../utils/calendarBars";
 
-import React, { useState, useEffect } from 'react';
-import styles from '../../styles/MiniCal.module.css';
+const z2 = (n) => String(n).padStart(2, "0");
 
-const MiniCal = ({selectedDate, setSelectedDate}) => {
+export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw }) {
+  // monthlyTodoRaw: 백에서 받은 "월 전체 이벤트 원본 배열" [{eventNm, eventBgngDt, eventEndDt, ...}, ...]
+
   const [currentDate, setCurrentDate] = useState(new Date());
-  /* const [selectedDate, setSelectedDate] = useState(null); */
-  // const [events, setEvents] = useState({}); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
 
-  // 새로고침하면 오늘 날짜 선택 (selectedDate도 문자열 'YYYY-MM-DD' 형태로 초기화)
   useEffect(() => {
     const today = new Date();
     setCurrentDate(today);
-    const dateKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
-      today.getDate()
-    ).padStart(2, '0')}`;
-
-    if (setSelectedDate) {
-        setSelectedDate(dateKey);
-    }
-  }, [setSelectedDate]); //setSelectedDate 의존성 추가
+    const key = `${today.getFullYear()}-${z2(today.getMonth() + 1)}-${z2(today.getDate())}`;
+    setSelectedDate?.(key);
+  }, [setSelectedDate]);
 
   const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+  const month0 = currentDate.getMonth();
+  const month = month0 + 1;
 
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
+  // 셀 그리드용 week 행렬
+  const weeks = useMemo(() => buildWeeks(year, month), [year, month]);
 
-  const startDay = firstDay.getDay();
-  const daysInMonth = [];
-
-  for (let i = 0; i < startDay; i++) {
-    daysInMonth.push(null);
-  }
-  for (let i = 1; i <= lastDay.getDate(); i++) {
-    daysInMonth.push(i);
-  }
-
-  // 주 단위로 나누고 부족한 칸 null로 채움
-  const weeks = [];
-  for (let i = 0; i < daysInMonth.length; i += 7) {
-    let week = daysInMonth.slice(i, i + 7);
-    while (week.length < 7) {
-      week.push(null);
-    }
-    if (week.some((day) => day !== null)) {
-      weeks.push(week);
-    }
-  }
+  // 오버레이 바(좌표/스팬/스택 인덱스) 생성
+  const { bars } = useMemo(
+    () => buildOverlayBars(Array.isArray(monthlyTodoRaw) ? monthlyTodoRaw : [], year, month),
+    [monthlyTodoRaw, year, month]
+  );
 
   const prevMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
-    setSelectedDate(null);
+    setCurrentDate(new Date(year, month0 - 1, 1));
+    setSelectedDate?.(null);
   };
 
   const nextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
-    setSelectedDate(null);
+    setCurrentDate(new Date(year, month0 + 1, 1));
+    setSelectedDate?.(null);
   };
 
   const onSelectDate = (day) => {
-    if (day === null) return;
-    const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    setSelectedDate(dateKey);
+    if (!day) return;
+    setSelectedDate?.(`${year}-${z2(month)}-${z2(day)}`);
   };
 
-  // 캘린더 전체 높이 고정 (원하는 값으로 조절 가능)
-  const totalCalendarHeight = 200;
-  const weekCount = weeks.length;
-  const weekHeight = totalCalendarHeight / weekCount;
-
   return (
-  <div className={styles.calContainer}>
     <div className={styles.cal}>
-      {/* 상단 네비게이션 */}
-      <div className={styles.month}>
+      {/* 헤더 */}
+      <div className={styles.monthNav}>
         <button onClick={prevMonth}>◀</button>
-        <h3>
-          {year}년 {month + 1}월
-        </h3>
+        <h3>{year}년 {month}월</h3>
         <button onClick={nextMonth}>▶</button>
       </div>
 
-      {/* 요일 헤더 */}
-      <div className={styles.day}>
-        {['일', '월', '화', '수', '목', '금', '토'].map((day, idx) => {
-          const color = idx === 0 ? 'red' : idx === 6 ? 'blue' : 'black';
-          return (
-            <div key={idx} style={{ fontWeight: 'bold', color, padding: 8 }}>
-              {day}
-            </div>
-          );
-        })}
+      {/* 요일 */}
+      <div className={styles.weekdayHeader}>
+        {["일","월","화","수","목","금","토"].map((d,i)=>(
+          <div key={i} className={styles.weekdayCell}>{d}</div>
+        ))}
       </div>
 
-      {/* 날짜 셀 */}
-      {weeks.map((week, weekIdx) => (
-        <div
-          key={weekIdx}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(7, 1fr)',
-            textAlign: 'center',
-            height: weekHeight,
-          }}
-        >
-          {week.map((day, idx) => {
-            const dayOfWeek = idx;
-
-            const dateKey = day
-              ? `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-              : null;
-
-            const isSelected = day !== null && dateKey === selectedDate;
-
-            let color = 'black';
-            if (day !== null) {
-              if (dayOfWeek === 0) color = 'red';
-              else if (dayOfWeek === 6) color = 'blue';
-            } else {
-              color = 'transparent';
-            }
-
-            return (
-              <div
-                key={idx}
-                onClick={() => onSelectDate(day)}
-                className={`${styles.calendarCell} ${isSelected ? styles.selected : styles.unselected}`}
-                style={{
-                  color: day !== null ? color : 'transparent',
-                  cursor: day !== null ? 'pointer' : 'default',
-                }}
-              >
-                {/* 날짜 숫자 */}
-                {day || ''}
-
-                {/* 일정 모두 표시 */}
-                {/* {dateKey && events[dateKey] && events[dateKey].length > 0 && (
-                  <div className={styles.eventCell}>
-                    {events[dateKey].map((event, i) => (
-                      <div key={i} className={styles.event}>
-                        {event}
-                      </div>
-                    ))}
+      {/* 달력 컨테이너: 아래 2 레이어 겹침 */}
+      <div className={styles.calendarFrame}>
+        {/* 1) 셀 레이어 */}
+        <div className={styles.cellsGrid}>
+          {weeks.map((week, r) => (
+            <div key={r} className={styles.rowGrid}>
+              {week.map((day, c) => {
+                const isNull = day === null;
+                const key = !isNull ? `${year}-${z2(month)}-${z2(day)}` : null;
+                const isSelected = key && key === selectedDate;
+                return (
+                  <div
+                    key={c}
+                    className={`${styles.cell} ${isSelected ? styles.selected : ""} ${isNull ? styles.empty : ""}`}
+                    onClick={() => onSelectDate(day)}
+                  >
+                    <div className={styles.dateLabel}>{day || ""}</div>
                   </div>
-                )} */}
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          ))}
         </div>
-      ))}
 
-    </div>
+        {/* 2) 바(오버레이) 레이어 */}
+        <div className={styles.barsOverlay}>
+          {/* bars: {row, colStart, span, title, stackIndex, z, fullDays} */}
+          {bars.map((b) => (
+            <div
+              key={b.id}
+              className={styles.bar}
+              title={`${b.title} · ${b.fullDays}일`}
+              style={{
+                gridRow: b.row,              // 몇 번째 주(행)
+                gridColumn: `${b.colStart} / span ${b.span}`, // 시작 요일 ~ span
+                zIndex: b.z,
+                // 같은 칸에서 위아래로 쌓이게 Y 오프셋
+                transform: `translateY(calc(${b.stackIndex} * (var(--bar-height) + var(--bar-gap))))`,
+              }}
+            >
+              {b.title}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default MiniCal;
+}

@@ -3,6 +3,7 @@ package com.kdt.KDT_PJT.bbs.ctl;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.bbs.dto.PostRequestDto;
 import com.kdt.KDT_PJT.bbs.dto.PostResponseDto;
+import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.bbs.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/posts")
+@RequestMapping("/api/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -40,9 +41,7 @@ public class PostController {
     public ResponseEntity<List<PostResponseDto>> getPosts(
             @AuthenticationPrincipal AuthCustomUserDetails auth,
             @RequestParam(required = false) Long cohortSn,   // 기수 필터
-            @RequestParam(required = false) String bbsType,   // 게시판 유형 필터 (Enum 이름: NOTICE, CLASS_MATERIAL 등)
-            @RequestParam(required = false) Long effectiveSn  //회사Sn
-
+            @RequestParam(required = false) String bbsType   // 게시판 유형 필터 (Enum 이름: NOTICE, SURVEY 등)
     ) {
         List<PostResponseDto> posts = postService.getPosts(auth, cohortSn, bbsType);
         return ResponseEntity.ok(posts);

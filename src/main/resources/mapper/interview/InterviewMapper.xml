@@ -44,6 +44,7 @@
             AND i.COHORT_SN = #{cohortSn}
             AND i.ITV_PIC_AUTHRT = #{roleType}
             AND i.ITV_PRNMNT_DT IS NULL -- 이거 값 있으면 면담 배정 끝난거임
+            AND i.DEL_YN = 0
         <!-- 방어적으로 roleType 허용 범위 체크를 SQL로도 하고 싶다면 아래 주석 해제
         AND #{roleType} IN (2,3,4)
         -->
@@ -89,6 +90,7 @@
         LEFT JOIN TB_USER u2 ON u2.USER_SN = i.ITV_PIC_SN       -- 이름 매칭용
         WHERE 1=1
             AND c.CO_SN = #{coSn}               <!-- 회사는 항상 제한 -->
+            AND i.DEL_YN = 0
             <if test="cohortSn != null and cohortSn != 0">
             AND i.COHORT_SN = #{cohortSn}     <!-- 특정 기수만 보고 싶을 때 -->
             </if>
@@ -109,6 +111,7 @@
         UPDATE TB_INTERVIEW
             SET VIEW_CNT = VIEW_CNT + 1
         WHERE ITV_SN = #{itvSn}
+          AND DEL_YN = 0
     </update>
 
     <update id="confirmInterview" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
@@ -126,6 +129,7 @@
             i.ITV_PIC_ANS   = #{itvPicAns}
         WHERE i.ITV_SN = #{itvSn}
           AND i.ITV_PIC_SN IS NULL
+          AND i.DEL_YN = 0
     </update>
 
     <select id="selectInterviewParticipants" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
@@ -137,6 +141,7 @@
         SELECT ITV_PIC_SN, ITV_APLCNT_SN
         FROM TB_INTERVIEW
         WHERE ITV_SN = #{itvSn}
+          AND DEL_YN = 0
     </select>
 
     <update id="updateInterviewCalSn" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
@@ -154,6 +159,7 @@
             i.ITV_PIC_ANS   = #{itvPicAns}
         WHERE i.ITV_SN = #{itvSn}
           AND i.ITV_PIC_SN IS NULL
+          AND i.DEL_YN = 0
     </update>
 
     <update id="insertCalendarSnToInterview" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" >
@@ -183,6 +189,7 @@
             COHORT_SN as cohortSn
         FROM TB_INTERVIEW
         WHERE ITV_SN = #{itvSn}
+          AND DEL_YN = 0
     </select>
 
     <select id="readInterviewbyItvSn" parameterType="com.kdt.KDT_PJT.cmmn.map.CmmnMap" resultType="com.kdt.KDT_PJT.cmmn.map.CmmnMap">
@@ -215,6 +222,20 @@
 --         LEFT JOIN TB_FILE f ON i.FORM_UUID = f.FORM_UUID
         WHERE
             i.ITV_SN = #{itvSn}
+        AND i.DEL_YN = 0
     </select>
+
+    <update id="deleteInterviewApplyBeforeConfirm" parameterType="Integer">
+    /*
+    soft delete (확정 전에만 삭제 가능)
+    */
+        UPDATE TB_INTERVIEW
+        SET DEL_YN = 1
+        WHERE 1=1
+            AND ITV_SN = #{itvSn}
+            AND DEL_YN = 0          -- 삭제 안된 글만 삭제 가능
+            AND ITV_CFMTN_DT IS NULL -- 확정이면 이거 채워져있기때문에 확정이면 삭제 불가능.
+    </update>
+
 
 </mapper>

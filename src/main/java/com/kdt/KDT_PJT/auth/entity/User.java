@@ -51,4 +51,5 @@ public class User {
     // 사용자 이미지 파일 일련번호
     @Column(name = "USER_PROFILE_IMAGE")
     private Long userProfileImage;
+
 }

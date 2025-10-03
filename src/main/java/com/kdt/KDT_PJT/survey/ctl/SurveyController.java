@@ -1,45 +1,82 @@
 package com.kdt.KDT_PJT.survey.ctl;
 
+import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
+import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
 import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
 import com.kdt.KDT_PJT.survey.service.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/bbsSurvey")
+@RequestMapping("/api/survey")
 @RequiredArgsConstructor
 public class SurveyController {
 
     private final SurveyService surveyService;
     // 설문 등록
     @PostMapping("/post")
-    public ResponseEntity<ResponseSurveyDto> createSurvey(@RequestBody RequestSurveyDto requestDto) {
-        ResponseSurveyDto responseDto = surveyService.createSurvey(requestDto);
+    public ResponseEntity<ResponseSurveyDto> createSurvey(@RequestBody RequestSurveyDto requestDto,
+                                                          @AuthenticationPrincipal AuthCustomUserDetails auth) {
+        Long userSn = auth.getId();
+        Long roleId = auth.getRoleType();
+
+        requestDto.setUserSn(userSn);
+
+        ResponseSurveyDto responseDto = surveyService.createSurvey(requestDto, userSn, roleId);
         return ResponseEntity.ok(responseDto);
     }
 
     // 설문 단건 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseSurveyDto> getSurvey(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(surveyService.getSurvey(id));
+    @GetMapping("/{srvySn}")
+    public ResponseEntity<ResponseSurveyDto> getSurvey(
+            @PathVariable Long srvySn,
+            @AuthenticationPrincipal AuthCustomUserDetails auth) {
+
+        Long roleId = auth.getRoleType();
+        Long userSn = auth.getId();
+        Long coSn = auth.getCompanySn();
+        Long cohortSn = auth.getCohortSn();
+
+        return ResponseEntity.ok(
+                surveyService.getSurvey(srvySn, roleId, userSn, coSn, cohortSn)
+        );
     }
 
-    // 회사별 설문 목록 조회
+    // 목록 조회
     @GetMapping("/list/{coSn}")
-    public ResponseEntity<List<ResponseSurveyDto>> getSurveyList(@PathVariable("coSn") Long coSn) {
-        return ResponseEntity.ok(surveyService.getSurveyList(coSn));
+    public ResponseEntity<List<ResponseSurveyDto>> getSurveyList(
+            @PathVariable Long coSn,
+            @RequestParam(value = "cohortSn", required = false) Long cohortSn,
+            @RequestParam(value = "bbsType", required = false) BbsType bbsType
+    ) {
+        return ResponseEntity.ok(surveyService.getSurveyList(coSn, cohortSn, bbsType));
     }
 
     // 설문 수정
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateSurvey(@PathVariable("id") Long id,
-                                               @RequestBody RequestSurveyDto requestDto) {
-        surveyService.updateSurvey(id, requestDto);
+    @PutMapping("/{srvySn}")
+    public ResponseEntity<String> updateSurvey(@PathVariable Long srvySn,
+                                               @RequestBody RequestSurveyDto requestDto,
+                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
+        Long userSn = auth.getId();       // 유저 ID
+        Long roleId = auth.getRoleType(); // 롤 타입 (숫자)
+        surveyService.updateSurvey(srvySn, requestDto, userSn, roleId);
         return ResponseEntity.ok("수정 성공");
+    }
+    //설문 삭제 (본인 or 권한자)
+    @DeleteMapping("/{srvySn}")
+    public ResponseEntity<String> deleteSurvey(@PathVariable Long srvySn,
+                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
+        Long userSn = auth.getId();
+        Long roleId = auth.getRoleType();
+        Long coSn = auth.getCompanySn();
+        Long cohortSn = auth.getCohortSn();
+        surveyService.deleteSurvey(srvySn, userSn, roleId, coSn, cohortSn);
+        return ResponseEntity.ok("삭제 성공");
     }
 
 }

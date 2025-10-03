@@ -111,4 +111,14 @@ public class InterviewService {
     public int incViewCnt(CmmnMap params){
         return dao.update("com.kdt.mapper.interview.incViewCnt", params);
     }
+
+    @Transactional
+    public void deleteInterviewApplyBeforeConfirm(Integer itvSn){
+        int isDeleted = dao.update("com.kdt.mapper.interview.deleteInterviewApplyBeforeConfirm",itvSn); // itvSn으로 해당 글 delYn 1로 바꾸기
+        if(isDeleted == 1) {
+            System.out.println("성공");
+        }else{
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "삭제실패, 이미삭제됐거나 뭐 잘못됨~");
+        }
+    }
 }

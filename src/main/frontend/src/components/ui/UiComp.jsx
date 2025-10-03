@@ -9,7 +9,7 @@ import FilePreview from './FilePreview';
 import ListTable from './ListTable';
 
 export function UiComp() {
-  const arr1 = ["순번", "이름", "이메일"];
+  const arr1 = ["#", "이름", "이메일"];
   
   return (
     <div>
@@ -35,7 +35,7 @@ export function UiComp() {
             <OrangeCheckbox />
             <FileUpload />
             <Table />
-            <ListTable tableHead={arr1} columnData={["no", "name", "email","tel"]} apiData={[{no:"순번", name: "이름", email:"이메일", tel:"전화번호" }, {no:"순번", name: "이름", email:"이메일", tel:"전화번호" }, {no:"순번", name: "이름", email:"이메일", tel:"전화번호" }]}></ListTable>
+            <ListTable tableHead={arr1} columnData={["no", "name", "email","tel"]} apiData={[{no:"#", name: "이름", email:"이메일", tel:"전화번호" }, {no:"#", name: "이름", email:"이메일", tel:"전화번호" }, {no:"#", name: "이름", email:"이메일", tel:"전화번호" }]}></ListTable>
       {/* 드롭다운 사용 방법 */}
       <Dropdown label="드롭다운 제목" trigger="hover" placement="bottom-start" >
       <a className="dd__item" href="/mypage">내 정보</a>
@@ -127,10 +127,10 @@ export function WhiteBtn({ textType }) {
   );
 }
 // 파란색 버튼
-export function BlueBtn({ textType }) {
+export function BlueBtn({ textType, onClick }) {
   return (
     <div>
-      <button className={styles.blueBtn}>{textType}</button>
+      <button className={styles.blueBtn} onClick={onClick} >{textType}</button>
     </div>
   );
 }
@@ -361,7 +361,7 @@ export function Table() {
     <table className={styles.table}>
       <thead>
         <tr>
-          <th>순번</th>
+          <th>#</th>
           <th>유형</th>
           <th>사유</th>
           <th>신청일</th>

@@ -1,6 +1,7 @@
 // QuestionAdd.jsx
 import React, {
-  forwardRef, useRef, useImperativeHandle, createRef, useEffect, setFiles
+  forwardRef, useRef, useImperativeHandle, createRef, useEffect,
+  useState
 } from "react";
 import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
@@ -17,8 +18,12 @@ export const makeQuestion = () => ({
     { id: uuid(), label: "" },
     { id: uuid(), label: "" },
   ],
-  answer: "",
+  // 응답 필드들
+  answer: null,         // single
+  selected: [],         // multiple
+  answerText: "",       // text
 });
+
 
 const ensureOptions = (opts = []) => {
   const next = (opts || []).map(o => ({ id: o.id || uuid(), label: o.label ?? "" }));
@@ -63,6 +68,7 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 
 // ───────── component ─────────
 const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, containerRef }, ref) {
+  const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
 
@@ -156,6 +162,15 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
         : q
     ));
 
+    const onSetAnswer = (qid, val) => {
+      onChange(prev => prev.map(q => q.qid === qid ? { ...q, answer: val } : q));
+    };
+    
+    const onToggleRequired = (qid, required) => {
+      onChange(prev => prev.map(q => q.qid === qid ? { ...q, required } : q));
+    };
+    
+
   return (
     <>
       <div className="questionContainer">
@@ -164,6 +179,8 @@ const QuestionAdd = forwardRef(function QuestionAdd({ questions = [], onChange, 
             key={q.qid}
             ref={getRef(q.qid)}
             q={q}
+            onSetAnswer={onSetAnswer}
+            onToggleRequired={onToggleRequired}
             qNum={idx + 1}
             onRemoveQuestion={removeQuestion}
             onSetType={setType}

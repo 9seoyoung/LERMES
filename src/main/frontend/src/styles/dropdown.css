@@ -41,6 +41,8 @@
   transform: translateY(-6px);
   pointer-events: none;
 
+  z-index: 999;
+  
   transition:
     max-height .26s ease,
     opacity .18s ease,

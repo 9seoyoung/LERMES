@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
 
     Optional<User> findByNameAndUserTelno(String name, String userTelno);
+
+    List<User> findByCompanySnAndRoleType(Long companySn, Long roleType);
+
 }
