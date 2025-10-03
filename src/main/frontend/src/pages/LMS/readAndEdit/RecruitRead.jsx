@@ -214,11 +214,14 @@ const buildAnswersMap = (surveyForm) => {
               <div> 수업 시간: {formatTime(formData.classStart)} ~ {formatTime(formData.classEnd)}</div>
               <div> 교육 장소: {formData.place}</div>
             </div>
-            <button className={styles.applyBtn} type="button" onClick={() => setShowForm(true)}>신청하러 가기</button>
+            <img src="940:"></img>
+            <button className={styles.applyBtn} type="button" onClick={() => setShowForm(!showForm)}>신청하러 가기</button>
         </div>
         </>
         :
         <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
+            <button className={styles.applyBtn} type="button" onClick={() => setShowForm(!showForm)}>임시 닫기</button>
+
           <div className="formArea_L">
             <RecruitForm
                 type={formData.type}

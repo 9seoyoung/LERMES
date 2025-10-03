@@ -95,7 +95,7 @@ function AppRoutes() {
         <Route path="unknownHome" element={<UnknownHome />} />
         
 
-        <Route element={<RoleRoute roles={[1, 2, 3, 4, 5]} />}>
+        <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
           {/* 로그인이 필요한 테스트 페이지 */}
           <Route path="testInterview" element={<InterviewEditPost />}></Route>
           <Route path="/tableall" element={<TableAll />} />
