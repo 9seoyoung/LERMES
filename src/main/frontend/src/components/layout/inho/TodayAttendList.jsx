@@ -40,8 +40,10 @@ export default function TodayAttendList() {
               <div>퇴실</div>
               <div>상태</div>
         </li>
+        </ul>
+        <ul style={{width: "100%", height: "350px", overflowY: "scroll" }}>
             {rows.map((s, idx) => (
-              <li key={s.userSn} className="listTable" style={{width: '100%', height: "100%", overflow: "hidden" }}>
+              <li key={s.userSn} className="listTable" style={{width: '100%', height: "30px", overflow: "hidden" }}>
                 <div>{idx + 1}</div> {/* # */}
                 <div>{s.username}</div>
                 <div>{s.checkInTime ?? '-'}</div>
