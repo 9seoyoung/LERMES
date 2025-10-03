@@ -68,6 +68,8 @@ public class CompanyService {
                     result.put("registeredAt", company.getRegisteredAt());
                     result.put("fileSn", company.getFileSn());
                     result.put("stts", hasRecruiting ? "RECRUITING" : null);
+                    result.put("companyAddress", company.getCompanyAddress());
+                    result.put("companyAddressDetail", company.getCompanyAddressDetail());
 
                     return result;
                 })

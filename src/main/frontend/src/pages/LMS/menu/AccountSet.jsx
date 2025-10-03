@@ -6,7 +6,7 @@ import {Settings} from "lucide-react";
 import ListEditTable from '../../../components/ui/ListEditTable';
 import { hortlistByCpSn } from '../../../services/cohortService';
 import { useSelectedCompany} from '../../../contexts/SelectedCompanyContext';
-import { pullAllAccount } from '../../../services/accountService';
+import { pullAllAccount, pullApplyEmp } from '../../../services/accountService';
 import styles from '../../../styles/account.module.css';
 import { FaArrowLeft } from "react-icons/fa";
 import GroupDropdown from '../../../components/ui/GroupDropdown';
@@ -21,6 +21,7 @@ export default function AccountSet() {
   const [cohortList, setCohortList] = useState([]);
   const [cohortSn, setCohortSn] = useState();
   const [accountList, setAccountList] = useState([]);
+  const [dataListTop, setDataListTop] = useState([]);
   const [formData, setFormData] = useState({
     // formData 초기값
     // 0. 유저테이블 리스트 객체배열로 보내주셈
@@ -36,8 +37,11 @@ export default function AccountSet() {
     ( async () => {
       try {
       const account = await pullAllAccount(effectiveSn);
+      const pendingEmp = await pullApplyEmp(effectiveSn);
+        console.log(pendingEmp.data);
         console.log(account.data);
         setAccountList(account.data);
+        setDataListTop(pendingEmp.data);
       } catch(err) {
         console.log(err);
       }
@@ -106,9 +110,10 @@ export default function AccountSet() {
                   <div className={`${styles.tutorBox}`}>
                     <h4>직원 승인 대기</h4>
                     <ListTable
-                      tableHead={['#', '이름', '이메일', '전화번호']}
-                      gridTemplate="0.5fr 1fr 2.5fr 1.6fr 1.5fr 0.7fr 1fr "
-                      apiData={[{}, {}]}
+                      tableHead={['#', '이름', '이메일', '전화번호', '요청일', '승인', '거절']}
+                      gridTemplate="0.5fr 1fr 2.5fr 1.6fr 2.5fr 0.5fr 0.5fr"
+                      apiData={dataListTop}
+                      columnData={["userSn", "email", "tel", "orgStartDate"]}
                       whereTogo={"/adminHome/accountSet"}
                       addStyle={{height: "160px", overflowY: "scroll", borderRadius: "8px", background: "var(--color-light-bg)"}}
                     >

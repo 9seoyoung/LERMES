@@ -2,17 +2,13 @@ import React from 'react'
 import { applyEmp } from '../../services/accountService';
 import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
 
-function VisitorHome() {
+function UnknownHome() {
   const { effectiveSn } = useSelectedCompany();
-  const handleSubmit1 = () => {
-    
+  const handleSubmit = () => {
+
     (async () => {
-      const params = {
-        applyDuty: 4,
-        companySn: effectiveSn
-      }
       try{
-        const res = await applyEmp(params);
+        const res = await applyEmp(effectiveSn);
         console.log(res);
       } catch(err) {
         console.log(err.message);
@@ -22,10 +18,9 @@ function VisitorHome() {
 
   return (
     <div className='board' style={{width: "100%", background: "yellow",height: "100%"}}>
-      <div>VisitorHome"권한없는사람 1, 6</div>
-      <button type='button' onClick={handleSubmit1}>직원신청</button>
+      <div>UnknownHome"로그인안함 1,7</div>
     </div>
   )
 }
 
-export default VisitorHome
+export default UnknownHome
