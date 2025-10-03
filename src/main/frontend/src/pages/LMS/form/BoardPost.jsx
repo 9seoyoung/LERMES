@@ -222,6 +222,7 @@ function BoardPost() {
                 <p>유형</p>
                 <Dropdown className="dropset_dd" label={formData.type || "---- 필수 선택 ----"}>
                   {(userAuth === 2 || userAuth === 3 || userAuth === 1) ?
+                  // 관리자들은 등록하기 이거밖에 없지 않나! 이거 고정
                       <>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "공지사항" }))}>공지사항</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
@@ -231,19 +232,54 @@ function BoardPost() {
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
                       </>
-                  : ""}
-                  {(userAuth === 4) ? (
+                  : 
+                  // 관리자 외
+                  <>
+                  {/* 4, 5 권한은 페이지 별로 줘야지 */}
+                  {(userAuth === 4) ?
+                    <>
+                      { locate.pathname === "/tutorHome/board/createPost"  ? 
+                        <>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
+                        </> : <></> }
+
+                      { locate.pathname === "/tutorHome/studentManage/interviewPost"  ? 
+                        <>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
+                        </> : <></> } 
+
+                      { locate.pathname === "/tutorHome/studySched/createPost"  ? 
+                        <>
+                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+
+                        </> : <></> } 
+                    </>
+                    :
                     <>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
                     </>
-                  ) : ""}
+                  }
                   {(userAuth === 5) && (locate.pathname === "/stdHome/board/createPost") ? <>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({...s, type: "자료실"}))}>자료실</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
                         <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
-                  </> : null}
+                      </>
+                      : 
+                      <>
+                                            <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
+                      </>
+                  }
+                  </>
+                }
                 </Dropdown>
                 <input type="hidden" name="type" value={formData.type} />
               </div>
