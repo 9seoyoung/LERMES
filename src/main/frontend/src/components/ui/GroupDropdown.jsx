@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { hortlistByCpSn } from "../../services/cohortService";
 import Dropdown from "./Dropdown";
+import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 
-function GroupDropdown({coSn, setCohortSn}) {
+function GroupDropdown({setCohortSn}) {
+  const { effectiveSn } = useSelectedCompany();
   const [hortlist, setHortList] = useState([]);
   const [groupFilter, setGroupFilter] = useState("All")
     console.log("그룹 변경")
@@ -13,7 +15,7 @@ function GroupDropdown({coSn, setCohortSn}) {
         try {
           // console.log(coSn);
           // console.log(`>>>>>>>>>>>>>>>hortlistByCpSn(회사별 모집공고 리스트) 호출`)
-          const data = await hortlistByCpSn(coSn);
+          const data = await hortlistByCpSn(effectiveSn);
           // console.log(`<<<<<<<<<<<<<<< 반환 ${data.data}`)
           setHortList(data.data.cohorts || []);
           // console.log(data.data.map((value, idx)=> `${value.cohortNm} + ${idx}`))
@@ -21,7 +23,7 @@ function GroupDropdown({coSn, setCohortSn}) {
           console.log(e.message);
         }
       })();
-    }, [coSn]);
+    }, [effectiveSn]);
   return (
     <div className="dropSet" style={{minWidth: "100px", maxwidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
       <Dropdown className="dropset_dd" label={groupFilter || "All"} >

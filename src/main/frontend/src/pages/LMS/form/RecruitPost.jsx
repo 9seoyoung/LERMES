@@ -106,7 +106,7 @@ function RecruitPost() {
 };
 
 
-
+// 이거 필요없을꺼 같음 보고 지우기 ㄱㄱ 
   useEffect(() => {
     (async () => {
       try {

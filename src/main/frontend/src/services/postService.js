@@ -74,6 +74,11 @@ export function editInterview( itvSn, effectiveSn, formData ) {
 }
 
 /**
+ * 면담 기록 API
+ */
+export const writtenInterview = (params) => api.get("/interview/record");
+
+/**
  * 관리자 게시글 관리 메뉴 - 전체 게시글 리스트(모집공고 제외)
  * 
  * @param {Number} effectiveSn LMS 회사 시리얼 넘버 고정값 => 상준이가 수퍼메인페이지 API 만들고 나면 정해질 예정
@@ -127,3 +132,17 @@ export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/pos
  * @returns {Array<Objects>} 전체 / 공식 / 내 일정/ 일지 / 면담 / 임시저장에 해당하는 게시물 목록
  */
 export const callStudyPlanListByFilter = ({url, filter, effectiveSn}) => api.get(`${url}`, {params: {filter, effectiveSn}})
+
+
+
+
+
+
+
+// 관리자 권한 게시물 관리 메뉴 ------------------------------------------------------------------------
+/**
+ * 게시물 유형 + 기수별 조회 기능(슈퍼관리자, 대표, 직원 조회 가능 / cohortSn(기수) 값 필수!)
+ * @param {Number} cohortSn 기수 시리얼 번호
+ * @returns {Array<Object>} 전체 / 공지 / 일정 / 자료실 / 설문 / FAQ / Q&A / 면담요청 / 면담기록 / 임시저장에 해당하는 게시물 목록
+ */
+export const callAllPostByTypeAndCohortSn = (params) => api.get(`admin/boardList/${params.cohortSn}`);
