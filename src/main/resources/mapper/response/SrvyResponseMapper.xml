@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdt.KDT_PJT.response.mapper.SrvyResponseMapper">
+
+    <!-- 등록 -->
+    <insert id="insertResponse">
+        INSERT INTO TB_RESPONSE (
+            PARENT_SN,
+            PARENT_TYPE,
+            USER_SN,
+            RSPSN_CN,
+            RSPSN_DT,
+            DEL_YN,
+            VIEW_CNT
+        ) VALUES (
+                     #{dto.parentSn},
+                     #{dto.parentType},
+                     #{dto.userSn},
+                     #{dto.response},
+                     NOW(),
+                     FALSE,
+                     0
+                 )
+    </insert>
+
+    <!-- 수정 -->
+    <update id="updateResponse">
+        UPDATE TB_RESPONSE
+        SET RSPSN_CN = #{dto.response},
+            RSPSN_DT = NOW()
+        WHERE PARENT_SN = #{dto.parentSn}
+          AND USER_SN = #{dto.userSn}
+          AND DEL_YN = FALSE
+    </update>
+
+    <!-- 유저별 설문 단건 조회 -->
+    <select id="findByParentAndUser"
+            resultType="com.kdt.KDT_PJT.response.dto.SrvyResponseResponseDto">
+        SELECT RSPSN_SN, PARENT_TYPE, PARENT_SN, USER_SN,
+               RSPSN_DT, RSPSN_CN, VIEW_CNT, DEL_YN
+        FROM TB_RESPONSE
+        WHERE PARENT_SN = #{parentSn}
+          AND USER_SN = #{userSn}
+          AND DEL_YN = FALSE
+    </select>
+
+
+    <!-- 본인 응답만 조회 -->
+    <select id="findByParentAndUserList"
+            resultType="com.kdt.KDT_PJT.response.dto.SrvyResponseResponseDto">
+        SELECT RSPSN_SN, PARENT_TYPE, PARENT_SN, USER_SN,
+               RSPSN_DT, RSPSN_CN, VIEW_CNT, DEL_YN
+        FROM TB_RESPONSE
+        WHERE PARENT_SN = #{parentSn}
+          AND USER_SN = #{userSn}
+          AND DEL_YN = FALSE
+        ORDER BY RSPSN_DT DESC
+    </select>
+
+    <!-- PK로 단건 조회 -->
+    <select id="findById"
+            resultType="com.kdt.KDT_PJT.response.dto.SrvyResponseResponseDto">
+        SELECT RSPSN_SN, PARENT_TYPE, PARENT_SN, USER_SN,
+               RSPSN_DT, RSPSN_CN, VIEW_CNT, DEL_YN
+        FROM TB_RESPONSE
+        WHERE RSPSN_SN = #{rspsnSn}
+    </select>
+
+    <!-- 전체 응답 조회 (관리자 + 응답자 이름 포함) -->
+    <select id="findAllByParentWithUserName"
+            resultType="com.kdt.KDT_PJT.response.dto.SrvyResponseResponseDto">
+        SELECT
+            R.RSPSN_SN,
+            R.PARENT_TYPE,
+            R.PARENT_SN,
+            R.USER_SN,
+            U.USER_NM AS userName,
+            R.RSPSN_DT,
+            R.RSPSN_CN,
+            R.VIEW_CNT,
+            R.DEL_YN
+        FROM TB_RESPONSE R
+                 LEFT JOIN TB_USER U ON R.USER_SN = U.USER_SN
+        WHERE R.PARENT_SN = #{parentSn}
+          AND R.DEL_YN = FALSE
+        ORDER BY R.RSPSN_DT DESC
+    </select>
+
+    <!-- 슈퍼관리자 전용: 회사/코호트 필터 가능 -->
+    <select id="findAllByParentWithFilter"
+            resultType="com.kdt.KDT_PJT.response.dto.SrvyResponseResponseDto">
+        SELECT
+        R.RSPSN_SN,
+        R.PARENT_TYPE,
+        R.PARENT_SN,
+        R.USER_SN,
+        U.USER_NM AS userName,
+        R.RSPSN_DT,
+        R.RSPSN_CN,
+        R.VIEW_CNT,
+        R.DEL_YN
+        FROM TB_RESPONSE R
+        LEFT JOIN TB_USER U ON R.USER_SN = U.USER_SN
+        LEFT JOIN TB_SURVEY S ON R.PARENT_SN = S.SRVY_SN
+        WHERE R.PARENT_SN = #{parentSn}
+        AND R.DEL_YN = FALSE
+        <if test="coSn != null">
+            AND S.CO_SN = #{coSn}
+        </if>
+        <if test="cohortSn != null">
+            AND S.COHORT_SN = #{cohortSn}
+        </if>
+        ORDER BY R.RSPSN_DT DESC
+    </select>
+
+    <!-- Soft Delete (본인 또는 관리자) -->
+    <update id="softDelete">
+        UPDATE TB_RESPONSE
+        SET DEL_YN = TRUE,
+            RSPSN_DT = NOW()
+        WHERE RSPSN_SN = #{rspsnSn}
+          AND (USER_SN = #{userSn} OR #{userSn} IS NULL)
+    </update>
+
+</mapper>

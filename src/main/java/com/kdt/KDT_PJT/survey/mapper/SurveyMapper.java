@@ -35,7 +35,6 @@ public interface SurveyMapper {
     void softDeleteSurvey(@Param("srvySn") Long srvySn,
                           @Param("userSn") Long userSn);
 
-
     void softDeleteSurveyByAdmin(@Param("srvySn") Long srvySn);
 
 }
