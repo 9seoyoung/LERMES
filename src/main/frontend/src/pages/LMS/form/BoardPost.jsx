@@ -123,7 +123,7 @@ const selectType = (nextType) => {
       // 공통 필드 초기화
       title: "",
       content: "",
-      files: [],            // formData 안 쓰더라도 명시적으로 비움
+      files: [],            
       surveyStart: "",
       surveyEnd: "",
       // 그룹 선택은 타입별로 의미 달라질 수 있으니 하위 그룹만 비움
