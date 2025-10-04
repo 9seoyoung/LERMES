@@ -53,10 +53,14 @@ function SurveyPost({
       </div>
 
       {/* 첨부파일 리스트 */}
+      {formData.type != "설문조사" ?
       <div className='inputSet'>
         <label className='formLabel' htmlFor={`${domFormId}_file`}>파일</label>
         <FileList files={files} setFiles={setFiles}></FileList>
       </div>
+      :
+      null
+      }
     </>
   );
 }

@@ -118,7 +118,7 @@ function AppRoutes() {
               <Route path="adminHome/boardSet" element={<BoardManage />} />
               <Route
                 path="adminHome/boardSet/createPost"
-                element={<CreatePost />}
+                element={<BoardPost />}
               ></Route>
               <Route path="adminHome/groupSet" element={<GroupSet />} />
               <Route
@@ -145,7 +145,7 @@ function AppRoutes() {
               ></Route>
               <Route
                 path="tutorHome/studySched/createPost"
-                element={<CreatePost />}
+                element={<BoardPost />}
               ></Route>
               <Route
                 path="tutorHome/studySched"

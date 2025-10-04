@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum BbsType {
-    NOTICE("공지"),
+    NOTICE("공지사항"),
     CLASS_MATERIAL("자료실"),
     FAQ("FAQ"),
     QNA("문의"),

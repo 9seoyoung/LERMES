@@ -5,100 +5,89 @@ import ListTable from "../../../components/ui/ListTable";
 import { useAccount } from "../../../auth/AuthContext";
 import FilterList from "../../../components/ui/FilterList";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
-import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter,matchedPostAPIAdminBoardFilter } from "../../../utils/readPageTypeReturn";
+import { ADMIN_BOARD_MENU_FILTER_COLUMNDATA, ADMIN_BOARD_MENU_FILTER, ADMIN_SELECT_POST_SN_KEY, ADMIN_BOARD_API_FILTER } from "../../../utils/readPageTypeReturn";
 import { toast } from "react-toastify";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
+import { callAllPostByTypeAndCohortSn } from "../../../services/postService";
+import { formatDate } from "../../../utils/dateformat";
 
 export default function BoardManage(){
-    const navigate = useNavigate();
-    const [selectedIdx, setSelected] = useState(0)
-    const {user} = useAccount();
-    const {effectiveSn} = useSelectedCompany();
+  const navigate = useNavigate();
+  const {effectiveSn} = useSelectedCompany();
+  const {user} = useAccount();
+  const [selectedIdx, setSelected] = useState(0) 
+  const [pullList, setPullList] = useState([]);
+  const [columnData, setColumnData] = useState([]);
+  const [postKey, setPostKey] = useState("");
+  const [whereTogo, setWhereToGo] = useState("");
+  const [cohortSn, setCohortSn] = useState(null);
+    
     const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "임시저장"]
-    // const [filter, setFilter] = useState("");
-    const [whereTogo, setWhereToGo] = useState("/");
-    const [cohortSn, setCohortSn] = useState(null);
-    const [pullList, setPullList] = useState([]);
     
-    const filter = filterArr[selectedIdx];
-    const path = useMemo(() => matchedPathAdminBoardFilter(filter), [filter]);
-
-    const splitWroteDate = (v) => v.split("T", 1);
-
-    const toReUseObject = (pullList) => ({
-        type: pullList.postType ?? "-",
-        title: pullList.ITV_APLY_TTL ?? "-",
-        wroteDate: splitWroteDate(pullList.ITV_APLY_DT ?? "-"),
-        author: pullList.ITV_APLCNT_SN ?? "-",
-        views: "미구현",
-        postSn: pullList.ITVSN ?? ""
-      });
-      
-      // 배열 캐스팅
-      const reUseArray = pullList.map(toReUseObject);
-    
+    //게시물 목록 불러오기
     useEffect(() => {
-        const listApi = matchedListAPIAdminBoardFilter(filter);
-        console.log(` listApi = ${listApi}`);
-        console.log(`cohortSn ${cohortSn}`);
-        console.log(`filter ${filter}`);
-        console.log(`path ${path}`);
-        console.log(`path ${user.USER_OGDP_CO_SN}`)
+        const userCohortSn = user?.USER_COHORT_SN;
+        const bbsType = ADMIN_BOARD_MENU_FILTER[selectedIdx];
+        const api = ADMIN_BOARD_API_FILTER[selectedIdx];
 
-    const req = {
-        roleType: user.USER_AUTHRT_SN,
-        cohortSn: cohortSn || 0,
-        filter: filter,
-        path: path,
-        effectiveSn: null}
+        // console.log(cohortSn, bbsType, api);
 
-    if (!listApi) {
-      setPullList([]);  // 미구현 필터면 빈 리스트
-      return;
-    }
-    (async () => {
-    
+        setWhereToGo("/");
+        console.log(filterArr[selectedIdx]);
+        setColumnData(ADMIN_BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
+        setPostKey(ADMIN_SELECT_POST_SN_KEY[selectedIdx]);
 
-      try {
-        console.log(`req >>>>>>>>>>>>>>>>>`);
-        console.log(req);
-        const { data } = await listApi(req); // ← API 함수 호출
-        setPullList(data);
-        console.log(data);
-        toast.success("데이터 불러옴");
-      } catch (err) {
-        toast.error(err.message);
-      }
-    })();
-  }, [filter, cohortSn]);
+        const params = {};
+
+        if(cohortSn != null) params.cohortSn = cohortSn;
+        if(bbsType != "전체") params.bbsType = bbsType;
+        if(effectiveSn != null) params.effectiveSn = effectiveSn;
+
+        console.log(user);
+
+        (async () => {
+
+
+
+            try{
+                const {data} = await api(params);
+                console.log(data);
+                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt),}));
+                setPullList(formattedData);
+            } catch(err) {
+                toast.error(err.message);
+            }
+        }
+    )();
+    }, [selectedIdx, cohortSn])
+
 
     return (
         <div className="boardPage">
             <h2>게시물 관리</h2>
             <div className="filterList">
 
-                <div className="ftList_L">
+                <ul className="ftList_L">
                     <GroupDropdown coSn={effectiveSn} setCohortSn={setCohortSn}></GroupDropdown>
                     <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
-                </div>
-
+                </ul>
                 <div className="ftList_R">
-                    <div className="createBtn" onClick={() => navigate('createPost')}>
+                    <div className="createBtn " onClick={() => navigate('createPost')}>
                         + 등록하기
                     </div>
                 </div>
             </div>
-
             <div className="BigListBox">
                 <ListTable
-                    tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
-                    columnData={['type', 'title', 'wroteDate', 'author', 'views']}
-                    apiData={reUseArray}
-                    // 문자열로 지정
-                    gridTemplate="0.5fr 0.5fr 5fr 1fr 1fr 0.5fr "
-                    gap="12px"
-                    whereTogo = {path}
-                />
+                tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
+                columnData={columnData}
+                apiData={pullList}
+                // 문자열로 지정
+                gridTemplate="0.5fr 1fr 5fr 1.25fr 1fr 1fr"
+                gap="12px"
+                postKey={postKey}
+                whereTogo={whereTogo}
+              /> 
             </div>
         </div>
     );
