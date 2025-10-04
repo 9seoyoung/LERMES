@@ -9,6 +9,7 @@ import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -127,7 +128,6 @@ public class AttendController {
     @GetMapping("/today/list")
     public ResponseEntity<SimpleResponse> getTodayStudentAttendance(Authentication auth) {
         List<StudentAttendanceDto> attendanceList = attendService.getTodayStudentAttendance(auth);
-
         return ResponseEntity.ok(
                 SimpleResponse.builder()
                         .ok(true)
@@ -135,8 +135,6 @@ public class AttendController {
                         .data(attendanceList)
                         .build()
         );
-
-
     }
 
     /** 단위기간 별 출결 조회 (학생 마이페이지) */

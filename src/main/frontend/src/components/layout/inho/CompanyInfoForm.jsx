@@ -112,32 +112,24 @@ const CompanyInfoForm = () => {
     }).open();
   };
 
-  // 회사 로고 업로드
+  // 회사 로고 업로드 (DB 저장 안 함, state만 세팅)
   const handleLogoChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     try {
       const uploaded = await uploadEvidenceFile(file);
-      await updateCompanySmallLogo(form.companyId, uploaded.fileSn);
-
       setForm((prev) => ({ ...prev, companyLogo: uploaded.fileSn }));
-      toast.success('회사 로고 변경 완료');
+      toast.info('로고 선택 완료. 저장 버튼을 눌러야 반영됩니다.');
     } catch (e) {
       console.error(e);
       toast.error('로고 업로드 실패');
     }
   };
 
-  // 회사 로고 삭제
-  const handleLogoDelete = async () => {
-    try {
-      await deleteCompanySmallLogo(form.companyId);
-      setForm((prev) => ({ ...prev, companyLogo: null }));
-      toast.success('회사 로고 삭제 완료');
-    } catch (e) {
-      console.error(e);
-      toast.error('회사 로고 삭제 실패');
-    }
+  // 회사 로고 삭제 (DB 저장 안 함, state만 세팅)
+  const handleLogoDelete = () => {
+    setForm((prev) => ({ ...prev, companyLogo: null }));
+    toast.info('로고 삭제됨. 저장 버튼을 눌러야 반영됩니다.');
   };
 
   // 저장
@@ -255,11 +247,17 @@ const CompanyInfoForm = () => {
           <div className="companyInfoRow">
             <span className="companyInfoLabel">회사 로고</span>
             <input
+              id="companyLogoUpload"
               type="file"
               accept="image/*"
+              style={{ display: 'none' }} // ← 기본 UI 숨김
               onChange={handleLogoChange}
-              className="companyDetailInfoInput"
             />
+
+            <label htmlFor="companyLogoUpload" className="companyLogoSelectBtn">
+              파일 선택
+            </label>
+            <span>{form.companyLogoName || ''}</span>
             <button
               type="button"
               className="companyInfoButton"

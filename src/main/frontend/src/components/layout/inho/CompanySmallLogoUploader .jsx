@@ -67,7 +67,7 @@ export default function CompanySmallLogoUploader() {
       style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
     >
       {/* 로고 영역 */}
-      <div className="logoWrapper">
+      {/* <div className="logoWrapper">
         {logoFileSn ? (
           <img
             src={`http://localhost:940/api/files/id/${logoFileSn}`}
@@ -77,7 +77,7 @@ export default function CompanySmallLogoUploader() {
         ) : (
           <div className="logoPlaceholder">회사 로고</div>
         )}
-      </div>
+      </div> */}
 
       {/* 버튼 영역 (세로 배치) */}
       {canEdit && (

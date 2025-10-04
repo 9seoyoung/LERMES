@@ -57,7 +57,10 @@ export default function FindPw() {
   };
 
   return (
-    <div className="contBox">
+    <div
+      className="contBox"
+      style={{ display: 'flex', flexDirection: 'column' }}
+    >
       <div className="signup-inner">
         <div className="signup-title">비밀번호 찾기</div>
 

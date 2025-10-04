@@ -6,7 +6,7 @@ import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../../auth/AuthContext';
 import CardBack from '../../components/ui/CardBack';
-import { MdHome } from "react-icons/md";
+import { MdHome } from 'react-icons/md';
 
 export default function SuperMain() {
   const { user } = useAccount();
@@ -16,7 +16,15 @@ export default function SuperMain() {
   const navigate = useNavigate();
   const myCoSn = user?.USER_OGDP_CO_SN;
   const myAuth = user?.USER_AUTHRT_SN;
-  const authLvPath = { 1:'adminHome', 2:'adminHome', 3:'adminHome', 4:'tutorHome', 5:'stdHome', 6:'visitorHome', 7:'visitorHome' };
+  const authLvPath = {
+    1: 'adminHome',
+    2: 'adminHome',
+    3: 'adminHome',
+    4: 'tutorHome',
+    5: 'stdHome',
+    6: 'visitorHome',
+    7: 'visitorHome',
+  };
 
   useEffect(() => {
     (async () => {
@@ -51,36 +59,44 @@ export default function SuperMain() {
 
         return (
           <div
-          key={v.id ?? idx}
-          className={cardStyle.flipCard}
-          onClick={() => {setFlipped(flipped === v.id ? null : v.id); setFixedSn(v.id)}}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
+            key={v.id ?? idx}
+            className={cardStyle.flipCard}
+            onClick={() => {
               setFlipped(flipped === v.id ? null : v.id);
-            }
-          }}
-          aria-pressed={flipped === v.id}
-        >
-          <div className={`${cardStyle.flipInner} ${flipped === v.id ? cardStyle.isFlipped : ''}`}>
-            {/* 앞면: 기존 .company_card 그대로 */}
+              setFixedSn(v.id);
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setFlipped(flipped === v.id ? null : v.id);
+              }
+            }}
+            aria-pressed={flipped === v.id}
+          >
             <div
-              className={cardStyle.company_card}
-              style={{
-                backgroundImage: v?.bigLogoFileSn
-                  ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
-                  : 'none',
-                backgroundSize: 'contain',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-              }}
+              className={`${cardStyle.flipInner} ${
+                flipped === v.id ? cardStyle.isFlipped : ''
+              }`}
             >
-              <div></div>
-              <div className={cardStyle.card_bottom}>
-                <p className={cardStyle.title} data-title-type="3">{v?.name}
-                  {/* <button
+              {/* 앞면: 기존 .company_card 그대로 */}
+              <div
+                className={cardStyle.company_card}
+                style={{
+                  backgroundImage: v?.bigLogoFileSn
+                    ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
+                    : 'none',
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              >
+                <div></div>
+                <div className={cardStyle.card_bottom}>
+                  <p className={cardStyle.title} data-title-type="3">
+                    {v?.name}
+                    {/* <button
                     style={{display:"flex", height: "100%", padding:"4px", alignItems: "end"}}
                     type="button"
                     onClick={(e) => {
@@ -91,35 +107,45 @@ export default function SuperMain() {
                   >
                     <MdHome></MdHome>
                   </button> */}
-                  {/* <button type="button" style={{display:"flex", height: "100%", padding:"2px 4px", alignItems: "end", fontSize: "1.2rem", fontWeight: "700"}} className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
+                    {/* <button type="button" style={{display:"flex", height: "100%", padding:"2px 4px", alignItems: "end", fontSize: "1.2rem", fontWeight: "700"}} className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
                     {`${!v.stts ? "" : "모집중" }`}
                   </button> */}
-                </p>
-                <p className={cardStyle.title}>{`${(v?.companyAddress ?? "소재지" )+ " " + ( v?.companyAddressDetail ?? "정보 없음" )}`}</p>
-                <div className={cardStyle.row} data-box-type="row">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation(); // 카드 뒤집힘 방지
-                      setFixedSn(v.id);
-                      handleGoLms(v.id);
-                    }}
-                  >
-                    LMS 바로가기
-                  </button>
-                  <button type="button" className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
-                    {`${!v.stts ? "-" : "모집중" }`}
-                  </button>
+                  </p>
+                  <p className={cardStyle.title}>{`${
+                    (v?.companyAddress ?? '소재지') +
+                    ' ' +
+                    (v?.companyAddressDetail ?? '정보 없음')
+                  }`}</p>
+                  <div className={cardStyle.row} data-box-type="row">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation(); // 카드 뒤집힘 방지
+                        setFixedSn(v.id);
+                        handleGoLms(v.id);
+                      }}
+                    >
+                      LMS 바로가기
+                    </button>
+                    <button
+                      type="button"
+                      className={!v.stts ? null : cardStyle.sttsBtn}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {`${!v.stts ? '-' : '모집중'}`}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-        
-            {/* 뒷면: 동일 크기, 다른 내용 */}
-            <div className={`${cardStyle.company_card} ${cardStyle.card_back}`}>
-              <CardBack effectiveSn={effectiveSn}></CardBack>
+
+              {/* 뒷면: 동일 크기, 다른 내용 */}
+              <div
+                className={`${cardStyle.company_card} ${cardStyle.card_back}`}
+              >
+                <CardBack effectiveSn={effectiveSn}></CardBack>
+              </div>
             </div>
           </div>
-        </div>
         );
       })}
     </div>

@@ -3,11 +3,14 @@ package com.kdt.KDT_PJT.auth.api;
 import com.kdt.KDT_PJT.attend.dto.SimpleResponse;
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import com.kdt.KDT_PJT.auth.dto.ApiResponse;
+import com.kdt.KDT_PJT.auth.dto.mypage.PasswordChangeRequest;
 import com.kdt.KDT_PJT.auth.dto.mypage.UpdateUserProfileRequest;
 import com.kdt.KDT_PJT.auth.dto.mypage.UserProfileResponse;
+import com.kdt.KDT_PJT.auth.service.PasswordService;
 import com.kdt.KDT_PJT.auth.service.UserProfileService;
 import com.kdt.KDT_PJT.file.dto.UploadResultDTO;
 import com.kdt.KDT_PJT.file.service.FileService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +26,7 @@ public class UserProfileController {
 
     private final UserProfileService userProfileService;
     private final FileService fileService;
+    private final PasswordService passwordService;
 
     @GetMapping
     public ResponseEntity<ApiResponse> getUserProfile(
@@ -57,5 +61,27 @@ public class UserProfileController {
                         "fileSn", req.getUserProfileImage() != null ? req.getUserProfileImage() : 0L
                 ))
                 .build();
+    }
+
+    @PostMapping("/password/change")
+    public ResponseEntity<?> changePassword(
+            @AuthenticationPrincipal AuthCustomUserDetails principal,
+            @Valid @RequestBody PasswordChangeRequest req) {
+
+        if (principal == null) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("ok", false, "message", "로그인이 필요합니다."));
+        }
+
+        try {
+            passwordService.changePassword(principal.getId(), req);
+            return ResponseEntity.ok(Map.of("ok", true, "message", "비밀번호가 변경되었습니다."));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("ok", false, "message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("ok", false, "message", "서버 오류가 발생했습니다."));
+        }
     }
 }
