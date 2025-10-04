@@ -325,7 +325,8 @@ footer>div:hover {
 .mainCont_Lms_Row {
   display: flex;
   width: 100%;
-  min-height: 702px;
+  min-height: 572px;
+  height: 572px;
   gap: 24px;
 }
 
