@@ -110,7 +110,38 @@ function BoardPost() {
   });
 
   console.log(user)
+// BoardPost.jsx 내부(컴포넌트 함수 안)
 
+const selectType = (nextType) => {
+  // 같은 타입이면 아무 것도 안 함
+  setFormData(prev => {
+    if (prev.type === nextType) return prev;
+
+    return {
+      ...prev,
+      type: nextType,
+      // 공통 필드 초기화
+      title: "",
+      content: "",
+      files: [],            // formData 안 쓰더라도 명시적으로 비움
+      surveyStart: "",
+      surveyEnd: "",
+      // 그룹 선택은 타입별로 의미 달라질 수 있으니 하위 그룹만 비움
+      detailScope: "",
+      detailScopeNm: "",
+    };
+  });
+
+  // 실제 업로드 파일 상태도 비움
+  setFiles([]);
+
+  // 설문 타입 전환 시 설문 폼 초기화 / 비설문이면 비워두기
+  setSurveyForm(
+    nextType === "설문조사"
+      ? { id: postId.current, pages: [{ id: uuidv4(), questions: [] }] }
+      : { id: postId.current, pages: [] }
+  );
+};
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -190,7 +221,7 @@ function BoardPost() {
 
   useEffect(() => {
     
-  })
+  },[formData.type])
 
   return (
     <div className="boardPage">
@@ -224,13 +255,14 @@ function BoardPost() {
                   {(userAuth === 2 || userAuth === 3 || userAuth === 1) ?
                   // 관리자들은 등록하기 이거밖에 없지 않나! 이거 고정
                       <>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "공지사항" }))}>공지사항</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "FAQ" }))}>FAQ</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
+                        {/* 관리자 예시 */}
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("공지사항")}>공지사항</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("자료실")}>자료실</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("설문조사")}>설문조사</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("FAQ")}>FAQ</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("문의")}>문의</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("일정")}>일정</p>
+                        <p className={layoutStyles.subMenuList} onClick={() => selectType("면담기록")}>면담기록</p>
                       </>
                   : 
                   // 관리자 외
@@ -328,7 +360,11 @@ function BoardPost() {
             </div>
 
             <div className="r_bottom">
+              {formData.type != "설문조사" ?
               <FileUpload files={files} setFiles={setFiles} />
+              :
+              null
+              }
               <ul>
                 {surveyForm.pages.map((page) => (
                     <React.Fragment key={page.id}>

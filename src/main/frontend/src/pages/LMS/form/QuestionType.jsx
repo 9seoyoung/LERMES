@@ -97,6 +97,7 @@ const QuestionType = forwardRef(function QuestionType(
         </div>
 
         <textarea
+          rows={2}
           className="questionCont"
           placeholder="질문 설명"
           value={q.explain}
