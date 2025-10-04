@@ -80,10 +80,9 @@ function BoardPost() {
   const locate = useLocation();
   const {effectiveSn} = useSelectedCompany();
   const navigate = useNavigate();
-  // const [loading, setLoading] = useState(false);
-
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
+
 
   // 설문 폼 (초기 페이지 하나 생성)
   const [surveyForm, setSurveyForm] = useState({
@@ -104,7 +103,6 @@ function BoardPost() {
     detailScopeNm: "",
     surveyStart: "",     // 설문조사
     surveyEnd: "",   // 설문조사
-    files: files,
     coSn: effectiveSn,
     cohortSn: cohortSn
   });
@@ -123,7 +121,6 @@ const selectType = (nextType) => {
       // 공통 필드 초기화
       title: "",
       content: "",
-      files: [],            
       surveyStart: "",
       surveyEnd: "",
       // 그룹 선택은 타입별로 의미 달라질 수 있으니 하위 그룹만 비움
@@ -154,12 +151,7 @@ const selectType = (nextType) => {
 
     const formUuid = postId.current || uuidv4();
 
-    const uploads = files.length
-    ? await uploadFiles(files, {
-        onProgress: (pct) => console.log("upload:", pct + "%"),
-        formUuid
-      })
-    : [];
+
 
     // 2) 게시글 JSON (File 객체 넣지 말기!)
     const postJson = {
@@ -173,12 +165,12 @@ const selectType = (nextType) => {
       scope: formData.scope,
       detailScope: formData.detailScope,
       detailScopeNm: formData.detailScopeNm,
-      attachments: uploads.map(u => ({
-      storedFileName: u.storedFileName,
-      originalFileName: u.originalFileName,
-      size: u.size,
-      // fileSn 내려오면 그걸 써도 OK
-    })),
+    //   attachments: uploads.map(u => ({
+    //   storedFileName: u.storedFileName,
+    //   originalFileName: u.originalFileName,
+    //   size: u.size,
+    //   // fileSn 내려오면 그걸 써도 OK
+    // })),
     ...(formData.type === "설문조사" ? { surveyForm } : {}),
     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
   };
@@ -190,14 +182,31 @@ const selectType = (nextType) => {
   const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
   console.log("[will send to server]", JSON.stringify(body, null, 2));
+  console.log("[FILES state]", files.map(f => ({ name: f.name, size: f.size })));
   console.table(snapshot.formData);
 
   // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
   try {
-    const res = await (formData.type === "설문조사"
+    const {data} = await (formData.type === "설문조사"
       ? createSurvey(postJson)
       : createPost(postJson)); // createPost는 너희 규약대로
-    console.log("saved:", res);
+    console.log("saved:", data);
+
+        const serverFormUuid = data?.formUuid || data?.result?.formUuid;
+        if (!serverFormUuid) {
+          toast.error("서버에서 formUuid를 받지 못했어요.");
+          console.error("[createPost 응답]", data);
+          return; // 업로드 중단
+        }
+      
+        let uploads = [];
+        if (Array.isArray(files) && files.length > 0) {
+          uploads = await uploadFiles(files, {
+            formUuid: serverFormUuid,
+            onProgress: pct => console.log("upload:", pct + "%"),
+          });
+        }
+    
     alert("저장 완료!");
     navigate(-1);
   } catch (err) {
@@ -239,7 +248,6 @@ const selectType = (nextType) => {
                 formData={formData}
                 surveyForm={surveyForm}
                 setSurveyForm={setSurveyForm}
-                FileList={FileList}
                 files={files}
                 setFiles={setFiles}
                 containerRef={scrollRef}

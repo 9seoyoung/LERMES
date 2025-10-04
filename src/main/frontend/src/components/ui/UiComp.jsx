@@ -7,6 +7,8 @@ import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
 import FilePreview from './FilePreview';
 import ListTable from './ListTable';
+import { useAccount } from '../../auth/AuthContext';
+import { downloadFileByFileSn } from '../../services/fileService';
 
 export function UiComp() {
   const arr1 = ["#", "이름", "이메일"];
@@ -332,7 +334,8 @@ export function FileUpload({ files, setFiles }) {
 }
 
 // 파일 목록
-export function FileList({ files, setFiles, noShow }) {
+export function FileList({ files, setFiles, noShow, uploadUser, editToggle }) {
+  const {user} = useAccount();
   const removeFile = (idx) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
   };
@@ -342,11 +345,15 @@ export function FileList({ files, setFiles, noShow }) {
       {files.map((file, idx) => (
         <li key={idx}>
           <span>
-            {file.name}
             { noShow ? 
-              null
+              <>
+                <div onClick={() => downloadFileByFileSn(file.fileSn, file.name )}>{file.name ?? file}</div>
+              </>
               :
-              <DeleteBtn onClick={() => removeFile(idx)} />
+              <>
+                {file.name ?? file}
+                <DeleteBtn onClick={() => removeFile(idx)} />
+              </>
             }
           </span>
         </li>

@@ -5,7 +5,7 @@ import ListTable from "../../../components/ui/ListTable";
 import { useAccount } from "../../../auth/AuthContext";
 import FilterList from "../../../components/ui/FilterList";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
-import { ADMIN_BOARD_MENU_FILTER_COLUMNDATA, ADMIN_BOARD_MENU_FILTER, ADMIN_SELECT_POST_SN_KEY, ADMIN_BOARD_API_FILTER } from "../../../utils/readPageTypeReturn";
+import { ADMIN_BOARD_MENU_FILTER_COLUMNDATA, ADMIN_BOARD_MENU_FILTER, ADMIN_SELECT_POST_SN_KEY, ADMIN_BOARD_API_FILTER, ADMIN_SELECT_DETAIL_PAGE_PATH } from "../../../utils/readPageTypeReturn";
 import { toast } from "react-toastify";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { callAllPostByTypeAndCohortSn } from "../../../services/postService";
@@ -22,7 +22,7 @@ export default function BoardManage(){
   const [whereTogo, setWhereToGo] = useState("");
   const [cohortSn, setCohortSn] = useState(null);
     
-    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "임시저장"]
+    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록"]
     
     //게시물 목록 불러오기
     useEffect(() => {
@@ -36,6 +36,7 @@ export default function BoardManage(){
         console.log(filterArr[selectedIdx]);
         setColumnData(ADMIN_BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
         setPostKey(ADMIN_SELECT_POST_SN_KEY[selectedIdx]);
+        setWhereToGo(ADMIN_SELECT_DETAIL_PAGE_PATH[selectedIdx])
 
         const params = {};
 
