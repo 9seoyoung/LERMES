@@ -242,15 +242,32 @@ function CreatePost() {
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체 공개" }))}>전체 공개</p>
-                  {(userAuth === 5) ?
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
+                {formData?.type === "설문조사" ?
+                  // 설문조사 유형일 경우
+                  <> 
+                    {userAuth <= 3 ?
+                      <>
+
+                      </>
+                      :
+                      <>
+                      </>
+                    }
+                  </>
                   :
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
-                  } 
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
-                  <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                  //설문조사 유형이 아닌 경우
+                  <>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
+                    {(userAuth === 5) ?
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
+                      :
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "소속그룹" }))}>소속그룹</p>
+                      } 
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "관리자" }))}>관리자</p>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
+                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                  </>
+                  }
                 </Dropdown>
                 <input type="hidden" name="scope" value={formData.scope} />
               </div>
