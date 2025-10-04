@@ -3,8 +3,8 @@ import styles from "./fileUpload.module.css";
 
 // 옵션: 허용 확장자/최대 개수/최대 용량(MB)
 const ACCEPT = ".png,.jpg,.jpeg,.pdf,.doc,.docx";
-const MAX_COUNT = 10;
-const MAX_SIZE_MB = 20;
+const MAX_COUNT = 2;
+const MAX_SIZE_MB = 50;
 
 export function FileUpload({ files, setFiles }) {
   const inputRef = useRef(null);

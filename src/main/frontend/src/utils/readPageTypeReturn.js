@@ -1,4 +1,4 @@
-import { readInterviewList, readInterview, callAllPostByTypeAndCohortSn, writtenInterview, callBoardList } from "../services/postService";
+import { readInterviewList, readInterview, callAllPostByTypeAndCohortSn, writtenInterview, callBoardList, readPostByPostSn } from "../services/postService";
 
 
 const PATH_BY_FILTER = {
@@ -26,12 +26,12 @@ const API_BY_FILTER = {
 };
 
 const DETAIL_API_BY_FILTER = {
-  // '공지': readNoticeList,
-  // '일정': readScheduleList,
-  // '자료실': readDocsList,
-  // '설문': readSurveyList,
-  // 'FAQ': readFaqList,
-  // 'Q&A': readQnaList,
+  '공지': readPostByPostSn,
+  '일정': readPostByPostSn,
+  '자료실': readPostByPostSn,
+  '설문': readPostByPostSn,
+  'FAQ': readPostByPostSn,
+  'Q&A': readPostByPostSn,
   '면담요청': readInterview,
   // '면담기록': ,
   // '임시저장': readDraftList,
@@ -95,12 +95,14 @@ export const ADMIN_SELECT_POST_SN_KEY = {
 
 export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
     0: 0,
-    1: "/stdHome/board",
-    2: "/stdHome/board",
-    3: "/stdHome/board",
-    4: "/stdHome/board", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
-    5: "/stdHome/board",
-    6: ""
+    1: "/adminHome/board",
+    2: "/adminHome/board",
+    3: "/adminHome/board",
+    4: "/adminHome/board", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/adminHome/board",
+    6: "",
+    7: "/adminHome/studySched/interview",
+    8: "",
 
 }
 

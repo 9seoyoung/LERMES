@@ -116,6 +116,7 @@ function AppRoutes() {
                 element={<AdminPostRead />}
               ></Route>
               <Route path="adminHome/boardSet" element={<BoardManage />} />
+              <Route path="adminHome/board/:postSn" element={<BoardRead2 />} />
               <Route
                 path="adminHome/boardSet/createPost"
                 element={<BoardPost />}

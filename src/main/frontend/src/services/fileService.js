@@ -99,3 +99,42 @@ export async function createPostWithFiles(postJson, files, { onProgress } = {}) 
     });
     return data; // PostResponse
   }
+
+
+  /**
+   * 폼 uuid로 파일 SN 받아오기
+   * @param {uuid} formUuid 응답으로 받아온 폼 uuid
+   * @returns {Array} fileSn 배열 
+   */
+  export const findFileSnByFormUuid = (formUuid) => api.get(`/formUuid/${formUuid}`);
+  
+  /**
+   * 파일 SN으로 파일 다운로드하기
+   * @param {Number} fileSn
+   * @returns {File} 
+   */
+
+  export const downloadFileByFileSn = async (fileSn, fileNm) => {
+    const res = await api.get(`/id/${fileSn}`, { responseType: 'blob' });
+  
+    // 파일명 파싱 (Content-Disposition 헤더에서)
+    let filename = fileNm;
+    const cd = res.headers?.['content-disposition'];
+    if (cd) {
+      // filename*=UTF-8''... 또는 filename="..."
+      const mStar = /filename\*=(?:UTF-8'')?([^;]+)/i.exec(cd);
+      const mBasic = /filename="?([^\";]+)"?/i.exec(cd);
+      const raw = (mStar && mStar[1]) || (mBasic && mBasic[1]);
+      if (raw) filename = decodeURIComponent(raw.replace(/["]/g, ''));
+    }
+  
+    const blobUrl = URL.createObjectURL(res.data);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;         // 이게 있어야 저장 대화상자 뜸
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+  };
