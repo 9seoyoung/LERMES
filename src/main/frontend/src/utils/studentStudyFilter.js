@@ -16,8 +16,8 @@ export const STUDENT_STUDY_MENU_FILTER = {
 
 export const MENU_FILTER_COLUMNDATA = {
     0: [],
-    1: [],
-    2: [],
+    1: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
+    2: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     3: [],
     4: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
     5: []

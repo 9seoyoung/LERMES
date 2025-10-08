@@ -8,7 +8,7 @@ import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, 
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
 
-function StudyManage() {
+function StudyPlan() {
     const navigate = useNavigate();
     const { effectiveSn } = useSelectedCompany();
     const filterArr = ["전체", "공식 일정", "내 일정", "학습 일지", "면담"];
@@ -80,4 +80,4 @@ function StudyManage() {
     );
 }
 
-export default StudyManage
+export default StudyPlan
