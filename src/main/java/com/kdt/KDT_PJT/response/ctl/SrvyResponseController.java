@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SrvyResponseController {
 
-    //단건조회는 따로 만들었음
+    //등록, 수정, 삭제 리스트 조회까지만 있음 단건조회는 따로 만들었음 
     private final SrvyResponseService srvyResponseService;
 
     //등록 및 수정
@@ -33,7 +33,7 @@ public class SrvyResponseController {
         return ResponseEntity.ok(saved);
     }
 
-     //설문 응답 조회
+     //설문 응답 리스트 조회
      // 관리자: 전체 유저 응답
      // 수강생: 본인 응답만
 

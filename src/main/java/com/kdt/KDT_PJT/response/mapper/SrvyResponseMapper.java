@@ -27,6 +27,9 @@ public interface SrvyResponseMapper {
     // 응답 단건 조회 (PK 기준)
     SrvyResponseResponseDto findById(@Param("rspsnSn") Long rspsnSn);
 
+    // 관리자·강사용 전체 응답 조회 (유저명 포함)
+    List<SrvyResponseResponseDto> findAllByParentWithUserName(@Param("parentSn") Long parentSn);
+
     // 슈퍼관리자 전용: coSn / cohortSn 필터 지원
     List<SrvyResponseResponseDto> findAllByParentWithFilter(@Param("parentSn") Long parentSn,
                                                             @Param("coSn") Long coSn,

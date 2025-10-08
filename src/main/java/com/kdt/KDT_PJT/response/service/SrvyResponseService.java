@@ -59,6 +59,16 @@ public class SrvyResponseService {
         // 4. 최종 응답 반환
         return srvyResponseMapper.findByParentAndUser(parentSn, userSn);
     }
+    //목록 조회
+    @Transactional(readOnly = true)
+    public List<SrvyResponseResponseDto> getResponses(Long srvySn, Long roleId, Long userSn) {
+        if (SurveyRole.fromCode(roleId).isAdmin()) {
+            // 관리자, 강사
+            return srvyResponseMapper.findAllByParentWithUserName(srvySn);
+        }
+        // 일반 사용자
+        return srvyResponseMapper.findByParentAndUserList(srvySn, userSn);
+    }
 
     //설문 응답 삭제 (Soft Delete) 설문이 마감되면 불가능 / 마감 전 관리자 or 본인만 가능
     @Transactional

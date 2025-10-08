@@ -102,6 +102,18 @@
         ORDER BY S.SRVY_FRST_WRT_DT DESC
     </select>
 
+    <!--응답 테이블 작성자 비교-->
+    <select id="findWriterBySurveySn" resultType="map">
+        SELECT
+            USER_SN   AS writerSn,
+            COHORT_SN AS cohortSn,
+            SRVY_SCOPE AS srvyScope
+        FROM TB_BBS_SURVEY
+        WHERE SRVY_SN = #{srvySn}
+          AND SRVY_DEL_YN = FALSE
+            LIMIT 1
+    </select>
+
 
     <!-- 수정 (작성자용) -->
     <update id="updateSurveyOwner">
