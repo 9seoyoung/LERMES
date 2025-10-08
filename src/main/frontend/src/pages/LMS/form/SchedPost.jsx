@@ -1,8 +1,6 @@
-// 페이지찾기 - 게시글 등록
-import React from 'react'
-import { FileList } from '../../../components/ui/UiComp'
+import { FileList } from "../../../components/ui/UiComp"
 
-export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) => {
+export const SchedPost = ({formId, handleChange, formData, files, setFiles}) => {
   return (
     <>
     <div className='formHeader'>
@@ -33,4 +31,3 @@ export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) =
     </>
   )
 }
-

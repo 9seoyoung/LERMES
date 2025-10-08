@@ -22,8 +22,8 @@ function PostStatus(props) {
   switch (type) {
     case "공지사항":
     case "자료실":
-    case "학습일지":
-    case "FAQ":
+      case "FAQ":
+      case "학습일지":
       return (
           <ArticlePost
               postId={postId.current}
@@ -264,59 +264,64 @@ const selectType = (nextType) => {
                   // 관리자들은 등록하기 이거밖에 없지 않나! 이거 고정
                       <>
                         {/* 관리자 예시 */}
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("공지사항")}>공지사항</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("자료실")}>자료실</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("설문조사")}>설문조사</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("FAQ")}>FAQ</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("문의")}>문의</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("일정")}>일정</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => selectType("면담기록")}>면담기록</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("공지사항")}>공지사항</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("자료실")}>자료실</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("설문조사")}>설문조사</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("FAQ")}>FAQ</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("문의")}>문의</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("일정")}>일정</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => selectType("면담기록")}>면담기록</p>
                       </>
                   : 
                   // 관리자 외
                   <>
                   {/* 4, 5 권한은 페이지 별로 줘야지 */}
+                  {/* 강사일 경우 */}
                   {(userAuth === 4) ?
                     <>
                       { locate.pathname === "/tutorHome/board/createPost"  ? 
                         <>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
                         </> : <></> }
-
-                      { locate.pathname === "/tutorHome/studentManage/interviewPost"  ? 
-                        <>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
-                        </> : <></> } 
 
                       { locate.pathname === "/tutorHome/studySched/createPost"  ? 
                         <>
-                          <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
+                        </> : <></> } 
+
+                      { locate.pathname === "/tutorHome/studentManage/createPost"  ? 
+                        <>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
 
                         </> : <></> } 
                     </>
                     :
-                    <>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
-                    </>
+                      null
                   }
-                  {(userAuth === 5) && (locate.pathname === "/stdHome/board/createPost") ? <>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({...s, type: "자료실"}))}>자료실</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
-                        <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
-                      </>
-                      : 
-                      <>
-                                            <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
-                      </>
+                  {/* 학생일 경우 */}
+                  {(userAuth === 5) ?
+                    <>
+                      { locate.pathname === "/stdHome/board/createPost"  ? 
+                        <>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
+                        </> : <></> }
+
+                      { locate.pathname === "/stdHome/studySched/createPost"  ? 
+                        <>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+                        </> : <></> } 
+                    </>
+                    :
+                    null
                   }
                   </>
                 }
@@ -329,23 +334,23 @@ const selectType = (nextType) => {
                   { userAuth === 1 || (( userAuth === 2 || userAuth === 3) && (effectiveSn === coSn)) ? <> 
                   <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
                   {/* 관리자 공개 범위 */}
-                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
-                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "회사공개" }))}>회사공개</p>
-                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개" }))}>그룹공개</p>
-                    <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
+                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "회사공개" }))}>회사공개</p>
+                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개" }))}>그룹공개</p>
+                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
                   </Dropdown>
                   </>: null }
                   { ( userAuth === 4 || userAuth === 5) && (effectiveSn === coSn) ?<>
                     <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개", cohortSn: cohortSn }))}>그룹공개</p>
-                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개", cohortSn: cohortSn }))}>그룹공개</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
                     </Dropdown>
                   </>: null }
                     
                 <input type="hidden" name="scope" value={formData.scope} />
               </div>
 
-              {formData.scope === "그룹공개" && (
+              {(formData.scope === "그룹공개" && userAuth <= 3) && (
                 <div className="dropSet" style={{ zIndex: "1" }}>
                   <p>하위 그룹</p>
                   <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
@@ -373,6 +378,7 @@ const selectType = (nextType) => {
               :
               null
               }
+              {formData.type === "설문조사" ?
               <ul>
                 {surveyForm.pages.map((page) => (
                     <React.Fragment key={page.id}>
@@ -400,8 +406,9 @@ const selectType = (nextType) => {
                     </React.Fragment>
                 ))}
               </ul>
+              : null }
               <div className="save_box">
-                <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button>
+                {/* <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button> */}
                 <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>저장</button>
               </div>
             </div>

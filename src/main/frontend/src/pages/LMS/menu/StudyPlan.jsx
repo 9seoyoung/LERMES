@@ -52,7 +52,7 @@ function StudyManage() {
                     <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
-                    <div className="createBtn " onClick={() => navigate('interviewPost')}>
+                    <div className="createBtn " onClick={() => navigate('studyPost')}>
                         + 등록하기
                     </div>
                 </div>

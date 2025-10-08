@@ -56,6 +56,7 @@ import BoardPost from '../pages/LMS/form/BoardPost.jsx';
 import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
 import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
 import UnknownHome from '../pages/LMS/UnknownHome.jsx';
+import StudyPost from '../pages/LMS/form/StudyPost.jsx';
 function AppRoutes() {
   return (
     <Routes>
@@ -111,26 +112,14 @@ function AppRoutes() {
             {/* 관리자(테넌트, 직원) */}
             <Route element={<RoleRoute roles={[1, 2, 3]} />}>
               <Route path="adminHome" element={<AdminHome />} />
-              <Route
-                path="adminHome/boardSet/readInterview"
-                element={<AdminPostRead />}
-              ></Route>
+              <Route path="adminHome/boardSet/readInterview" element={<AdminPostRead />} />
               <Route path="adminHome/boardSet" element={<BoardManage />} />
+              <Route path="adminHome/boardSet/createPost" element={<BoardPost />} />
               <Route path="adminHome/board/:postSn" element={<BoardRead2 />} />
-              <Route
-                path="adminHome/boardSet/createPost"
-                element={<BoardPost />}
-              ></Route>
               <Route path="adminHome/groupSet" element={<GroupSet />} />
-              <Route
-                path="adminHome/groupSet/createGroup"
-                element={<RecruitPost />}
-              />
-              <Route path="adminHome/docuSet" element={<DocxSet />}></Route>
-              <Route
-                path="adminHome/accountSet"
-                element={<AccountSet />}
-              ></Route>
+              <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
+              <Route path="adminHome/docuSet" element={<DocxSet />}/>
+              <Route path="adminHome/accountSet" element={<AccountSet />} />
               <Route path="adminHome/myPage" element={<AdminMypage />} />
             </Route>
 
@@ -138,28 +127,12 @@ function AppRoutes() {
             <Route element={<RoleRoute roles={[1, 4]} />}>
               <Route path="tutorHome" element={<TutorHome />} />
               <Route path="tutorHome/board" element={<Board />} />
+              <Route path="tutorHome/board/createPost" element={<BoardPost />} />
               <Route path="tutorHome/board/:postSn" element={<BoardRead2 />} />
-
-              <Route
-                path="tutorHome/board/createPost"
-                element={<BoardPost />}
-              ></Route>
-              <Route
-                path="tutorHome/studySched/createPost"
-                element={<BoardPost />}
-              ></Route>
-              <Route
-                path="tutorHome/studySched"
-                element={<StudyManage />}
-              ></Route>
-              <Route
-                path="tutorHome/studentManage"
-                element={<StudentManage />}
-              ></Route>
-              <Route
-                path="tutorHome/studentManage/interviewPost"
-                element={<InterviewPost />}
-              ></Route>
+              <Route path="tutorHome/studySched/createPost" element={<BoardPost />} />
+              <Route path="tutorHome/studySched" element={<StudyManage />} />
+              <Route path="tutorHome/studentManage" element={<StudentManage />} />
+              <Route path="tutorHome/studentManage/interviewPost" element={<InterviewPost />} />
               <Route path="tutorHome/myPage" element={<TutorMypage />} />
             </Route>
 
@@ -170,6 +143,7 @@ function AppRoutes() {
               <Route path="stdHome/board/createPost" element={<BoardPost />} />
               <Route path="stdHome/board/:postSn" element={<BoardRead2 />} />
               <Route path="stdHome/studySched" element={<StudyPlan />} />
+              <Route path='stdHome/studySched/studyPost' element={<StudyPost />} />
               <Route path="stdHome/studySched/interviewPost" element={<InterviewPost />} />
               <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />
               <Route path="stdHome/myPage" element={<StdMypage />} />

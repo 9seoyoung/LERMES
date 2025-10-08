@@ -10,6 +10,7 @@ import { createPost } from '../../../services/postService';
 
 import SurveyPost from './SurveyPost';
 import { DateTimeInput } from '../../../components/ui/UiComp';
+import InterviewPost from './InterviewPost';
 
 
 // StudyPost.jsx
@@ -119,6 +120,7 @@ function StudyPost() {
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
             />
+            <InterviewPost></InterviewPost>
           </div>
 
           <div className="formArea_R">
@@ -138,8 +140,13 @@ function StudyPost() {
                   : ""}
                   {(userAuth === 4 || userAuth === 5) ? (
                     <>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+                      <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
+                      {userAuth === 4 ?
                       <p className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
+                      : null
+                      }
                     </>
                   ) : ""}
                 </Dropdown>
@@ -183,7 +190,6 @@ function StudyPost() {
             <div className="r_bottom">
               <FileUpload files={files} setFiles={setFiles} />
               <div className="save_box">
-                <button className="basicBtn tempBtn" type="button" onClick={tempSubmit}>임시 저장</button>
                 <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>저장</button>
               </div>
             </div>

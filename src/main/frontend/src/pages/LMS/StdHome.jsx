@@ -8,9 +8,12 @@ export default function StdHome() {
     // const [selectedDate, setSelectedDate] = useState(null); // 공유할 상태
   
   return (
-    <div className="mainCont_Lms_Row">
-      <div className="main_L" style={{ width: '40%' }}>
+    <div className="mainCont_Lms_Row" style={{height:"702px"}}>
+      <div className="main_L" style={{ width: '40%', height: "100%" }}>
+        <div className='dashBoardModule' style={{ height: '100%' }}>
+
           <CalSched></CalSched>
+          </div>
       </div>
       <div className="main_R" style={{ flex: '1', gap: '16px' }}>
         <div className='max_height'>
