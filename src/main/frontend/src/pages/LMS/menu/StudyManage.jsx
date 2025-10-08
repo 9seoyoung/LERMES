@@ -6,7 +6,7 @@ import { useState } from "react";
 
 function StudyManage() {
     const navigate = useNavigate();
-    const filterArr = ["전체", "공식", "내 일정", "일지", "자료실"];
+    const filterArr = ["전체", "공식일정", "개인일정", "일지", "자료실"];
     const [selectedIdx, setSelected] = useState(0)
 
 

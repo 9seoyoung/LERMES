@@ -26,8 +26,8 @@ function SurveyPost({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <DateTimeInput type="date" labelNm="설문기간" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel" ></DateTimeInput>
-          <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
+          <DateTimeInput type="date" labelNm="설문기간" handleChange={handleChange} name="surveyStart" formData={formData} disabled={false}></DateTimeInput>
+          <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} disabled={false}></DateTimeInput>
         </div>
       </div>
 

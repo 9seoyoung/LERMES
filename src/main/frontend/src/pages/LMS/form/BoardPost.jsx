@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useState, useRef } from 'react'
 import Dropdown from '../../../components/ui/Dropdown'
 import layoutStyles from "../../../styles/layout.module.css"
-import {FileUpload, FileList, GrayBtn, BackBtn } from '../../../components/ui/UiComp';
+import {FileUpload, FileList, GrayBtn, BackBtn, DateTimeInput, FormInput} from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
@@ -12,15 +12,17 @@ import { uploadFiles } from '../../../services/fileService';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
-import { InterviewForm } from './StudyPost';
+import {InterviewForm, InterviewMemo} from './StudyPost';
 import { SchedPost } from './SchedPost';
+import {registToDo} from "../../../services/calService";
+import {post} from "axios";
 
 
 // BoardPost.jsx
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef } = props;
+  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -63,6 +65,8 @@ function PostStatus(props) {
           FileList={FileList}
           files={files}
           setFiles={setFiles}
+          prvToggle={prvToggle}
+          setPrvToggle={setPrvToggle}
         />
       )
     case "면담신청":
@@ -77,7 +81,18 @@ function PostStatus(props) {
           setFiles={setFiles}
         />
       );
-
+    case "면담기록":
+      return (
+        <InterviewMemo
+            postId={postId.current}
+            domFormId={domFormId}
+            handleChange={handleChange}
+            formData={formData}
+            FileList={FileList}
+            files={files}
+            setFiles={setFiles}
+        />
+      )
     default:
       return (
           <ArticlePost
@@ -109,6 +124,7 @@ function BoardPost() {
   const navigate = useNavigate();
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
+  const [prvToggle, setPrvToggle] = useState(0);
 
 
   // 설문 폼 (초기 페이지 하나 생성)
@@ -131,7 +147,14 @@ function BoardPost() {
     surveyStart: "",     // 설문조사
     surveyEnd: "",   // 설문조사
     coSn: effectiveSn,
-    cohortSn: cohortSn
+    cohortSn: cohortSn,
+    startDate: "", //일정 시작, 면담 시작
+    endDate: "",
+    startTime: "", //일정 시간, 면담 시간
+    location: "", //일정 장소, 면담 장소
+    author: user?.USER_NM, // 작성자
+    mento: "-", // 담당자
+    isPrivate: (userAuth <=3 ? prvToggle : 1)
   });
 
   console.log(user)
@@ -153,6 +176,10 @@ const selectType = (nextType) => {
       // 그룹 선택은 타입별로 의미 달라질 수 있으니 하위 그룹만 비움
       detailScope: "",
       detailScopeNm: "",
+      startDate: "",
+      endDate: "",
+      startTime: "",
+      location: ""
     };
   });
 
@@ -190,8 +217,13 @@ const selectType = (nextType) => {
       type: formData.type,
       cohortSn: cohortSn,
       scope: formData.scope,
-      detailScope: formData.detailScope,
+      detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      startTime: formData.startTime,
+      location: formData.location,
+      isPrivate: formData.isPrivate,
     //   attachments: uploads.map(u => ({
     //   storedFileName: u.storedFileName,
     //   originalFileName: u.originalFileName,
@@ -215,6 +247,7 @@ const selectType = (nextType) => {
   // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
   try {
     const type = String(formData.type).trim();
+    console.log(type);
 
     const { data } = await (async () => {
       switch (type) {
@@ -222,20 +255,22 @@ const selectType = (nextType) => {
           return createSurvey(postJson);
         case "면담신청":
           return createInterview(postJson);
+        case "일정":
+          return registToDo(postJson);
         default:
           return createPost(postJson); // 규약대로
       }
     })();
 
     console.log("saved:", data);
-
+      if(postJson.type != "일정") {
         const serverFormUuid = data?.formUuid || data?.result?.formUuid;
         if (!serverFormUuid) {
           toast.error("서버에서 formUuid를 받지 못했어요.");
           console.error("[createPost 응답]", data);
           return; // 업로드 중단
         }
-      
+
         let uploads = [];
         if (Array.isArray(files) && files.length > 0) {
           uploads = await uploadFiles(files, {
@@ -243,7 +278,7 @@ const selectType = (nextType) => {
             onProgress: pct => console.log("upload:", pct + "%"),
           });
         }
-    
+      }
     alert("저장 완료!");
     navigate(-1);
   } catch (err) {
@@ -257,8 +292,8 @@ const selectType = (nextType) => {
   useEffect(() => {
     (async () => {
       try {
-        const data = await hortlistByCpSn(coSn);
-        setHortList(data.data.cohorts);
+        const {data} = await hortlistByCpSn(coSn);
+        setHortList(data.cohorts);
       } catch (e) {
         console.log(e.message);
       }
@@ -272,7 +307,7 @@ const selectType = (nextType) => {
   return (
     <div className="boardPage">
       {/* <h2>게시판</h2> */}
-      <div className={formData?.type === "설문조사" ? "limitedHeightBox" : "BigListBox"}>
+      <div className="limitedHeightBox">
         <h4 style={{ fontWeight: "500" }}>{formData.type} 등록하기 
           <GrayBtn textType={"← back"} onClick={(e) => {e.preventDefault(); navigate(-1);}}></GrayBtn>
         </h4>
@@ -291,6 +326,8 @@ const selectType = (nextType) => {
                 setFiles={setFiles}
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
+                setPrvToggle={setPrvToggle}
+                prvToggle={prvToggle}
             />
           </div>
 
@@ -352,10 +389,9 @@ const selectType = (nextType) => {
 
                       { locate.pathname === "/stdHome/studySched/createPost"  ? 
                         <>
-                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "자료실" }))}>자료실</p>
-                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "설문조사" }))}>설문조사</p>
-                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "문의" }))}>문의</p>                    
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
+                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
                         </> : <></> } 
                     </>
                     :
@@ -367,26 +403,45 @@ const selectType = (nextType) => {
                 <input type="hidden" name="type" value={formData.type} />
               </div>
               {formData.type === "일정"?
-                <>
-                  {userAuth <= 3 ? 
-                <div className="dropSet" style={{ zIndex: "2" }}>
-                <p>공개 범위</p>
-                  { (userAuth <=3  && (effectiveSn === coSn)) ? <> 
-                  <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
-                  {/* 관리자 공개 범위 */}
-                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
-                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "회사공개" }))}>회사공개</p>
-                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개" }))}>그룹공개</p>
-                    <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
-                  </Dropdown>
-                  </>: null }
-                <input type="hidden" name="scope" value={formData.scope} />
-            </div>
-                    :
-                    null
-                  }
-                </>
-              :
+              <>
+                <DateTimeInput type="date" labelNm="시작일" handleChange={handleChange} name="startDate" formData={formData} addLabelStyle="formLabel"  disabled={false}/>
+                <DateTimeInput type="date" labelNm="종료일" handleChange={handleChange} name="endDate" formData={formData} addLabelStyle="formLabel"  disabled={false}/>
+                <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="startTime" formData={formData} addLabelStyle="formLabel"  disabled={false}/>
+                <FormInput type="text" formData={formData} handleChange={handleChange} disabled={false} addLabelStyle="formLabel" name="location" labelNm="장소"/>
+
+                {(userAuth <=3  && (effectiveSn === coSn)) ? <>
+                  <div className="dropSet" style={{ zIndex: "2" }}>
+                  <p>공개 범위</p>
+                    <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
+                    {/* 관리자 공개 범위 */}
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "회사공개" }))}>회사공개</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개" }))}>그룹공개</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
+                    </Dropdown>
+                    <input type="hidden" name="scope" value={formData.scope} />
+                  </div>
+                </> : null }
+            </> : null }              
+              {formData.type === "면담신청"?
+              <>
+                {(userAuth >= 4  && (effectiveSn === coSn)) ? <>
+                  <div className="dropSet" style={{ zIndex: "2" }}>
+                  <p>면담 대상</p>
+                    <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
+                    {/* 관리자 공개 범위 */}
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "대표" }))}>대표</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "직원" }))}>직원</p>
+                      {userAuth != 4 ?
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
+                      : null }
+                    </Dropdown>
+                    <input type="hidden" name="scope" value={formData.scope} />
+                  </div>
+                </> : null }
+            </> : null }
+              {(formData.type === "면담신청") || (formData.type === "일정") ?
+                  null :
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
                   { (userAuth <=3  && (effectiveSn === coSn)) ? <> 
@@ -406,8 +461,7 @@ const selectType = (nextType) => {
                   </>: null }
                     
                 <input type="hidden" name="scope" value={formData.scope} />
-              </div>
-              }
+              </div> }
 
               {(formData.scope === "그룹공개" && userAuth <= 3) && (
                 <div className="dropSet" style={{ zIndex: "1" }}>
@@ -432,10 +486,9 @@ const selectType = (nextType) => {
             </div>
 
             <div className="r_bottom">
-              {formData.type != "설문조사" ?
+              {(formData.type === "설문조사") || (formData.type === "일정") ?
+                  null :
               <FileUpload files={files} setFiles={setFiles} />
-              :
-              null
               }
               {formData.type === "설문조사" ?
               <ul>

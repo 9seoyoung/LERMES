@@ -84,15 +84,18 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
         className={`${styles.input} ${addStyle}`}
         disabled={disabled}
         id={`${inputId}-${name}`} autoComplete={ "off"} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
-      <button
+
+        {disabled ? null :
+
+        <button
         type="button"
         className={styles2.iconBtn}
         onClick={onIconClick}
         aria-label="open picker"
         tabIndex={-1}
-      >
+        >
         <IconCmp size={18} strokeWidth={2} />
-      </button>
+        </button>}
     </div>
   );
 });

@@ -1,39 +1,48 @@
 import { DateTimeInput, FileList, FormInput } from "../../../components/ui/UiComp"
+import styles from "../../../styles/SchedListPopUp.module.css";
+import React from "react";
+import {useLocation} from "react-router-dom";
+import {useAccount} from "../../../auth/AuthContext";
 
-export const SchedPost = ({formId, handleChange, formData, files, setFiles}) => {
+export const SchedPost = ({formId, handleChange, formData, prvToggle, setPrvToggle}) => {
+    const {pathname} = useLocation();
+    const {user} = useAccount();
   return (
     <>
-    <div className='formHeader'>
-        <div className='inputSet inputTitleSet'>
-          <label className='formLabel' htmlFor={`${formId}_itvAplyTtl`}>제목</label>
-          <input
-            id={`${formId}_itvAplyTtl`}
-            className='formInput'
-            name='itvAplyTtl'
-            placeholder='제목을 입력하세요.'
-            value={formData.itvAplyTtl}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className='inputSet inputFlex1'>
-          <DateTimeInput type="date" labelNm="시작일" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}/>
-          <DateTimeInput type="date" labelNm="종료일" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}/>
-        </div>
-            </div>
-            {/* 본문 */}
-            <textarea                 
-                id={`${formId}_content`}
-                name="content"
-                className='formTextarea'
-                placeholder='본문을 입력하세요.'
-                value={formData.content}
-                onChange={handleChange}>
-            </textarea>
+        <div className='formHeader'>
             <div className='inputSet'>
-              <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-              <FileList files={files} setFiles={setFiles} />
+              <label className='formLabel' htmlFor={`${formId}_title`}>제목</label>
+              <input
+                id={`${formId}_title`}
+                className='formInput'
+                name='title'
+                placeholder='제목을 입력하세요.'
+                value={formData.title}
+                onChange={handleChange}
+              />
             </div>
+            { user?.USER_AUTHRT_SN <= 3 && pathname !== "/adminHome" ? (
+                <div className={styles.private}>
+                    <input
+                        type="checkbox"
+                        name="isPrivate"
+                        checked={!!formData.isPrivate}
+                        onChange={() => {setPrvToggle(prvToggle); handleChange();}}
+                        id="privateBox"
+                    />
+                    <label htmlFor="privateBox">비공개</label>
+                </div>
+            ) : null}
+        </div>
+        {/* 본문 */}
+        <textarea
+            id={`${formId}_content`}
+            name="content"
+            className='formTextarea'
+            placeholder='본문을 입력하세요.'
+            value={formData.content}
+            onChange={handleChange}>
+        </textarea>
     </>
   )
 }

@@ -82,7 +82,7 @@ function InterviewPost() {
    try {
     const res = await createInterview(body);
     toast.success("신청등록 되었습니다.")
-    console.log(Object.keys(snapshot)); 
+    console.log(Object.keys(snapshot));
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitPost] createGroup response:", res);
     navigate(-1);
@@ -144,13 +144,13 @@ function InterviewPost() {
                     <>
                       <p className={layoutStyles.subMenuList} onClick={() => {
                                                                               changeType("면담신청");
-                                                                              }}>면담신청</p>                     
+                                                                              }}>면담신청</p>
                     </>
                   ): null }
                 </Dropdown>
                 <input type="hidden" name="type" value={postType} />
               </div>
-              {formData.type === "면담신청" ? 
+              {formData.type === "면담신청" ?
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
                 <Dropdown className="dropset_dd" label={formData.itvPicAuthrt || "---- 필수 선택 ----"}>
@@ -163,7 +163,7 @@ function InterviewPost() {
                   ) : null}
                 </Dropdown>
                 <input type="hidden" name="itvPicAuthrt" value={formData.itvPicAuthrt} />
-              </div> 
+              </div>
               :
               null}
             </div>
@@ -206,14 +206,14 @@ function InterviewForm({
           />
         </div>
 
-        <div className='inputSet inputFlex1'>
-          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-        </div>
+          <div className='inputSet inputFlex1'>
+              <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+              <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+          </div>
       </div>
 
       <div className="formContent">
-            <textarea                 
+            <textarea
                 id={`${formId}_itvAplyCn`}
                 name="itvAplyCn"
                 className='formTextarea'
@@ -229,7 +229,7 @@ function InterviewForm({
               <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
               <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
               <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
-              
+
             </div>
           </div>
           <div className='inputSet'>
@@ -260,13 +260,13 @@ function InterviewMemo({
       </div>
 
       <div className='inputSet inputFlex1'>
-        <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-        <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
       </div>
     </div>
 
     <div className="formContent">
-          <textarea                 
+          <textarea
               id={`${formId}_itvAplyCn`}
               name="itvAplyCn"
               className='formTextarea'
@@ -282,7 +282,7 @@ function InterviewMemo({
             <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
             <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
             <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
-            
+
           </div>
         </div>
         <div className='inputSet'>

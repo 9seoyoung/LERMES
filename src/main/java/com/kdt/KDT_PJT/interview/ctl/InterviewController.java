@@ -55,9 +55,10 @@ public class InterviewController {
             @AuthenticationPrincipal AuthCustomUserDetails me,
             @RequestBody CmmnMap params){
 
+         Object formUuid = params.get("formUuid");
          // 처리후 결과 보낼거임
         CmmnMap resp= interviewService.createInterviewRequest(me, params);
-        resp.put(params.getId);
+        resp.put("formUuid", formUuid);
 
         return ResponseEntity.ok(resp);
     }
