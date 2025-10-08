@@ -9,7 +9,7 @@ export default function AdminHome() {
   
   return (
     <div className="mainCont_Lms_Row" >
-      <div className="main_L" style={{ width: '40%', maxHeight: "702px" }}>
+      <div className="main_L" style={{ width: '40%', maxHeight: "702px", overflow: "hidden" }}>
           <div className='dashBoardModule' style={{display: "flex", flexDirection: "column", maxHeight: "702px"}}>
             <CalSched></CalSched>
           </div>

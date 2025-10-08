@@ -31,7 +31,7 @@ function StudyManage() {
                 // 문자열로 지정
                 gridTemplate="1fr 1fr 4.25fr 1.25fr 1.25fr 1.25fr 1fr 1fr"
                 gap="12px"
-              /> 
+                /> 
             </div>
         </div>
     );

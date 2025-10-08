@@ -55,7 +55,7 @@ function CardBack({ effectiveSn }) {
         {!hortlist?.length ? (
           <div className={styles.empty}>목록이 없습니다.</div>
         ) : (
-          <ul style={{ height: "400px", overflowY: "scroll" }}>
+          <ul style={{ height: "320px", overflowY: "scroll" }}>
             {hortlist.map((v, idx) => {
               const items = Array.isArray(v?.cohorts) && v.cohorts.length ? v.cohorts : [v];
   
