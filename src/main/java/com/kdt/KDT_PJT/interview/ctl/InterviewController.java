@@ -57,6 +57,7 @@ public class InterviewController {
 
          // 처리후 결과 보낼거임
         CmmnMap resp= interviewService.createInterviewRequest(me, params);
+        resp.put(params.getId);
 
         return ResponseEntity.ok(resp);
     }

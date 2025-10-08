@@ -120,7 +120,6 @@ function StudyPost() {
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
             />
-            <InterviewPost></InterviewPost>
           </div>
 
           <div className="formArea_R">
@@ -203,7 +202,7 @@ function StudyPost() {
 export default StudyPost;
 
 
-function InterviewForm({
+export function InterviewForm({
   domFormId, handleChange, formData, files, formId, setFiles,
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)

@@ -132,7 +132,7 @@ function AppRoutes() {
               <Route path="tutorHome/studySched/createPost" element={<BoardPost />} />
               <Route path="tutorHome/studySched" element={<StudyManage />} />
               <Route path="tutorHome/studentManage" element={<StudentManage />} />
-              <Route path="tutorHome/studentManage/interviewPost" element={<InterviewPost />} />
+              <Route path="tutorHome/studentManage/createPost" element={<BoardPost />} />
               <Route path="tutorHome/myPage" element={<TutorMypage />} />
             </Route>
 
@@ -143,7 +143,7 @@ function AppRoutes() {
               <Route path="stdHome/board/createPost" element={<BoardPost />} />
               <Route path="stdHome/board/:postSn" element={<BoardRead2 />} />
               <Route path="stdHome/studySched" element={<StudyPlan />} />
-              <Route path='stdHome/studySched/studyPost' element={<StudyPost />} />
+              <Route path='stdHome/studySched/createPost' element={<BoardPost />} />
               <Route path="stdHome/studySched/interviewPost" element={<InterviewPost />} />
               <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />
               <Route path="stdHome/myPage" element={<StdMypage />} />

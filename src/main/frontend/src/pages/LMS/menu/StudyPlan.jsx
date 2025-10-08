@@ -11,7 +11,7 @@ import { formatDate } from "../../../utils/dateformat";
 function StudyManage() {
     const navigate = useNavigate();
     const { effectiveSn } = useSelectedCompany();
-    const filterArr = ["전체", "공식", "내 일정", "일지", "면담", "임시저장"];
+    const filterArr = ["전체", "공식", "내 일정", "일지", "면담"];
     const [selectedIdx, setSelected] = useState(0)
     const [pullList, setPullList] = useState([]);
     const [columnData, setColumnData] = useState([]);
@@ -52,7 +52,7 @@ function StudyManage() {
                     <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
-                    <div className="createBtn " onClick={() => navigate('studyPost')}>
+                    <div className="createBtn " onClick={() => navigate('createPost')}>
                         + 등록하기
                     </div>
                 </div>
