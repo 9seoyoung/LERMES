@@ -7,6 +7,7 @@ import { editPostByPostSn, readPostByPostSn } from '../../../services/postServic
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
+import { downloadByStoredName, findFileSnByFormUuid } from '../../../services/fileService';
 
 
 
@@ -53,7 +54,11 @@ function BoardRead() {
         const {data}  = await readPostByPostSn(params);
         console.log(`${data} 받아온 데이터`);
         setFormData(data);
-        console.log(`${formData} 폼데이터에 저장한 데이터`);
+        const fileData = await findFileSnByFormUuid(data.formUuid);
+    console.log(files);
+        setFiles(fileData.data.map((v) => ({"name":v.orgnlFileNm, "fileSn": v.fileSn})));
+        console.log(fileData.data);
+        console.log(files);
       } catch(err) {
         toast.error(err);
       }
@@ -180,8 +185,10 @@ function BoardEditForm({
             <div className='inputSet'>
           </div>
           <div className='inputGrid '>
+            <div  className='inputSet'>
               <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-              <FileList files={files} setFiles={setFiles}></FileList>
+              <FileList files={files} setFiles={setFiles} uploadUser={formData.postWrtrSn} noShow={true} editToggle={editToggle}></FileList>
+            </div>
             <div className='inputSet limitedInputSe'>
               <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="postWriterName" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
               <FormInput type="text" labelNm="조회수" handleChange={handleChange} name="viewCnt" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>

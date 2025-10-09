@@ -325,7 +325,8 @@ footer>div:hover {
 .mainCont_Lms_Row {
   display: flex;
   width: 100%;
-  min-height: 702px;
+  min-height: 572px;
+  height: 572px;
   gap: 24px;
 }
 
@@ -382,7 +383,7 @@ footer>div:hover {
 
 .limitedHeightBox {
   width: 100%;
-  height: 618px;
+  height: 702px;
   display: flex;
   /* background-color: #FCFEFF; */
   background-color: var(--color-sec-bg);
@@ -935,6 +936,7 @@ footer>div:hover {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  width: 100%;
 }
 
 

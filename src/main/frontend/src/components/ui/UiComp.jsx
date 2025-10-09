@@ -7,6 +7,8 @@ import styles from '../../styles/UiComp.module.css';
 import Dropdown from './Dropdown';
 import FilePreview from './FilePreview';
 import ListTable from './ListTable';
+import { useAccount } from '../../auth/AuthContext';
+import { downloadFileByFileSn } from '../../services/fileService';
 
 export function UiComp() {
   const arr1 = ["#", "이름", "이메일"];
@@ -82,15 +84,18 @@ export const DateTimeInput = forwardRef(function DateTimeInput(
         className={`${styles.input} ${addStyle}`}
         disabled={disabled}
         id={`${inputId}-${name}`} autoComplete={ "off"} name={name} value={formData[name] ?? ""} placeholder={textType} onChange={handleChange} />
-      <button
+
+        {disabled ? null :
+
+        <button
         type="button"
         className={styles2.iconBtn}
         onClick={onIconClick}
         aria-label="open picker"
         tabIndex={-1}
-      >
+        >
         <IconCmp size={18} strokeWidth={2} />
-      </button>
+        </button>}
     </div>
   );
 });
@@ -135,10 +140,10 @@ export function BlueBtn({ textType, onClick }) {
   );
 }
 // 회색 버튼
-export function GrayBtn({ textType, style }) {
+export function GrayBtn({ textType, style, onClick }) {
   return (
     <div>
-      <button className={styles.grayBtn} style={{style}}>{textType}</button>
+      <button className={styles.grayBtn} style={{style}} onClick={onClick}>{textType}</button>
     </div>
   );
 }
@@ -147,7 +152,7 @@ export function GrayBtn({ textType, style }) {
 export function SchedAddBtn({ textType, onClick }) {
     return (
         <div>
-            <button onClick={onClick} className={styles.schedAddBtn}>{textType}</button>
+            <button type='button' onClick={onClick} className={styles.schedAddBtn}>{textType}</button>
         </div>
     );
 }
@@ -332,7 +337,8 @@ export function FileUpload({ files, setFiles }) {
 }
 
 // 파일 목록
-export function FileList({ files, setFiles, noShow }) {
+export function FileList({ files, setFiles, noShow, uploadUser, editToggle }) {
+  const {user} = useAccount();
   const removeFile = (idx) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
   };
@@ -342,11 +348,15 @@ export function FileList({ files, setFiles, noShow }) {
       {files.map((file, idx) => (
         <li key={idx}>
           <span>
-            {file.name}
             { noShow ? 
-              null
+              <>
+                <div onClick={() => downloadFileByFileSn(file.fileSn, file.name )}>{file.name ?? file}</div>
+              </>
               :
-              <DeleteBtn onClick={() => removeFile(idx)} />
+              <>
+                {file.name ?? file}
+                <DeleteBtn onClick={() => removeFile(idx)} />
+              </>
             }
           </span>
         </li>

@@ -87,7 +87,7 @@ const MyInfo = forwardRef(function MyInfo(
         onClick={handleButtonClick}
         disabled={disabled}
       >
-        <User style={{background: "#f6f6f6", borderRadius: "50%", padding: "4px"}} size={32}></User>
+        <User style={{background: 'var(--color-light-bg, #f6f6f6)', borderRadius: "50%", padding: "4px"}} size={32}></User>
         {label}
       </button>
 

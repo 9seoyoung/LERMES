@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cohort-member") // 선택적
+@RequestMapping("/api/cohort-member") // 선택적
 @RequiredArgsConstructor
 public class CohortMemberController {
 
@@ -28,6 +28,18 @@ public class CohortMemberController {
     ) {
         cohortMemberService.applyForCohort(userSn, cohortSn);
         return ResponseEntity.ok("수강신청 완료");
+    }
+
+    @PostMapping("/{memberId}/approve")
+    public ResponseEntity<String> approveMember(@PathVariable Long memberId) {
+        cohortMemberService.approveMember(memberId);
+        return ResponseEntity.ok("승인 완료");
+    }
+
+    @PostMapping("/{memberId}/reject")
+    public ResponseEntity<String> rejectMember(@PathVariable Long memberId) {
+        cohortMemberService.rejectMember(memberId);
+        return ResponseEntity.ok("반려 완료");
     }
 
 }

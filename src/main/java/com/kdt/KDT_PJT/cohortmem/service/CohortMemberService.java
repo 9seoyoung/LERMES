@@ -6,9 +6,11 @@ import com.kdt.KDT_PJT.cohort.entity.Cohort;
 import com.kdt.KDT_PJT.cohort.repository.CohortRepository;
 import com.kdt.KDT_PJT.cohortmem.dto.CohortMemberDto;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
+import com.kdt.KDT_PJT.cohortmem.entity.CohortMemberStts;
 import com.kdt.KDT_PJT.cohortmem.repository.CohortMemberRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,13 +55,44 @@ public class CohortMemberService {
                 .orElseThrow(() -> new RuntimeException("코호트를 찾을 수 없습니다."));
 
         CohortMember member = new CohortMember();
+
         member.setUser(user);
         member.setCohort(cohort);
-        member.setAprvDt(null); // 아직 승인되지 않음
+
+            // 연관관계 필드는 insertable=false, updatable=false
+        member.setUserSn(user.getId());
+        member.setCohortSn(cohort.getCohortSn());
+        member.setUserAuthrtSn(user.getRoleType());
+        member.setCohortMemStts(CohortMemberStts.APPLIED);
+        member.setAplyDt(LocalDateTime.now());
+        member.setAprvDt(null);
+
 
         cohortMemberRepository.save(member);
     }
 
+    public void approveMember(Long memberId) {
+        CohortMember member = cohortMemberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+
+        member.setAprvDt(LocalDateTime.now());
+        member.setCohortMemStts(CohortMemberStts.ENROLLED);
+
+        User user = member.getUser();
+        user.setRoleType(5L);
+        userRepository.save(user);
+
+        cohortMemberRepository.save(member);
+    }
+
+    public void rejectMember(Long memberId) {
+        CohortMember member = cohortMemberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+
+        member.setAprvDt(LocalDateTime.now());
+
+        cohortMemberRepository.save(member);
+    }
 
 
 }

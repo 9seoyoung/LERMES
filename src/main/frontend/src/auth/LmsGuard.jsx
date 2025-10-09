@@ -9,12 +9,14 @@ export default function LmsGuard() {
 
   // 0) 특정 경로는 화이트리스트로 통과 (모집공고 신청/읽기)
   const matchApply = useMatch("/visitorHome/applyRecruitPoster/:recruitSn");
-  if (matchApply) return <Outlet />;         // ✅ 반드시 JSX 반환
-
+  const matchApply2 = useMatch("/visitorHome");
+  if (matchApply) return <Outlet />;         
+  if (matchApply2) return <Outlet />;    
+  
   if (loading) return null;
 
   // 1) 미로그인 -> 방문자 홈
-  if (!user) return <Navigate to="/visitorHome" replace />;
+  if (!user) return <Navigate to="/unknownHome" replace />;
 
   const myCompany = Number(
     user?.USER_OGDP_CO_SN ?? user?.user_ogdp_co_sn ?? user?.userOgdpCoSn ?? NaN
@@ -41,7 +43,6 @@ export default function LmsGuard() {
     7: "unknownHome",
   };
 
-  // ❌ const arrive = authLvPath?.myCoAuth;    // 점 표기 오타
   const arrive = authLvPath[myCoAuth];
 
   // 필요할 때만 리디렉트(예: 회사 루트 진입 시). 보통은 그냥 <Outlet/>만 내보내는 게 안전.

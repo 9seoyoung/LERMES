@@ -1,7 +1,8 @@
 // 페이지찾기 - 게시글 등록
 import React from 'react'
+import { FileList } from '../../../components/ui/UiComp'
 
-export const ArticlePost = ({formId, handleChange, formData, FileList, files, setFiles}) => {
+export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) => {
   return (
     <>
     <div className='formHeader'>
@@ -27,8 +28,9 @@ export const ArticlePost = ({formId, handleChange, formData, FileList, files, se
             </textarea>
             <div className='inputSet'>
               <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
-              <FileList files={files} setFiles={setFiles}></FileList>
+              <FileList files={files} setFiles={setFiles} />
             </div>
     </>
   )
 }
+

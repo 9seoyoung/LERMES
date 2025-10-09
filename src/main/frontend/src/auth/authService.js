@@ -88,3 +88,4 @@ export const updateCompanyBigLogo = (companyId, fileSn) => {
 // 회사 빅 로고 삭제
 export const deleteCompanyBigLogo = (companyId) =>
   api.delete(`/company/${companyId}/logo/big`).then(({ data }) => data);
+

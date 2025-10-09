@@ -78,7 +78,7 @@
 }
 
 .row>button:focus-visible {
-  outline: 2px solid var(--color-primary-bg, #08F);
+  outline: 2px solid var(--color-primary, #08F);
   outline-offset: 2px;
 }
 
@@ -106,7 +106,10 @@
 .company_card {
   position: absolute;     
   inset: 0;
+}
 
+.sttsBtn {
+  color: var(--font-color-blue1);
 }
 
 /* 뒷면 */

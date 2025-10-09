@@ -16,18 +16,20 @@
     --color-text-main: #222;
     --shadow-color: #00000025;
     --shadow-color2: #00000010;
-    --color-primary-bg: #08F;
+    /* CSS 변수명 수정 전(사용X) */
+    /* --color-primary-bg: #08F;
     --color-checkin-btn: #62B6FF;
     --color-checkout-warning: #FFB5A0;
     --color-disable-bg: #EEEFF0;
     --color-font-nav: #565656;
     --color-font-sec: #333;
     --color-font-warning: #E9623A;
-    --color-font-disable: #575757;
+    --color-font-disable: #575757; */
     
     --color-table-bg: #F2F3F0;
 
     --opacity-25: 25%;
+
     /* 배경 컬러 */
     --bg-color-gray1: #565656;
     --bg-color-gray2: #acacac;
@@ -35,6 +37,7 @@
     --bg-color-blue2: #62B6FF;
     --bg-color-blue3: #e1f1ff;
     --bg-color-gray5: #f3f4f6;
+    --bg-color-red2: #ffb5a0;
 
     /* 폰트 컬러 */
     --font-color-base: #222;
