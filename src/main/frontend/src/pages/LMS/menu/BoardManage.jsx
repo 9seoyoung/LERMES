@@ -22,7 +22,7 @@ export default function BoardManage(){
   const [whereTogo, setWhereToGo] = useState("");
   const [cohortSn, setCohortSn] = useState(null);
     
-    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록"]
+    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "학습일지"]
     
     //게시물 목록 불러오기
     useEffect(() => {

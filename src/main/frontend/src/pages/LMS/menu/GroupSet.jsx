@@ -106,7 +106,7 @@ function GroupSet() {
             displayDate={displayDate}
             setDisplayDate={setDisplayDate}/>    
           </div>
-          <div className='dashBoardModule' style={{ height: '470px', overflow:"hidden" }}>
+          <div className='dashBoardModule' style={{overflow:"hidden" }}>
             <TodayAttendList />
           </div>
         </div>

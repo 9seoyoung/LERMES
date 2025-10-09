@@ -33,3 +33,4 @@ export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) =
     </>
   )
 }
+
