@@ -1,0 +1,106 @@
+package com.kdt.KDT_PJT.response.service;
+
+import com.kdt.KDT_PJT.response.dto.SrvyRequestResponseDto;
+import com.kdt.KDT_PJT.response.dto.SrvyResponseResponseDto;
+import com.kdt.KDT_PJT.response.mapper.SrvyResponseMapper;
+import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
+import com.kdt.KDT_PJT.survey.enums.SurveyRole;
+import com.kdt.KDT_PJT.survey.enums.SurveyStatus;
+import com.kdt.KDT_PJT.survey.mapper.SurveyMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+
+public class SrvyResponseService {
+
+    private final SrvyResponseMapper srvyResponseMapper;
+    private final SurveyMapper surveyMapper; // 설문 종료일 체크용
+
+    /**
+     * ✅ 설문 응답 등록 또는 수정 (Upsert)
+     */
+    @Transactional
+    public SrvyResponseResponseDto createResponse(SrvyRequestResponseDto requestDto) {
+        Long parentSn = requestDto.getParentSn();
+        Long userSn = requestDto.getUserSn();
+
+        // 1. 설문 마감 여부 확인
+        ResponseSurveyDto survey = surveyMapper.findSurveyById(parentSn);
+        if (survey == null) {
+            throw new IllegalArgumentException("해당 설문을 찾을 수 없습니다.");
+        }
+
+        SurveyStatus status = SurveyStatus.of(
+                LocalDateTime.now(),
+                survey.getSrvyBgngDt().atStartOfDay(),
+                survey.getSrvyEndDt().atTime(23, 59, 59)
+        );
+
+        if (status == SurveyStatus.CLOSED) {
+            throw new IllegalStateException("마감된 설문에는 응답할 수 없습니다.");
+        }
+
+        // 2. 기존 응답 존재 여부 확인
+        SrvyResponseResponseDto existing = srvyResponseMapper.findByParentAndUser(parentSn, userSn);
+
+        // 3. 있으면 수정, 없으면 등록
+        if (existing == null) {
+            srvyResponseMapper.insertResponse(requestDto);
+        } else {
+            srvyResponseMapper.updateResponse(requestDto);
+        }
+
+        // 4. 최종 응답 반환
+        return srvyResponseMapper.findByParentAndUser(parentSn, userSn);
+    }
+    //목록 조회
+    @Transactional(readOnly = true)
+    public List<SrvyResponseResponseDto> getResponses(Long srvySn, Long roleId, Long userSn) {
+        if (SurveyRole.fromCode(roleId).isAdmin()) {
+            // 관리자, 강사
+            return srvyResponseMapper.findAllByParentWithUserName(srvySn);
+        }
+        // 일반 사용자
+        return srvyResponseMapper.findByParentAndUserList(srvySn, userSn);
+    }
+
+    //설문 응답 삭제 (Soft Delete) 설문이 마감되면 불가능 / 마감 전 관리자 or 본인만 가능
+    @Transactional
+    public void deleteResponse(Long rspsnSn, Long userSn, Long roleId) {
+        SrvyResponseResponseDto response = srvyResponseMapper.findById(rspsnSn);
+        if (response == null) {
+            throw new IllegalArgumentException("응답이 존재하지 않습니다.");
+        }
+
+        ResponseSurveyDto survey = surveyMapper.findSurveyById(response.getParentSn());
+        if (survey == null) {
+            throw new IllegalArgumentException("관련 설문을 찾을 수 없습니다.");
+        }
+
+        // 설문 마감 여부 확인
+        SurveyStatus status = SurveyStatus.of(
+                LocalDateTime.now(),
+                survey.getSrvyBgngDt().atStartOfDay(),
+                survey.getSrvyEndDt().atTime(23, 59, 59)
+        );
+        if (status == SurveyStatus.CLOSED) {
+            throw new IllegalStateException("마감된 설문은 삭제할 수 없습니다.");
+        }
+
+        SurveyRole role = SurveyRole.fromCode(roleId);
+        boolean isOwner = response.getUserSn().equals(userSn);
+        boolean isAdmin = (role == SurveyRole.SUPER_ADMIN || role == SurveyRole.TENANT_ADMIN);
+
+        if (isOwner || isAdmin) {
+            srvyResponseMapper.softDelete(rspsnSn, userSn);
+        } else {
+            throw new SecurityException("응답 삭제 권한이 없습니다.");
+        }
+    }
+}

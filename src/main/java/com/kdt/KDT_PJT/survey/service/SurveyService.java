@@ -1,13 +1,14 @@
 package com.kdt.KDT_PJT.survey.service;
 
 import com.kdt.KDT_PJT.bbs.enums.BbsType;
+import com.kdt.KDT_PJT.response.mapper.SrvyResponseMapper;
 import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
 import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
 import com.kdt.KDT_PJT.survey.enums.SurveyRole;
 import com.kdt.KDT_PJT.survey.enums.SurveyScope;
 import com.kdt.KDT_PJT.survey.enums.SurveyStatus;
 import com.kdt.KDT_PJT.survey.mapper.SurveyMapper;
-import com.kdt.KDT_PJT.response.mapper.ResponseMapper;
+import com.kdt.KDT_PJT.response.mapper.SrvyResponseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ import java.util.UUID;
 public class SurveyService {
 
     private final SurveyMapper surveyMapper;
-    private final ResponseMapper responseMapper;
+    private final SrvyResponseMapper responseMapper;
 
     // 설문 등록
     public ResponseSurveyDto createSurvey(RequestSurveyDto requestDto, Long userSn, Long roleId) {
