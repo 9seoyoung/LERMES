@@ -22,7 +22,7 @@ import {post} from "axios";
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
+  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -67,6 +67,7 @@ function PostStatus(props) {
           setFiles={setFiles}
           prvToggle={prvToggle}
           setPrvToggle={setPrvToggle}
+          setFormData={setFormData}
         />
       )
     case "면담신청":
@@ -194,10 +195,13 @@ const selectType = (nextType) => {
   );
 };
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, type, checked, value } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value
+  }));
+};
 
   const tempSubmit = () => {};
   const saveSubmit = async (e) => {

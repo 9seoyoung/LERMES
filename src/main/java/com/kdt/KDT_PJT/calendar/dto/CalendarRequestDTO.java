@@ -19,6 +19,8 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CalendarRequestDTO {
+    @JsonProperty("detailScope")
+    @JsonAlias("cohortSn")
     private Integer cohortSn;           //COHORT_SN
     private String startDate;
     private String endDate;             //nullable, 안들어오면 = startDate

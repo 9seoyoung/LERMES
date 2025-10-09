@@ -92,7 +92,6 @@ function GroupSet() {
         day,
         isPrivate: 0,
         cohortSn: cohortSn,
-        effectiveSn: effectiveSn
       };
       setDisplayDate(`${month}월 ${day}일`);
       
