@@ -3,5 +3,17 @@
 <mapper namespace="com.kdt.mapper.AdminBoardListMapper">
     <select id="getAdminBoardListByCohortSn" parameterType="Integer" resultType="com.kdt.KDT_PJT.adminBoardList.dto.AdminBoardListDTO">
         SELECT
+            i.ITV_SN,
+            "INTERVIEW"     as boardType,
+            i.ITV_APLY_TTL,
+            i.ITV_APLY_DT,
+            u.USER_NM,
+            i.VIEW_CNT
+        FROM TB_INTERVIEW i
+        LEFT JOIN TB_USER u AS i.ITV_APLCNT_SN = u.USER_SN
+        WHERE 1=1
+            AND i.COHORT_SN = #{cohortSn}
+        ORDER BY i.ITV_SN
+
     </select>
 </mapper>

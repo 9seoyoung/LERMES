@@ -26,7 +26,7 @@ public class AdminBoardListController {
                                                                                @PathVariable Integer cohortSn){
 //        Integer coSn = me.getCompanySn().intValue();
 
-        adminBoardListService.getAdminBoardListByCohortSn(cohortSn);
-        return ResponseEntity.ok(Collections.emptyList()); // TODO 쓰레기 return중, 수정 필요
+
+        return ResponseEntity.ok(adminBoardListService.getAdminBoardListByCohortSn(cohortSn));
     }
 }
