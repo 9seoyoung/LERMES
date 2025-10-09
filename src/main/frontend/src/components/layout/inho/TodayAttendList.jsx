@@ -1,7 +1,9 @@
-// TodayAttendList.jsx
 import { useEffect, useState } from 'react';
 import { useAccount } from '../../../auth/AuthContext';
-import { fetchTodayAttendance } from '../../../attend/attendService';
+import {
+  fetchTodayAttendance,
+  fetchTodayAttendanceByCohort,
+} from '../../../attend/attendService';
 import '../../../styles/Attend.css';
 
 const STATUS_KO = {
@@ -13,17 +15,31 @@ const STATUS_KO = {
   LATE_PENDING: '지각(예정)',
 };
 
-export default function TodayAttendList() {
+export default function TodayAttendList({ cohortSn }) {
+  console.log('[TodayAttendList] 전달받은 cohortSn:', cohortSn);
+
   const [rows, setRows] = useState([]);
   const { user } = useAccount();
 
   useEffect(() => {
-    if (user?.USER_AUTHRT_SN === 1) return; //슈퍼 권한일 때 에러 방지
-    fetchTodayAttendance().then((data) => {
-      console.log('[오늘 출결 데이터]', data);
-      setRows(data || []);
-    });
-  }, []);
+    const load = async () => {
+      try {
+        // ✅ 관리자나 테넌트가 특정 기수를 선택한 경우
+        if (cohortSn) {
+          const data = await fetchTodayAttendanceByCohort(cohortSn);
+          setRows(data || []);
+        }
+        // ✅ 강사(기수 고정 사용자)인 경우
+        else if (user?.USER_AUTHRT_SN === 4) {
+          const data = await fetchTodayAttendance();
+          setRows(data || []);
+        }
+      } catch (err) {
+        console.error('[TodayAttendList] 출결 조회 실패:', err);
+      }
+    };
+    load();
+  }, [cohortSn]);
 
   return (
     <div>
@@ -63,9 +79,9 @@ export default function TodayAttendList() {
               <li
                 key={s.userSn}
                 className="listTable"
-                style={{ width: '100%', height: '30px', overflow: 'hidden' }}
+                style={{ height: '30px' }}
               >
-                <div>{idx + 1}</div> {/* # */}
+                <div>{idx + 1}</div>
                 <div>{s.username}</div>
                 <div>{s.checkInTime ?? '-'}</div>
                 <div>{s.checkOutTime ?? '-'}</div>
