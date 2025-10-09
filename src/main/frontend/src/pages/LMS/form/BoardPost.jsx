@@ -206,9 +206,20 @@ const selectType = (nextType) => {
     const formUuid = postId.current || uuidv4();
 
 
+    if (formData.type === "면담신청") {
+      setFormData(prev => ({
+        ...prev,
+        // nextType 은 이 스코프에 없음. 필요하다면 prev.type 또는 "면담신청" 고정.
+        // type: prev.type,
+        itvAplyTtl: prev.title,      // 제목
+        itvAplyCn: prev.content,       // 내용
+        itvPicAuthrt: (prev.scope === "강사" ? "INSTRUCTOR" : (prev.scope === "직원" ? "EMPLOYEE" : "REPRESENTATIVE")),    // 공개범위
+      }));
+    }
+
 
     // 2) 게시글 JSON (File 객체 넣지 말기!)
-    const postJson = {
+    const postJson = (formData.type === "면담신청" ? {
       id: formData.id,
       userSn: formData.userSn,
       title: formData.title,
@@ -232,7 +243,32 @@ const selectType = (nextType) => {
     // })),
     ...(formData.type === "설문조사" ? { surveyForm } : {}),
     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
-  };
+  } : {
+      id: formData.id,
+      userSn: formData.userSn,
+      title: formData.title,
+      content: formData.content,
+      coSn: formData.coSn,
+      type: formData.type,
+      cohortSn: cohortSn,
+      scope: formData.scope,
+      detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
+      detailScopeNm: formData.detailScopeNm,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      startTime: formData.startTime,
+      location: formData.location,
+      isPrivate: formData.isPrivate,
+    //   attachments: uploads.map(u => ({
+    //   storedFileName: u.storedFileName,
+    //   originalFileName: u.originalFileName,
+    //   size: u.size,
+    //   // fileSn 내려오면 그걸 써도 OK
+    // })),
+    ...(formData.type === "설문조사" ? { surveyForm } : {}),
+    formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
+  });
+
 
   const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
