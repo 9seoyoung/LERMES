@@ -70,6 +70,7 @@ public class CompanyService {
                     result.put("stts", hasRecruiting ? "RECRUITING" : null);
                     result.put("companyAddress", company.getCompanyAddress());
                     result.put("companyAddressDetail", company.getCompanyAddressDetail());
+                    result.put("bigLogoFileSn", company.getBigLogoFileSn());
 
                     return result;
                 })

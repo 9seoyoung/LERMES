@@ -128,7 +128,15 @@ public class DailyAttendTotService {
                         userSn, start, end,
                         List.of(AttendDtlTypeNm.LATE, AttendDtlTypeNm.EARLY_LEAVE, AttendDtlTypeNm.OUTING));
 
-        Long requiredDays = (long) end.getDayOfMonth();
+        long requiredDays = 0;
+        LocalDate date = start;
+        while (!date.isAfter(end)) {
+            DayOfWeek dow = date.getDayOfWeek();
+            if (dow != DayOfWeek.SATURDAY && dow != DayOfWeek.SUNDAY) {
+                requiredDays++;
+            }
+            date = date.plusDays(1);
+        }
 
         return AttendSummaryDto.builder()
                 .period(start + " ~ " + end)
