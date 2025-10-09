@@ -8,10 +8,10 @@ import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, 
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
 
-function StudyManage() {
+function StudyPlan() {
     const navigate = useNavigate();
     const { effectiveSn } = useSelectedCompany();
-    const filterArr = ["전체", "공식", "내 일정", "일지", "면담", "임시저장"];
+    const filterArr = ["전체", "공식 일정", "내 일정", "학습 일지", "면담"];
     const [selectedIdx, setSelected] = useState(0)
     const [pullList, setPullList] = useState([]);
     const [columnData, setColumnData] = useState([]);
@@ -24,6 +24,13 @@ function StudyManage() {
     const postSn = SELECT_POST_SN_KEY[selectedIdx];
     const path = SELECT_DETAIL_PAGE_PATH[selectedIdx];
 
+      const params = {
+          url: url,
+          effectiveSn: effectiveSn,
+          isPrivate: null,
+      };
+      if (selectedIdx === 1) params.isPrivate = 0;
+      if (selectedIdx === 2) params.isPrivate = 1;
 
     setColumnData(column);
     setPostKey(postSn);
@@ -31,7 +38,7 @@ function StudyManage() {
     console.log(columnData);
     (async () => {
         try {
-            const data = await callStudyPlanListByFilter({effectiveSn, url});
+            const data = await callStudyPlanListByFilter(params);
             console.log(data.data);
             const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item.itvAplyDt),}));
             setPullList(formattedData);
@@ -52,7 +59,7 @@ function StudyManage() {
                     <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected}></FilterList>
                 </ul>
                 <div className="ftList_R">
-                    <div className="createBtn " onClick={() => navigate('interviewPost')}>
+                    <div className="createBtn " onClick={() => navigate('createPost')}>
                         + 등록하기
                     </div>
                 </div>
@@ -73,4 +80,4 @@ function StudyManage() {
     );
 }
 
-export default StudyManage
+export default StudyPlan

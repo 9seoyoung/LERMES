@@ -21,7 +21,7 @@ export default function Board(){
     const [columnData, setColumnData] = useState([]);
     const [postKey, setPostKey] = useState("");
     const [whereTogo, setWhereToGo] = useState("");
-    const filterArr = ["전체", "공지", "자료실", "설문", "FAQ", "Q&A", "임시 저장"]
+    const filterArr = ["전체", "공지", "자료실", "설문", "FAQ", "Q&A"]
 
     //게시물 목록 불러오기
     useEffect(() => {

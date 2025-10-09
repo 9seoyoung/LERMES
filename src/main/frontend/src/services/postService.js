@@ -131,7 +131,7 @@ export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/pos
  * @param {String} url API요청 URL
  * @returns {Array<Objects>} 전체 / 공식 / 내 일정/ 일지 / 면담 / 임시저장에 해당하는 게시물 목록
  */
-export const callStudyPlanListByFilter = ({url, filter, effectiveSn}) => api.get(`${url}`, {params: {filter, effectiveSn}})
+export const callStudyPlanListByFilter = ({url, effectiveSn, isPrivate}) => api.get(`${url}`, {params: {isPrivate, effectiveSn}})
 
 
 

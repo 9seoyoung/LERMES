@@ -6,6 +6,7 @@ import styles from '../../styles/CalSched.module.css';
 import { useAccount } from '../../auth/AuthContext';
 import { pullToDoList } from "../../services/calService.js";
 import { diffDaysInclusive } from '../../utils/dateformat.js';
+import { useLocation } from 'react-router-dom';
 
 const z2 = (n) => String(n).padStart(2, '0');
 
@@ -17,6 +18,8 @@ const CalSched = () => {
   const [schedules, setSchedules] = useState({});
   const [events, setEvents] = useState({});
   const [monthlyTodoRaw, setMonthlyTodoRaw] = useState([]); // ★ 원본 배열
+  const location = useLocation();
+  const curloc = location.pathname;
 
 
   useEffect(() => {

@@ -56,7 +56,13 @@ export default function StdAttendModal({ onClose }) {
         toast.error(r?.message || '입실 실패');
       }
     } catch (e) {
-      toast.error(e.message || '입실 실패');
+      console.error('[Checkin error]', e);
+      const msg =
+        e.response?.data?.message || // 서버에서 내려주는 커스텀 메시지
+        e.response?.data?.error || // 다른 형태일 때 대비
+        e.message || // Axios 기본 메시지
+        '입실 실패';
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

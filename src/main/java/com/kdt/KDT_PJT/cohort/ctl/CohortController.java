@@ -2,7 +2,10 @@ package com.kdt.KDT_PJT.cohort.ctl;
 
 
 // import com.kdt.KDT_PJT.cohort.dto.CohortListDto;
+import com.kdt.KDT_PJT.auth.entity.Company;
+import com.kdt.KDT_PJT.auth.repository.CompanyRepository;
 import com.kdt.KDT_PJT.cohort.dto.CohortDto;
+import com.kdt.KDT_PJT.cohort.dto.CohortRecruitDto;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
 import com.kdt.KDT_PJT.cohort.entity.cohortSttsNm;
 import com.kdt.KDT_PJT.cohort.mapper.CohortConverter;
@@ -19,9 +22,11 @@ import java.util.Map;
 public class CohortController {
 
     private final CohortService cohortService;
+    private final CompanyRepository companyRepository;
 
-    public CohortController(CohortService cohortService) {
+    public CohortController(CohortService cohortService, CompanyRepository companyRepository) {
         this.cohortService = cohortService;
+        this.companyRepository = companyRepository;
     }
 
     // 전체 조회
@@ -32,11 +37,37 @@ public class CohortController {
 
     // 단건 조회
     @GetMapping("/{id}")
-    public ResponseEntity<Cohort> getCohortById(@PathVariable Long id) {
-        return cohortService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CohortRecruitDto> getCohortById(@PathVariable Long id) {
+        return cohortService.findById(id).map(c -> {
+            Long logoSn = companyRepository.findById(c.getCoSn())
+                    .map(Company::getBigLogoFileSn)
+                    .orElse(null);
+
+            CohortRecruitDto dto = new CohortRecruitDto(
+                    c.getCohortSn(),
+                    c.getCohortNm(),
+                    c.getCrclmNm(),
+                    c.getRecruitBgngDt(),
+                    c.getRecruitEndDt(),
+                    c.getCrclmBgngYmd(),
+                    c.getCrclmEndYmd(),
+                    c.getAttendStartTm(),
+                    c.getAttendEndTm(),
+                    c.getCohortPl(),
+                    c.getCrclmCn(),
+                    logoSn
+            );
+            return ResponseEntity.ok(dto);
+        }).orElse(ResponseEntity.notFound().build());
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Cohort> getCohortById(@PathVariable Long id) {
+//        return cohortService.findById(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
+
     //회사 조회
     @GetMapping("/company/{coSn}")
     public ResponseEntity<Map<String, Object>> getCohortsByCompanyId(@PathVariable Long coSn) {

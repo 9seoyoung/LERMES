@@ -42,7 +42,8 @@ export default function Login() {
       const to = safePath(from) ?? safePath(me?.HOME_PATH) ?? '/';
       navigate(to, { replace: true });
     } catch (err) {
-      toast.error(err?.message || '로그인 실패');
+      const msg = err.response?.data?.message || '로그인 실패';
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

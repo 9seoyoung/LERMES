@@ -33,7 +33,7 @@ export default function UserProfile() {
       });
       setPreviewUrl(
         res.userProfileImage
-          ? `http://localhost:940/api/files/id/${res.userProfileImage}`
+          ? `http://localhost:940/api/files/id/${res.userProfileImage}/preview`
           : null
       );
     } catch (e) {
