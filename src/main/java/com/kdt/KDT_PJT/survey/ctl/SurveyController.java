@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/survey")
+@RequestMapping("/api/surveys")
 @RequiredArgsConstructor
 public class SurveyController {
 
     private final SurveyService surveyService;
     // 설문 등록
-    @PostMapping("/post")
+    @PostMapping
     public ResponseEntity<ResponseSurveyDto> createSurvey(@RequestBody RequestSurveyDto requestDto,
                                                           @AuthenticationPrincipal AuthCustomUserDetails auth) {
         Long userSn = auth.getId();

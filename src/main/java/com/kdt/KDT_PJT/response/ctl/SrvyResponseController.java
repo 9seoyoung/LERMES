@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/srvy-responses")
+@RequestMapping("/api/surveys")
 @RequiredArgsConstructor
 public class SrvyResponseController {
 
@@ -21,7 +21,7 @@ public class SrvyResponseController {
     private final SrvyResponseService srvyResponseService;
 
     //등록 및 수정
-    @PostMapping
+    @PostMapping("/{srvySn}/responses")
     public ResponseEntity<SrvyResponseResponseDto> createSrvyResponse(
             @RequestBody SrvyRequestResponseDto requestDto,
             @AuthenticationPrincipal AuthCustomUserDetails auth) {
@@ -55,7 +55,7 @@ public class SrvyResponseController {
     //설문 마감 전까지만 삭제 가능
     //관리자 및 본인만 가능
 
-    @DeleteMapping("/{responseSn}")
+    @DeleteMapping("responses/{responseSn}")
     public ResponseEntity<Void> deleteSrvyResponse(
             @PathVariable Long responseSn,
             @AuthenticationPrincipal AuthCustomUserDetails auth) {
