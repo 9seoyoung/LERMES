@@ -19,7 +19,10 @@ export default function TodayAttendList() {
 
   useEffect(() => {
     if (user?.USER_AUTHRT_SN === 1) return; //슈퍼 권한일 때 에러 방지
-    fetchTodayAttendance().then((data) => setRows(data || []));
+    fetchTodayAttendance().then((data) => {
+      console.log('[오늘 출결 데이터]', data);
+      setRows(data || []);
+    });
   }, []);
 
   return (
@@ -31,19 +34,37 @@ export default function TodayAttendList() {
       {rows.length === 0 ? (
         <div style={{ padding: 8, color: '#777' }}>오늘 데이터가 없습니다.</div>
       ) : (
-        <div style={{width: "100%", gap:"4px", display:"flex", flexDirection: "column"}}>
-        <ul style={{width: "100%", gap:"4px", display:"flex", flexDirection: "column"}}>
-        <li className="listTable" >
+        <div
+          style={{
+            width: '100%',
+            gap: '4px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <ul
+            style={{
+              width: '100%',
+              gap: '4px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <li className="listTable">
               <div>#</div>
               <div>이름</div>
               <div>입실</div>
               <div>퇴실</div>
               <div>상태</div>
-        </li>
-        </ul>
-        <ul style={{width: "100%", height: "350px", overflowY: "scroll" }}>
+            </li>
+          </ul>
+          <ul style={{ width: '100%', height: '350px', overflowY: 'scroll' }}>
             {rows.map((s, idx) => (
-              <li key={s.userSn} className="listTable" style={{width: '100%', height: "30px", overflow: "hidden" }}>
+              <li
+                key={s.userSn}
+                className="listTable"
+                style={{ width: '100%', height: '30px', overflow: 'hidden' }}
+              >
                 <div>{idx + 1}</div> {/* # */}
                 <div>{s.username}</div>
                 <div>{s.checkInTime ?? '-'}</div>
@@ -55,7 +76,7 @@ export default function TodayAttendList() {
                 </div>
               </li>
             ))}
-        </ul>
+          </ul>
         </div>
       )}
     </div>
