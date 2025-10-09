@@ -89,3 +89,9 @@ export const updateCompanyBigLogo = (companyId, fileSn) => {
 export const deleteCompanyBigLogo = (companyId) =>
   api.delete(`/company/${companyId}/logo/big`).then(({ data }) => data);
 
+// 회사 상세 정보 조회
+export const getCompanyDetail = () => ok(api.get('/company/detail'));
+
+// 회사 상세 정보 저장/수정
+export const saveCompanyDetail = (companyId, payload) =>
+  api.put(`/company/${companyId}`, payload).then(({ data }) => data);

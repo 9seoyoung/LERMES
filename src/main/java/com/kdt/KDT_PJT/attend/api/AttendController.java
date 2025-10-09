@@ -9,6 +9,7 @@ import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -123,11 +124,10 @@ public class AttendController {
         );
     }
 
-    /** 금일 학생들 출결 현황 조회 (강사 홈 페이지) */
+    /** 금일 학생들 출결 현황 조회 (강사용) */
     @GetMapping("/today/list")
     public ResponseEntity<SimpleResponse> getTodayStudentAttendance(Authentication auth) {
         List<StudentAttendanceDto> attendanceList = attendService.getTodayStudentAttendance(auth);
-
         return ResponseEntity.ok(
                 SimpleResponse.builder()
                         .ok(true)
@@ -135,8 +135,21 @@ public class AttendController {
                         .data(attendanceList)
                         .build()
         );
+    }
 
-
+    /** 금일 학생들 출결 현황 조회 (관리자/테넌트용) */
+    @GetMapping("/today/list/cohort/{cohortSn}")
+    public ResponseEntity<SimpleResponse> getTodayStudentAttendanceByCohort(
+            Authentication auth,
+            @PathVariable Long cohortSn) {
+        List<StudentAttendanceDto> attendanceList = attendService.getTodayStudentAttendanceByCohort(auth, cohortSn);
+        return ResponseEntity.ok(
+                SimpleResponse.builder()
+                        .ok(true)
+                        .message("오늘 출결 현황 - 특정 기수")
+                        .data(attendanceList)
+                        .build()
+        );
     }
 
     /** 단위기간 별 출결 조회 (학생 마이페이지) */
@@ -154,6 +167,8 @@ public class AttendController {
                         .build()
         );
     }
+
+
 
     /** 기수별 결석 조회 (관리자용) */
     @GetMapping("/absence/by-cohort/today")

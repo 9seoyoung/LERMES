@@ -89,4 +89,23 @@ public class CompanyLogoController {
                 "message", "빅 로고 삭제 완료"
         ));
     }
+
+    @PutMapping("/{companyId}")
+    public ResponseEntity<Company> updateCompany(
+            @PathVariable Long companyId,
+            @RequestBody Company updated
+    ) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new IllegalArgumentException("회사 없음: " + companyId));
+
+        // 필요한 필드만 업데이트
+        company.setName(updated.getName());
+        company.setCompanyTel(updated.getCompanyTel());
+        company.setCompanyAddress(updated.getCompanyAddress());
+        company.setCompanyAddressDetail(updated.getCompanyAddressDetail());
+        company.setSmallLogoFileSn(updated.getSmallLogoFileSn());
+
+        companyRepository.save(company);
+        return ResponseEntity.ok(company);
+    }
 }

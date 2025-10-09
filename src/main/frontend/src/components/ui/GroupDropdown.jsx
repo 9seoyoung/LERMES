@@ -6,7 +6,7 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 function GroupDropdown({setCohortSn}) {
   const { effectiveSn } = useSelectedCompany();
   const [hortlist, setHortList] = useState([]);
-  const [groupFilter, setGroupFilter] = useState("All")
+  const [groupFilter, setGroupFilter] = useState(null)
     console.log("그룹 변경")
 
 
@@ -18,6 +18,8 @@ function GroupDropdown({setCohortSn}) {
           const data = await hortlistByCpSn(effectiveSn);
           // console.log(`<<<<<<<<<<<<<<< 반환 ${data.data}`)
           setHortList(data.data.cohorts || []);
+          setGroupFilter(hortlist[0].cohortNm);
+          setCohortSn(hortlist[0].cohortSn);
           // console.log(data.data.map((value, idx)=> `${value.cohortNm} + ${idx}`))
         } catch (e) {
           console.log(e.message);
@@ -26,8 +28,8 @@ function GroupDropdown({setCohortSn}) {
     }, [effectiveSn]);
   return (
     <div className="dropSet" style={{minWidth: "100px", maxwidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
-      <Dropdown className="dropset_dd" label={groupFilter || "All"} >
-        <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p>
+      <Dropdown className="dropset_dd" label={groupFilter} >
+        {/* <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p> */}
       { hortlist.map((hortlist, idx) => (
           <p className=".subMenuList" key={idx} onClick={()=> {console.log("그룹선택>>>>>>>>>>>>>>>>>>>>>>>>>>>>");setGroupFilter(`${hortlist.cohortNm}`); setCohortSn(hortlist.cohortSn)}} >{hortlist.cohortNm}</p>
       ))}

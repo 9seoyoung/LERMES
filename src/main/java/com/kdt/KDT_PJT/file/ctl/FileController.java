@@ -77,6 +77,39 @@ public class FileController {
                 .body(r);
     }
 
+    // 파일 SN으로 미리보기 (inline)
+    @GetMapping("/id/{fileSn:\\d+}/preview")
+    public ResponseEntity<Resource> previewById(@PathVariable int fileSn) {
+        var meta = fileService.getMeta(fileSn);
+        if (meta == null || (meta.getDelYn() != null && meta.getDelYn() == 1)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String storedFileName = meta.getStrgFileNm();
+        String original = meta.getOrgnlFileNm();
+
+        Resource r = storage.loadAsResource(storedFileName);
+        Path p = storage.resolveFilename(storedFileName);
+        String contentType = storage.detectContentType(p);
+
+        String filename = (original != null && !original.isBlank()) ? original : storedFileName;
+        String encoded = URLEncoder.encode(filename, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+
+        long len;
+        try {
+            len = Files.size(p);
+        } catch (Exception e) {
+            len = -1L;
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + encoded + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .contentLength(Math.max(0, len))
+                .body(r);
+    }
+
+
 
     // 다운로드 (attachment) - 저장 파일명으로
     @GetMapping("/{storedFileName}")
@@ -112,6 +145,9 @@ public class FileController {
                 "originalFileName", meta.getOrgnlFileNm()
         ));
     }
+
+    //1) fileSn 받아오고 그걸로 저장 파일명(strgfilenm)받아오는 api 호출 -> 파일명 받아옴 -> user.home+LERMES/FILES/파일명 으로 바로 연결
+    // 2) 미리보기 api 호출하면 그거는 용량 쪼매난애니까 더 빨리 받아질거임 그거쓰기
 
     // 파일 SN으로 다운로드 (attachment)
     @GetMapping("/id/{fileSn:\\d+}")    //파일 SN을 url에 실어서 요청 보냄, @Pathvariable은 항상 포함되어야하고,

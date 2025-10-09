@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.calendar.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -18,6 +19,8 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CalendarRequestDTO {
+    @JsonProperty("detailScope")
+    @JsonAlias("cohortSn")
     private Integer cohortSn;           //COHORT_SN
     private String startDate;
     private String endDate;             //nullable, 안들어오면 = startDate
@@ -28,6 +31,7 @@ public class CalendarRequestDTO {
     @JsonProperty("title")
     private String eventNm;             //EVENT_NM 이벤트 이름
     @JsonProperty("memo")
+    @JsonAlias("content")
     private String rmrkCn;              //RMRK_CN 이벤트 설명
     private Integer userSn;             //USER_SN 사용자 일련번호
     @JsonProperty("isPrivate")
