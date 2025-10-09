@@ -4,6 +4,7 @@ import styles from "../../styles/MiniCal.module.css";
 import { buildOverlayBars, buildWeeks } from "../../utils/calendarBars";
 
 const z2 = (n) => String(n).padStart(2, "0");
+const makeKey = (...parts) => parts.filter(Boolean).join("|");
 
 export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw }) {
   // monthlyTodoRaw: 백에서 받은 "월 전체 이벤트 원본 배열" [{eventNm, eventBgngDt, eventEndDt, ...}, ...]
@@ -66,14 +67,14 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
         {/* 1) 셀 레이어 */}
         <div className={styles.cellsGrid}>
           {weeks.map((week, r) => (
-            <div key={r} className={styles.rowGrid}>
+             <div key={makeKey("row", year, month, r)} className={styles.rowGrid}>
               {week.map((day, c) => {
                 const isNull = day === null;
                 const key = !isNull ? `${year}-${z2(month)}-${z2(day)}` : null;
                 const isSelected = key && key === selectedDate;
                 return (
                   <div
-                    key={c}
+                    key={key ?? makeKey("empty", year, month, r, c)}
                     className={`${styles.cell} ${isSelected ? styles.selected : ""} ${isNull ? styles.empty : ""}`}
                     onClick={() => onSelectDate(day)}
                   >
@@ -88,9 +89,25 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
         {/* 2) 바(오버레이) 레이어 */}
         <div className={styles.barsOverlay}>
           {/* bars: {row, colStart, span, title, stackIndex, z, fullDays} */}
-          {bars.map((b) => (
+        {bars.map((b, idx) => {
+          const seed =
+            b.eventId ??
+            b.startKey ??             // 'YYYY-MM-DD' 같은 시작 키
+            b.title ?? "no-title";
+          const safeKey = makeKey(
+            "bar",
+            seed,
+            b.row,
+            b.colStart,
+            b.span,
+            b.stackIndex,
+            idx
+          );
+          return (
             <div
-              key={b.id}
+            key={
+                safeKey
+              }
               className={styles.bar}
               title={`${b.title} · ${b.fullDays}일`}
               style={{
@@ -103,7 +120,8 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
             >
               {b.title}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

@@ -1,8 +1,5 @@
 import CohortAbsenceCard from '../../components/layout/inho/CohortAbsenceCard';
 import AttendAdjustAdminPage from '../../components/layout/inho/AttendAdjustAdminPage';
-import ScheduleList from '../../components/ui/ScheduleList';
-import SchedList from '../../components/ui/SchedList';
-import MiniCal from '../../components/ui/MiniCal';
 import CalSched from '../../components/ui/CalSched';
 
 export default function AdminHome() {

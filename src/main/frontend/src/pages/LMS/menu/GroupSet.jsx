@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FilterList from "../../../components/ui/FilterList";
 import { useAccount } from "../../../auth/AuthContext";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
@@ -19,20 +19,27 @@ function GroupSet() {
   const navigate = useNavigate();
   const { user } = useAccount();
   const {effectiveSn} = useSelectedCompany();
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [todayList, setTodayList] = useState([]);
-    const [schedules, setSchedules] = useState({});
-    const [monthlyTodoRaw, setMonthlyTodoRaw] = useState([]); // ★ 원본 배열
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [todayList, setTodayList] = useState([]);
+  const [schedules, setSchedules] = useState({});
+  const [monthlyTodoRaw, setMonthlyTodoRaw] = useState([]); // ★ 원본 배열
 
   const [events, setEvents] = useState([]); // { 'YYYY-MM-DD': ['일정1', '일정2'] }
   const [displayDate, setDisplayDate] = useState("");                     // 문자열
   const [selectedIdx, setSelected] = useState(0);
+
+  const location = useLocation();
+  const curloc = location.pathname;
 
   const coSn = user?.USER_OGDP_CO_SN;
 
   const [hortlist, setHortList] = useState(null);
   const [loading, setLoading] = useState(false);
   const [filterArr, setFilterArr] = useState([]);
+  const cohortSn = useMemo(
+      () => (Array.isArray(hortlist) && hortlist[selectedIdx]?.cohortSn) ?? null,
+      [hortlist, selectedIdx]
+    );
 
 
   // 과정 리스트
@@ -50,6 +57,8 @@ function GroupSet() {
         // if (!ignore) setHortList(res?.data ?? []);
         if (!ignore) {
           setHortList(res?.data.cohorts );
+          console.log("기수넘ㅂㅓ");
+          console.log(res?.data.cohorts[selectedIdx].cohortSn);
         }
         console.log(`${hortlist}-회사SN으로 상태에 저장한 리스트`)
       } catch (e) {
@@ -60,17 +69,82 @@ function GroupSet() {
     })();
 
     return () => { ignore = true; };
-  }, [coSn]);
+  }, [coSn, selectedIdx]);
 
   // 필터 배열
   useEffect(() => {
     const names = (hortlist || []).map(h => h?.cohortNm).filter(Boolean);
     setFilterArr(names);
   }, [hortlist]);
+  
+    useEffect(() => {
+      if (!selectedDate || !user || !cohortSn) {
+        setDisplayDate('선택된 날짜 없음');
+        return;
+      }
+  
+      const [year, month, day] = selectedDate.split('-').map(Number);
+      const dateKey = `${year}-${z2(month)}-${z2(day)}`;
+  
+      const params = {
+        year,
+        month,
+        day,
+        isPrivate: 0,
+        cohortSn: cohortSn,
+        effectiveSn: effectiveSn
+      };
+      setDisplayDate(`${month}월 ${day}일`);
+      
+    (async () => {
+      try {
+        // 당일 목록
+        const res = await pullToDoList(params); // axios.get('/api/...', { params })
+        const list = res?.data ?? [];
+        setTodayList(list);
+        console.log(`>>>>>>>>>>>>>>>>>>>당일 목록 불러옴 ${res.data}`)
+        console.log(list);
 
-  if (!user) return <div>로딩 중…</div>;
+        // 사이드 목록(텍스트)와 events(객체) 갱신
+        setSchedules(prev => ({
+          ...prev,
+          [selectedDate]: list.map(v => v.eventNm)
+        }));
+
+        setEvents(prev => ({
+          ...prev,
+          [dateKey]: list
+        }));
+
+        // 월 전체 목록
+        const monthlyRes = await pullToDoList({ year, month, isPrivate: 0, cohortSn });
+
+        const raw = monthlyRes?.data;
+        console.log("월목록")
+        console.log(raw);
+        
+        const monthlyList = Array.isArray(raw) ? raw : Object.values(raw ?? {});
+        setMonthlyTodoRaw(monthlyList);  // ★ 항상 배열
+  
+  
+          // (선택) 전체 기간 일수 필드 부여해두면 다른 곳에서 재사용 편함
+          const withPeriod = monthlyList.map(v => ({
+            ...v,
+            periodDays: diffDaysInclusive(v.eventBgngDt, v.eventEndDt),
+          }));
+  
+          // 미니캘용 맵
+        } catch (err) {
+          console.error("[pullToDoList] error:", err?.response?.data ?? err);
+        }
+      })();
+  
+    }, [selectedDate, user, cohortSn]);
 
 
+    if (!user) return <div>로딩 중…</div>;
+
+    
   return (
     <div className="boardPage">
       <h2>과정 관리</h2>
@@ -104,7 +178,8 @@ function GroupSet() {
             setEvents={setEvents}
             selectedDate={selectedDate}
             displayDate={displayDate}
-            setDisplayDate={setDisplayDate}/>    
+            setDisplayDate={setDisplayDate}
+            todayList={todayList}/>
           </div>
           <div className='dashBoardModule' style={{overflow:"hidden" }}>
             <TodayAttendList />

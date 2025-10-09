@@ -1,14 +1,15 @@
 // 일정 목록
 
 import React, { useState, useEffect } from "react";
-import { SchedAddBtn } from './UiComp.jsx';
 import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
+import { useLocation } from "react-router-dom";
 
 export default function ScheduleList({selectedDate}) {
   const [schedules, setSchedules] = useState({});   // 날짜별 일정 저장
   const [showPopup, setShowPopup] = useState(false); // 💡 팝업 상태 추가
   const [displayDate, setDisplayDate] = useState('');
+  const curloc = useLocation();
 
   useEffect(() => {
     if (selectedDate) {
@@ -41,7 +42,8 @@ export default function ScheduleList({selectedDate}) {
     <>
       <h4>
          <div style={{color: "#E9623A", display:"flex", gap:"4px", alignItems:"center"}}>TODO <p style={{fontSize:"1.4rem", fontWeight:"500"}}>({displayDate})</p></div>
-         <div className="specificBtn">+일정등록</div>
+         {curloc.pathname === "/adminHome/groupSet" ? null :
+         <div className="specificBtn">+일정등록</div>}
       </h4>
 
       <ul className={styles.schedList}>
