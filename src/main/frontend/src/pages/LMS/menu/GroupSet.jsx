@@ -5,7 +5,7 @@ import { useAccount } from "../../../auth/AuthContext";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { hortlistByCpSn } from "../../../services/cohortService";
 import TodayAttendList from "../../../components/layout/inho/TodayAttendList";
-import ScheduleList from "../../../components/ui/ScheduleList";
+import ScheduleList from "../../../components/ui/SchedList";
 import styles from '../../../styles/CalSched.module.css';
 import MiniCal from "../../../components/ui/MiniCal";
 import { pullToDoList } from "../../../services/calService";
