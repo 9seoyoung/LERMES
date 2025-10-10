@@ -6,7 +6,7 @@ import {Settings} from "lucide-react";
 import ListEditTable from '../../../components/ui/ListEditTable';
 import { hortlistByCpSn } from '../../../services/cohortService';
 import { useSelectedCompany} from '../../../contexts/SelectedCompanyContext';
-import { pullAllAccount, pullApplyEmp } from '../../../services/accountService';
+import { pullAllAccount, pullApplyEmp, pullTeacherAccount } from '../../../services/accountService';
 import styles from '../../../styles/account.module.css';
 import { FaArrowLeft } from "react-icons/fa";
 import GroupDropdown from '../../../components/ui/GroupDropdown';
@@ -19,6 +19,8 @@ export default function AccountSet() {
   const [selectedIdx, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
   const [cohortList, setCohortList] = useState([]);
+  const [teacherList, setTeacherList] = useState([]);
+  const [stdList, setStdList] = useState([]);
   const [cohortSn, setCohortSn] = useState();
   const [accountList, setAccountList] = useState([]);
   const [dataListTop, setDataListTop] = useState([]);
@@ -47,7 +49,22 @@ export default function AccountSet() {
       }
     })();
   }, [selectedIdx, cohortSn, effectiveSn])
+ useEffect(() => {
 
+  ( async () => {
+    console.log(effectiveSn);
+      try {
+      const accountT = await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 4});
+      const accountStd = await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: [5, 6]});
+        console.log(accountStd.data);
+        console.log(accountT.data);
+        setTeacherList(accountT.data);
+        setStdList(accountStd.data);
+      } catch(err) {
+        console.log(err);
+      }
+    })();
+  }, [cohortSn, effectiveSn])
   // 직원 / 강사 / 수강생 관리(수정 + 저장)할 핸들러
   const handleSubmit = async () => {
     setLoading(true)
@@ -221,7 +238,7 @@ export default function AccountSet() {
                     <ListEditTable 
                     tableHead={[,'이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
                     columnData={[ 'name','email', 'userTelno', 'memo','roleType', 'enabled']}
-                    apiData={accountList}
+                    apiData={teacherList}
                     gridTemplate="0.5fr 0.3fr 1fr 2.5fr 1.6fr 1.5fr 0.7fr 1fr "
                     formData={formData}
                     type = {['text', 'email', 'tel', 'text', 'select', 'select' ]}
@@ -235,7 +252,7 @@ export default function AccountSet() {
                     <ListTable
                     tableHead={['#', '이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
                     columnData={['name','email', 'userTelno', 'memo', 'roleType', 'enabled']}
-                    apiData={ accountList }
+                    apiData={ teacherList }
                     whereTogo={"/adminHome/accountSet"}
                     // 문자열로 지정
                     gridTemplate="0.5fr 1fr 2.5fr 1.6fr 1.5fr 0.7fr 1fr "
@@ -275,7 +292,7 @@ export default function AccountSet() {
                     <ListEditTable 
                     tableHead={[,'이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
                     columnData={[ 'name','email', 'userTelno', 'memo','roleType', 'enabled']}
-                    apiData={accountList}
+                    apiData={stdList}
                     gridTemplate="0.5fr 0.3fr 1fr 2.5fr 1.6fr 1.5fr 0.7fr 1fr "
                     formData={formData}
                     type = {['text', 'email', 'tel', 'text', 'select', 'select' ]}
@@ -288,7 +305,7 @@ export default function AccountSet() {
                     <ListTable
                     tableHead={['#', '이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
                     columnData={['name','email', 'userTelno', 'memo', 'roleType', 'enabled']}
-                    apiData={ accountList }
+                    apiData={ stdList }
                     whereTogo={"/adminHome/accountSet"}
                     // 문자열로 지정
                     gridTemplate="0.5fr 1fr 2.5fr 1.6fr 1.5fr 0.7fr 1fr "
