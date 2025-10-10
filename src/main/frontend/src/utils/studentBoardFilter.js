@@ -17,7 +17,7 @@ export const BOARD_MENU_FILTER_COLUMNDATA = {
     0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     2: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
-    3: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    3: ["bbsType", "srvyTtl", "formattedAPostFrstDt", "userNm", "viewCnt"],
     4: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     5: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"]
@@ -27,7 +27,7 @@ export const SELECT_POST_SN_KEY = {
     0: "postSn",
     1: "postSn",
     2: "postSn",
-    3: "postSn",
+    3: "srvyTtl",
     4: "postSn",
     5: "postSn",
     6: "postSn"

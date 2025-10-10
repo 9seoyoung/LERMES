@@ -118,15 +118,15 @@ public class SurveyService {
         );
 
         // 3. 응답 여부 확인
-        int responseCount = responseMapper.countResponsesByParent(srvySn, "SURVEY");
+//        int responseCount = responseMapper.countResponsesByParent(srvySn, "SURVEY");
 
-        // 4. 수정 불가 조건
-        if (responseCount > 0) {
-            throw new IllegalStateException("해당 설문에 응답이 있습니다. 수정 불가능합니다.");
-        }
-        if (status == SurveyStatus.CLOSED) {
-            throw new IllegalStateException("마감된 설문은 수정할 수 없습니다.");
-        }
+//        // 4. 수정 불가 조건
+//        if (responseCount > 0) {
+//            throw new IllegalStateException("해당 설문에 응답이 있습니다. 수정 불가능합니다.");
+//        }
+//        if (status == SurveyStatus.CLOSED) {
+//            throw new IllegalStateException("마감된 설문은 수정할 수 없습니다.");
+//        }
 
         // 5. 권한 체크
         if (roleId == null) {
