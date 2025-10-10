@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import GroupDropdown from '../ui/GroupDropdown';
 
 function FilterList(props) {
-  const { arr, children, selectedIdx, setSelected, setCohortSn, effectiveSn } =
+  const { arr, children, selectedIdx, setSelected, setCohortSn, effectiveSn, setCohortStts } =
     props;
   //   const [pullList, setPullList] = useState([]);
   // const filter = filterArr[selectedIdx];
@@ -25,6 +25,7 @@ function FilterList(props) {
             if (setCohortSn) {
               // ✅ 클릭한 기수의 SN 넘기기
               setCohortSn(arr[idx]?.cohortSn || null);
+              setCohortStts(arr[idx]?.cohortSttsNm || null);
               console.log('[FilterList] 클릭한 기수:', arr[idx]);
             }
           }}

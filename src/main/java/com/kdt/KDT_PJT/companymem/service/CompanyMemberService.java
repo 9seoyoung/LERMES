@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.companymem.service;
 
+import com.kdt.KDT_PJT.auth.repository.UserRepository;
 import com.kdt.KDT_PJT.companymem.Dto.CompanyMemberDto;
 import com.kdt.KDT_PJT.companymem.entity.CompanyMember;
 import com.kdt.KDT_PJT.companymem.repository.CompanyMemberRepository;
@@ -14,6 +15,8 @@ import java.util.List;
 public class CompanyMemberService {
 
     private final CompanyMemberRepository companyMemberRepository;
+
+    private final UserRepository userRepository;
 
     @Transactional
     public Long save(CompanyMemberDto dto) {
@@ -63,15 +66,22 @@ public class CompanyMemberService {
     @Transactional(readOnly = true)
     public List<CompanyMemberDto> findByCompanySn(Long companySn) {
         List<CompanyMember> members = companyMemberRepository.findByCompanySn(companySn);
-        return members.stream().map(member -> CompanyMemberDto.builder()
-                .companyMemberSn(member.getCompanyMemberSn())
-                .companySn(member.getCompanySn())
-                .userSn(member.getUserSn())
-                .userAuthrtSn(member.getUserAuthrtSn())
-                .orgStartDate(member.getOrgStartDate())
-                .orgEndDate(member.getOrgEndDate())
-                .build()
-        ).toList();
+
+        return members.stream().map(member -> {
+            CompanyMemberDto.CompanyMemberDtoBuilder dtoBuilder = CompanyMemberDto.builder()
+                    .companyMemberSn(member.getCompanyMemberSn())
+                    .companySn(member.getCompanySn())
+                    .userSn(member.getUserSn())
+                    .userAuthrtSn(member.getUserAuthrtSn())
+                    .orgStartDate(member.getOrgStartDate())
+                    .orgEndDate(member.getOrgEndDate());
+
+            userRepository.findById(member.getUserSn())
+                    .ifPresent(user -> dtoBuilder.userName(user.getName()));
+
+            return dtoBuilder.build();
+        }).toList();
     }
+
 
 }

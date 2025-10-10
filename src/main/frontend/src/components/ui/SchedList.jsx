@@ -5,6 +5,7 @@ import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
 import '../../styles/token.css';
 import { useAccount } from "../../auth/AuthContext.jsx";
+import { useLocation } from "react-router-dom";
 
 function SchedList({
   selectedDate,
@@ -17,6 +18,7 @@ function SchedList({
 }) {
   const [showPopup, setShowPopup] = useState(false);
   const { user } = useAccount();
+  const curloc = useLocation();
 
   const z2 = (n) => String(n).padStart(2, '0');
 
@@ -61,11 +63,12 @@ function SchedList({
   const currentDateSchedules = schedules[selectedDate] || [];
 
   return (
-    <div className={styles.sched}>
-      <div className={styles.schedDateBox}>
-        <div className={styles.schedDate}>등록된 일정 ({displayDate})</div>
-        <SchedAddBtn textType="+ 일정등록" onClick={() => setShowPopup(true)} />
-      </div>
+    <>
+      <h4>
+         <div style={{color: "#E9623A", display:"flex", gap:"4px", alignItems:"center"}}>TODO <p style={{fontSize:"1.4rem", fontWeight:"500"}}>({displayDate})</p></div>
+         {curloc.pathname === "/adminHome/groupSet" ? null :
+         <div className="specificBtn">+일정등록</div>}
+      </h4>
 
       <ul className={styles.schedList}>
         {currentDateSchedules.length === 0 ? (
@@ -82,7 +85,7 @@ function SchedList({
           selectedDate={selectedDate}
         />
       )}
-    </div>
+    </>
   );
 }
 

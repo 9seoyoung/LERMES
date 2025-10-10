@@ -19,13 +19,13 @@ public class CompanyMemberController {
 
     @GetMapping
     public ResponseEntity<List<CompanyMemberDto>> getMembersInSameCompany(
-            @AuthenticationPrincipal AuthCustomUserDetails me) {
+            @RequestParam("companySn") Long companySn) {
 
-        Long companySn = me.getCompanySn(); // 로그인한 유저의 회사번호 가져오기
         List<CompanyMemberDto> members = companyMemberService.findByCompanySn(companySn);
 
         return ResponseEntity.ok(members);
     }
+
 
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody CompanyMemberDto dto) {
