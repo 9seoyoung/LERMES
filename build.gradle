@@ -92,6 +92,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
+	// OAuth2 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 tasks.withType(JavaCompile) {
 	options.compilerArgs << "-parameters"

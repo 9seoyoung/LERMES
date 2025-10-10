@@ -57,6 +57,8 @@ import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
 import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
 import UnknownHome from '../pages/LMS/UnknownHome.jsx';
 import StudyPost from '../pages/LMS/form/StudyPost.jsx';
+import OAuth2Redirect from '../auth/loginPage/GoogleOAuth2Redirect.jsx';
+
 function AppRoutes() {
   return (
     <Routes>
@@ -83,9 +85,11 @@ function AppRoutes() {
         <Route path="generaljoin" element={<GeneralJoin />} />
         <Route path="tenantjoin" element={<TenantSignup />} />
         <Route path="login" element={<Login />} />
-        {/* 여기 FindId,FindPw 추가 */}
+        {/* 아이디, 비밀번호 찾기 추가 */}
         <Route path="find-id" element={<FindId />} />
         <Route path="find-pw" element={<FindPw />} />
+        {/* OAuth2Redirect 추가 */}
+        <Route path="oauth2-redirect" element={<OAuth2Redirect />} />
       </Route>
 
       {/*기본 레이아웃*/}
@@ -94,7 +98,6 @@ function AppRoutes() {
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
         <Route path="unknownHome" element={<UnknownHome />} />
-        
 
         <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
           {/* 로그인이 필요한 테스트 페이지 */}
@@ -106,49 +109,88 @@ function AppRoutes() {
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
             <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
-          <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecruitRead/>}/>
-            <Route path="visitorHome" element={<VisitorHome />} />
-            <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
-            {/* 관리자(테넌트, 직원) */}
-            <Route element={<RoleRoute roles={[1, 2, 3]} />}>
-              <Route path="adminHome" element={<AdminHome />} />
-              <Route path="adminHome/boardSet/readInterview" element={<AdminPostRead />} />
-              <Route path="adminHome/boardSet" element={<BoardManage />} />
-              <Route path="adminHome/boardSet/createPost" element={<BoardPost />} />
-              <Route path="adminHome/board/:postSn" element={<BoardRead2 />} />
-              <Route path="adminHome/groupSet" element={<GroupSet />} />
-              <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
-              <Route path="adminHome/docuSet" element={<DocxSet />}/>
-              <Route path="adminHome/accountSet" element={<AccountSet />} />
-              <Route path="adminHome/myPage" element={<AdminMypage />} />
-            </Route>
+              <Route
+                path="/visitorHome/applyRecruitPoster/:recruitSn"
+                element={<RecruitRead />}
+              />
+              <Route path="visitorHome" element={<VisitorHome />} />
+              <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
+              {/* 관리자(테넌트, 직원) */}
+              <Route element={<RoleRoute roles={[1, 2, 3]} />}>
+                <Route path="adminHome" element={<AdminHome />} />
+                <Route
+                  path="adminHome/boardSet/readInterview"
+                  element={<AdminPostRead />}
+                />
+                <Route path="adminHome/boardSet" element={<BoardManage />} />
+                <Route
+                  path="adminHome/boardSet/createPost"
+                  element={<BoardPost />}
+                />
+                <Route
+                  path="adminHome/board/:postSn"
+                  element={<BoardRead2 />}
+                />
+                <Route path="adminHome/groupSet" element={<GroupSet />} />
+                <Route
+                  path="adminHome/groupSet/createGroup"
+                  element={<RecruitPost />}
+                />
+                <Route path="adminHome/docuSet" element={<DocxSet />} />
+                <Route path="adminHome/accountSet" element={<AccountSet />} />
+                <Route path="adminHome/myPage" element={<AdminMypage />} />
+              </Route>
 
-            {/* 강사 */}
-            <Route element={<RoleRoute roles={[1, 4]} />}>
-              <Route path="tutorHome" element={<TutorHome />} />
-              <Route path="tutorHome/board" element={<Board />} />
-              <Route path="tutorHome/board/createPost" element={<BoardPost />} />
-              <Route path="tutorHome/board/:postSn" element={<BoardRead2 />} />
-              <Route path="tutorHome/studySched/createPost" element={<BoardPost />} />
-              <Route path="tutorHome/studySched" element={<StudyManage />} />
-              <Route path="tutorHome/studentManage" element={<StudentManage />} />
-              <Route path="tutorHome/studentManage/createPost" element={<BoardPost />} />
-              <Route path="tutorHome/myPage" element={<TutorMypage />} />
-            </Route>
+              {/* 강사 */}
+              <Route element={<RoleRoute roles={[1, 4]} />}>
+                <Route path="tutorHome" element={<TutorHome />} />
+                <Route path="tutorHome/board" element={<Board />} />
+                <Route
+                  path="tutorHome/board/createPost"
+                  element={<BoardPost />}
+                />
+                <Route
+                  path="tutorHome/board/:postSn"
+                  element={<BoardRead2 />}
+                />
+                <Route
+                  path="tutorHome/studySched/createPost"
+                  element={<BoardPost />}
+                />
+                <Route path="tutorHome/studySched" element={<StudyManage />} />
+                <Route
+                  path="tutorHome/studentManage"
+                  element={<StudentManage />}
+                />
+                <Route
+                  path="tutorHome/studentManage/createPost"
+                  element={<BoardPost />}
+                />
+                <Route path="tutorHome/myPage" element={<TutorMypage />} />
+              </Route>
 
-            {/* 수강생 */}
-            <Route element={<RoleRoute roles={[1, 5]} />}>
-              <Route path="stdHome" element={<StdHome />} />
-              <Route path="stdHome/board" element={<Board />} />
-              <Route path="stdHome/board/createPost" element={<BoardPost />} />
-              <Route path="stdHome/board/:postSn" element={<BoardRead2 />} />
-              <Route path="stdHome/studySched" element={<StudyPlan />} />
-              <Route path="stdHome/studySched/createPost" element={<BoardPost />} />
-              <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />
-              <Route path="stdHome/myPage" element={<StdMypage />} />
+              {/* 수강생 */}
+              <Route element={<RoleRoute roles={[1, 5]} />}>
+                <Route path="stdHome" element={<StdHome />} />
+                <Route path="stdHome/board" element={<Board />} />
+                <Route
+                  path="stdHome/board/createPost"
+                  element={<BoardPost />}
+                />
+                <Route path="stdHome/board/:postSn" element={<BoardRead2 />} />
+                <Route path="stdHome/studySched" element={<StudyPlan />} />
+                <Route
+                  path="stdHome/studySched/createPost"
+                  element={<BoardPost />}
+                />
+                <Route
+                  path="stdHome/studySched/interview/:postSn"
+                  element={<InterviewRead />}
+                />
+                <Route path="stdHome/myPage" element={<StdMypage />} />
+              </Route>
             </Route>
           </Route>
-        </Route>
         </Route>
       </Route>
     </Routes>
