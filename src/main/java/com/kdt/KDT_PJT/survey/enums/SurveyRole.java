@@ -1,5 +1,7 @@
 package com.kdt.KDT_PJT.survey.enums;
 
+import static java.lang.Boolean.TRUE;
+
 public enum SurveyRole {
 
     SUPER_ADMIN {

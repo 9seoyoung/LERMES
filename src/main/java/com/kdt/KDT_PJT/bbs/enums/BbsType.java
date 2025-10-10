@@ -2,7 +2,7 @@ package com.kdt.KDT_PJT.bbs.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.kdt.KDT_PJT.survey.mapper.SurveyMapper;
+//import com.kdt.KDT_PJT.survey.mapper.SurveyMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
