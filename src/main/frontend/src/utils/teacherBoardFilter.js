@@ -17,7 +17,7 @@ export const BOARD_MENU_FILTER_COLUMNDATA = {
     0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     2: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
-    3: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    3: ["bbsType", "srvyTtl", "formattedAPostFrstDt", "userNm", "viewCnt"],
     4: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     5: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"]
@@ -27,19 +27,19 @@ export const SELECT_POST_SN_KEY = {
     0: "postSn",
     1: "postSn",
     2: "postSn",
-    3: "postSn",
+    3: "srvySn",
     4: "postSn",
     5: "postSn",
     6: "postSn"
 }
 
 export const SELECT_TEACHER_DETAIL_PAGE_PATH = {
-    0: 0,
-    1: "/tutorHome/board",
-    2: "/tutorHome/board",
-    3: "/tutorHome/board",
-    4: "/tutorHome/board", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
-    5: "/tutorHome/board",
+    0: "/tutorHome/board/read",
+    1: "/tutorHome/board/read",
+    2: "/tutorHome/board/read",
+    3: "/tutorHome/board/read",
+    4: "/tutorHome/board/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/tutorHome/board/read",
     6: ""
 
 }
