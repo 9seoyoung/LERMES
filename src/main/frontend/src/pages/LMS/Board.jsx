@@ -5,7 +5,7 @@ import uiStyle from "../../styles/UiComp.module.css"
 import FilterList from "../../components/ui/FilterList";
 import { useEffect, useState } from "react";
 import { BOARD_MENU_FILTER_COLUMNDATA, SELECT_DETAIL_PAGE_PATH, SELECT_POST_SN_KEY, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
-import { callBoardList } from "../../services/postService";
+import { callBoardList, callSurveyList } from "../../services/postService";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../auth/AuthContext";
 import { toast } from "react-toastify";
@@ -42,9 +42,9 @@ export default function Board(){
 
         (async () => {
             try{
-                const {data} = await callBoardList(params);
+                const {data} = (selectedIdx === 3 ? await callSurveyList({coSn:effectiveSn, cohortSn: cohortSn, bbsType: "설문"}) : await callBoardList(params));
                 console.log(data);
-                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt),}));
+                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt ?? item.srvyFrstWrtDt),}));
                 setPullList(formattedData);
             } catch(err) {
                 toast.error(err.message);

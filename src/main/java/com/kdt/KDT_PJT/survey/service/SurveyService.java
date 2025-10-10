@@ -117,9 +117,9 @@ public class SurveyService {
                 survey.getSrvyEndDt().atTime(23, 59, 59)
         );
 
-//        // 3. 응답 여부 확인
+        // 3. 응답 여부 확인
 //        int responseCount = responseMapper.countResponsesByParent(srvySn, "SURVEY");
-//
+
 //        // 4. 수정 불가 조건
 //        if (responseCount > 0) {
 //            throw new IllegalStateException("해당 설문에 응답이 있습니다. 수정 불가능합니다.");

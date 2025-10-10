@@ -124,6 +124,19 @@ export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/p
  */
 export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn}})
 
+/**
+ * 설문 목록 조회
+ * @param {Number} coSn
+ * @param {Number} cohortSn
+ * @param {String} bbsType
+ */
+export const callSurveyList = ({cohortSn, bbsType, coSn}) => api.get(`/survey/list/${coSn}`)
+
+/**
+ * 설문 단건 조회
+ * @param {Number} srvySn
+ */
+export const readSurvey = ({srvySn}) => api.get(`/survey/${srvySn}`);
 
 
 /**

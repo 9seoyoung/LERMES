@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum SurveyScope {
 
     COHORT("기수전체"),        //테넌트, 직원, 수강생 전용
-    INTERNAL("기수내부");      //강사, 수강생 전용
+    INTERNAL("그룹공개");      //강사, 수강생 전용
 
     private final String description;
 
