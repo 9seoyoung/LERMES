@@ -44,6 +44,7 @@ export default function BoardManage(){
         if(bbsType != "전체") params.bbsType = bbsType;
         if(effectiveSn != null) params.effectiveSn = effectiveSn;
         if(selectedIdx === 4) {params.bbsType = "SURVEY"; params.coSn = effectiveSn}
+        if(selectedIdx === 2) {params.bbsType = "SURVEY"; params.coSn = effectiveSn; params.isPrivate = 0;}
 
         console.log(params);
         console.log(user);
