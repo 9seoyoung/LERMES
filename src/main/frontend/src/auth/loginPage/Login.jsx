@@ -83,6 +83,124 @@ export default function Login() {
           >
             {loading ? '로그인 중...' : '로그인'}
           </button>
+          <header
+            style={{
+              textAlign: 'center',
+              fontSize: '1.2rem',
+              fontWeight: '700',
+              letterSpacing: '0.2px',
+              color: '#757575',
+            }}
+          >
+            SNS로 간편 로그인 / 회원가입
+          </header>
+          <div
+            className="OAuth2"
+            style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
+          >
+            <button
+              className="googleLoginBtn"
+              onClick={() => {
+                window.location.href =
+                  'http://localhost:940/oauth2/authorization/google';
+              }}
+            >
+              <img
+                src="/img/google-icon.png"
+                alt="Google 아이콘"
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  backgroundColor: '#fff',
+                  border: '1px solid #dadce0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 1px 3px rgba(60,64,67,0.3)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  padding: '5px',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.08)';
+                  e.currentTarget.style.boxShadow =
+                    '0 3px 8px rgba(60,64,67,0.35)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow =
+                    '0 1px 3px rgba(60,64,67,0.3)';
+                }}
+              />
+            </button>
+            <button
+              className="kakaoLoginBtn"
+              onClick={() => {
+                window.location.href =
+                  'http://localhost:940/oauth2/authorization/kakao';
+              }}
+            >
+              <img
+                src="/img/kakao-icon.png"
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: '#FFE812',
+                  justifyContent: 'center',
+                  boxShadow: '0 0 4px rgba(0,0,0,0.2)',
+                  cursor: 'pointer',
+                  padding: '10px',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.08)';
+                  e.currentTarget.style.boxShadow =
+                    '0 3px 8px rgba(60,64,67,0.35)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow =
+                    '0 1px 3px rgba(60,64,67,0.3)';
+                }}
+              />
+            </button>
+            <button
+              className="naverLoginBtn"
+              onClick={() => {
+                window.location.href =
+                  'http://localhost:940/oauth2/authorization/naver';
+              }}
+            >
+              <img
+                src="/img/naver-icon.png"
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  backgroundColor: '#03C75A',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 0 4px rgba(0,0,0,0.2)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.08)';
+                  e.currentTarget.style.boxShadow =
+                    '0 3px 8px rgba(60,64,67,0.35)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow =
+                    '0 1px 3px rgba(60,64,67,0.3)';
+                }}
+              />
+            </button>
+          </div>
           <hr />
           <Link to="/welcome/generaljoin" className="problemBox">
             아이디가 없어요

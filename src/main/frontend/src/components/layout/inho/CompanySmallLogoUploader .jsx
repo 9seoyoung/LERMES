@@ -42,7 +42,7 @@ export default function CompanySmallLogoUploader() {
 
       await updateCompanySmallLogo(user?.USER_OGDP_CO_SN, fileSn);
       setLogoFileSn(fileSn);
-      toast.success('미니 로고 변경 완료!');
+      toast.success('회사 로고 변경 완료!');
     } catch (err) {
       console.error(err);
       toast.error('로고 업로드 실패');
@@ -54,7 +54,7 @@ export default function CompanySmallLogoUploader() {
     try {
       await deleteCompanySmallLogo(user?.USER_OGDP_CO_SN);
       setLogoFileSn(null);
-      toast.success('미니 로고 삭제 완료!');
+      toast.success('회사 로고 삭제 완료!');
     } catch (err) {
       console.error(err);
       toast.error('로고 삭제 실패');
@@ -67,17 +67,17 @@ export default function CompanySmallLogoUploader() {
       style={{ display: 'flex', alignItems: 'center', gap: '12px' }}
     >
       {/* 로고 영역 */}
-      {/* <div className="logoWrapper">
+      <div className="logoWrapper">
         {logoFileSn ? (
           <img
-            src={`http://localhost:940/api/files/id/${logoFileSn}`}
+            src={`http://localhost:940/api/files/id/${logoFileSn}/preview`}
             alt="회사 로고"
             className="companyLogo"
           />
         ) : (
           <div className="logoPlaceholder">회사 로고</div>
         )}
-      </div> */}
+      </div>
 
       {/* 버튼 영역 (세로 배치) */}
       {canEdit && (

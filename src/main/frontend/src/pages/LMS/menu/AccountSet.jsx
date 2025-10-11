@@ -24,6 +24,7 @@ export default function AccountSet() {
   const [cohortSn, setCohortSn] = useState();
   const [accountList, setAccountList] = useState([]);
   const [dataListTop, setDataListTop] = useState([]);
+  const [cohortStts, setCohortStts] = useState(null);
   const [formData, setFormData] = useState({
     // formData 초기값
     // 0. 유저테이블 리스트 객체배열로 보내주셈
@@ -38,7 +39,7 @@ export default function AccountSet() {
 
     ( async () => {
       try {
-      const account = await pullAllAccount(effectiveSn);
+      const account = await pullAllAccount({ogdpCoSn: effectiveSn, userAuthrtSn: 3});
       const pendingEmp = await pullApplyEmp(effectiveSn);
         console.log(pendingEmp.data);
         console.log(account.data);
@@ -49,13 +50,17 @@ export default function AccountSet() {
       }
     })();
   }, [selectedIdx, cohortSn, effectiveSn])
- useEffect(() => {
+  useEffect(() => {
 
   ( async () => {
     console.log(effectiveSn);
       try {
       const accountT = await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 4});
-      const accountStd = await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: [5, 6]});
+      const accountStd = (cohortStts === "RECRUITING" ? 
+        await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 6})
+          :
+        await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 5}
+        ));
         console.log(accountStd.data);
         console.log(accountT.data);
         setTeacherList(accountT.data);
@@ -120,7 +125,7 @@ export default function AccountSet() {
               <>
                 <div className="filterList" style={{padding: 0}}>
                     <ul className="ftList_L">
-                        <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected} effectiveSn={effectiveSn}></FilterList>
+                        <FilterList arr={filterArr} setCohortStts={setCohortStts} selectedIdx={selectedIdx} setSelected={setSelected} effectiveSn={effectiveSn}></FilterList>
                     </ul>
                 </div>
                 <div id={`${styles.boxCol}`}>
