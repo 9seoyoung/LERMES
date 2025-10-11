@@ -2,35 +2,41 @@
 // import { matchedPathAdminBoardFilter, matchedListAPIAdminBoardFilter } from "../../utils/readPageTypeReturn";
 // import { toast } from "react-toastify";
 
-import { useLocation } from "react-router-dom";
-import GroupDropdown from "../ui/GroupDropdown";
+import { useLocation } from 'react-router-dom';
+import GroupDropdown from '../ui/GroupDropdown';
 
 function FilterList(props) {
-  const {arr, children, selectedIdx, setSelected, setCohortSn, effectiveSn } = props;
-//   const [pullList, setPullList] = useState([]);
+  const { arr, children, selectedIdx, setSelected, setCohortSn, effectiveSn, setCohortStts } =
+    props;
+  //   const [pullList, setPullList] = useState([]);
   // const filter = filterArr[selectedIdx];
   // console.log(`1. ${filter} 필터 누름`);
   // setFilter(filter);
-  console.log(`2. setFilter 상태훅 사용`)
+  console.log(`2. setFilter 상태훅 사용`);
   const location = useLocation();
 
-
-return (
-  <ul className="ftList_L">
-        { arr?.map((ft, idx) => (
-          <li
+  return (
+    <ul className="ftList_L">
+      {arr?.map((ft, idx) => (
+        <li
           key={idx}
           onClick={() => {
             setSelected(idx);
+            if (setCohortSn) {
+              // ✅ 클릭한 기수의 SN 넘기기
+              setCohortSn(arr[idx]?.cohortSn || null);
+              setCohortStts(arr[idx]?.cohortSttsNm || null);
+              console.log('[FilterList] 클릭한 기수:', arr[idx]);
+            }
           }}
-          id= {selectedIdx === idx ? "ftClicked" : ""}
-          >{ft}
-            </li>
-        ))
-      }
+          id={selectedIdx === idx ? 'ftClicked' : ''}
+        >
+          {ft?.cohortNm || ft}
+        </li>
+      ))}
       {/* 추가 버튼 생성 및 눌렀을 때 배열에 데이터 추가하기 위한 버튼 */}
       {children}
-      </ul>
+    </ul>
   );
 }
 

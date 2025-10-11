@@ -370,6 +370,16 @@ footer>div:hover {
 }
 
 /* 공통 ui */
+.pageBox {
+  width: 100%;
+  display: flex;
+  background-color: var(--color-sec-bg);
+  padding: 20px 12px;
+  border-radius: 16px;
+  flex: 1;
+  gap: 12px;
+}
+
 .BigListBox{
   width: 100%;
   display: flex;

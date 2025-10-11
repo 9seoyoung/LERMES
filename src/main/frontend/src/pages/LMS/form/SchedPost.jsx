@@ -4,7 +4,7 @@ import React from "react";
 import {useLocation} from "react-router-dom";
 import {useAccount} from "../../../auth/AuthContext";
 
-export const SchedPost = ({formId, handleChange, formData, prvToggle, setPrvToggle}) => {
+export const SchedPost = ({formId, handleChange, formData, prvToggle, setPrvToggle, setFormData}) => {
     const {pathname} = useLocation();
     const {user} = useAccount();
   return (
@@ -23,14 +23,14 @@ export const SchedPost = ({formId, handleChange, formData, prvToggle, setPrvTogg
             </div>
             { user?.USER_AUTHRT_SN <= 3 && pathname !== "/adminHome" ? (
                 <div className={styles.private}>
+                  <label htmlFor="privateBox">개인</label>
                     <input
                         type="checkbox"
                         name="isPrivate"
                         checked={!!formData.isPrivate}
-                        onChange={() => {setPrvToggle(prvToggle); handleChange();}}
+                        onChange={(e) => {setPrvToggle(v => !v); handleChange(e);}}
                         id="privateBox"
                     />
-                    <label htmlFor="privateBox">비공개</label>
                 </div>
             ) : null}
         </div>

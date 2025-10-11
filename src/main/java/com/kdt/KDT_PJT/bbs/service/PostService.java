@@ -71,7 +71,7 @@ public class PostService {
                 return Objects.equals(post.getPostWrtrSn(), auth.getId());
             }
             if (role == BbsRole.TENANT || role == BbsRole.EMPLOYEE
-                    || role == BbsRole.SUPER_ADMIN || role == BbsRole.INSTRUCTOR) { // 👈 INSTRUCTOR 추가됨
+                    || role == BbsRole.SUPER_ADMIN || role == BbsRole.INSTRUCTOR) {
                 return true;
             }
         }
@@ -107,7 +107,7 @@ public class PostService {
     }
 
     // 🔹 단건 조회 전용 권한 체크 메서드 (신규 추가)
-    private boolean canAccessPostForSingle(PostResponseDto post, AuthCustomUserDetails auth) { // 👈 추가됨
+    private boolean canAccessPostForSingle(PostResponseDto post, AuthCustomUserDetails auth) {
         return canAccessPost(post, auth, auth.getCohortSn(), post.getBbsType().name());
     }
 
@@ -115,7 +115,7 @@ public class PostService {
     private boolean canAccessPostForList(PostResponseDto post,
                                          AuthCustomUserDetails auth,
                                          Long filterCohortSn,
-                                         String filterBbsType) { // 👈 추가됨
+                                         String filterBbsType) {
         return canAccessPost(post, auth, filterCohortSn, filterBbsType);
     }
 
@@ -141,7 +141,7 @@ public class PostService {
         List<PostResponseDto> posts = postMapper.findByFilters(companySn, filterCohortSn, filterBbsType);
 
         return posts.stream()
-                .filter(post -> canAccessPostForList(post, auth, filterCohortSn, filterBbsType)) // 👈 변경됨
+                .filter(post -> canAccessPostForList(post, auth, filterCohortSn, filterBbsType))
                 .toList();
     }
 

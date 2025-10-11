@@ -210,45 +210,40 @@ public class AttendService {
         codeStore.clear(codeKey(cohortSn));
     }
 
-    /** 금일 출석현황 조회 */
+    /** 금일 출석현황 조회 강사용 */
     @Transactional(readOnly = true)
     public List<StudentAttendanceDto> getTodayStudentAttendance(Authentication auth) {
-        // 현재 로그인 사용자
-        AuthCustomUserDetails me =  requirePrincipal(auth);
+        AuthCustomUserDetails me = requirePrincipal(auth);
 
         Long cohortSn = me.getCohortSn();
         LocalDateTime startOfDay = LocalDate.now(ZONE).atStartOfDay();
         LocalDateTime endOfDay = startOfDay.plusDays(1);
 
-        // 오늘 출결 로그 조회
         List<Attend> todayAttendLogs = attendRepository
                 .findByCohortSnAndAttendTmBetween(cohortSn, startOfDay, endOfDay)
                 .orElseGet(Collections::emptyList);
 
-        // 오늘 기수 학생 목록 조회
         List<User> cohortMembers = userRepository
                 .findByCohortSn(cohortSn)
                 .orElseGet(Collections::emptyList);
 
         List<User> cohortStudents = new ArrayList<>();
-
-        for (User cohortMember : cohortMembers) {
-            if (cohortMember.getRoleType() != 4) {
-                cohortStudents.add(cohortMember);
+        for (User member : cohortMembers) {
+            if (member.getRoleType() != 4) { // INSTRUCTOR 제외
+                cohortStudents.add(member);
             }
         }
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-        // 상태 판단 기준
         LocalTime attendStartTm = LocalTime.of(8, 30);
         LocalTime attendEndTm   = LocalTime.of(17, 30);
-        LocalTime earlyLeaveTm  = LocalTime.of(12, 30);
+        Duration fullDay  = Duration.between(attendStartTm, attendEndTm);
+        Duration halfDay  = fullDay.dividedBy(2);
+        LocalTime lateLimit = attendStartTm.plus(fullDay.dividedBy(2)); // 🔹 절반 이후 입실은 결석 처리
 
         List<StudentAttendanceDto> results = new ArrayList<>();
 
         for (User student : cohortStudents) {
-            // 오늘 학생 로그만 필터링
             List<Attend> logs = todayAttendLogs.stream()
                     .filter(l -> l.getUserSn().equals(student.getId()))
                     .toList();
@@ -268,26 +263,25 @@ public class AttendService {
             String checkInStr = checkIn != null ? checkIn.format(timeFormatter) : null;
             String checkOutStr = checkOut != null ? checkOut.format(timeFormatter) : null;
 
-            // 상태 계산
-
-            Duration fullDay  = Duration.between(attendStartTm, attendEndTm);
-            Duration halfDay  = fullDay.dividedBy(2);
-
             String status;
             if (checkIn == null) {
                 status = "ABSENT";
             } else if (checkOut == null) {
-                // 퇴실 전: 예정 상태
-                status = checkIn.isAfter(attendStartTm) ? "LATE_PENDING" : "PRESENT_PENDING";
+                // 🔹 절반 이후 입실은 결석 처리
+                if (checkIn.isAfter(lateLimit)) {
+                    status = "ABSENT";
+                } else if (checkIn.isAfter(attendStartTm)) {
+                    status = "LATE_PENDING";
+                } else {
+                    status = "PRESENT_PENDING";
+                }
             } else {
                 Duration work = Duration.between(checkIn, checkOut);
-
                 if (work.compareTo(halfDay) < 0) {
                     status = "ABSENT";
                 } else if (checkIn.isAfter(attendStartTm) && checkOut.isBefore(attendEndTm)) {
-                    // 지각 + 조기 퇴실 => 결석
                     status = "ABSENT";
-                }  else if (checkOut.isBefore(attendEndTm)) {
+                } else if (checkOut.isBefore(attendEndTm)) {
                     status = "EARLY_LEAVE";
                 } else if (checkIn.isAfter(attendStartTm)) {
                     status = "LATE";
@@ -305,11 +299,95 @@ public class AttendService {
                     .build());
         }
 
-        // 이름순 정렬
-        return results.stream()
-                .sorted(Comparator.comparing(StudentAttendanceDto::getUsername,
-                        Comparator.nullsLast(String::compareTo)))
-                .toList();
+        return results;
     }
 
+    /** 금일 출석현황 조회 (관리자/테넌트: 기수별 조회용) */
+    @Transactional(readOnly = true)
+    public List<StudentAttendanceDto> getTodayStudentAttendanceByCohort(Authentication auth, Long cohortSn) {
+        LocalDateTime startOfDay = LocalDate.now(ZONE).atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        List<Attend> todayAttendLogs = attendRepository
+                .findByCohortSnAndAttendTmBetween(cohortSn, startOfDay, endOfDay)
+                .orElseGet(Collections::emptyList);
+
+        List<User> cohortMembers = userRepository
+                .findByCohortSn(cohortSn)
+                .orElseGet(Collections::emptyList);
+
+        List<User> cohortStudents = new ArrayList<>();
+        for (User member : cohortMembers) {
+            if (member.getRoleType() != 4) { // INSTRUCTOR 제외
+                cohortStudents.add(member);
+            }
+        }
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime attendStartTm = LocalTime.of(8, 30);
+        LocalTime attendEndTm   = LocalTime.of(17, 30);
+        Duration fullDay  = Duration.between(attendStartTm, attendEndTm);
+        Duration halfDay  = fullDay.dividedBy(2);
+        LocalTime lateLimit = attendStartTm.plus(fullDay.dividedBy(2)); // 🔹 절반 이후 입실은 결석 처리
+
+        List<StudentAttendanceDto> results = new ArrayList<>();
+
+        for (User student : cohortStudents) {
+            List<Attend> logs = todayAttendLogs.stream()
+                    .filter(l -> l.getUserSn().equals(student.getId()))
+                    .toList();
+
+            LocalTime checkIn = logs.stream()
+                    .filter(l -> Boolean.TRUE.equals(l.getInoutYn()))
+                    .map(l -> l.getAttendTm().toLocalTime())
+                    .findFirst()
+                    .orElse(null);
+
+            LocalTime checkOut = logs.stream()
+                    .filter(l -> Boolean.FALSE.equals(l.getInoutYn()))
+                    .map(l -> l.getAttendTm().toLocalTime())
+                    .findFirst()
+                    .orElse(null);
+
+            String checkInStr = checkIn != null ? checkIn.format(timeFormatter) : null;
+            String checkOutStr = checkOut != null ? checkOut.format(timeFormatter) : null;
+
+            String status;
+            if (checkIn == null) {
+                status = "ABSENT";
+            } else if (checkOut == null) {
+                // 🔹 절반 이후 입실은 결석 처리
+                if (checkIn.isAfter(lateLimit)) {
+                    status = "ABSENT";
+                } else if (checkIn.isAfter(attendStartTm)) {
+                    status = "LATE_PENDING";
+                } else {
+                    status = "PRESENT_PENDING";
+                }
+            } else {
+                Duration work = Duration.between(checkIn, checkOut);
+                if (work.compareTo(halfDay) < 0) {
+                    status = "ABSENT";
+                } else if (checkIn.isAfter(attendStartTm) && checkOut.isBefore(attendEndTm)) {
+                    status = "ABSENT";
+                } else if (checkOut.isBefore(attendEndTm)) {
+                    status = "EARLY_LEAVE";
+                } else if (checkIn.isAfter(attendStartTm)) {
+                    status = "LATE";
+                } else {
+                    status = "PRESENT";
+                }
+            }
+
+            results.add(StudentAttendanceDto.builder()
+                    .userSn(student.getId())
+                    .username(student.getName())
+                    .checkInTime(checkInStr)
+                    .checkOutTime(checkOutStr)
+                    .status(status)
+                    .build());
+        }
+
+        return results;
+    }
 }

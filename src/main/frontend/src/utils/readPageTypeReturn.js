@@ -1,4 +1,5 @@
-import { readInterviewList, readInterview, callAllPostByTypeAndCohortSn, writtenInterview, callBoardList, readPostByPostSn } from "../services/postService";
+import { pullToDoList } from "../services/calService";
+import { readInterviewList, readInterview, callAllPostByTypeAndCohortSn, writtenInterview, callBoardList, readPostByPostSn, callSurveyList } from "../services/postService";
 
 
 const PATH_BY_FILTER = {
@@ -55,12 +56,12 @@ export function matchedPostAPIAdminBoardFilter(filter) {
 export const ADMIN_BOARD_MENU_FILTER = {
     // key는 선택한 필터의 인덱스 (=selectedIdx)
     0: null, // 전체
-    1: "공지", // 공지
+    1: "NOTICE", // 공지
     2: "일정", // 공지
-    3: "자료실", //자료실
-    4: "설문", //설문
+    3: "CLASS_MATERIAL", //자료실
+    4: "SURVEY", //설문
     5: "FAQ", //FAQ
-    6: "문의", //문의
+    6: "QNA", //문의
     7: "면담요청", //면담요청들어온 것
     8: "면담기록", //면담확정후 기록한 것
     9: "PRIVATE" //임시저장
@@ -69,9 +70,9 @@ export const ADMIN_BOARD_MENU_FILTER = {
 export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
     0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "view_CNT"],
     1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "view_CNT"],
-    2: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    2: ["postType", "title", "formattedAPostFrstDt", "userNm", "viewCnt"],
     3: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
-    4: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    4: ["bbsType", "srvyTtl", "formattedAPostFrstDt", "userNm", "viewCnt"],
     5: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     7: ["postType", "itvAplyTtl", "formattedAPostFrstDt", "itvAplcntNm", "viewCnt"],
@@ -82,9 +83,9 @@ export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
 export const ADMIN_SELECT_POST_SN_KEY = {
     0: "postSn",
     1: "postSn",
-    2: "postSn",
+    2: "calSn",
     3: "postSn",
-    4: "postSn",
+    4: "srvySn",
     5: "postSn",
     6: "postSn",
     7: "itvSn",
@@ -95,13 +96,13 @@ export const ADMIN_SELECT_POST_SN_KEY = {
 
 export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
     0: 0,
-    1: "/adminHome/board",
-    2: "/adminHome/board",
-    3: "/adminHome/board",
-    4: "/adminHome/board", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
-    5: "/adminHome/board",
-    6: "",
-    7: "/adminHome/studySched/interview",
+    1: "/adminHome/boardSet/read",
+    2: "/adminHome/boardSet/readSchedule",
+    3: "/adminHome/boardSet/read",
+    4: "/adminHome/boardSet/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/adminHome/boardSet/read",
+    6: "/adminHome/boardSet/read",
+    7: "/adminHome/boardSet/readInterview",
     8: "",
 
 }
@@ -109,9 +110,9 @@ export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
 export const ADMIN_BOARD_API_FILTER = {
   0: 0,
   1: callBoardList,
-  2: callBoardList,
+  2: pullToDoList,
   3: callBoardList,
-  4: callBoardList,
+  4: callSurveyList,
   5: callBoardList,
   6: callBoardList,
   7: readInterviewList,

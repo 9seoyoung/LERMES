@@ -66,8 +66,8 @@ export const readInterviewList = ({ roleType, cohortSn }) => {
  * @param {Object} formData 변경(확정)된 내용
  * @returns 1
  */
-export function editInterview( itvSn, effectiveSn, formData ) {
-  return api.post(`/interview/edit/${itvSn}/${effectiveSn}`, formData, {
+export function editInterview( itvSn, formData ) {
+  return api.put(`/interview/confirm/${itvSn}`, formData, {
       headers: { 'Content-Type': 'application/json' },
     }
   );
@@ -124,6 +124,19 @@ export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/p
  */
 export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn}})
 
+/**
+ * 설문 목록 조회
+ * @param {Number} coSn
+ * @param {Number} cohortSn
+ * @param {String} bbsType
+ */
+export const callSurveyList = ({cohortSn, bbsType, coSn}) => api.get(`/survey/list/${coSn}`)
+
+/**
+ * 설문 단건 조회
+ * @param {Number} srvySn
+ */
+export const readSurvey = ({srvySn}) => api.get(`/survey/${srvySn}`);
 
 
 /**

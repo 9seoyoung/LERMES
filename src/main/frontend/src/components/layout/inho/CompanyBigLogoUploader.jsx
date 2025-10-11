@@ -128,16 +128,18 @@ export default function CompanyBigLogoUploader() {
             border-radius: 8px;
           }
             .cbl-subject {
-              position: absolute;
               margin-top: 22px;
               margin-left: 30px;
+              margin-bottom: 50px;
               font-weight: 600;
               font-size: 20px;
             }
+
             .cbl-root {
-              margin-top:10px;
-              padding: 90px 0px 85px 130px;
+              display: flex;
+              justisfy-content: center;
             }
+
               .cbl-logoWrapper {
               position: relative;
               border-radius: 12px 12px 0px 0px;
@@ -172,7 +174,17 @@ export default function CompanyBigLogoUploader() {
         `}
       </style>
       <div className="cbl-subject">부트캠프 배너 변경</div>
-      <div className="cbl-root">
+      <div
+        className="cbl-root"
+        style={{
+          display: 'flex',
+          width: '100%',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px',
+        }}
+      >
         <div className="cbl-card">
           {/* 상단: 로고 영역 */}
           <div
@@ -215,8 +227,12 @@ export default function CompanyBigLogoUploader() {
 
           {/* 하단: 회사 정보 + 버튼 */}
           <div className="cbl-cardBottom">
-            <p className="cbl-title">{company?.name || '회사명 없음'}</p>
-            <p>소재지 {company?.address || 'undefined'}</p>
+            <p className="cbl-title">{company?.name || '상호명 없음'}</p>
+            <p>
+              {(company?.companyAddress ?? '소재지') +
+                ' ' +
+                (company?.companyAddressDetail ?? '정보 없음')}
+            </p>
 
             <div className="cbl-row">
               <button>LMS 바로가기</button>

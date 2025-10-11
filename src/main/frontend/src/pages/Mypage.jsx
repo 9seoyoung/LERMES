@@ -5,15 +5,42 @@ import MyInfoForm from '../components/layout/inho/MyInfoForm';
 import UserProfile from '../components/layout/inho/UserProfile';
 import '../components/layout/inho/Mypage.css';
 import CompanyBigLogoUploader from '../components/layout/inho/CompanyBigLogoUploader';
+import CompanyInfoForm from '../components/layout/inho/CompanyInfoForm';
+import { useState } from 'react';
+import PasswordChangeModal from '../components/layout/inho/PasswordChangeModal';
 
 export default function Mypage() {
+  const [open, setOpen] = useState(false);
   return (
     <div>
       <header className="my-page-header">내 정보</header>
       <div className="my-page-div">
         <section>
-          <UserProfile />
-          <MyInfoForm />
+          <div style={{ display: 'flex' }}>
+            <UserProfile />
+            {/* 비번바꾸기 모달 */}
+            <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
+              <button
+                onClick={() => setOpen(true)}
+                style={{
+                  background: '#eee',
+                  width: '100%',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'end',
+                }}
+              >
+                비밀번호 변경
+              </button>
+            </div>
+            {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
+            {/* 비번 바꾸기 모달 */}
+            <MyInfoForm />
+          </div>
         </section>
       </div>
     </div>
@@ -21,15 +48,44 @@ export default function Mypage() {
 }
 
 export function AdminMypage() {
+  const [open, setOpen] = useState(false);
   return (
-    <div>
-      <header className="my-page-header">내 정보</header>
-      <div className="my-page-div">
-        <section>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '16px',
+        width: '100%',
+      }}
+    >
+      <h2>내 정보</h2>
+      <div className="my-page-div" style={{ minHeight: '646px' }}>
+        <section style={{ display: 'flex', flexDirection: 'column' }}>
           <UserProfile />
-          <MyInfoForm />
+          {/* 비번바꾸기 모달 */}
+          <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
+            <button
+              onClick={() => setOpen(true)}
+              style={{
+                background: '#eee',
+                width: '100%',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'end',
+              }}
+            >
+              비밀번호 변경
+            </button>
+          </div>
+          {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
+          {/* 비번 바꾸기 모달 */}
+          <CompanyInfoForm />
         </section>
-        <section className="admin-my-page-second">
+        <section style={{ width: '100%' }}>
           <CompanyBigLogoUploader />
         </section>
       </div>
@@ -38,12 +94,34 @@ export function AdminMypage() {
 }
 
 export function StdMypage() {
+  const [open, setOpen] = useState(false);
   return (
     <div>
       <header className="my-page-header">내 정보</header>
       <div className="my-page-div">
         <section>
           <UserProfile />
+          {/* 비번바꾸기 모달 */}
+          <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
+            <button
+              onClick={() => setOpen(true)}
+              style={{
+                background: '#eee',
+                width: '100%',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'end',
+              }}
+            >
+              비밀번호 변경
+            </button>
+          </div>
+          {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
+          {/* 비번 바꾸기 모달 */}
           <MyInfoForm />
         </section>
         <section className="std-my-page-second">
@@ -56,12 +134,34 @@ export function StdMypage() {
 }
 
 export function TutorMypage() {
+  const [open, setOpen] = useState(false);
   return (
     <div>
       <header className="my-page-header">내 정보</header>
       <div className="my-page-div">
         <section>
           <UserProfile />
+          {/* 비번바꾸기 모달 */}
+          <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
+            <button
+              onClick={() => setOpen(true)}
+              style={{
+                background: '#eee',
+                width: '100%',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'end',
+              }}
+            >
+              비밀번호 변경
+            </button>
+          </div>
+          {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
+          {/* 비번 바꾸기 모달 */}
           <MyInfoForm />
         </section>
       </div>

@@ -15,14 +15,18 @@ import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import {InterviewForm, InterviewMemo} from './StudyPost';
 import { SchedPost } from './SchedPost';
 import {registToDo} from "../../../services/calService";
-import {post} from "axios";
+import {
+  buildPostJson,
+  buildInterviewJson,
+  buildScheduleJson,
+} from "../../../utils/normalizeDto";
 
 
 // BoardPost.jsx
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
+  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -67,6 +71,7 @@ function PostStatus(props) {
           setFiles={setFiles}
           prvToggle={prvToggle}
           setPrvToggle={setPrvToggle}
+          setFormData={setFormData}
         />
       )
     case "면담신청":
@@ -194,97 +199,179 @@ const selectType = (nextType) => {
   );
 };
   
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, type, checked, value } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value
+  }));
+};
 
   const tempSubmit = () => {};
-  const saveSubmit = async (e) => {
-    e.preventDefault();
+//   const saveSubmit = async (e) => {
+//     e.preventDefault();
 
-    const formUuid = postId.current || uuidv4();
-
-
-    if (formData.type === "면담신청") {
-      setFormData(prev => ({
-        ...prev,
-        // nextType 은 이 스코프에 없음. 필요하다면 prev.type 또는 "면담신청" 고정.
-        // type: prev.type,
-        itvAplyTtl: prev.title,      // 제목
-        itvAplyCn: prev.content,       // 내용
-        itvPicAuthrt: (prev.scope === "강사" ? "INSTRUCTOR" : (prev.scope === "직원" ? "EMPLOYEE" : "REPRESENTATIVE")),    // 공개범위
-      }));
-    }
+//     const formUuid = postId.current || uuidv4();
 
 
-    // 2) 게시글 JSON (File 객체 넣지 말기!)
-    const postJson = (formData.type === "면담신청" ? {
-      id: formData.id,
-      userSn: formData.userSn,
-      title: formData.title,
-      content: formData.content,
-      coSn: formData.coSn,
-      type: formData.type,
-      cohortSn: cohortSn,
-      scope: formData.scope,
-      detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
-      detailScopeNm: formData.detailScopeNm,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      startTime: formData.startTime,
-      location: formData.location,
-      isPrivate: formData.isPrivate,
-    //   attachments: uploads.map(u => ({
-    //   storedFileName: u.storedFileName,
-    //   originalFileName: u.originalFileName,
-    //   size: u.size,
-    //   // fileSn 내려오면 그걸 써도 OK
-    // })),
-    ...(formData.type === "설문조사" ? { surveyForm } : {}),
-    formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
-  } : {
-      id: formData.id,
-      userSn: formData.userSn,
-      title: formData.title,
-      content: formData.content,
-      coSn: formData.coSn,
-      type: formData.type,
-      cohortSn: cohortSn,
-      scope: formData.scope,
-      detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
-      detailScopeNm: formData.detailScopeNm,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      startTime: formData.startTime,
-      location: formData.location,
-      isPrivate: formData.isPrivate,
-    //   attachments: uploads.map(u => ({
-    //   storedFileName: u.storedFileName,
-    //   originalFileName: u.originalFileName,
-    //   size: u.size,
-    //   // fileSn 내려오면 그걸 써도 OK
-    // })),
-    ...(formData.type === "설문조사" ? { surveyForm } : {}),
-    formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
-  });
+//     if (formData.type === "면담신청") {
+//       setFormData(prev => ({
+//         ...prev,
+//         // nextType 은 이 스코프에 없음. 필요하다면 prev.type 또는 "면담신청" 고정.
+//         // type: prev.type,
+//         itvAplyTtl: prev.title,      // 제목
+//         itvAplyCn: prev.content,       // 내용
+//         itvPicAuthrt: (prev.scope === "강사" ? "INSTRUCTOR" : (prev.scope === "직원" ? "EMPLOYEE" : "REPRESENTATIVE")),    // 공개범위
+//       }));
+//     }
+    
 
 
-  const snapshot = structuredClone
-    ? structuredClone({ surveyForm, formData })
-    : JSON.parse(JSON.stringify({ surveyForm, formData }));
+//     // 2) 게시글 JSON (File 객체 넣지 말기!)
+//     const postJson = (formData.type === "면담신청" ? {
+//       id: formData.id,
+//       userSn: formData.userSn,
+//       title: formData.title,
+//       content: formData.content,
+//       coSn: formData.coSn,
+//       type: formData.type,
+//       cohortSn: cohortSn,
+//       scope: formData.scope,
+//       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
+//       detailScopeNm: formData.detailScopeNm,
+//       startDate: formData.startDate,
+//       endDate: formData.endDate,
+//       startTime: formData.startTime,
+//       location: formData.location,
+//       isPrivate: formData.isPrivate,
+//     //   attachments: uploads.map(u => ({
+//     //   storedFileName: u.storedFileName,
+//     //   originalFileName: u.originalFileName,
+//     //   size: u.size,
+//     //   // fileSn 내려오면 그걸 써도 OK
+//     // })),
+//     ...(formData.type === "설문조사" ? { surveyForm } : {}),
+//     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
+//   } : {
+//       id: formData.id,
+//       userSn: formData.userSn,
+//       title: formData.title,
+//       content: formData.content,
+//       coSn: formData.coSn,
+//       type: formData.type,
+//       cohortSn: cohortSn,
+//       scope: formData.scope,
+//       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
+//       detailScopeNm: formData.detailScopeNm,
+//       startDate: formData.startDate,
+//       endDate: formData.endDate,
+//       startTime: formData.startTime,
+//       location: formData.location,
+//       isPrivate: formData.isPrivate,
+//     //   attachments: uploads.map(u => ({
+//     //   storedFileName: u.storedFileName,
+//     //   originalFileName: u.originalFileName,
+//     //   size: u.size,
+//     //   // fileSn 내려오면 그걸 써도 OK
+//     // })),
+//     ...(formData.type === "설문조사" ? { surveyForm } : {}),
+//     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
+//   });
 
-  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
 
-  console.log("[will send to server]", JSON.stringify(body, null, 2));
+//   const snapshot = structuredClone
+//     ? structuredClone({ surveyForm, formData })
+//     : JSON.parse(JSON.stringify({ surveyForm, formData }));
+
+//   const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
+
+//   console.log("[will send to server]", JSON.stringify(body, null, 2));
+//   console.log("[FILES state]", files.map(f => ({ name: f.name, size: f.size })));
+//   console.table(snapshot.formData);
+
+//   // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
+//   try {
+//     const type = String(formData.type).trim();
+//     console.log(type);
+
+//     const { data } = await (async () => {
+//       switch (type) {
+//         case "설문조사":
+//           return createSurvey(postJson);
+//         case "면담신청":
+//           return createInterview(postJson);
+//         case "일정":
+//           return registToDo(postJson);
+//         default:
+//           return createPost(postJson); // 규약대로
+//       }
+//     })();
+
+//     console.log("saved:", data);
+//       if(postJson.type != "일정") {
+//         const serverFormUuid = data?.formUuid || data?.result?.formUuid;
+//         if (!serverFormUuid) {
+//           toast.error("서버에서 formUuid를 받지 못했어요.");
+//           console.error("[createPost 응답]", data);
+//           return; // 업로드 중단
+//         }
+
+//         let uploads = [];
+//         if (Array.isArray(files) && files.length > 0) {
+//           uploads = await uploadFiles(files, {
+//             formUuid: serverFormUuid,
+//             onProgress: pct => console.log("upload:", pct + "%"),
+//           });
+//         }
+//       }
+//     alert("저장 완료!");
+//     navigate(-1);
+//   } catch (err) {
+//     console.error(err);
+//     toast.error(err.message);
+//     alert("저장 실패");
+//     // 옵션) 실패 시 formUuid로 업로드 롤백 API가 있으면 호출
+//   }
+// };
+
+const saveSubmit = async (e) => {
+  e.preventDefault();
+
+  const formUuid = postId.current || uuidv4();
+  const type = String(formData.type || "").trim();
+
+  // 1) 타입별 보낼 JSON 구성
+  let postJson;
+  if (type === "면담신청") {
+    postJson = buildInterviewJson({
+      formData,
+      cohortSn,   // 외부에서 주는 cohortSn
+      formUuid,
+    });
+  } else if (type === "일정") {
+    postJson = buildScheduleJson({
+      formData,
+      cohortSn,
+      userAuth,
+      formUuid,
+    });
+  } else {
+    // 공지/자료실/FAQ/문의/설문조사
+    postJson = buildPostJson({
+      formData,
+      surveyForm,
+      cohortSn,
+      userAuth,
+      formUuid,
+    });
+  }
+
+  // 2) 디버깅 로그
+  console.log("[will send]", type, JSON.stringify(postJson, null, 2));
   console.log("[FILES state]", files.map(f => ({ name: f.name, size: f.size })));
-  console.table(snapshot.formData);
 
-  // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
+  // 3) 전송
   try {
-    const type = String(formData.type).trim();
-    console.log(type);
-
     const { data } = await (async () => {
       switch (type) {
         case "설문조사":
@@ -294,34 +381,32 @@ const selectType = (nextType) => {
         case "일정":
           return registToDo(postJson);
         default:
-          return createPost(postJson); // 규약대로
+          return createPost(postJson);
       }
     })();
 
-    console.log("saved:", data);
-      if(postJson.type != "일정") {
-        const serverFormUuid = data?.formUuid || data?.result?.formUuid;
-        if (!serverFormUuid) {
-          toast.error("서버에서 formUuid를 받지 못했어요.");
-          console.error("[createPost 응답]", data);
-          return; // 업로드 중단
-        }
-
-        let uploads = [];
-        if (Array.isArray(files) && files.length > 0) {
-          uploads = await uploadFiles(files, {
-            formUuid: serverFormUuid,
-            onProgress: pct => console.log("upload:", pct + "%"),
-          });
-        }
+    // 4) 파일 업로드 (일정 제외)
+    if (type !== "일정") {
+      const serverFormUuid = data?.formUuid || data?.result?.formUuid;
+      if (!serverFormUuid) {
+        toast.error("서버에서 formUuid를 받지 못했어요.");
+        console.error("[응답]", data);
+        return;
       }
+      if (Array.isArray(files) && files.length > 0) {
+        await uploadFiles(files, {
+          formUuid: serverFormUuid,
+          onProgress: pct => console.log("upload:", pct + "%"),
+        });
+      }
+    }
+
     alert("저장 완료!");
     navigate(-1);
   } catch (err) {
     console.error(err);
     toast.error(err.message);
     alert("저장 실패");
-    // 옵션) 실패 시 formUuid로 업로드 롤백 API가 있으면 호출
   }
 };
 

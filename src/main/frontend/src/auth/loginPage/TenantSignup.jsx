@@ -104,7 +104,7 @@ export default function TenantSignup() {
       <form className="signup-form" onSubmit={onSubmit} noValidate>
         <input
           name="companyName"
-          placeholder="회사명"
+          placeholder="상호명"
           value={form.companyName}
           onChange={onChange}
           required
