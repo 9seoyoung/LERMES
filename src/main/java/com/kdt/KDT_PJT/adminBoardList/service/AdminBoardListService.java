@@ -18,5 +18,5 @@ public class AdminBoardListService {
 
     public List<AdminBoardListDTO> getAdminBoardListByCohortSn(AdminBoardListDTO adminBoardListDTO){
 
-        return dao.selectList("com.kdt.mapper.AdminBoardListMapper.",adminBoardListDTO);    }
+        return dao.selectList("com.kdt.mapper.AdminBoardListMapper.getAdminBoardListByCohortSn",adminBoardListDTO);    }
 }

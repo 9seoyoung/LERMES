@@ -28,7 +28,11 @@ public class AdminBoardListController {
         Integer userSn = me.getId().intValue();
         adminBoardListDTO.setCohortSn(cohortSn);
         adminBoardListDTO.setUserSn(userSn);
-        adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
-        return ResponseEntity.ok(Collections.emptyList()); // TODO 쓰레기 return중, 수정 필요
+
+//        adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
+//        return ResponseEntity.ok(Collections.emptyList()); // TODO 쓰레기 return중, 수정 필요
+
+        List<AdminBoardListDTO> list = adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
+        return ResponseEntity.ok(list);
     }
 }
