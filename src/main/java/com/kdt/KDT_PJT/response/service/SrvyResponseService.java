@@ -60,10 +60,10 @@ public class SrvyResponseService {
     //목록 조회
     @Transactional(readOnly = true)
     public List<SrvyResponseResponseDto> getResponses(Long srvySn, Long roleId, Long userSn) {
-        if (SurveyRole.fromCode(roleId).isAdmin()) {
-            // 관리자, 강사
-            return srvyResponseMapper.findAllByParentWithUserName(srvySn);
-        }
+//        if (SurveyRole.fromCode(roleId).isAdmin()) {
+//            // 관리자, 강사
+//            return srvyResponseMapper.findAllByParentWithUserName(srvySn);
+//        }
         // 일반 사용자
         return srvyResponseMapper.findByParentAndUserList(srvySn, userSn);
     }

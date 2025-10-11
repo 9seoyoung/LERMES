@@ -15,5 +15,6 @@ public class CompanyMemberDto {
     private Long userAuthrtSn;
     private LocalDateTime orgStartDate;
     private LocalDateTime orgEndDate;
+    private String userName;
 }
 

@@ -21,6 +21,25 @@ export default function UserProfile() {
     userProfileImage: null,
   });
 
+  // ✅ 전화번호 포맷 (조회용)
+  const formatPhone = (phone) => {
+    if (!phone) return '';
+    const onlyNum = phone.replace(/\D/g, '');
+    if (onlyNum.length === 11)
+      return onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    if (onlyNum.length === 10)
+      return onlyNum.replace(/(\d{2,3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+    return onlyNum;
+  };
+
+  const formatBrNo = (brno) => {
+    if (!brno || brno.length !== 10) return brno;
+    return `${brno.substring(0, 3)}-${brno.substring(3, 5)}-${brno.substring(
+      5
+    )}`;
+  };
+
+  // ✅ 프로필 불러오기
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -28,7 +47,7 @@ export default function UserProfile() {
       setProfile(res);
       setFormData({
         email: res.email,
-        phoneNumber: res.phoneNumber,
+        phoneNumber: res.phoneNumber ? formatPhone(res.phoneNumber) : '', // ✅ 조회 시 하이픈 표시
         userProfileImage: res.userProfileImage || null,
       });
       setPreviewUrl(
@@ -42,25 +61,6 @@ export default function UserProfile() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatPhone = (phone) => {
-    if (!phone) return '-';
-    const onlyNum = phone.replace(/\D/g, '');
-    if (onlyNum.length === 11) {
-      return onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-    }
-    if (onlyNum.length === 10) {
-      return onlyNum.replace(/(\d{2,3})(\d{3,4})(\d{4})/, '$1-$2-$3');
-    }
-    return phone;
-  };
-
-  const formatBrNo = (brno) => {
-    if (!brno || brno.length !== 10) return brno;
-    return `${brno.substring(0, 3)}-${brno.substring(3, 5)}-${brno.substring(
-      5
-    )}`;
   };
 
   useEffect(() => {
@@ -88,7 +88,9 @@ export default function UserProfile() {
 
   // ✅ edit 버튼 → DB 반영
   const handleSave = async () => {
-    if (!formData.phoneNumber || formData.phoneNumber.length !== 11) {
+    const plainPhone = formData.phoneNumber.replace(/[^0-9]/g, ''); // 숫자만 추출
+
+    if (!plainPhone || plainPhone.length !== 11) {
       toast.error('휴대폰 번호는 숫자 11자리여야 합니다.');
       return;
     }
@@ -101,8 +103,8 @@ export default function UserProfile() {
 
     try {
       await updateUserProfileInfo({
-        email: formData.email,
-        phoneNumber: formData.phoneNumber,
+        userEmlAddr: formData.email,
+        userTelno: plainPhone,
         userProfileImage: formData.userProfileImage,
       });
 
@@ -110,11 +112,11 @@ export default function UserProfile() {
         ...profile,
         USER_PROFILE_IMAGE: formData.userProfileImage,
         USER_EML_ADDR: formData.email,
-        USER_TELNO: formData.phoneNumber,
+        USER_TELNO: plainPhone,
       });
 
       toast.success('프로필이 수정되었습니다.');
-      fetchProfile();
+      fetchProfile(); // ✅ 저장 후 다시 조회 → 하이픈 포함 표시
     } catch (err) {
       console.error(err);
       toast.error('수정 실패');
@@ -124,7 +126,6 @@ export default function UserProfile() {
   if (loading) return <p>로딩 중...</p>;
   if (!profile) return <p>데이터 없음</p>;
 
-  // ✅ 권한 번호
   const authSn = user?.USER_AUTHRT_SN;
 
   return (
@@ -181,7 +182,6 @@ export default function UserProfile() {
 
         {/* 상세 정보 */}
         <div className="myInfoDetails">
-          {/* 학생(5) / 강사(4) */}
           {(authSn === 4 || authSn === 5) && (
             <>
               <div className="myInfoRow">
@@ -195,7 +195,6 @@ export default function UserProfile() {
             </>
           )}
 
-          {/* 테넌트 관리자(2) / 직원(3) */}
           {(authSn === 2 || authSn === 3) && (
             <>
               <div className="myInfoRow">
@@ -215,17 +214,19 @@ export default function UserProfile() {
             <input
               type="text"
               className="myInfoInput"
-              value={formatPhone(profile.phoneNumber)}
+              value={formData.phoneNumber}
               maxLength={11}
+              minLength={11}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
-                  phoneNumber: e.target.value.replace(/[^0-9]/g, ''), // 숫자만
+                  phoneNumber: e.target.value.replace(/[^0-9]/g, ''), // 숫자만 입력
                 }))
               }
               placeholder="숫자 11자리"
             />
           </div>
+
           <div className="myInfoRow">
             <span className="myInfoLabel">이메일</span>
             <input

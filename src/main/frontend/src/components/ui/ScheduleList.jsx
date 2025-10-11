@@ -5,7 +5,7 @@ import SchedListPopUp from './SchedListPopUp.jsx';
 import styles from '../../styles/SchedList.module.css';
 import { useLocation } from "react-router-dom";
 
-export default function ScheduleList({selectedDate}) {
+export default function ScheduleList({selectedDate, toDoList}) {
   const [schedules, setSchedules] = useState({});   // 날짜별 일정 저장
   const [showPopup, setShowPopup] = useState(false); // 💡 팝업 상태 추가
   const [displayDate, setDisplayDate] = useState('');

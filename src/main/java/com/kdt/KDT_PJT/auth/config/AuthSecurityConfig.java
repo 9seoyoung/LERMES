@@ -38,6 +38,8 @@ import java.util.List;
 public class AuthSecurityConfig {
 
     private final AuthCustomUserDetailsService customUserDetailsService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
 
     // DaoAuthenticationProvider (지금은 anyRequest().permitAll() 이라 실사용 X, 그래도 보관)
@@ -90,6 +92,17 @@ public class AuthSecurityConfig {
                 .cors(Customizer.withDefaults()) //서영 추가함
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/api/login") // 기존 로그인 엔드포인트 유지
+                        .userInfoEndpoint(user -> user.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl("http://localhost:3000/welcome/login")
+                )
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(

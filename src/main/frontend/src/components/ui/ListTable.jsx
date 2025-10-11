@@ -1,6 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/UiComp.module.css";
 
+
+
 export default function ListTable({
   tableHead = [],
   apiData = [],
@@ -10,6 +12,7 @@ export default function ListTable({
   whereTogo,
   postKey,
   addStyle = {},
+  selectedIdx
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,7 +61,7 @@ export default function ListTable({
                 className={`${styles.row} ${styles.gridRow}`}
                 onClick={() => {
                   if (location.pathname !== whereTogo)
-                    navigate(`${whereTogo}/${row[postKey]}`);
+                    navigate(`${(selectedIdx === 0 ? null : whereTogo)}/${(selectedIdx === 0 ? null : row[postKey])}`);
                 }}
               >
                 {/* 번호 셀 - 이건 map 안의 첫 자식이라 별도 key 필요 없음 */}
