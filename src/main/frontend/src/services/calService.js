@@ -9,3 +9,18 @@ export const pullToDoList = (params) => api.get('/calendar',{params});
 export const registToDo = (payload) => api.post('/calendar', payload, {
   headers: { "Content-Type": "application/json" }
 });
+
+/**
+ * 일정 상세 조회
+ * @param {Number} calSn
+ * @returns 일정 상세 내용
+ */
+export const detailSchedule = (calSn) => api.get(`/calendar/${calSn}`);
+
+/**
+ * 일정 업데이트
+ * @param {Number} calSn
+ * @param {Object} formData
+ */
+export const editSchedule = (calSn, payload) => api.patch(`/calendar/${calSn}`, payload,  {
+  headers: { "Content-Type": "application/json" }});

@@ -113,3 +113,14 @@
   width: 100%;
   justify-content: space-between;
 }
+
+.grayBtn {
+  background-color: var(--bg-color-gray3);
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.grayBtn:hover {
+  background-color: var(--bg-color-gray2);
+  color: var(--font-color-white);
+}
