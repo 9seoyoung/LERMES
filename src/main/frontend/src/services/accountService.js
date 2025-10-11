@@ -7,7 +7,7 @@ export const deleteAccount = (id) => api.delete(`/${id}`, id)
 export const applyEmp = (params) => api.post('/company-members/apply', params , {
   headers: { "Content-Type": "application/json" }});
 
-export const pullApplyEmp = (effectiveSn) => api.get('/company-members', effectiveSn);
+export const pullApplyEmp = (companySn) => api.get('/company-members', companySn);
 
 /**
  * 
