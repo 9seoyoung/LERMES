@@ -83,7 +83,17 @@ export default function Login() {
           >
             {loading ? '로그인 중...' : '로그인'}
           </button>
-          <header>간편로그인 || 1초 회원가입</header>
+          <header
+            style={{
+              textAlign: 'center',
+              fontSize: '1.2rem',
+              fontWeight: '700',
+              letterSpacing: '0.2px',
+              color: '#757575',
+            }}
+          >
+            SNS로 간편 로그인 / 회원가입
+          </header>
           <div
             className="OAuth2"
             style={{ display: 'flex', gap: '30px', justifyContent: 'center' }}
@@ -99,8 +109,8 @@ export default function Login() {
                 src="/img/google-icon.png"
                 alt="Google 아이콘"
                 style={{
-                  width: '60px',
-                  height: '60px',
+                  width: '50px',
+                  height: '50px',
                   borderRadius: '50%',
                   backgroundColor: '#fff',
                   border: '1px solid #dadce0',
@@ -110,6 +120,7 @@ export default function Login() {
                   boxShadow: '0 1px 3px rgba(60,64,67,0.3)',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
+                  padding: '5px',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.08)';
@@ -133,8 +144,8 @@ export default function Login() {
               <img
                 src="/img/kakao-icon.png"
                 style={{
-                  width: '60px',
-                  height: '60px',
+                  width: '50px',
+                  height: '50px',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
@@ -166,8 +177,8 @@ export default function Login() {
               <img
                 src="/img/naver-icon.png"
                 style={{
-                  width: '60px',
-                  height: '60px',
+                  width: '50px',
+                  height: '50px',
                   borderRadius: '50%',
                   backgroundColor: '#03C75A',
                   display: 'flex',
