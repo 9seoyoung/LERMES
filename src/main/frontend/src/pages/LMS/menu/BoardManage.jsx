@@ -44,7 +44,7 @@ export default function BoardManage(){
         if(bbsType != "전체") params.bbsType = bbsType;
         if(effectiveSn != null) params.effectiveSn = effectiveSn;
         if(selectedIdx === 4) {params.bbsType = "SURVEY"; params.coSn = effectiveSn}
-        if(selectedIdx === 2) {params.bbsType = "SURVEY"; params.coSn = effectiveSn; params.isPrivate = 0;}
+        if(selectedIdx === 2) {params.isPrivate = 0;}
 
         console.log(params);
         console.log(user);
@@ -54,7 +54,7 @@ export default function BoardManage(){
 
 
             try{
-                const {data} = await api(params);
+                const {data} = await api((selectedIdx === 2 ? ({isPrivate: false, cohortSn: cohortSn}) : params));
                 console.log(data);
                 const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt || item.eventRegDt || item.srvyFrstWrtDt || item.itvAplyDt),}));
                 setPullList(formattedData);
