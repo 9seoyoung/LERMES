@@ -81,35 +81,20 @@ export default function SuperMain() {
               }`}
             >
               {/* 앞면: 기존 .company_card 그대로 */}
-              <div
-                className={cardStyle.company_card}
-                style={{
-                  backgroundImage: v?.bigLogoFileSn
-                    ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
-                    : 'none',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                }}
-              >
-                <div></div>
+              <div className={cardStyle.company_card}>
+                {v?.bigLogoFileSn ? (
+                  <img
+                    src={`http://localhost:940/api/files/id/${v.bigLogoFileSn}`}
+                    alt={v?.name || 'company banner'}
+                    className={cardStyle.company_img}
+                  />
+                ) : (
+                  <div className={cardStyle.noImage}>홍보 배너 없음</div>
+                )}
+
                 <div className={cardStyle.card_bottom}>
                   <p className={cardStyle.title} data-title-type="3">
                     {v?.name}
-                    {/* <button
-                    style={{display:"flex", height: "100%", padding:"4px", alignItems: "end"}}
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation(); // 카드 뒤집힘 방지
-                      setFixedSn(v.id);
-                      handleGoLms(v.id);
-                    }}
-                  >
-                    <MdHome></MdHome>
-                  </button> */}
-                    {/* <button type="button" style={{display:"flex", height: "100%", padding:"2px 4px", alignItems: "end", fontSize: "1.2rem", fontWeight: "700"}} className={!v.stts ? null : cardStyle.sttsBtn} onClick={(e) => e.stopPropagation()}>
-                    {`${!v.stts ? "" : "모집중" }`}
-                  </button> */}
                   </p>
                   <p className={cardStyle.title}>{`${
                     (v?.companyAddress ?? '소재지') +
@@ -120,7 +105,7 @@ export default function SuperMain() {
                     <button
                       type="button"
                       onClick={(e) => {
-                        e.stopPropagation(); // 카드 뒤집힘 방지
+                        e.stopPropagation();
                         setFixedSn(v.id);
                         handleGoLms(v.id);
                       }}
