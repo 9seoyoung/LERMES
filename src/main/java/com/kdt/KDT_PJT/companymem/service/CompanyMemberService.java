@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -81,6 +82,44 @@ public class CompanyMemberService {
 
             return dtoBuilder.build();
         }).toList();
+    }
+    @Transactional
+    public Long apply(CompanyMemberDto dto) {
+        CompanyMember entity = CompanyMember.builder()
+                .companySn(dto.getCompanySn())
+                .userSn(dto.getUserSn())
+                .userAuthrtSn(dto.getUserAuthrtSn())
+                .applyDate(LocalDateTime.now())
+                .orgStartDate(null)  // 아직 승인 안됨
+                .build();
+
+        return companyMemberRepository.save(entity).getCompanyMemberSn();
+    }
+
+    @Transactional
+    public void approve(Long id) {
+        CompanyMember entity = companyMemberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 구성원 ID: " + id));
+
+        if (entity.getOrgStartDate() != null) {
+            throw new IllegalStateException("이미 승인된 신청입니다.");
+        }
+
+        entity.setOrgStartDate(LocalDateTime.now());  // 승인 시 소속 시작일 셋팅
+
+        companyMemberRepository.save(entity);
+    }
+
+    @Transactional
+    public void cancel(Long id) {
+        CompanyMember entity = companyMemberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 구성원 ID: " + id));
+
+        if (entity.getOrgStartDate() != null) {
+            throw new IllegalStateException("이미 승인된 신청입니다.");
+        }
+
+        companyMemberRepository.delete(entity);  // 승인 전 신청 취소는 삭제 처리
     }
 
 

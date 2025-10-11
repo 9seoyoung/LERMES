@@ -1,7 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kdt.mapper.AdminBoardListMapper">
-    <select id="getAdminBoardListByCohortSn" parameterType="Integer" resultType="com.kdt.KDT_PJT.adminBoardList.dto.AdminBoardListDTO">
+    <select id="getAdminBoardListByCohortSn" parameterType="com.kdt.KDT_PJT.adminBoardList.dto.AdminBoardListDTO" resultType="com.kdt.KDT_PJT.adminBoardList.dto.AdminBoardListDTO">
+
+    <!-- Post_bbs-->
+        (
         SELECT
+        p.POST_SN AS sn,
+        p.BBS_TYPE AS boardType,
+        p.POST_TTL AS title,
+        p.POST_FRST_WRT_DT AS regDt,
+        u.USER_NM AS userNm,
+        p.VIEW_CNT AS viewCnt
+        FROM TB_POST p
+        JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
+        WHERE p.DEL_YN = FALSE
+        AND (#{cohortSn} IS NULL OR p.COHORT_SN = #{cohortSn})
+        AND (
+        p.BBS_SCOPE IN ('PUBLIC', 'COMPANY', 'COHORT')
+        OR (p.BBS_SCOPE = 'PRIVATE' AND p.POST_WRTR_SN = #{userSn})
+        )
+        )
+
+        UNION ALL
+        <!--bbs_survey-->
+        (
+        SELECT
+        s.SRVY_SN AS sn,
+        s.BBS_TYPE AS boardType,
+        s.SRVY_TTL AS title,
+        s.SRVY_BGNG_DT AS regDt,
+        u.USER_NM AS userNm,
+        s.VIEW_CNT AS viewCnt
+        FROM TB_BBS_SURVEY s
+        JOIN TB_USER u ON s.USER_SN = u.USER_SN
+        WHERE s.DEL_YN = FALSE
+        AND (#{cohortSn} IS NULL OR s.COHORT_SN = #{cohortSn})
+        AND s.SRVY_SCOPE = 'COHORT'
+        )
+
+        ORDER BY regDt DESC
+
+
+
+--             i.ITV_SN,
+--             "INTERVIEW"     as boardType,
+--             i.ITV_APLY_TTL,
+--             i.ITV_APLY_DT,
+--             u.USER_NM,
+--             i.VIEW_CNT
+--         FROM TB_INTERVIEW i
+--         LEFT JOIN TB_USER u AS i.ITV_APLCNT_SN = u.USER_SN
+--         WHERE 1=1
+--             AND i.COHORT_SN = #{cohortSn}
+--         ORDER BY i.ITV_SN
+
     </select>
 </mapper>

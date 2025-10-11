@@ -12,12 +12,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SrvyResponseResponseDto {
-    private Long rspsnSn;        // 응답 일련번호 (PK)
+    private Long rspnsSn;        // 응답 일련번호 (PK)
+    private String responseUuid;    //uuid
     private String parentType;   // 부모 유형 (SURVEY, COHORT 등)
     private Long parentSn;       // 부모 일련번호 (설문 SN 등)
     private Long userSn;         // 응답자 SN
-    private LocalDateTime rspsnDt; // 응답 일시
-    private String rspsnCn;      // 응답 내용(JSON 문자열)
+    private LocalDateTime rspnsDt; // 응답 일시
+    private String rspnsCn;      // 응답 내용(JSON 문자열)
     private Integer viewCnt;     // 조회 수
     private Boolean delYn;       // 삭제 여부 (0=false, 1=true)
 }
