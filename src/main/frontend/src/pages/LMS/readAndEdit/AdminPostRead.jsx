@@ -6,6 +6,7 @@ import FilterList from "../../../components/ui/FilterList";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
 import { StudySched_Tb } from "../../../components/module/TableAll";
 import InterviewEditPost from "../form/InterviewEditPost";
+import { SchedRead } from "./SchedRead";
 
 export default function AdminPostRead({whereTogo}){
     

@@ -84,7 +84,6 @@ function BoardRead() {
     const body = { ...snapshot.formData };
     console.log("[will send to server]", JSON.stringify(body, null, 2));
     console.table(snapshot.formData);
-    console.time("[RecruitPost] createGroup");
 
     const params = {
       formData: formData,
@@ -157,6 +156,7 @@ function BoardEditForm({
 
   return (
     <>
+      {editToggle === false ? 
       <div className='formHeader'>
         <div className='inputSet inputTitleSet'>
           <label className='formLabel' htmlFor={`${domFormId}_postTtl`}>제목</label>
@@ -171,7 +171,7 @@ function BoardEditForm({
           />
         </div>
       </div>
-
+        : null }
       <div className="formContent">
             <textarea                 
                 id={`${formId}_postCn`}
@@ -188,10 +188,10 @@ function BoardEditForm({
             <div  className='inputSet'>
               <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
               <FileList files={files} setFiles={setFiles} uploadUser={formData.postWrtrSn} noShow={true} editToggle={editToggle}></FileList>
-            </div>
-            <div className='inputSet limitedInputSe'>
-              <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="postWriterName" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-              <FormInput type="text" labelNm="조회수" handleChange={handleChange} name="viewCnt" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+              <div style={{display:"flex", gap: "12px"}}>
+                <p style={{display:"flex", gap: "4px", padding: "2px 4px", background: "var(--bg-color-gray3)", borderRadius: "4px"}}>작성자 |<p>{formData.postWriterName}</p></p>
+                <p style={{display:"flex", gap: "4px", padding: "2px 4px", background: "var(--bg-color-gray3)", borderRadius: "4px"}}>조회수 |<p>{formData.viewCnt || 0}</p></p>
+              </div>
             </div>
           </div>
       </div>

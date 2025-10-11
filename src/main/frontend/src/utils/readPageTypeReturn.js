@@ -96,13 +96,13 @@ export const ADMIN_SELECT_POST_SN_KEY = {
 
 export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
     0: 0,
-    1: "/adminHome/board/read",
-    2: "/adminHome/board/read",
-    3: "/adminHome/board/read",
-    4: "/adminHome/board/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
-    5: "/adminHome/board/read",
-    6: "/adminHome/board/read",
-    7: "/adminHome/studySched/interview",
+    1: "/adminHome/boardSet/read",
+    2: "/adminHome/boardSet/readSchedule",
+    3: "/adminHome/boardSet/read",
+    4: "/adminHome/boardSet/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/adminHome/boardSet/read",
+    6: "/adminHome/boardSet/read",
+    7: "/adminHome/boardSet/readInterview",
     8: "",
 
 }
