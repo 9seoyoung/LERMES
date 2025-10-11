@@ -2,6 +2,7 @@ package com.kdt.KDT_PJT.adminBoardList.service;
 
 import com.kdt.KDT_PJT.adminBoardList.dto.AdminBoardListDTO;
 import com.kdt.KDT_PJT.cmmn.dao.CmmnDao;
+import com.kdt.KDT_PJT.cmmn.map.CmmnMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class AdminBoardListService {
     CmmnDao dao;
 
 
-    public List<AdminBoardListDTO> getAdminBoardListByCohortSn(Integer cohortSn){
-        return dao.selectList("com.kdt.mapper.AdminBoardListMapper.",cohortSn);
-    }
+    public List<AdminBoardListDTO> getAdminBoardListByCohortSn(AdminBoardListDTO adminBoardListDTO){
+
+        return dao.selectList("com.kdt.mapper.AdminBoardListMapper.",adminBoardListDTO);    }
 }

@@ -19,7 +19,7 @@ public class BbsListController {
 
     private final BbsListService bbsListService;
 
-    //bbs+survey list
+    //bbs+survey list 방문객/일반사용자/수강생/강사
     @GetMapping("/list")
     public ResponseEntity<List<BbsListResponseDto>> getAllBbsList(@AuthenticationPrincipal AuthCustomUserDetails auth)
 
