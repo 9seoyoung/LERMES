@@ -23,7 +23,7 @@
         VALUES
         (
         #{dto.srvyTtl},
-        #{dto.srvyQitem},
+        CAST(#{dto.srvyQitem, jdbcType=OTHER} AS JSON),
         #{dto.coSn},
         #{dto.cohortSn},
         #{dto.srvyBgngDt},

@@ -35,6 +35,8 @@ public class PostRequestDto {
     @JsonProperty("scope")
     @JsonAlias({"bbsScope"})
     private BbsScope bbsScope;    // 공개 범위 (전체, 회사, 기수, 비공개)
+
+
     private LocalDateTime postFrstWrtDt;
     private LocalDateTime postLastMdfcnDt;
 

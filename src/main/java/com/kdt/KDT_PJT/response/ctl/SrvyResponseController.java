@@ -24,19 +24,30 @@ public class SrvyResponseController {
     @PostMapping("/{srvySn}/responses")
     public ResponseEntity<SrvyResponseResponseDto> createSrvyResponse(
             @RequestBody SrvyRequestResponseDto requestDto,
-            @AuthenticationPrincipal AuthCustomUserDetails auth) {
+            @AuthenticationPrincipal AuthCustomUserDetails auth,
+            @PathVariable Long srvySn) { // 👈 추가됨
 
         Long userSn = auth.getId();
-        requestDto.setUserSn(userSn);
+        Long roleId = auth.getRoleType();     // 👈 추가됨
+        Long coSn = auth.getCompanySn();      // 👈 추가됨
+        Long cohortSn = auth.getCohortSn();   // 👈 추가됨
 
-        SrvyResponseResponseDto saved = srvyResponseService.createResponse(requestDto);
+        // 요청 DTO 보정
+        requestDto.setUserSn(userSn);
+        requestDto.setParentSn(srvySn);       // 👈 추가됨 (설문 번호 설정)
+
+        // 서비스 호출 (권한/소속 검증 포함)
+        SrvyResponseResponseDto saved =
+                srvyResponseService.createResponse(requestDto, roleId, coSn, cohortSn); // 👈 수정됨
+
         return ResponseEntity.ok(saved);
     }
 
-     //설문 응답 리스트 조회
-     // 관리자: 전체 유저 응답
-     // 수강생: 본인 응답만
-
+    /**
+     * ✅ 설문 응답 리스트 조회
+     * - 관리자: 전체 유저 응답
+     * - 수강생: 본인 응답만
+     */
     @GetMapping("/{srvySn}/list")
     public ResponseEntity<List<SrvyResponseResponseDto>> getSrvyResponses(
             @PathVariable Long srvySn,
@@ -51,10 +62,11 @@ public class SrvyResponseController {
         return ResponseEntity.ok(responses);
     }
 
-    //응답 삭제 (Soft Delete)
-    //설문 마감 전까지만 삭제 가능
-    //관리자 및 본인만 가능
-
+    /**
+     * ✅ 응답 삭제 (Soft Delete)
+     * - 설문 마감 전까지만 삭제 가능
+     * - 관리자 및 본인만 가능
+     */
     @DeleteMapping("responses/{responseSn}")
     public ResponseEntity<Void> deleteSrvyResponse(
             @PathVariable Long responseSn,
