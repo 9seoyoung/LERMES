@@ -66,8 +66,8 @@ export const readInterviewList = ({ roleType, cohortSn }) => {
  * @param {Object} formData 변경(확정)된 내용
  * @returns 1
  */
-export function editInterview( itvSn, effectiveSn, formData ) {
-  return api.post(`/interview/edit/${itvSn}/${effectiveSn}`, formData, {
+export function editInterview( itvSn, formData ) {
+  return api.put(`/interview/confirm/${itvSn}`, formData, {
       headers: { 'Content-Type': 'application/json' },
     }
   );
