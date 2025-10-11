@@ -49,4 +49,17 @@ public class CompanyMemberController {
         companyMemberService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/apply")
+    public ResponseEntity<Long> apply(@RequestBody CompanyMemberDto dto) {
+        Long id = companyMemberService.apply(dto);
+        return ResponseEntity.ok(id);
+    }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<Void> approve(@PathVariable Long id) {
+        companyMemberService.approve(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
