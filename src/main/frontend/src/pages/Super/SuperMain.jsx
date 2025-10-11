@@ -87,7 +87,7 @@ export default function SuperMain() {
                   backgroundImage: v?.bigLogoFileSn
                     ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
                     : 'none',
-                  backgroundSize: 'contain',
+                  backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
                 }}
