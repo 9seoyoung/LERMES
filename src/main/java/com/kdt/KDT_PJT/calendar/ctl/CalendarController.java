@@ -164,18 +164,12 @@ public class CalendarController {
         params.setCalSn(calSn);
         params.setUserSn(me.getId().intValue());    //수정하면 수정자로 sn 바꿔야함
         // 실려온 값에 prvtYn = 0 (관리자만 가능) 값이 있으면 관리자인지 확인드가자
-        if(params.getPrvtYn() == 0){
-            //관리자맞니?
-            int roleType = me.getRoleType().intValue();
-            if(roleType == 1 || roleType == 2 || roleType == 3){ // 관리자 맞네
-                return ResponseEntity.ok(calendarService.putCalendarDetailByCalSn(params));
-            } else { // 관리자 아니네
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "관리자만 공식 손댈수있슴");
-            }
+        int roleType = me.getRoleType().intValue();
+        if(params.getPrvtYn() != null && params.getPrvtYn() == false && roleType != 1 && roleType != 2 && roleType != 3){ // 공식일정인데 관리자 아닌데 건드는경우
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "관리자만 공식 일정을 수정할 수 있습니다.");
         }
-        // 개인 글이면 걍 원래대로
+        // 수정 시작
         return ResponseEntity.ok(calendarService.putCalendarDetailByCalSn(params));
-
     }
 
     /*

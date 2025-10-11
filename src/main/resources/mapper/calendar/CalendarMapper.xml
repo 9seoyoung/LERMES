@@ -196,7 +196,7 @@
                         )
                 </when>
             </choose>
-        ORDER BY CAL_SN ASC -- EVENT_REG_DT ASC
+        ORDER BY CAL_SN DESC -- EVENT_REG_DT ASC
     </select>
 
     <update id="putCalendarDetailByCalSn" parameterType="com.kdt.KDT_PJT.calendar.dto.CalendarDetailResponseDTO">
@@ -214,12 +214,15 @@
                 c.EVENT_NM = #{eventNm},
             </if>
 
-            <if test="rmrkCn != null">
+            <if test="rmrkCn != null and rmrkCn !=''">
                 c.RMRK_CN = #{rmrkCn},
             </if>
 
             <if test="prvtYn != null">
                 c.PRVT_YN = #{prvtYn},
+            </if>
+            <if test="eventPlc != null and eventPlc != ''">
+                c.EVENT_PLC = #{eventPlc},
             </if>
 
                 c.USER_SN = #{userSn},
