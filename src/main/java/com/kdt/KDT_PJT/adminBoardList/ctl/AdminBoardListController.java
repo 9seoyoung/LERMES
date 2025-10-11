@@ -23,10 +23,16 @@ public class AdminBoardListController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','TENANT_ADMIN','EMPLOYEE')")
     @GetMapping("/boardList/{cohortSn}")
     public ResponseEntity<List<AdminBoardListDTO>> getAdminBoardListByCohortSn(@AuthenticationPrincipal AuthCustomUserDetails me,
-                                                                               @PathVariable Integer cohortSn){
-//        Integer coSn = me.getCompanySn().intValue();
+                                                                               @PathVariable Integer cohortSn,
+                                                                               AdminBoardListDTO adminBoardListDTO){
+        Integer userSn = me.getId().intValue();
+        adminBoardListDTO.setCohortSn(cohortSn);
+        adminBoardListDTO.setUserSn(userSn);
 
+//        adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
+//        return ResponseEntity.ok(Collections.emptyList()); // TODO 쓰레기 return중, 수정 필요
 
-        return ResponseEntity.ok(adminBoardListService.getAdminBoardListByCohortSn(cohortSn));
+        List<AdminBoardListDTO> list = adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
+        return ResponseEntity.ok(list);
     }
 }

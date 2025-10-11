@@ -60,4 +60,7 @@ public enum SurveyRole {
             default -> throw new IllegalArgumentException("Unknown roleId: " + roleId);
         };
     }
+    public boolean isAdmin() {
+        return this == SUPER_ADMIN || this == TENANT_ADMIN;
+    }
 }

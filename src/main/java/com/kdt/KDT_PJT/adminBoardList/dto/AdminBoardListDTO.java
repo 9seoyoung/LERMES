@@ -16,12 +16,9 @@ public class AdminBoardListDTO {
     private Integer sn;             // 고유번호 (테이블별)
     private String boardType;       // 게시판 타입, 이걸로 무슨테이블 글인지 구분할거임. (enum으로 정해야하나)
     private String title;           // 글 제목
-    private String regDate;         // 게시일 YYYYMMDD
+    private LocalDateTime regDt;    // 게시일 YYYYMMDD
     private String userNm;          // 글 작성자 이름 (userTB와 join 필요)
     private Integer viewCnt;        // 게시글 조회수
-    @JsonIgnore private LocalDateTime regDt;    // 게시일 YYYYMMDD
-
-    public String getRegDate() {
-        return regDt != null ? regDt.toLocalDate().toString() : null;
-    } //보낼떄 String타입 날짜로 변환
+    @JsonIgnore private Integer cohortSn;
+    @JsonIgnore private Integer userSn;
 }

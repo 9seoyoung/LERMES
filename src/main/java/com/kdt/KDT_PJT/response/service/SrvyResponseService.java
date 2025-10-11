@@ -42,20 +42,18 @@ public class SrvyResponseService {
                 survey.getSrvyEndDt().atTime(23, 59, 59)
         );
 
-        if (status == SurveyStatus.CLOSED) {
-            throw new IllegalStateException("마감된 설문에는 응답할 수 없습니다.");
-        }
+        if (status != SurveyStatus.ONGOING) {
+            throw new IllegalStateException("현재는 응답할 수 없는 설문입니다. (시작 전 또는 종료됨)");}
 
         // 2. 기존 응답 존재 여부 확인
         SrvyResponseResponseDto existing = srvyResponseMapper.findByParentAndUser(parentSn, userSn);
 
         // 3. 있으면 수정, 없으면 등록
-        if (existing == null) {
+        if (existing == null || Boolean.TRUE.equals(existing.getDelYn())) {
             srvyResponseMapper.insertResponse(requestDto);
         } else {
             srvyResponseMapper.updateResponse(requestDto);
         }
-
         // 4. 최종 응답 반환
         return srvyResponseMapper.findByParentAndUser(parentSn, userSn);
     }
@@ -72,8 +70,8 @@ public class SrvyResponseService {
 
     //설문 응답 삭제 (Soft Delete) 설문이 마감되면 불가능 / 마감 전 관리자 or 본인만 가능
     @Transactional
-    public void deleteResponse(Long rspsnSn, Long userSn, Long roleId) {
-        SrvyResponseResponseDto response = srvyResponseMapper.findById(rspsnSn);
+    public void deleteResponse(Long rspnsSn, Long userSn, Long roleId) {
+        SrvyResponseResponseDto response = srvyResponseMapper.findById(rspnsSn);
         if (response == null) {
             throw new IllegalArgumentException("응답이 존재하지 않습니다.");
         }
@@ -98,7 +96,7 @@ public class SrvyResponseService {
         boolean isAdmin = (role == SurveyRole.SUPER_ADMIN || role == SurveyRole.TENANT_ADMIN);
 
         if (isOwner || isAdmin) {
-            srvyResponseMapper.softDelete(rspsnSn, userSn);
+            srvyResponseMapper.softDelete(rspnsSn, userSn);
         } else {
             throw new SecurityException("응답 삭제 권한이 없습니다.");
         }
