@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdt.mapper.interviewRecord">
+    <insert id="createInterviewRecord" parameterType="com.kdt.KDT_PJT.interview.dto.InterviewRecordRequestDTO" useGeneratedKeys="true" keyProperty="itvRecordSn">
+        INSERT INTO
+            TB_INTERVIEW_RECORD
+            (
+                ITV_SN,
+                ITV_RECORD_TTL,
+                ITV_RECORD_CN,
+                FORM_UUID,
+                ITV_PIC_SN,
+                ITV_TRPR_SN,
+                COHORT_SN,
+                CO_SN,
+                ITV_DT
+            )
+        VALUES
+              (
+               #{itvSn},
+               #{itvRecordTtl},
+               #{itvRecordCn},
+               #{formUuid},
+               #{itvPicSn},
+               #{itvTrprSn},
+               #{cohortSn},
+               #{coSn},
+               #{itvDt}
+                 )
+    </insert>
+
+
+    <select id="countActiveRecordByItvSn" parameterType="Integer" resultType="Integer">
+        /*
+        QueryID : com.kdt.mapper.interviewRecord.countActiveRecordByItvSn
+        Description : 특정 ITV_SN에 대해 활성(DEL_YN=0)된 기록 개수 조회
+        */
+        SELECT
+            COUNT(*)
+        FROM TB_INTERVIEW_RECORD
+        WHERE ITV_SN = #{itvSn}
+          AND DEL_YN = 0
+    </select>
+</mapper>

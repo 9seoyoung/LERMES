@@ -237,5 +237,13 @@
             AND ITV_CFMTN_DT IS NULL -- 확정이면 이거 채워져있기때문에 확정이면 삭제 불가능.
     </update>
 
+    <select id="getItvPrnmntDtByItvSn" parameterType="Integer" resultType="java.time.LocalDateTime">
+        SELECT
+            ITV_PRNMNT_DT
+        FROM TB_INTERVIEW
+        WHERE 1=1
+        AND ITV_SN = #{itvSn}
+    </select>
+
 
 </mapper>
