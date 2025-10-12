@@ -135,6 +135,7 @@ public class InterviewController {
         // SQL 분기에 필요한 최소 파라미터만 전달 (Integer 타입 보장)
         // ㅇㅎ params에 권한레벨 넣음
         params.put("roleType", roleType);
+        System.out.println("roleType = " + roleType);
 //        params.put("userSn",   userSn);
         // params에 받아온 기수정보 넣음
         params.put("cohortSn", resolvedCohortSn);

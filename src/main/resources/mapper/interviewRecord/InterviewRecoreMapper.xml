@@ -50,7 +50,7 @@
             u1.USER_NM as itvPicNm,
             i.ITV_PIC_SN,
             i.VIEW_CNT,
-            i.ITV_DT,
+            i.REG_DT,
             '면담기록' as postType
         FROM TB_INTERVIEW_RECORD i
         LEFT JOIN TB_USER u1 ON u1.USER_SN = i.ITV_PIC_SN
@@ -78,7 +78,8 @@
             u2.USER_NM as itvTrprNm,    -- 면담 대상자 이름
             i.ITV_DT,
             i.COHORT_SN,
-            i.VIEW_CNT
+            i.VIEW_CNT,
+            i.REG_DT
         FROM TB_INTERVIEW_RECORD i
         LEFT JOIN TB_USER u1 ON u1.USER_SN = i.ITV_PIC_SN
         LEFT JOIN TB_USER u2 ON u2.USER_SN = i.ITV_TRPR_SN

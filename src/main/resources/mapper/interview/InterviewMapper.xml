@@ -89,7 +89,9 @@
         JOIN TB_USER u1      ON u1.USER_SN = i.ITV_APLCNT_SN    -- 이름 매칭용
         LEFT JOIN TB_USER u2 ON u2.USER_SN = i.ITV_PIC_SN       -- 이름 매칭용
         WHERE 1=1
-            AND c.CO_SN = #{coSn}               <!-- 회사는 항상 제한 -->
+            <if test="roleType != null and roleType != 1">
+                AND c.CO_SN = #{coSn}               <!-- 회사는 항상 제한 -->
+            </if>
             AND i.DEL_YN = 0
             <if test="cohortSn != null and cohortSn != 0">
             AND i.COHORT_SN = #{cohortSn}     <!-- 특정 기수만 보고 싶을 때 -->
@@ -100,7 +102,7 @@
             </if>
 
             <!-- 담당자 권한별 보기 (신청자 조건 없을 때만) -->
-            <if test="(userSn == null or userSn == 0) and roleType != null">
+            <if test="(userSn == null or userSn == 0) and roleType != null and roleType != 1">
                 AND i.ITV_PIC_AUTHRT = #{roleType}
                 AND i.ITV_PRNMNT_DT IS NULL
             </if>

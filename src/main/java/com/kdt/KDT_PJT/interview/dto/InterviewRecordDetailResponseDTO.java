@@ -31,6 +31,7 @@ public class InterviewRecordDetailResponseDTO {
     private String date;            // 프론트 용 날짜
     private String time;            // 프론트 용 시간
     private List<CmmnMap> files;    // 파일 리스트
+    private LocalDateTime regDt;    //DB에서 꺼내온 등록 일시
 
     @JsonIgnore private String formUuid;        // 폼 UUID (첨부파일 매칭용)
     @JsonIgnore private LocalDateTime itvDt;    //DB에서 꺼내온 면담일시

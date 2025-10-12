@@ -18,7 +18,7 @@ public class InterviewRecordListResponseDTO {
     private Integer itvPicSn;       // 면담 담당자 일련번호
     private String itvPicNm;        // 면담 담당자 명
     private Integer viewCnt;        // 조회수
-    private LocalDateTime itvDt;    //DB에서 꺼내온 면담일시
+    private LocalDateTime regDt;    //DB에서 꺼내온 등록 일시
     private String postType;        //면담기록
 
 //    public String getPostType() {return "면담기록";}
