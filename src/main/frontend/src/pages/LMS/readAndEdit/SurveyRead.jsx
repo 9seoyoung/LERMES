@@ -16,6 +16,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
+import { pullSurveyResList, submitSurvey } from '../../../services/responseService';
 
 // CreatePost.jsx
 // ...import 생략
@@ -35,6 +36,7 @@ function SurveyRead({setEditToggle}) {
   const {pathname} = useLocation();
   const [files, setFiles] = useState([]);
 
+  console.log(srvySn);
   // 설문 폼 (초기 페이지 하나 생성)
   const [surveyForm, setSurveyForm] = useState({
     id: postId.current,
@@ -205,7 +207,7 @@ function SurveyRead({setEditToggle}) {
     }
     return out;
   };
-  const saveSubmit = async (e) => {
+  const saveSrvyRes = async (e) => {
     e.preventDefault();
 
     const snapshot = structuredClone
@@ -227,17 +229,31 @@ function SurveyRead({setEditToggle}) {
 
     console.time('[SurveyRead] readRecruitPoster');
     try {
-      const res = await applyGroup(body);
+      const res = await submitSurvey(srvySn, {parentSn: Number(srvySn), response: JSON.stringify(body), parentType: "SURVEY"});
       console.log(Object.keys(snapshot));
       console.log(Object.keys(snapshot.formData));
       console.log('[SurveyRead] readRecruitPoster response:', res);
-      toast.success('게시 성공');
+      toast.success('제출 성공');
       navigate(-1);
     } catch (err) {
       console.error('[SurveyRead] readRecruitPoster error:', err);
       toast.error(err.message);
     }
   };
+
+  const pullFormResponses = () => {
+
+    (async() => {
+      try {
+        const {data} = await pullSurveyResList(srvySn);
+        console.log(data);
+      } catch(err) {
+        console.log(err.message);
+      }
+
+    }
+    )();
+  }
 
   return (
     <div className="boardPage">
@@ -249,6 +265,9 @@ function SurveyRead({setEditToggle}) {
         <h4 style={{ fontWeight: '500', justifyContent: "flex-start", gap: "6px"}}>
           <span noborder = "no">{`[${formData.surveyStart} ~ ${formData.surveyEnd}]`}</span>
           <span noborder = "no">{`${formData.title}`}</span>
+          { formData.userSn === user.USER_SN ? 
+            <button noborder = "no" onClick={() => pullFormResponses()}>응답 내역</button >
+            : null }
         </h4>
           <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
             <div className="formArea_L">
@@ -266,7 +285,7 @@ function SurveyRead({setEditToggle}) {
                 setFiles={setFiles}
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
-                saveSubmit={saveSubmit}
+                saveSrvyRes={saveSrvyRes}
                 setShowForm={setShowForm}
                 showForm={showForm}
                 setEditToggle={setEditToggle}
@@ -289,6 +308,7 @@ function RecruitForm({
   setSurveyForm,
   questionAddRef,
   containerRef,
+  saveSrvyRes,
   saveSubmit,
   setShowForm,
   showForm,
@@ -310,6 +330,7 @@ function RecruitForm({
           containerRef={containerRef}
           questions={surveyForm.pages[0].questions}
           saveSubmit={saveSubmit}
+          saveSrvyRes={saveSrvyRes}
           showForm={showForm}
           setShowForm={setShowForm}
           setEditToggle={setEditToggle}

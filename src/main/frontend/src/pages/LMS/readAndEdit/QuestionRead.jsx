@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
 import QuestionReadType from "./QuestionReadType";
 import styles from "../../../styles/form.module.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // ───────── utils ─────────
 export const makeQuestion = () => ({
@@ -65,10 +65,11 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit, showForm, setShowForm, setEditToggle }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit, showForm, setShowForm, setEditToggle, saveSrvyRes }, ref) {
   const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
+  const {srvySn} = useParams();
   const {pathname} = useLocation();
   const navigate = useNavigate();
   const getRef = (qid) => {
@@ -220,7 +221,10 @@ const onSetAnswer = (qid, val) => {
         {pathname === "/adminHome/groupSet" ?
             <button className={styles.applyBtn} type="button" onClick={() => setEditToggle(true)}>수정하기</button>
           :
-            <button className={styles.applyBtn} type="button" onClick={() => saveSubmit()}>제출하기</button>
+            <button className={styles.applyBtn} type="button" onClick={(e) => 
+              ( pathname.split('/')[3] === "survey" ?
+                saveSrvyRes(e)
+              : saveSubmit())}>제출하기</button>
           }
                         <button
               className={styles.backBtn}
