@@ -113,6 +113,7 @@ public class CohortController {
         return cohortService.findById(id)
                 .map(existing -> {
                     // 업데이트 할 필드 설정 (id 제외)
+                    existing.setCohortNm(cohort.getCohortNm());
                     existing.setCrclmNm(cohort.getCrclmNm());
                     existing.setCrclmCn(cohort.getCrclmCn());
                     existing.setCoSn(cohort.getCoSn());
@@ -122,7 +123,9 @@ public class CohortController {
                     existing.setCrclmEndYmd(cohort.getCrclmEndYmd());
                     existing.setCohortSttsNm(cohort.getCohortSttsNm());
                     existing.setCohortCate(cohort.getCohortCate());
-
+                    existing.setAttendStartTm(cohort.getAttendStartTm());
+                    existing.setAttendEndTm(cohort.getAttendEndTm());
+                    existing.setCohortPl(cohort.getCohortPl());
                     Cohort updated = cohortService.save(existing);
                     return ResponseEntity.ok(updated);
                 })

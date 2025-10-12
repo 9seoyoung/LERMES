@@ -7,7 +7,7 @@ import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import {v4 as uuidv4} from "uuid";
 
-import { applyGroup, readRecruitPoster } from '../../../services/postService';
+import { applyGroup, editGroup, readRecruitPoster } from '../../../services/postService';
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -15,9 +15,10 @@ import { toast } from "react-toastify";
 // CreatePost.jsx
 // ...import 생략
 
-function RecruitEdit() {
+function RecruitEdit({propCohortSn, editToggle, setEditToggle}) {
   const domFormId = useId();
-  const {recruitSn} = useParams();
+  const { recruitSn } = useParams();
+  const finalSn = propCohortSn ?? recruitSn; 
   const domId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
@@ -58,9 +59,9 @@ function RecruitEdit() {
   
   useEffect(() => {
     (async () => {
-      if (!recruitSn) return;
+      if (!finalSn) return;
       try {
-        const res = await readRecruitPoster(recruitSn);
+        const res = await readRecruitPoster(finalSn);
         const c = res?.data;
   
       // ── 설문 복원: crclmCn(JSON 문자열) → surveyForm 주입 ──
@@ -118,12 +119,12 @@ function RecruitEdit() {
           classEnd:    c?.attendEndTm   ?? "",
           place:       c?.cohortPl ?? "",
         }));
-        console.log("[RecruitEdit] recruitSn =", recruitSn, c);
+        console.log("[RecruitEdit] finalSn =", finalSn, c);
       } catch (e) {
         console.log("[RecruitEdit] read error:", e?.message, e);
       }
     })();
-  }, [recruitSn]);
+  }, [finalSn]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,39 +136,55 @@ function RecruitEdit() {
   const saveSubmit = async (e) => {
     e.preventDefault();
 
-  // const payload = structuredClone
-  //   ? structuredClone({ surveyForm, formData })
-  //   : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
   const snapshot = structuredClone
     ? structuredClone({ surveyForm, formData })
     : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
-  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
+  const body = {
+      // 문자열/날짜/시간 필드 매핑
+      cohortNm: snapshot.formData.groupName ?? "",      // 과정명(그룹명으로 보이던 값)
+      crclmNm: snapshot.formData.title ?? "",           // 커리큘럼명(제목)
+      // JSON 컬럼: 객체를 문자열로(백엔드가 String으로 받는다면)
+      crclmCn: JSON.stringify(snapshot.surveyForm),     // ★ 핵심
+      coSn: user?.USER_OGDP_CO_SN,                      // 회사 SN (확실히 회사 SN이 맞는지 확인)
 
-  // console.groupCollapsed("[RecruitEdit] readRecruitPoster payload");
-  // console.table(
-  //   payload.surveyForm?.pages?.[0]?.questions?.map((q, i) => ({
-  //     idx: i + 1, qid: q.qid, type: q.type,
-  //     title: q.title || "(제목 없음)", options: q.options?.length ?? 0,
-  //   })) || []
-  // );
-  // console.groupEnd();
+      recruitBgngDt: snapshot.formData.surveyStart || null,  // "YYYY-MM-DD"
+      recruitEndDt:   snapshot.formData.surveyEnd   || null,  // "
 
-  // console.log("[payload snapshot]", snapshot);
-  // console.log("[formData]", snapshot.formData);
-  // console.log("[surveyForm]", snapshot.surveyForm);
+      crclmBgngYmd: snapshot.formData.startDate || null,     // "YYYY-MM-DD"
+      crclmEndYmd:   snapshot.formData.endDate   || null,     // "
+
+      attendStartTm: snapshot.formData.classStart 
+        ? `${snapshot.formData.classStart}`.length === 5 
+          ? `${snapshot.formData.classStart}:00`             // "HH:mm" → "HH:mm:ss"
+          : snapshot.formData.classStart 
+        : null,
+      attendEndTm: snapshot.formData.classEnd 
+        ? `${snapshot.formData.classEnd}`.length === 5 
+          ? `${snapshot.formData.classEnd}:00`
+          : snapshot.formData.classEnd
+        : null,
+
+      cohortPl: snapshot.formData.place ?? "",
+
+      // enum들 필요 시 추가
+      // cohortSttsNm: "RECRUITING", 
+      // cohortCate: "BOOTCAMP",
+    };
+
+
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.table(snapshot.formData);
 
   console.time("[RecruitEdit] readRecruitPoster");
   try {
-    const res = await applyGroup(body);
+    const res = await editGroup(finalSn, body);
     console.log(Object.keys(snapshot)); 
     console.log(Object.keys(snapshot.formData));
     console.log("[RecruitEdit] readRecruitPoster response:", res);
-    toast.success("게시 성공");
-    navigate(-1);
+    toast.success("수정 완료");
+    setEditToggle(false);
   } catch (err) {
     console.error("[RecruitEdit] readRecruitPoster error:", err);
     toast.error(err.message);
@@ -239,7 +256,8 @@ function RecruitEdit() {
                 ))}
               </ul>
               <div className="save_box">
-                {/* <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>제출</button> */}
+                <button className="basicBtn tempBtn" type="button" onClick={() => setEditToggle(false)}>취소</button>
+                <button className="basicBtn saveBtn" type="button" onClick={saveSubmit}>저장</button>
               </div>
             </div>
           </div>
@@ -276,7 +294,7 @@ function RecruitForm({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} addStyle="formLabel"></DateTimeInput>
+          <DateTimeInput type="date" labelNm="모집기간" handleChange={handleChange} name="surveyStart" formData={formData} ></DateTimeInput>
           <DateTimeInput type="date" labelNm="-" handleChange={handleChange} name="surveyEnd" formData={formData} ></DateTimeInput>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
 import QuestionReadType from "./QuestionReadType";
 import styles from "../../../styles/form.module.css";
+import { useLocation } from "react-router-dom";
 
 // ───────── utils ─────────
 export const makeQuestion = () => ({
@@ -64,11 +65,11 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit, showForm, setShowForm, setEditToggle }, ref) {
   const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
-
+  const {pathname} = useLocation();
   const getRef = (qid) => {
     if (!itemRefs.current[qid]) itemRefs.current[qid] = createRef();
     return itemRefs.current[qid];
@@ -215,7 +216,18 @@ const onSetAnswer = (qid, val) => {
         ))}
       </div>
       <div className={styles.can}>
+        {pathname === "/adminHome/groupSet" ?
+            <button className={styles.applyBtn} type="button" onClick={() => setEditToggle(true)}>수정하기</button>
+          :
             <button className={styles.applyBtn} type="button" onClick={() => saveSubmit()}>제출하기</button>
+          }
+                        <button
+              className={styles.backBtn}
+              type="button"
+              onClick={() => setShowForm(!showForm)}
+            >
+              뒤로
+            </button>
       </div>
     </>
   );
