@@ -42,6 +42,12 @@ public class InterviewRecordController {
         return ResponseEntity.ok(interviewRecordService.readInterviewRecordDetail(me,itvRecordSn));
     }
 
+    @PatchMapping("/{itvRecordSn}")
+    public ResponseEntity<InterviewRecordDetailResponseDTO> updateInterviewRecord(@PathVariable Integer itvRecordSn,
+                                                                                  @RequestBody InterviewRecordRequestDTO params){
+        return ResponseEntity.ok(interviewRecordService.updateInterviewRecord(itvRecordSn,params));
+    }
+
     @DeleteMapping("/{itvRecordSn}")
     public void deleteInterviewRecord(@PathVariable Integer itvRecordSn){
         interviewRecordService.deleteInterviewRecord(itvRecordSn);

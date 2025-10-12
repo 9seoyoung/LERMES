@@ -103,4 +103,39 @@
         WHERE ITV_RECORD_SN = #{itvRecordSn}
           AND DEL_YN = 0
     </update>
+
+    <update id="updateInterviewRecordByItvRecordSn" parameterType="com.kdt.KDT_PJT.interview.dto.InterviewRecordRequestDTO">
+        UPDATE TB_INTERVIEW_RECORD
+        <set> -- 마지막쉼표 자동제거
+            <if test="itvSn != null">
+                ITV_SN = #{itvSn},
+            </if>
+
+            <if test="itvDt != null">
+                ITV_DT = #{itvDt},
+            </if>
+
+            <if test="itvRecordTtl != null and itvRecordTtl != ''">
+                ITV_RECORD_TTL = #{itvRecordTtl},
+            </if>
+
+            <if test="itvRecordCn != null and itvRecordCn !=''">
+                ITV_RECORD_CN = #{itvRecordCn},
+            </if>
+
+            <if test="formUuid != null and formUuid !=''">
+                FORM_UUID = #{formUuid},
+            </if>
+
+            <if test="itvPicSn != null">
+                ITV_PIC_SN = #{itvPicSn},
+            </if>
+
+            <if test="itvTrprSn != null">
+                ITV_TRPR_SN = #{itvTrprSn},
+            </if>
+        </set>
+        WHERE ITV_RECORD_SN = #{itvRecordSn}
+        AND DEL_YN = 0
+    </update>
 </mapper>

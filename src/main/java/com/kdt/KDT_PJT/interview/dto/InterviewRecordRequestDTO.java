@@ -23,9 +23,7 @@ public class InterviewRecordRequestDTO {
     private Integer itvPicSn;       // 면담 담당자 일련번호
     private Integer itvTrprSn;      // 면담 대상자 일련번호
     private Integer cohortSn;       // 기수 일련번호
-    private Integer viewCnt;        // 조회수
     private Integer coSn;           // 회사 일련번호
-    private Integer delYn;          // 삭제 여부
     private String date;            // 프론트 입력 받기용 (날짜)
     private String time;            // 프론트 입력 받기용 (시간)
 

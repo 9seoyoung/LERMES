@@ -73,12 +73,26 @@ public class InterviewRecordService {
     // 면담 기록 상세 조회
     @Transactional
     public InterviewRecordDetailResponseDTO readInterviewRecordDetail(AuthCustomUserDetails me, Integer itvRecordSn){
-        try {   // 조회수 +1
-            dao.update("com.kdt.mapper.interviewRecord.incViewCnt",itvRecordSn);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "업뎃실패");
+           // 조회수 +1
+        if(dao.update("com.kdt.mapper.interviewRecord.incViewCnt",itvRecordSn)==0){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "조회수 증가 실패");
         }
 
+        InterviewRecordDetailResponseDTO res = dao.selectOne("com.kdt.mapper.interviewRecord.readInterviewRecordDetailByItvRecordSn",itvRecordSn);
+        String formUuid = Objects.toString(res.getFormUuid(), ""); // formUuid 비었으면 ""로 처리
+        List<CmmnMap> files = fileService.readFileSnAndNmbyFormUuid(formUuid);
+        res.setFiles(files); //파일목록실어줌
+        return res;
+    }
+
+    // 면담 기록 수정
+    @Transactional
+    public InterviewRecordDetailResponseDTO updateInterviewRecord(Integer itvRecordSn,InterviewRecordRequestDTO params){
+        params.setItvRecordSn(itvRecordSn);
+        if(params.getDate() != null && !params.getDate().isBlank()) params.buildDateTime(); // 날짜 실어서 보내면 시간도 업뎃
+        if(dao.update("com.kdt.mapper.interviewRecord.updateInterviewRecordByItvRecordSn",params)==0){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "업데이트실패");
+        }
         InterviewRecordDetailResponseDTO res = dao.selectOne("com.kdt.mapper.interviewRecord.readInterviewRecordDetailByItvRecordSn",itvRecordSn);
         String formUuid = Objects.toString(res.getFormUuid(), ""); // formUuid 비었으면 ""로 처리
         List<CmmnMap> files = fileService.readFileSnAndNmbyFormUuid(formUuid);
