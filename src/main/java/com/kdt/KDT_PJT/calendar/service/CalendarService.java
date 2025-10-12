@@ -117,7 +117,12 @@ public class CalendarService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "업뎃실패요");
         }
         Integer calSn = params.getCalSn();
-        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+        CalendarDetailResponseDTO rtn = dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+        System.out.println("리턴전rtn = " + rtn);
+        if(rtn.getPrvtYn() == 0 && rtn.getCohortSn() == null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "개인일정 공식으로 바꿀라면 기수번호 가져오십쇼");
+        }
+        return rtn;
     }
 
     /*

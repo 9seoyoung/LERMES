@@ -165,8 +165,17 @@ public class CalendarController {
         params.setUserSn(me.getId().intValue());    //수정하면 수정자로 sn 바꿔야함
         // 실려온 값에 prvtYn = 0 (관리자만 가능) 값이 있으면 관리자인지 확인드가자
         int roleType = me.getRoleType().intValue();
-        if(params.getPrvtYn() != null && params.getPrvtYn() == false && roleType != 1 && roleType != 2 && roleType != 3){ // 공식일정인데 관리자 아닌데 건드는경우
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "관리자만 공식 일정을 수정할 수 있습니다.");
+
+        // 공식/개인 설정은 관리자만 가능하고, 관리자 개인 일정은 cohortSn == null인데 공식으로 바꾸려면 cohortSn이 필요하다. 그래서 이거 건들려면 cohortSn도 같이 보냈는지 확인해야함.
+
+        if(params.getPrvtYn() != null && !params.getPrvtYn() && params.getCohortSn() != null && roleType != 1 && roleType != 2 && roleType != 3){
+            // 공식일정인데 관리자 아닌데 건드는경우
+            // params.getCohortSn() != null 체크는 여기서는 이게 원래 공식인데 채워서 보낼수도 있음, 하지만 비공식 -> 공식인지, 원래 공식인지 확인할라면 원래꺼 체크 쿼리 날려서 확인해야하니까 기차늠 무조건 받는걸로 체크 ㄱㄱ
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "관리자만 공식 일정을 수정할 수 있습니다. 관리자라면 cohortSn 실어보냈는지 확인부탁");
+        }
+        if(params.getCohortSn() != null && roleType != 1 && roleType != 2 && roleType != 3){
+            // 코호트번호 수정 -> 관리자만 가능 관리자 아닌데 할라하면 안됨
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "관리자만 기수단위 일정 변경이 가능합니다.");
         }
         // 수정 시작
         return ResponseEntity.ok(calendarService.putCalendarDetailByCalSn(params));
