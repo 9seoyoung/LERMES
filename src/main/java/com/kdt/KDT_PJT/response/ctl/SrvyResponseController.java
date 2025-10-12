@@ -23,6 +23,7 @@ public class SrvyResponseController {
     //등록 및 수정
     @PostMapping("/{srvySn}/responses")
     public ResponseEntity<SrvyResponseResponseDto> createSrvyResponse(
+            @PathVariable Long srvySn,
             @RequestBody SrvyRequestResponseDto requestDto,
             @AuthenticationPrincipal AuthCustomUserDetails auth,
             @PathVariable Long srvySn) { // 👈 추가됨

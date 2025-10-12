@@ -39,6 +39,48 @@
         AND s.SRVY_SCOPE = 'COHORT'
         )
 
+        UNION ALL
+        -- 면담 신청, 확정
+        (
+        SELECT
+        i.ITV_SN AS sn,
+        CASE
+        WHEN i.ITV_CFMTN_DT IS NULL THEN '면담신청'
+        ELSE '면담확정'
+        END AS boardType,
+        i.ITV_APLY_TTL as title,
+        i.ITV_APLY_DT as regDt,
+        u.USER_NM as userNM,
+        i.VIEW_CNT as viewCnt
+        FROM TB_INTERVIEW i
+        LEFT JOIN TB_USER u ON u.USER_SN = i.ITV_APLCNT_SN
+        WHERE 1=1
+        AND i.DEL_YN = 0
+        AND i.COHORT_SN = #{cohortSn}
         ORDER BY regDt DESC
+        )
+
+        UNION ALL
+        -- 면담 기록
+        (
+        SELECT
+        ir.ITV_RECORD_SN as sn,
+        '면담 기록' as boardType,
+        ir.ITV_RECORD_TTL as title,
+        ir.REG_DT as regDt,
+        u.USER_NM as userNm,
+        ir.VIEW_CNT as viewCnt
+        FROM TB_INTERVIEW_RECORD ir
+        LEFT JOIN TB_USER u ON u.USER_SN = ir.ITV_PIC_SN
+        WHERE 1=1
+        AND ir.COHORT_SN = #{cohortSn}
+        AND ir.DEL_YN = 0
+        ORDER BY regDt DESC
+        )
+
+        ORDER BY regDt DESC
+        LIMIT 50
+
+
     </select>
 </mapper>

@@ -4,8 +4,8 @@ import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
 import FilterList from "../../components/ui/FilterList";
 import { useEffect, useState } from "react";
-import { BOARD_MENU_FILTER_COLUMNDATA, SELECT_DETAIL_PAGE_PATH, SELECT_POST_SN_KEY, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
-import { callBoardList, callSurveyList } from "../../services/postService";
+import { BOARD_MENU_FILTER_COLUMNDATA, CHANGE_PAGE_BY_POST_TYPE, CHANGE_POST_TYPE_NAME, SELECT_DETAIL_PAGE_PATH, SELECT_POST_SN_KEY, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
+import { callBoardList, callSurveyList, pullAllBoardList } from "../../services/postService";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../auth/AuthContext";
 import { toast } from "react-toastify";
@@ -25,6 +25,8 @@ export default function Board(){
 
     //게시물 목록 불러오기
     useEffect(() => {
+        let cancelled = false; 
+          setPullList([]);   
         const cohortSn = user?.USER_COHORT_SN;
         const bbsType = STUDENT_BOARD_MENU_FILTER[selectedIdx];
         setWhereToGo(user.USER_AUTHRT_SN === 4 ? SELECT_TEACHER_DETAIL_PAGE_PATH[selectedIdx] : SELECT_DETAIL_PAGE_PATH[selectedIdx]);
@@ -42,9 +44,13 @@ export default function Board(){
 
         (async () => {
             try{
-                const {data} = (selectedIdx === 3 ? await callSurveyList({coSn:effectiveSn, cohortSn: cohortSn, bbsType: "설문"}) : await callBoardList(params));
+                const {data} = (selectedIdx === 3 ? await callSurveyList({coSn:effectiveSn, cohortSn: cohortSn, bbsType: "설문"}) : (selectedIdx === 0 ?
+                    await pullAllBoardList()
+                    : await callBoardList(params)));
                 console.log(data);
-                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt ?? item.srvyFrstWrtDt),}));
+                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt ?? item.srvyFrstWrtDt ?? item.createdAt),
+                    renamePostType: CHANGE_POST_TYPE_NAME[item.bbsType]
+                }));
                 setPullList(formattedData);
             } catch(err) {
                 toast.error(err.message);
@@ -68,6 +74,7 @@ export default function Board(){
             </div>
             <div className="BigListBox">
                 <ListTable
+                key={`board-${selectedIdx}`}
                 tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
                 columnData={columnData}
                 apiData={pullList}
@@ -76,6 +83,9 @@ export default function Board(){
                 gap="12px"
                 postKey={postKey}
                 whereTogo={whereTogo}
+                allPage={CHANGE_PAGE_BY_POST_TYPE}
+                selectedIdx={selectedIdx}
+                typeKey={"bbsType"}
               /> 
             </div>
         </div>

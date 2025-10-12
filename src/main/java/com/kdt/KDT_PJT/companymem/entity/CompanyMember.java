@@ -32,5 +32,9 @@ public class CompanyMember {
 
     @Column(name = "OGDP_END_DT")
     private LocalDateTime orgEndDate;
+
+    @Column(name = "APLY_DT")
+    private LocalDateTime applyDate;
+
 }
 

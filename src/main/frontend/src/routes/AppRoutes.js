@@ -24,7 +24,6 @@ import CalSched from '../components/ui/CalSched';
 import TableAll from '../components/module/TableAll.jsx';
 import NoticeList from '../components/module/NoticeList.jsx';
 import Board from '../pages/LMS/Board.jsx';
-import CreatePost from '../pages/LMS/form/CreatePost.jsx';
 import UploadDownloadDemo from '../pages/UploadDownloadDemo.jsx';
 import DocxSet from '../pages/LMS/menu/DocxSet.jsx';
 import AccountSet from '../pages/LMS/menu/AccountSet.jsx';
@@ -40,7 +39,6 @@ import QuestionAdd from '../pages/LMS/form/QuestionAdd.jsx';
 import RecruitPost from '../pages/LMS/form/RecruitPost.jsx';
 import StudyManage from '../pages/LMS/menu/StudyManage.jsx';
 import StudentManage from '../pages/LMS/menu/StudentManage.jsx';
-import InterviewPost from '../pages/LMS/form/InterviewPost.jsx';
 import InterviewEditPost from '../pages/LMS/form/InterviewEditPost.jsx';
 import AdminPostRead from '../pages/LMS/readAndEdit/AdminPostRead.jsx';
 import LmsHomeIndex from '../pages/LmsHomeIndex.jsx';
@@ -56,8 +54,9 @@ import BoardPost from '../pages/LMS/form/BoardPost.jsx';
 import BoardRead2 from '../pages/LMS/readAndEdit/BoardRead2.jsx';
 import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
 import UnknownHome from '../pages/LMS/UnknownHome.jsx';
-import StudyPost from '../pages/LMS/form/StudyPost.jsx';
 import OAuth2Redirect from '../auth/loginPage/GoogleOAuth2Redirect.jsx';
+import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
+import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
 
 function AppRoutes() {
   return (
@@ -109,33 +108,19 @@ function AppRoutes() {
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
             <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
-              <Route
-                path="/visitorHome/applyRecruitPoster/:recruitSn"
-                element={<RecruitRead />}
-              />
+              <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecruitRead />} />
               <Route path="visitorHome" element={<VisitorHome />} />
               <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
               {/* 관리자(테넌트, 직원) */}
               <Route element={<RoleRoute roles={[1, 2, 3]} />}>
                 <Route path="adminHome" element={<AdminHome />} />
-                <Route
-                  path="adminHome/boardSet/readInterview"
-                  element={<AdminPostRead />}
-                />
+                <Route path="adminHome/boardSet/readInterview/:itvSn" element={<AdminPostRead />} />
                 <Route path="adminHome/boardSet" element={<BoardManage />} />
-                <Route
-                  path="adminHome/boardSet/createPost"
-                  element={<BoardPost />}
-                />
-                <Route
-                  path="adminHome/board/:postSn"
-                  element={<BoardRead2 />}
-                />
+                <Route path="adminHome/boardSet/createPost"  element={<BoardPost />} />
+                <Route path="adminHome/boardSet/read/:postSn" element={<BoardRead2 />} />
+                <Route path="adminHome/boardSet/readSchedule/:calSn" element={<SchedEditPost />} />
                 <Route path="adminHome/groupSet" element={<GroupSet />} />
-                <Route
-                  path="adminHome/groupSet/createGroup"
-                  element={<RecruitPost />}
-                />
+                <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
                 <Route path="adminHome/docuSet" element={<DocxSet />} />
                 <Route path="adminHome/accountSet" element={<AccountSet />} />
                 <Route path="adminHome/myPage" element={<AdminMypage />} />
@@ -166,6 +151,7 @@ function AppRoutes() {
                   path="tutorHome/studentManage/createPost"
                   element={<BoardPost />}
                 />
+                <Route path="tutorHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route path="tutorHome/myPage" element={<TutorMypage />} />
               </Route>
 
@@ -178,11 +164,13 @@ function AppRoutes() {
                   element={<BoardPost />}
                 />
                 <Route path="stdHome/board/read/:postSn" element={<BoardRead2 />} />
+                <Route path="stdHome/board/survey/:srvySn" element={<SurveyRead />} />
                 <Route path="stdHome/studySched" element={<StudyPlan />} />
                 <Route
                   path="stdHome/studySched/createPost"
                   element={<BoardPost />}
                 />
+                <Route path="stdHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route
                   path="stdHome/studySched/interview/:postSn"
                   element={<InterviewRead />}

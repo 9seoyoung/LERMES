@@ -16,10 +16,11 @@ import java.util.List;
 public class CompanyMemberController {
 
     private final CompanyMemberService companyMemberService;
-
+    
+    //직원 승인 대기 목록 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
     @GetMapping
     public ResponseEntity<List<CompanyMemberDto>> getMembersInSameCompany(
-            @RequestParam("companySn") Long companySn) {
+            @RequestParam("effectiveSn") Long companySn) {
 
         List<CompanyMemberDto> members = companyMemberService.findByCompanySn(companySn);
 
@@ -49,4 +50,17 @@ public class CompanyMemberController {
         companyMemberService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/apply")
+    public ResponseEntity<Long> apply(@RequestBody CompanyMemberDto dto) {
+        Long id = companyMemberService.apply(dto);
+        return ResponseEntity.ok(id);
+    }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<Void> approve(@PathVariable Long id) {
+        companyMemberService.approve(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

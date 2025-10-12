@@ -61,19 +61,6 @@ public class CalendarService {
             }
         }
 
-        // 3) DTO -> CmmnMap 평탄화 + 서버 주입
-//        CmmnMap m = new CmmnMap();
-//        m.put("COHORT_SN",     cohortSnFinal);
-//        m.put("EVENT_BGNG_DT", req.getEventBgngDt());
-//        m.put("EVENT_END_DT",  req.getEventEndDt());
-//        m.put("EVENT_NM",      req.getEventNm());
-//        m.put("RMRK_CN",       req.getRmrkCn());
-//        m.put("DEL_YN",        (byte) 0);
-//        m.put("USER_SN",       me.getId());                   // 등록자(항상 서버에서)
-//        m.put("PRVT_YN",       req.getPrvtYn());
-//        m.put("EVENT_REG_DT",  LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));          // << 서버에서 세팅
-//        m.put("CO_SN",Math.toIntExact(me.getCompanySn())); // 해당유저 회사번호 가져옴
-
         req.setCohortSn(cohortSnFinal);
 //        req.buildDateTime(); // 테이블 저장용 시간 만들어냄, 현재 시각도 이때 넣음.
         req.setUserSn(me.getId().intValue()); // 등록자
@@ -118,7 +105,11 @@ public class CalendarService {
     * 업데이트*/
     @Transactional
     public CalendarDetailResponseDTO putCalendarDetailByCalSn(CalendarUpdateRequestDTO params){
-        int u = dao.update("com.kdt.mapper.calendar.putCalendarDetailByCalSn",params);
+
+        if(params.getStartDate() != null && !params.getStartDate().isBlank()){
+            params.buildDateTime();
+        }
+        int u = dao.update("com.kdt.mapper.calendar.putCalendarDetailByCalSn", params);
         if(u!=0){
             System.out.println("성공~");
         }else{
@@ -126,7 +117,12 @@ public class CalendarService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "업뎃실패요");
         }
         Integer calSn = params.getCalSn();
-        return dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+        CalendarDetailResponseDTO rtn = dao.selectOne("com.kdt.mapper.calendar.selectCalendarDetailByCalSn",calSn);
+        System.out.println("리턴전rtn = " + rtn);
+        if(rtn.getPrvtYn() == 0 && rtn.getCohortSn() == null){
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "개인일정 공식으로 바꿀라면 기수번호 가져오십쇼");
+        }
+        return rtn;
     }
 
     /*

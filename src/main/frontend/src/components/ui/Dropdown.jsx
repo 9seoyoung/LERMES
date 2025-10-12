@@ -104,6 +104,7 @@ const Dropdown = forwardRef(function Dropdown(
       </button>
 
       <div
+        data-dd-select
         className={`dd__menu ${placementClass} ${open ? "is-open" : ""}`}
         role="menu"
         onClickCapture={handleMenuClickCapture}

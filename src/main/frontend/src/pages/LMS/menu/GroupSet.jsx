@@ -10,6 +10,9 @@ import styles from '../../../styles/CalSched.module.css';
 import MiniCal from "../../../components/ui/MiniCal";
 import { pullToDoList } from "../../../services/calService";
 import { diffDaysInclusive } from "../../../utils/dateformat";
+import { Settings } from "lucide-react";
+import RecruitRead from "../readAndEdit/RecruitRead";
+import RecruitEdit from "../readAndEdit/RecruitEdit";
 
 
 const z2 = (n) => String(n).padStart(2, '0');
@@ -28,7 +31,8 @@ function GroupSet() {
   const [displayDate, setDisplayDate] = useState(''); // 문자열
   const [selectedIdx, setSelected] = useState(0);
   const [selectedCohortSn, setSelectedCohortSn] = useState(null);
-
+  const [manageToggle, setManageToggle] = useState(false);
+  const [editToggle, setEditToggle] = useState(false);
   const location = useLocation();
   const curloc = location.pathname;
 
@@ -41,11 +45,6 @@ function GroupSet() {
       () => (Array.isArray(hortlist) && hortlist[selectedIdx]?.cohortSn) ?? null,
       [hortlist, selectedIdx]
     );
-
-  useEffect(() => {
-    console.log('[GroupSet] hortlist 상태:', hortlist);
-  }, [hortlist]);
-
   // 과정 리스트
   useEffect(() => {
     if (!coSn) return;
@@ -154,9 +153,26 @@ function GroupSet() {
         <FilterList arr={filterArr} selectedIdx={selectedIdx} setSelected={setSelected} loading={loading}>
           <li className="opacityBtn" onClick={() => { navigate('createGroup'); }}>+</li>
         </FilterList>
-        <div className="ftList_R" />
+        <div className="ftList_R" >
+          <button
+            type="button"
+            className="manageBtn"
+            onClick={() => setManageToggle(!manageToggle)}
+            >
+            <Settings size={20} strokeWidth={2} />
+            관리
+          </button>
+        </div>
       </div>
-
+      {manageToggle ? 
+          <>
+            {editToggle ? 
+              <RecruitEdit propCohortSn={cohortSn} editToggle={editToggle} setEditToggle={setEditToggle}/>
+              :
+              <RecruitRead propCohortSn={cohortSn} editToggle={editToggle} setEditToggle={setEditToggle}/>
+            }
+          </>
+        : 
       <div className="mainCont_Lms_Row">
         <div className="main_L" style={{ width: '40%' }}>
           <div className='dashBoardModule' style={{ flex: 1 }}>
@@ -187,6 +203,7 @@ function GroupSet() {
           </div>
         </div>
       </div>
+  }
     </div>
   );
 }

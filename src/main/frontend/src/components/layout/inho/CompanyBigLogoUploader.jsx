@@ -130,6 +130,7 @@ export default function CompanyBigLogoUploader() {
             .cbl-subject {
               margin-top: 22px;
               margin-left: 30px;
+              margin-bottom: 50px;
               font-weight: 600;
               font-size: 20px;
             }
@@ -227,7 +228,11 @@ export default function CompanyBigLogoUploader() {
           {/* 하단: 회사 정보 + 버튼 */}
           <div className="cbl-cardBottom">
             <p className="cbl-title">{company?.name || '상호명 없음'}</p>
-            <p>소재지 {company?.address || 'undefined'}</p>
+            <p>
+              {(company?.companyAddress ?? '소재지') +
+                ' ' +
+                (company?.companyAddressDetail ?? '정보 없음')}
+            </p>
 
             <div className="cbl-row">
               <button>LMS 바로가기</button>

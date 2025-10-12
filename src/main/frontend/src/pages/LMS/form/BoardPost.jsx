@@ -15,7 +15,11 @@ import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import {InterviewForm, InterviewMemo} from './StudyPost';
 import { SchedPost } from './SchedPost';
 import {registToDo} from "../../../services/calService";
-import {post} from "axios";
+import {
+  buildPostJson,
+  buildInterviewJson,
+  buildScheduleJson,
+} from "../../../utils/normalizeDto";
 
 
 // BoardPost.jsx
@@ -220,11 +224,14 @@ const handleChange = (e) => {
         itvPicAuthrt: (prev.scope === "강사" ? "INSTRUCTOR" : (prev.scope === "직원" ? "EMPLOYEE" : "REPRESENTATIVE")),    // 공개범위
       }));
     }
+    
 
 
     // 2) 게시글 JSON (File 객체 넣지 말기!)
     const postJson = (formData.type === "면담신청" ? {
       id: formData.id,
+      surveyStart: formData.surveyStart,
+      surveyEnd: formData.surveyEnd,
       userSn: formData.userSn,
       title: formData.title,
       content: formData.content,
@@ -245,8 +252,8 @@ const handleChange = (e) => {
     //   size: u.size,
     //   // fileSn 내려오면 그걸 써도 OK
     // })),
-    ...(formData.type === "설문조사" ? { surveyForm } : {}),
-    formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
+    // ...(formData.type === "설문조사" ? { surveyForm: JSON.stringify(surveyForm) } : {}),
+    // formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
   } : {
       id: formData.id,
       userSn: formData.userSn,
@@ -258,8 +265,8 @@ const handleChange = (e) => {
       scope: formData.scope,
       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
+      surveyStart: formData.surveyStart,
+      surveyEnd: formData.surveyEnd,
       startTime: formData.startTime,
       location: formData.location,
       isPrivate: formData.isPrivate,
@@ -269,7 +276,7 @@ const handleChange = (e) => {
     //   size: u.size,
     //   // fileSn 내려오면 그걸 써도 OK
     // })),
-    ...(formData.type === "설문조사" ? { surveyForm } : {}),
+    ...(formData.type === "설문조사" ? { surveyForm: JSON.stringify(surveyForm) } : {}),
     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
   });
 
@@ -278,7 +285,12 @@ const handleChange = (e) => {
     ? structuredClone({ surveyForm, formData })
     : JSON.parse(JSON.stringify({ surveyForm, formData }));
 
-  const body = { ...snapshot.formData, surveyForm: snapshot.surveyForm };
+  const body = { ...snapshot.formData, 
+      surveyForm:
+    typeof snapshot.surveyForm === 'string'
+      ? snapshot.surveyForm
+      : JSON.stringify(snapshot.surveyForm),
+   };
 
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.log("[FILES state]", files.map(f => ({ name: f.name, size: f.size })));
@@ -430,7 +442,7 @@ const handleChange = (e) => {
                       { locate.pathname === "/stdHome/studySched/createPost"  ? 
                         <>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
-                          <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p>
+                          {/* <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "학습일지" }))}>학습일지</p> */}
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
                         </> : <></> } 
                     </>
