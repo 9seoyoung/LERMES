@@ -67,3 +67,7 @@
     align-items: center;
     justify-content: space-between;
 }
+
+[noborder = "no"]{
+    border: none;
+}

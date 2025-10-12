@@ -11,7 +11,7 @@ import { formatDate } from "../../../utils/dateformat";
 function StudyPlan() {
     const navigate = useNavigate();
     const { effectiveSn } = useSelectedCompany();
-    const filterArr = ["전체", "공식 일정", "내 일정", "학습 일지", "면담"];
+    const filterArr = ["전체", "공식 일정", "내 일정", "면담"];
     const [selectedIdx, setSelected] = useState(0)
     const [pullList, setPullList] = useState([]);
     const [columnData, setColumnData] = useState([]);

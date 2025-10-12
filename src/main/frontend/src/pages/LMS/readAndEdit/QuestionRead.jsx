@@ -7,7 +7,7 @@ import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
 import QuestionReadType from "./QuestionReadType";
 import styles from "../../../styles/form.module.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // ───────── utils ─────────
 export const makeQuestion = () => ({
@@ -70,6 +70,7 @@ const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
   const {pathname} = useLocation();
+  const navigate = useNavigate();
   const getRef = (qid) => {
     if (!itemRefs.current[qid]) itemRefs.current[qid] = createRef();
     return itemRefs.current[qid];
@@ -224,7 +225,10 @@ const onSetAnswer = (qid, val) => {
                         <button
               className={styles.backBtn}
               type="button"
-              onClick={() => setShowForm(!showForm)}
+              onClick={() =>
+              ( pathname.split('/')[3] === "survey" ?
+                navigate(-1)
+              : setShowForm(!showForm))}
             >
               뒤로
             </button>

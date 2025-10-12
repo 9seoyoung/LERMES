@@ -20,12 +20,12 @@ public class RequestSurveyDto {
     private Long srvySn;            // 설문 일련번호 (PK)
     @JsonProperty("title")
     private String srvyTtl;         // 설문 제목
-    @JsonProperty("content")
+    @JsonProperty("surveyForm")
     private String srvyQitem;       // 설문 문항 (JSON 문자열)
-    @JsonProperty("startDate")
-    private LocalDate srvyBgngDt;   // 설문 시작일
-    @JsonProperty("endDate")
-    private LocalDate srvyEndDt;    // 설문 종료일
+    @JsonProperty("surveyStart")
+    private String srvyBgngDt;   // 설문 시작일
+    @JsonProperty("surveyEnd")
+    private String srvyEndDt;    // 설문 종료일
     @JsonProperty("type")
     private BbsType bbsType;        //게시판 유형 기본값 survey
     @JsonProperty("scope")
