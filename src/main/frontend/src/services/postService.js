@@ -13,7 +13,23 @@ export function createGroup(body) {
   });
 }
 
+/**
+ * @param {Number} cohortSn
+ * @returns 기수 모집 내용 수정
+ */
+export const editGroup = (cohortSn, body) => api.put(`/cohorts/${cohortSn}`, body, {
+  headers: {'Content-Type': 'application/json'}
+})
+
+/**
+ * @param {Number} cohortSn
+ * @returns 기수 삭제
+ */
+export const deleteGroup = (cohortSn) => api.delete(`/cohorts/${cohortSn}`);
+
 export const applyGroup = ({ userSn, cohortSn }) =>  api.post('/cohort-member/apply', null, { params: { userSn, cohortSn }});
+
+
 
 export const readRecruitPoster = (id) => api.get(`/cohorts/${id}`)
 
@@ -114,6 +130,10 @@ export const readPostByPostSn = ({postSn, effectiveSn, type}) => api.get(`/posts
  */
 export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/posts/${postSn}`, formData, {params: {effectiveSn}});
 
+/**
+ * 게시글 목록 전체 조회(bbs + 설문)
+ */
+export const pullAllBoardList = () => api.get('/bbs/all/list');
 
 /**
  * 게시글 목록 조회

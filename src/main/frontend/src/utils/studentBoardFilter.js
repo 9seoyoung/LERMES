@@ -14,7 +14,7 @@ export const STUDENT_BOARD_MENU_FILTER = {
 }
 
 export const BOARD_MENU_FILTER_COLUMNDATA = {
-    0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    0: ["renamePostType", "title", "formattedAPostFrstDt", "writerName", "viewCnt"],
     1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     2: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     3: ["bbsType", "srvyTtl", "formattedAPostFrstDt", "userNm", "viewCnt"],
@@ -24,7 +24,7 @@ export const BOARD_MENU_FILTER_COLUMNDATA = {
 }
 
 export const SELECT_POST_SN_KEY = {
-    0: "postSn",
+    0: "contentSn",
     1: "postSn",
     2: "postSn",
     3: "srvySn",
@@ -37,9 +37,25 @@ export const SELECT_DETAIL_PAGE_PATH = {
     0: "/stdHome/board/read",
     1: "/stdHome/board/read",
     2: "/stdHome/board/read",
-    3: "/stdHome/board/read",
+    3: "/stdHome/board/survey",
     4: "/stdHome/board/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
     5: "/stdHome/board/read",
     6: ""
 
+}
+
+export const CHANGE_POST_TYPE_NAME = {
+    "NOTICE": "공지사항",
+    "CLASS_MATERIAL": "자료실",
+    "QNA": "문의",
+    "SURVEY": "설문조사",
+    "FAQ": "FAQ",
+}
+
+export const CHANGE_PAGE_BY_POST_TYPE = {
+    "NOTICE": "/stdHome/board/read",
+    "CLASS_MATERIAL": "/stdHome/board/read",
+    "QNA": "/stdHome/board/read",
+    "SURVEY": "/stdHome/board/survey",
+    "FAQ": "/stdHome/board/read",
 }

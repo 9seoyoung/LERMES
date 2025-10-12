@@ -11,18 +11,20 @@ import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from '../../../services/cohortService';
 import { v4 as uuidv4 } from 'uuid';
 
-import { applyGroup, readRecruitPoster } from '../../../services/postService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { applyGroup, deleteGroup, readRecruitPoster } from '../../../services/postService';
+import { redirect, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
+import { Trash2Icon } from 'lucide-react';
 
 // CreatePost.jsx
 // ...import 생략
 
-function RecruitRead() {
+function RecruitRead({propCohortSn, editToggle, setEditToggle}) {
   const domFormId = useId();
   const { recruitSn } = useParams();
+  const finalSn = propCohortSn ?? recruitSn; 
   const domId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
@@ -30,8 +32,8 @@ function RecruitRead() {
   const qAddRef = useRef(null);
   const navigate = useNavigate();
   const scrollRef = useRef(null);
-  const [showForm, setShowForm] = useState(false);
-
+  const [showForm, setShowForm] = useState(true);
+  const {pathname} = useLocation();
   const [files, setFiles] = useState([]);
 
   // 설문 폼 (초기 페이지 하나 생성)
@@ -41,7 +43,7 @@ function RecruitRead() {
   });
 
   const [formData, setFormData] = useState({
-    cohortSn: recruitSn,
+    cohortSn: finalSn,
     id: postId.current,
     userSn: user.USER_SN, //유저같지만 회사임
     title: '', //과정명
@@ -65,9 +67,9 @@ function RecruitRead() {
 
   useEffect(() => {
     (async () => {
-      if (!recruitSn) return;
+      if (!finalSn) return;
       try {
-        const res = await readRecruitPoster(recruitSn);
+        const res = await readRecruitPoster(finalSn);
         const c = res?.data;
 
         // 설문 복원 crclmCn(JSON 문자열) >> surveyForm
@@ -137,12 +139,12 @@ function RecruitRead() {
           place: c?.cohortPl ?? '',
           bigLogoFileSn: c?.bigLogoFileSn ?? null,
         }));
-        console.log('[RecruitRead] recruitSn =', recruitSn, c);
+        console.log('[RecruitRead] finalSn =', finalSn, c);
       } catch (e) {
         console.log('[RecruitRead] read error:', e?.message, e);
       }
     })();
-  }, [recruitSn]);
+  }, [finalSn]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -231,10 +233,33 @@ function RecruitRead() {
         ref={scrollRef}
         style={{ position: 'relative' }}
       >
-        <h2 style={{ fontWeight: '500' }}>
+        <h2 style={{ fontWeight: '500', display: "flex", alignItems: "baseline" }}>
+          <span style={{border: "none"}}>
           [모집공고] {formData?.title} {formData.groupName}
+          </span>
+          {pathname === "/adminHome/groupSet" ?
+          <button type='button'
+            className={styles.redBtn}
+            onClick={async () => {
+              const ok = window.confirm("정말 삭제하시겠습니까?");
+              if (!ok) return; // 취소하면 아무것도 안 함
+
+              try {
+                await deleteGroup(finalSn);
+                toast.success("삭제되었습니다.", {
+                  onClose: () => window.location.reload() // ✅ 토스트 닫힐 때 리로드
+                });
+              } catch (err) {
+                console.error(err);
+                toast.error("삭제 중 오류가 발생했습니다.");
+              }
+            }}
+          >
+            삭제 [x]
+          </button>
+          : null}
         </h2>
-        {showForm ? (
+        {showForm === true ? (
           <>
             <div className={styles.explainBox}>
               <div className="selectBoxArea" style={{ position: 'relative' }}>
@@ -262,20 +287,16 @@ function RecruitRead() {
                 type="button"
                 onClick={() => setShowForm(!showForm)}
               >
-                신청하러 가기
+                {pathname === "/adminHome/groupSet" ?
+                "미리보기"
+                :
+                "신청하러 가기"
+                }
               </button>
             </div>
           </>
         ) : (
           <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
-            <button
-              className={styles.applyBtn}
-              type="button"
-              onClick={() => setShowForm(!showForm)}
-            >
-              임시 닫기
-            </button>
-
             <div className="formArea_L">
               <RecruitForm
                 type={formData.type}
@@ -292,6 +313,9 @@ function RecruitRead() {
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
                 saveSubmit={saveSubmit}
+                setShowForm={setShowForm}
+                showForm={showForm}
+                setEditToggle={setEditToggle}
               />
             </div>
           </form>
@@ -313,6 +337,9 @@ function RecruitForm({
   questionAddRef,
   containerRef,
   saveSubmit,
+  setShowForm,
+  showForm,
+  setEditToggle
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
   // const firstPage = surveyForm.pages[0];
@@ -330,6 +357,9 @@ function RecruitForm({
           containerRef={containerRef}
           questions={surveyForm.pages[0].questions}
           saveSubmit={saveSubmit}
+          showForm={showForm}
+          setShowForm={setShowForm}
+          setEditToggle={setEditToggle}
           onChange={(updaterOrQs) => {
             setSurveyForm((prev) => {
               const page = prev.pages[0];

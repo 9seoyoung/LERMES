@@ -12,17 +12,19 @@ import { hortlistByCpSn } from '../../../services/cohortService';
 import { v4 as uuidv4 } from 'uuid';
 
 import { applyGroup, readRecruitPoster, readSurvey } from '../../../services/postService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
+import { pullSurveyResList, submitSurvey } from '../../../services/responseService';
 
 // CreatePost.jsx
 // ...import 생략
 
-function SurveyRead() {
+function SurveyRead({setEditToggle}) {
   const domFormId = useId();
-  const { recruitSn } = useParams();
+  const { srvySn } = useParams();
+  // const finalSn = propCohortSn ?? recruitSn; 
   const domId = useId();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
@@ -30,10 +32,11 @@ function SurveyRead() {
   const qAddRef = useRef(null);
   const navigate = useNavigate();
   const scrollRef = useRef(null);
-  const [showForm, setShowForm] = useState(false);
-
+  const [showForm, setShowForm] = useState(true);
+  const {pathname} = useLocation();
   const [files, setFiles] = useState([]);
 
+  console.log(srvySn);
   // 설문 폼 (초기 페이지 하나 생성)
   const [surveyForm, setSurveyForm] = useState({
     id: postId.current,
@@ -41,22 +44,16 @@ function SurveyRead() {
   });
 
   const [formData, setFormData] = useState({
-    cohortSn: cohortSn,
     id: postId.current,
     userSn: user.USER_SN, //유저같지만 회사임
     title: '', //과정명
     answer: '', // 신청자 답변
     groupName: '', //그룹명
-    type: '모집공고',
+    type: '설문조사',
     content: '',
     scope: [1, 2, 3],
     surveyStart: '', // 모집시작
     surveyEnd: '',
-    startDate: '',
-    place: '', // 장소
-    endDate: '', //  모집종료
-    classStart: '', //수업시작시간
-    classEnd: '', //수업종료시간
     files: [
       { qid: '', fid: '' },
       { qid: '', fid: '' },
@@ -65,15 +62,15 @@ function SurveyRead() {
 
   useEffect(() => {
     (async () => {
-      if (!recruitSn) return;
+      if (!srvySn) return;
       try {
-        const res = await readSurvey(srvySn);
+        const res = await readSurvey({srvySn});
         const c = res?.data;
 
-        // 설문 복원 crclmCn(JSON 문자열) >> surveyForm
-        if (typeof c?.crclmCn === 'string' && c.crclmCn.trim()) {
+        // 설문 복원 srvyQitem(JSON 문자열) >> surveyForm
+        if (typeof c?.srvyQitem === 'string' && c.srvyQitem.trim()) {
           try {
-            const parsed = JSON.parse(c.crclmCn); // { id, pages: [{ id, questions: [...] }] }
+            const parsed = JSON.parse(c.srvyQitem); // { id, pages: [{ id, questions: [...] }] }
             const pages = Array.isArray(parsed?.pages) ? parsed.pages : [];
             const first = pages[0] ?? {
               id: crypto.randomUUID?.() ?? 'page-1',
@@ -118,31 +115,51 @@ function SurveyRead() {
               pages: [{ id: first.id, questions: restoredQs }],
             }));
           } catch (e) {
-            console.warn('[SurveyRead] crclmCn JSON parse 실패:', e);
+            console.warn('[SurveyRead] srvyQitem JSON parse 실패:', e);
           }
         }
 
         setFormData((prev) => ({
           ...prev,
-          content: c?.crclmCn ?? '',
+          /**
+           *     id: postId.current,
+            userSn: user.USER_SN, //유저같지만 회사임
+            title: '', //과정명
+            answer: '', // 신청자 답변
+            groupName: '', //그룹명
+            type: '모집공고',
+            content: '',
+            scope: [1, 2, 3],
+            surveyStart: '', // 모집시작
+            surveyEnd: '',
+            startDate: '',
+            place: '', // 장소
+            endDate: '', //  모집종료
+            classStart: '', //수업시작시간
+            classEnd: '', //수업종료시간
+            files: [
+              { qid: '', fid: '' },
+              { qid: '', fid: '' },
+            ],
+           */
+          scope: c?.srvyScope ?? '',
+          userSn: c?.userSn ?? '',
+          userNm: c?.userNm ?? '',
+          content: c?.srvyQitem ?? '',
           groupName: c?.cohortNm ?? '',
           answer: c?.answer ?? '',
-          title: c?.crclmNm ?? '',
-          surveyStart: c?.recruitBgngYmd ?? c?.recruitBgngDt ?? '',
-          surveyEnd: c?.recruitEndYmd ?? c?.recruitEndDt ?? '',
-          startDate: c?.crclmBgngYmd ?? c?.crclmBgngDt ?? '',
-          endDate: c?.crclmEndYmd ?? c?.crclmEndDt ?? '',
-          classStart: c?.attendStartTm ?? '',
-          classEnd: c?.attendEndTm ?? '',
-          place: c?.cohortPl ?? '',
-          bigLogoFileSn: c?.bigLogoFileSn ?? null,
+          title: c?.srvyTtl ?? '',
+          surveyStart: c?.srvyBgngDt ?? c?.recruitBgngDt ?? '',
+          surveyEnd: c?.srvyEndDt ?? c?.recruitEndDt ?? '',
+          srvyFrstWrtDt: c?.srvyFrstWrtDt ?? null,
+          viewCnt: c?.viewCnt ?? null
         }));
-        console.log('[SurveyRead] recruitSn =', recruitSn, c);
+        console.log('[SurveyRead] srvySn =', srvySn, c);
       } catch (e) {
         console.log('[SurveyRead] read error:', e?.message, e);
       }
     })();
-  }, [recruitSn]);
+  }, [srvySn]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -190,7 +207,7 @@ function SurveyRead() {
     }
     return out;
   };
-  const saveSubmit = async (e) => {
+  const saveSrvyRes = async (e) => {
     e.preventDefault();
 
     const snapshot = structuredClone
@@ -212,17 +229,31 @@ function SurveyRead() {
 
     console.time('[SurveyRead] readRecruitPoster');
     try {
-      const res = await applyGroup(body);
+      const res = await submitSurvey(srvySn, {parentSn: Number(srvySn), response: JSON.stringify(body), parentType: "SURVEY"});
       console.log(Object.keys(snapshot));
       console.log(Object.keys(snapshot.formData));
       console.log('[SurveyRead] readRecruitPoster response:', res);
-      toast.success('게시 성공');
+      toast.success('제출 성공');
       navigate(-1);
     } catch (err) {
       console.error('[SurveyRead] readRecruitPoster error:', err);
       toast.error(err.message);
     }
   };
+
+  const pullFormResponses = () => {
+
+    (async() => {
+      try {
+        const {data} = await pullSurveyResList(srvySn);
+        console.log(data);
+      } catch(err) {
+        console.log(err.message);
+      }
+
+    }
+    )();
+  }
 
   return (
     <div className="boardPage">
@@ -231,51 +262,14 @@ function SurveyRead() {
         ref={scrollRef}
         style={{ position: 'relative' }}
       >
-        <h2 style={{ fontWeight: '500' }}>
-          [모집공고] {formData?.title} {formData.groupName}
-        </h2>
-        {showForm ? (
-          <>
-            <div className={styles.explainBox}>
-              <div className="selectBoxArea" style={{ position: 'relative' }}>
-                <div>
-                  {' '}
-                  모집 기간: {formData.surveyStart} - {formData.surveyEnd}
-                </div>
-                <div>
-                  {' '}
-                  교육 기간: {formData.startDate} - {formData.endDate}
-                </div>
-                <div>
-                  {' '}
-                  수업 시간: {formatTime(formData.classStart)} ~{' '}
-                  {formatTime(formData.classEnd)}
-                </div>
-                <div> 교육 장소: {formData.place}</div>
-              </div>
-              <img
-                src={`http://localhost:940/api/files/id/${formData.bigLogoFileSn}`}
-              />
-
-              <button
-                className={styles.applyBtn}
-                type="button"
-                onClick={() => setShowForm(!showForm)}
-              >
-                신청하러 가기
-              </button>
-            </div>
-          </>
-        ) : (
+        <h4 style={{ fontWeight: '500', justifyContent: "flex-start", gap: "6px"}}>
+          <span noborder = "no">{`[${formData.surveyStart} ~ ${formData.surveyEnd}]`}</span>
+          <span noborder = "no">{`${formData.title}`}</span>
+          { formData.userSn === user.USER_SN ? 
+            <button noborder = "no" onClick={() => pullFormResponses()}>응답 내역</button >
+            : null }
+        </h4>
           <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
-            <button
-              className={styles.applyBtn}
-              type="button"
-              onClick={() => setShowForm(!showForm)}
-            >
-              임시 닫기
-            </button>
-
             <div className="formArea_L">
               <RecruitForm
                 type={formData.type}
@@ -291,11 +285,13 @@ function SurveyRead() {
                 setFiles={setFiles}
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
-                saveSubmit={saveSubmit}
+                saveSrvyRes={saveSrvyRes}
+                setShowForm={setShowForm}
+                showForm={showForm}
+                setEditToggle={setEditToggle}
               />
             </div>
           </form>
-        )}
       </div>
     </div>
   );
@@ -312,7 +308,11 @@ function RecruitForm({
   setSurveyForm,
   questionAddRef,
   containerRef,
+  saveSrvyRes,
   saveSubmit,
+  setShowForm,
+  showForm,
+  setEditToggle
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
   // const firstPage = surveyForm.pages[0];
@@ -330,6 +330,10 @@ function RecruitForm({
           containerRef={containerRef}
           questions={surveyForm.pages[0].questions}
           saveSubmit={saveSubmit}
+          saveSrvyRes={saveSrvyRes}
+          showForm={showForm}
+          setShowForm={setShowForm}
+          setEditToggle={setEditToggle}
           onChange={(updaterOrQs) => {
             setSurveyForm((prev) => {
               const page = prev.pages[0];

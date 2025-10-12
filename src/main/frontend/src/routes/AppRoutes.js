@@ -56,6 +56,7 @@ import RecruitRead from '../pages/LMS/readAndEdit/RecruitRead.jsx';
 import UnknownHome from '../pages/LMS/UnknownHome.jsx';
 import OAuth2Redirect from '../auth/loginPage/GoogleOAuth2Redirect.jsx';
 import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
+import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
 
 function AppRoutes() {
   return (
@@ -150,6 +151,7 @@ function AppRoutes() {
                   path="tutorHome/studentManage/createPost"
                   element={<BoardPost />}
                 />
+                <Route path="tutorHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route path="tutorHome/myPage" element={<TutorMypage />} />
               </Route>
 
@@ -162,11 +164,13 @@ function AppRoutes() {
                   element={<BoardPost />}
                 />
                 <Route path="stdHome/board/read/:postSn" element={<BoardRead2 />} />
+                <Route path="stdHome/board/survey/:srvySn" element={<SurveyRead />} />
                 <Route path="stdHome/studySched" element={<StudyPlan />} />
                 <Route
                   path="stdHome/studySched/createPost"
                   element={<BoardPost />}
                 />
+                <Route path="stdHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route
                   path="stdHome/studySched/interview/:postSn"
                   element={<InterviewRead />}

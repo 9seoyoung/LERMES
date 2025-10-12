@@ -7,6 +7,7 @@ import { v4 as uuid } from "uuid";
 import { Plus } from "lucide-react";
 import QuestionReadType from "./QuestionReadType";
 import styles from "../../../styles/form.module.css";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 // ───────── utils ─────────
 export const makeQuestion = () => ({
@@ -64,11 +65,13 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit, showForm, setShowForm, setEditToggle, saveSrvyRes }, ref) {
   const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
-
+  const {srvySn} = useParams();
+  const {pathname} = useLocation();
+  const navigate = useNavigate();
   const getRef = (qid) => {
     if (!itemRefs.current[qid]) itemRefs.current[qid] = createRef();
     return itemRefs.current[qid];
@@ -215,7 +218,24 @@ const onSetAnswer = (qid, val) => {
         ))}
       </div>
       <div className={styles.can}>
-            <button className={styles.applyBtn} type="button" onClick={() => saveSubmit()}>제출하기</button>
+        {pathname === "/adminHome/groupSet" ?
+            <button className={styles.applyBtn} type="button" onClick={() => setEditToggle(true)}>수정하기</button>
+          :
+            <button className={styles.applyBtn} type="button" onClick={(e) => 
+              ( pathname.split('/')[3] === "survey" ?
+                saveSrvyRes(e)
+              : saveSubmit())}>제출하기</button>
+          }
+                        <button
+              className={styles.backBtn}
+              type="button"
+              onClick={() =>
+              ( pathname.split('/')[3] === "survey" ?
+                navigate(-1)
+              : setShowForm(!showForm))}
+            >
+              뒤로
+            </button>
       </div>
     </>
   );

@@ -16,10 +16,11 @@ import java.util.List;
 public class CompanyMemberController {
 
     private final CompanyMemberService companyMemberService;
-
+    
+    //직원 승인 대기 목록 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
     @GetMapping
     public ResponseEntity<List<CompanyMemberDto>> getMembersInSameCompany(
-            @RequestParam("companySn") Long companySn) {
+            @RequestParam("effectiveSn") Long companySn) {
 
         List<CompanyMemberDto> members = companyMemberService.findByCompanySn(companySn);
 
