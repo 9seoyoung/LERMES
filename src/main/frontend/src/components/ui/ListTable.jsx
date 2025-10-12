@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/UiComp.module.css";
+import { toast } from "react-toastify";
 
 
 
@@ -12,7 +13,11 @@ export default function ListTable({
   whereTogo,
   postKey,
   addStyle = {},
-  selectedIdx
+  selectedIdx,
+  apiBtn = false,
+  approveApi,
+  denyApi,
+  directPage = false
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,6 +78,37 @@ export default function ListTable({
                     {row[col]}
                   </div>
                 ))}
+                <>
+                 {directPage ? 
+                  <div className={styles.cell} onClick={() => navigate('/visitorHome/applyRecruitPoster')}>
+                    바로가기
+                  </div>
+                 : null}
+                 {apiBtn ? 
+                  <>
+                    <div className={styles.cell}>
+                      <button type="button" onClick={async() => {
+                        try {
+                          await approveApi(row.userSn);
+                          toast.success("승인되었습니다.")
+                        } catch(err) {
+                          console.log(err.message);
+                        }
+                        }} 
+                        className={`${styles.blueBtn} ${styles.cell}`} style={{width: "40px"}}>승인</button>
+                      <button type="button" onClick={async() => {
+                        try {
+                          await denyApi(row.userSn);
+                          toast.success("거부되었습니다.")
+                        } catch(err) {
+                          console.log(err.message);
+                        }
+                        }}
+                      className={`${styles.redBtn} ${styles.cell}`} style={{width: "40px"}}>거절</button>
+                    </div>
+                  </>
+                 : ""}
+                </>
               </li>
             );
           })}

@@ -38,12 +38,15 @@
     --bg-color-blue2: #62B6FF;
     --bg-color-blue3: #e1f1ff;
     --bg-color-gray5: #f3f4f6;
+    --bg-color-red1: #E9623A;
     --bg-color-red2: #ffb5a0;
 
     /* 폰트 컬러 */
     --font-color-base: #222;
     --font-color-white: #fcfeff;
-    --font-color-gray1: #d9d9d9;
+    --font-color-gray1: #565656;
+    --font-color-gray2: #acacac;
+    --font-color-gray3: #d9d9d9;
     --font-color-blue1: #08f;
     --font-color-red1: #E9623A;
 
