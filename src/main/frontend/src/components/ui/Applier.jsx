@@ -5,52 +5,64 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import styles from "../../styles/fontStyle.module.css";
 import { pullAllAccount } from "../../services/accountService";
 
-function Applier({handleChange}) {
+export default function Applier({ handleChange, formData }) {
   const { effectiveSn } = useSelectedCompany();
   const [applierList, setApplierList] = useState([]);
-  const [groupFilter, setGroupFilter] = useState(null)
-    console.log("그룹 변경")
+  const [groupFilter, setGroupFilter] = useState(null);
+  const [applierSn, setApplierSn] = useState(null);
 
+  // 🔹 applierSn이 변경되면 부모의 formData.authorSn을 갱신
+  useEffect(() => {
+    if (applierSn != null) {
+      handleChange({
+        target: { name: "authorSn", value: applierSn, type: "text" }
+      });
+    }
+  }, []);
 
   useEffect(() => {
-      (async () => {
-        try {
-          // console.log(coSn);
-          // console.log(`>>>>>>>>>>>>>>>applierListByCpSn(회사별 모집공고 리스트) 호출`)
-          const { data: res4 } = await pullAllAccount({ ogdpCoSn: effectiveSn, userAuthrtSn: 4 });
-          const { data: res5 } = await pullAllAccount({ ogdpCoSn: effectiveSn, userAuthrtSn: 5 });
-          
-          // 두 응답이 리스트 형태라면 이렇게 합치기
-          setApplierList([...(res4 || []), ...(res5 || [])]);
-          
-          // 만약 data.list 안에 배열이 있다면
-          // setApplierList([...(res4.list || []), ...(res5.list || [])]);
-  
-          // 🔹 바로 응답 데이터를 이용해서 초기값 설정
-          if (applierList?.length > 0) {
-            setGroupFilter(res4[0].userNm);
-          }
-          // console.log(data.data.map((value, idx)=> `${value.cohortNm} + ${idx}`))
-        } catch (e) {
-          console.log(e.message);
-        }
-      })();
-    }, [effectiveSn]);
-  return (
-    <div className="dropSet" style={{minWidth: "100px", maxwidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
-      <Dropdown className="dropset_dd" label={groupFilter || applierList[0]?.userNm} >
-        {/* <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p> */}
-      { applierList?.map((applier, idx) => (
-          <p className="subMenuList" key={idx} onClick={()=> {console.log("그룹선택>>>>>>>>>>>>>>>>>>>>>>>>>>>>");}} >
-            {applier.userNm}
-            <div >
-              {/* {`[${applier.cohortSttsNm === "RECRUITING" ? "예정" : (applier.cohortSttsNm === "CANCELED" ? "폐강" : (applier.cohortSttsNm === "ONGOING" ? "진행" : "수료"))}]`} */}
-          </div>
-          </p>
-      ))}
-      </Dropdown>
-    </div>
-  )
-}
+    (async () => {
+      try {
+        // 응답 스키마 안전 분기
+        const { data: res4 } = await pullAllAccount({ ogdpCoSn: effectiveSn, userAuthrtSn: 4 });
+        const { data: res5 } = await pullAllAccount({ ogdpCoSn: effectiveSn, userAuthrtSn: 5 });
 
-export default Applier
+        const list4 = res4?.list ?? res4 ?? [];
+        const list5 = res5?.list ?? res5 ?? [];
+        const merged = [...list4, ...list5];
+
+        setApplierList(merged);
+
+        // 🔹 여기서 바로 초기값 설정 (applierList 참조하지 말고 merged 사용)
+        if (merged.length > 0) {
+          setGroupFilter(merged[0].userNm);
+          setApplierSn(merged[0].userSn);
+        }
+      } catch (e) {
+        console.log(e.message);
+      }
+    })();
+  }, [effectiveSn]);
+
+  return (
+    <div className="dropSet" style={{ minWidth: "100px", maxWidth: "100px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+      <Dropdown className="dropset_dd" label={groupFilter || applierList[0]?.userNm || "선택"}>
+        {applierList?.map((applier) => (
+          <p
+            className="subMenuList"
+            key={applier.userSn} // 🔹 key 안정화
+            onClick={() => {
+              setGroupFilter(applier.userNm);
+              setApplierSn(applier.userSn);
+            }}
+          >
+            {applier.userNm}
+          </p>
+        ))}
+      </Dropdown>
+
+      {/* 🔹 hidden input은 값만 바인딩. onChange 제거 */}
+      <input type="hidden" name="authorSn" value={applierSn ?? ""} />
+    </div>
+  );
+}

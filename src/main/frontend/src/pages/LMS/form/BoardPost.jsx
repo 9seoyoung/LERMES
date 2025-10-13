@@ -159,7 +159,8 @@ function BoardPost() {
     location: "", //일정 장소, 면담 장소
     author: user?.USER_NM, // 작성자
     mento: "-", // 담당자
-    isPrivate: (userAuth <=3 ? prvToggle : 1)
+    isPrivate: (userAuth <=3 ? prvToggle : 1),
+    authorSn: null,
   });
 
   console.log(user)
@@ -225,6 +226,21 @@ const handleChange = (e) => {
       }));
     }
     
+    if (formData.type === "면담기록") {
+      setFormData(prev => ({
+        ...prev,
+        // type: prev.type,
+        itvRecordTtl: prev.title,      // 제목
+        itvRecordCn: prev.content,       // 내용
+        itvPicAuthrt: (prev.scope === "강사" ? "INSTRUCTOR" : (prev.scope === "직원" ? "EMPLOYEE" : "REPRESENTATIVE")),    // 공개범위
+        itvPicSn: prev.userSn, //담당자
+        itvTrprSn: prev.authorSn, //신청자
+        date: prev.startDate,
+        time: prev.startTime,
+        coSn: effectiveSn,
+        itvSn: null,
+      }));
+    }
 
 
     // 2) 게시글 JSON (File 객체 넣지 말기!)
@@ -310,7 +326,7 @@ const handleChange = (e) => {
         case "일정":
           return registToDo(postJson);
         case "면담기록":
-          return createInterviewRecord(postJson);
+          return createInterviewRecord(formData);
         default:
           return createPost(postJson); // 규약대로
       }
@@ -419,13 +435,8 @@ const handleChange = (e) => {
                       { locate.pathname === "/tutorHome/studySched/createPost"  ? 
                         <>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
-                        </> : <></> } 
-
-                      { locate.pathname === "/tutorHome/studentManage/createPost"  ? 
-                        <>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
-
                         </> : <></> } 
                     </>
                     :

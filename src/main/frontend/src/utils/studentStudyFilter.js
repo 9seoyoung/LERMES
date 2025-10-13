@@ -10,6 +10,8 @@ export const STUDENT_STUDY_MENU_FILTER = {
     1: "/calendar", // 공식
     2: "/calendar", //내 일정
     3: "/interview/my-requests", //면담
+    4: "/interview/my-requests", //면담
+    5: "/interviewRecord"
 }
 
 export const MENU_FILTER_COLUMNDATA = {
@@ -17,6 +19,7 @@ export const MENU_FILTER_COLUMNDATA = {
     1: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     2: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     3: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
+    4: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
 }
 
 export const SELECT_POST_SN_KEY = {
@@ -24,7 +27,7 @@ export const SELECT_POST_SN_KEY = {
     1: "calSn",
     2: "calSn",
     3: "itvSn",
-    4: ""
+    4: "itvSn",
 }
 
 //상세보기 API
@@ -39,5 +42,6 @@ export const SELECT_DETAIL_PAGE_PATH = {
     0: 0,
     1: "/stdHome/studySched/calendar",
     2: "/stdHome/studySched/calendar",
-    3: "/stdHome/studySched/interview" //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    3: "/stdHome/studySched/interview", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    4: "/tutorHome/studySched/interview" //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
 }

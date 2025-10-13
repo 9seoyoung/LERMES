@@ -7,10 +7,12 @@ import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH } from "../../../utils/studentStudyFilter";
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
+import { useAccount } from "../../../auth/AuthContext";
 
 function StudyPlan() {
     const navigate = useNavigate();
     const { effectiveSn } = useSelectedCompany();
+    const {user} = useAccount();
     const filterArr = ["전체", "공식 일정", "내 일정", "면담"];
     const [selectedIdx, setSelected] = useState(0)
     const [pullList, setPullList] = useState([]);
@@ -28,6 +30,7 @@ function StudyPlan() {
           url: url,
           effectiveSn: effectiveSn,
           isPrivate: null,
+          cohortSn: user.USER_OGDP_COHORT_SN
       };
       if (selectedIdx === 1) params.isPrivate = 0;
       if (selectedIdx === 2) params.isPrivate = 1;

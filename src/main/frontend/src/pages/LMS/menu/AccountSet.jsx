@@ -52,10 +52,10 @@ export default function AccountSet() {
             ogdpCoSn: effectiveSn,
             userAuthrtSn: 3,
           });
-          console.log(account.data);
-          setAccountList(account.data);
+          console.log(account?.data);
+          setAccountList(account?.data);
           const pendingEmp = await pullApplyEmp(effectiveSn);
-          console.log(pendingEmp.data);
+          console.log(pendingEmp?.data);
           const formattedData = pendingEmp.data.map((item) => ({
             ...item,
             formattedApplyDt: formatDate(item.aplyDt),

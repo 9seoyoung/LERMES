@@ -195,7 +195,7 @@ export const readSurvey = ({srvySn}) => api.get(`/survey/${srvySn}`);
  * @param {String} url API요청 URL
  * @returns {Array<Objects>} 전체 / 공식 / 내 일정/ 일지 / 면담 / 임시저장에 해당하는 게시물 목록
  */
-export const callStudyPlanListByFilter = ({url, effectiveSn, isPrivate}) => api.get(`${url}`, {params: {isPrivate, effectiveSn}})
+export const callStudyPlanListByFilter = ({url, effectiveSn, isPrivate, cohortSn}) => api.get(`${url}`, (url === "/interviewRecord") ? {params: {cohortSn: cohortSn }}: {params: {isPrivate, effectiveSn}});
 
 
 
