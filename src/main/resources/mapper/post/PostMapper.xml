@@ -122,7 +122,9 @@
         FROM TB_POST p
         JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = 0
-        AND p.CO_SN = #{coSn}   
+         <if test="coSn != null">
+             AND p.CO_SN = #{coSn}
+         </if>
 
         <if test="bbsType != null">
             AND p.BBS_TYPE = #{bbsType} 
