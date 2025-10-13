@@ -1,7 +1,9 @@
 package com.kdt.KDT_PJT.cohort.repository;
 
 
+import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.cohort.entity.Cohort;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +17,5 @@ public interface CohortRepository extends JpaRepository<Cohort, Long> {
 
     @Query("SELECT c.cohortNm FROM Cohort c")
     List<String> findAllCohortTitles();
-    // 추가 쿼리가 필요하면 작성
+
 }
