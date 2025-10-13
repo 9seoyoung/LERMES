@@ -11,36 +11,37 @@ import PasswordChangeModal from '../components/layout/inho/PasswordChangeModal';
 
 export default function Mypage() {
   const [open, setOpen] = useState(false);
+
   return (
     <div>
       <header className="my-page-header">내 정보</header>
       <div className="my-page-div">
-        <section>
-          <div style={{ display: 'flex' }}>
-            <UserProfile />
-            {/* 비번바꾸기 모달 */}
-            <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
-              <button
-                onClick={() => setOpen(true)}
-                style={{
-                  background: '#eee',
-                  width: '100%',
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  padding: '6px 12px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  justifyContent: 'end',
-                }}
-              >
-                비밀번호 변경
-              </button>
-            </div>
-            {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
-            {/* 비번 바꾸기 모달 */}
-            <MyInfoForm />
+        <section
+          style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+        >
+          <UserProfile />
+
+          <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
+            <button
+              onClick={() => setOpen(true)}
+              style={{
+                background: '#eee',
+                width: '100%',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                padding: '6px 12px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'end',
+              }}
+            >
+              비밀번호 변경
+            </button>
           </div>
+
+          {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
+          <MyInfoForm />
         </section>
       </div>
     </div>
