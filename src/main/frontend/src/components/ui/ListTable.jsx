@@ -111,7 +111,7 @@ export default function ListTable({
                 ))}
                 <>
                  {directPage ? 
-                  <div className={styles.cell} onClick={() => navigate('/visitorHome/applyRecruitPoster')}>
+                  <div className={styles.cell} onClick={() => navigate(`/visitorHome/applyRecruitPoster/${row?.rspnsSn}`)}>
                     바로가기
                   </div>
                  : null}
