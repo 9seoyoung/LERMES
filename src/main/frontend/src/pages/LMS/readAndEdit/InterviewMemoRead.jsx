@@ -127,7 +127,7 @@ export default function InterviewMemoRead() {
                       :
                       <></>
                     }
-                    {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1?
+                    {pathname === "/adminHome/boardSet" || formData?.itvPicNm === user.USER_NM || userAuth === 1?
                     <button type='button'
                     className={styles2.redBtn}
                     onClick={async () => {
