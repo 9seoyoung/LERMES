@@ -118,37 +118,37 @@ function BoardRead() {
         <h4 style={{ fontWeight: "500" }}>
           <div boxType="row">
           {`[${formData?.bbsType}] ${formData?.postTtl}`}
-          <span style={{border: "none"}}>
-                    </span>
-                    { editToggle && formData?.postWriterName === user.USER_NM ? 
+          <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
+                    { editToggle && formData?.postWriterName === user.USER_NM ?
                       <button type='button' onClick={() => setEditToggle(false)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
                       :
                       <></>
                     }
                     {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1?
                     <button type='button'
-                      className={styles2.grayBtn}
-                      onClick={async () => {
-                        const ok = window.confirm("정말 삭제하시겠습니까?");
-                        if (!ok) return; // 취소하면 아무것도 안 함
-          
-                        try {
-                          await deletePost(postSn);
-                          toast.success("삭제되었습니다.", {
-                            onClose: () => navigate(-1) // ✅ 토스트 닫힐 때 리로드
-                          });
-                        } catch (err) {
-                          console.error(err);
-                          toast.error("삭제 중 오류가 발생했습니다.");
-                        }
-                      }}
+                    className={styles2.redBtn}
+                    onClick={async () => {
+                      const ok = window.confirm("정말 삭제하시겠습니까?");
+                      if (!ok) return; // 취소하면 아무것도 안 함
+                      
+                      try {
+                        await deletePost(postSn);
+                        toast.success("삭제되었습니다.", {
+                          onClose: () => navigate(-1) // ✅ 토스트 닫힐 때 리로드
+                        });
+                      } catch (err) {
+                        console.error(err);
+                        toast.error("삭제 중 오류가 발생했습니다.");
+                      }
+                    }}
                     >
-                      <Trash2Icon size={"1rem"} color={"var(--font-color-white)"}/>
+                      <Trash2Icon size={"1.4rem"} color={"var(--font-color-white)"}/>
                     </button>
                     : null}
+              </span>
           </div>
           {editToggle ? 
-            <button type='button' onClick={() => navigate(-1)}>back</button>
+            <button type='button' onClick={() => navigate(-1)} className={styles2.grayBtn}>back</button>
             :
             <SaveBtn type='button' onClick={(e) => {setEditToggle(true); saveSubmit(e)}} style={{color: "#fff", marginTop: "4px"}} textType={"저장"}></SaveBtn>
         }
