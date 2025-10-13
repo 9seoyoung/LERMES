@@ -63,16 +63,16 @@ public class CompanyMemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{memberId}/approve")
-    public ResponseEntity<String> approveCompanyMember(@PathVariable Long memberId) {
-        companyMemberService.approveMember(memberId);
-        return ResponseEntity.ok("승인 완료");
+    @PostMapping("/{companyMemberSn}/approve")
+    public ResponseEntity<String> approveCompanyMember(@PathVariable Long companyMemberSn) {
+        companyMemberService.approveMember(companyMemberSn);
+        return ResponseEntity.ok("승인 완료 (ID: " + companyMemberSn + ")");
     }
 
-    @PostMapping("/{memberId}/reject")
-    public ResponseEntity<String> rejectCompanyMember(@PathVariable Long memberId) {
-        companyMemberService.rejectMember(memberId);
-        return ResponseEntity.ok("반려 완료");
+    @PostMapping("/{companyMemberSn}/reject")
+    public ResponseEntity<String> rejectCompanyMember(@PathVariable Long companyMemberSn) {
+        companyMemberService.rejectMember(companyMemberSn);
+        return ResponseEntity.ok("반려 완료 (ID: " + companyMemberSn + ")");
     }
 
 
