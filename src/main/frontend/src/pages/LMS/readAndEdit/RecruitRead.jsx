@@ -40,7 +40,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
     title: '',
     answer: '',
     groupName: '',
-    type: '모집공고',
+    type: 'COHORT',
     content: '',
     scope: [1, 2, 3],
     surveyStart: '',
@@ -130,7 +130,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
     e.preventDefault();
     const body = { ...formData, crclmCn:JSON.stringify(surveyForm) };
     try {
-      const res = await submitRecruitForm({body});
+      const res = await submitRecruitForm(body);
       console.log('[RecruitRead] applyGroup response:', res);
       toast.success('폼 제출 성공');
       const apply = await applyGroup({userSn: user?.USER_SN, cohortSn: finalSn});
