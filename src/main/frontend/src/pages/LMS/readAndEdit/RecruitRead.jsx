@@ -128,13 +128,13 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
 
   const saveSubmit = async (e) => {
     e.preventDefault();
-    const body = { ...formData, crclmCn:JSON.stringify(surveyForm) };
+    const body = { ...formData, crclmCn:JSON.stringify(formData) };
     try {
+      const apply = await applyGroup({userSn: user?.USER_SN, cohortSn: finalSn});
+      toast.success("신청 완료")
       const res = await submitRecruitForm(body);
       console.log('[RecruitRead] applyGroup response:', res);
       toast.success('폼 제출 성공');
-      const apply = await applyGroup({userSn: user?.USER_SN, cohortSn: finalSn});
-      toast.success("신청 완료")
       navigate(-1);
     } catch (err) {
       console.error('[RecruitRead] applyGroup error:', err);

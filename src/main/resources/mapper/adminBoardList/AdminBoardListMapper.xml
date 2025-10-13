@@ -15,7 +15,7 @@
         FROM TB_POST p
         JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = FALSE
-        AND (#{cohortSn} IS NULL OR p.COHORT_SN = #{cohortSn})
+        AND (p.COHORT_SN IS NULL OR p.COHORT_SN = #{cohortSn})
         AND (
         p.BBS_SCOPE IN ('PUBLIC', 'COMPANY', 'COHORT')
         OR (p.BBS_SCOPE = 'PRIVATE' AND p.POST_WRTR_SN = #{userSn})
