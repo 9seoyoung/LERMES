@@ -3,10 +3,10 @@ import { api } from '../auth/api';
 export const pullAllAccount = (params) =>
   api.get('/users/by-company-role', { params });
 
-export const deleteAccount = (id) => api.delete(`/company-members/${id}`, id);
+export const deleteAccount = (id) => api.delete(`/company-members/${id}`, {id});
 
 export const approveAccount = (id) =>
-  api.put(`/company-members/${id}/approve`, id);
+  api.put(`/company-members/${id}/approve`, {userSn: id});
 
 export const applyEmp = (params) =>
   api.post('/company-members/apply', params, {
