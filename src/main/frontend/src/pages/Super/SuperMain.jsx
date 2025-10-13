@@ -50,7 +50,7 @@ export default function SuperMain() {
 
   return (
     <div className={cardStyle.mainContainer_cardGrid}>
-      {companyList?.map((v, idx) => {
+      {[...companyList].reverse().map((v, idx) => {
         const bg = v?.bigLogoFileSn
           ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
           : 'none';
