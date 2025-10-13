@@ -1,6 +1,10 @@
 import React from 'react'
 import { applyEmp } from '../../services/accountService';
 import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
+import NoticeList from '../../components/module/NoticeList';
+import FAQList from '../../components/module/FAQList';
+import BigCal from '../../components/ui/BigCal';
+import MiniCal from '../../components/ui/MiniCal';
 
 function UnknownHome() {
   const { effectiveSn } = useSelectedCompany();
@@ -17,9 +21,23 @@ function UnknownHome() {
   }
 
   return (
-    <div className='board' style={{width: "100%", background: "yellow",height: "100%"}}>
-      <div>UnknownHome"로그인안함 1,7</div>
-    </div>
+      <div className="mainCont_Lms_Row" style={{height:"702px"}}>
+        <div className="main_L" style={{ width: '40%', height: "100%" }}>
+          <div className='dashBoardModule' style={{ height: '100%' }}>
+            <MiniCal/>
+          </div>
+        </div>
+        <div className="main_R" style={{ flex: '1', gap: '16px' }}>
+          <div className='max_height'>
+            <div className='dashBoardModule' style={{ flex:1 }}>
+              <NoticeList/>
+            </div>
+            <div className='dashBoardModule' style={{ height: '400px' }}>
+              <FAQList/>
+            </div>
+          </div>
+        </div>
+      </div>
   )
 }
 

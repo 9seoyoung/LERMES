@@ -17,7 +17,7 @@ const CalSched = () => {
   const [todayList, setTodayList] = useState([]);
   const [schedules, setSchedules] = useState({});
   const [events, setEvents] = useState({});
-  const [monthlyTodoRaw, setMonthlyTodoRaw] = useState([]); // ★ 원본 배열
+  const [monthlyTodoRaw, setMonthlyTodoRaw] = useState([]); 
   const location = useLocation();
   const curloc = location.pathname;
 
@@ -27,15 +27,14 @@ const CalSched = () => {
       setDisplayDate('선택된 날짜 없음');
       return;
     }
-
-    const [year, month, day] = selectedDate.split('-').map(Number);
-    const dateKey = `${year}-${z2(month)}-${z2(day)}`;
+      const [year, month, day] = selectedDate.split('-').map(Number);
+      const dateKey = selectedDate; 
 
     const params = {
       year,
       month,
       day,
-      isPrivate: (user.USER_AUTHRT_SN <= 3 ? 1 : 0),
+      isPrivate: (user.USER_AUTHRT_SN <= 3 ? 1 : null),
     };
 
     setDisplayDate(`${month}월 ${day}일`);
@@ -44,35 +43,51 @@ const CalSched = () => {
       try {
         // 당일 목록
         const res = await pullToDoList(params); // axios.get('/api/...', { params })
-        const list = res?.data ?? [];
+        // const list = res?.data ?? [];
+        // setTodayList(list);
+        const listRaw = res?.data ?? [];
+        const list = listRaw.map(v => ({
+          calSn: v.calSn,
+          title: v.eventNm,
+          eventBgngDt: v.eventBgngDt,
+          eventEndDt: v.eventEndDt,
+          ...v,
+        }));
         setTodayList(list);
 
-        // 사이드 목록(텍스트)와 events(객체) 갱신
-        setSchedules(prev => ({
-          ...prev,
-          [selectedDate]: list.map(v => v.eventNm)
-        }));
+        // setSchedules(prev => ({
+        //   ...prev,
+        //   [selectedDate]: list.map(v => v.eventNm)
+        // }));
 
-        setEvents(prev => ({
-          ...prev,
-          [dateKey]: list
-        }));
+        // setEvents(prev => ({
+        //   ...prev,
+        //   [dateKey]: list
+        // }));
+        setSchedules(prev => ({ ...prev, [selectedDate]: list }));
+        setEvents(prev => ({ ...prev, [dateKey]: list }));
 
         // 월 전체 목록
-        const monthlyRes = await pullToDoList({ year, month, isPrivate: 1 });
+        const monthlyRes = await pullToDoList(user.USER_AUTHRT_SN <= 3 ? { year, month, isPrivate: 1 } : {year, month});
+
+
 
         const raw = monthlyRes?.data;
-        const monthlyList = Array.isArray(raw) ? raw : Object.values(raw ?? {});
-        setMonthlyTodoRaw(monthlyList);  // ★ 항상 배열
+        const monthlyListRaw = Array.isArray(raw) ? raw : Object.values(raw ?? {});
+        const monthlyList = monthlyListRaw.map(v => ({
+          calSn: v.calSn,
+          title: v.eventNm,
+          eventBgngDt: v.eventBgngDt,
+          eventEndDt: v.eventEndDt,
+          ...v,
+        }));
+        setMonthlyTodoRaw(monthlyList); 
 
-
-        // (선택) 전체 기간 일수 필드 부여해두면 다른 곳에서 재사용 편함
         const withPeriod = monthlyList.map(v => ({
           ...v,
           periodDays: diffDaysInclusive(v.eventBgngDt, v.eventEndDt),
         }));
 
-        // 미니캘용 맵
       } catch (err) {
         console.error("[pullToDoList] error:", err?.response?.data ?? err);
       }
