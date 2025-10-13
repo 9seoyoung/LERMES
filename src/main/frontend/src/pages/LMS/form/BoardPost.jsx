@@ -120,7 +120,7 @@ function BoardPost() {
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
-  const cohortSn = user.USER_COHORT_SN
+  const cohortSn = user.USER_COHORT_SN;
   const userAuth = user.USER_AUTHRT_SN;
   const qAddRef = useRef(null);
   const scrollRef = useRef(null);
@@ -277,8 +277,8 @@ const handleChange = (e) => {
       content: formData.content,
       coSn: formData.coSn,
       type: formData.type,
-      cohortSn: cohortSn,
-      scope: formData.scope,
+      cohortSn: formData.cohortSn,
+      scope: (formData.type === "설문조사" ? "기수전체" : formData.scope),
       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
       surveyStart: formData.surveyStart,
@@ -292,7 +292,7 @@ const handleChange = (e) => {
     //   size: u.size,
     //   // fileSn 내려오면 그걸 써도 OK
     // })),
-    ...(formData.type === "설문조사" ? { surveyForm: JSON.stringify(surveyForm) } : {}),
+    ...(formData.type === "설문조사" ? { surveyForm: JSON.stringify(surveyForm), srvyBgngDt: formData.surveyStart, srvyEndDt: formData.surveyEnd} : {}),
     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
   });
 
@@ -311,6 +311,10 @@ const handleChange = (e) => {
   console.log("[will send to server]", JSON.stringify(body, null, 2));
   console.log("[FILES state]", files.map(f => ({ name: f.name, size: f.size })));
   console.table(snapshot.formData);
+
+  console.log("DEBUG scope typeof/value:", typeof formData.scope, formData.scope);
+  console.log("DEBUG cohortSn typeof/value:", typeof formData.cohortSn, formData.cohortSn);
+  console.log("DEBUG payload:", JSON.stringify(postJson, null, 2));
 
   // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
   try {
@@ -362,13 +366,14 @@ const handleChange = (e) => {
   useEffect(() => {
     (async () => {
       try {
-        const {data} = await hortlistByCpSn(coSn);
+        const {data} = await hortlistByCpSn(effectiveSn);
         setHortList(data.cohorts);
+        console.log(data.cohorts);
       } catch (e) {
         console.log(e.message);
       }
     })();
-  }, [coSn]);
+  }, [effectiveSn]);
 
   useEffect(() => {
     
@@ -505,7 +510,7 @@ const handleChange = (e) => {
                   </div>
                 </> : null }
             </> : null }
-              {(formData.type === "면담신청") || (formData.type === "일정") || (formData.type === "면담기록")?
+              {(formData.type === "면담신청") || (formData.type === "일정") || (formData.type === "면담기록") || (formData.type === "설문조사") ?
                   null :
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
@@ -528,7 +533,7 @@ const handleChange = (e) => {
                 <input type="hidden" name="scope" value={formData.scope} />
               </div> }
 
-              {(formData.scope === "그룹공개" && userAuth <= 3) && (
+              {(formData.scope === "그룹공개" && userAuth <= 3)&& (
                 <div className="dropSet" style={{ zIndex: "1" }}>
                   <p>하위 그룹</p>
                   <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
@@ -538,7 +543,6 @@ const handleChange = (e) => {
                         key={idx}
                         onClick={() => {
                           setFormData(s => ({ ...s, cohortSn:h.cohortSn, detailScope: h.cohortSn, detailScopeNm: String(h.cohortNm) }));
-
                         }}
                       >
                         {h.cohortNm}
@@ -546,6 +550,28 @@ const handleChange = (e) => {
                     ))}
                   </Dropdown>
                   <input type="hidden" name="detailScope" value={formData.detailScope} />
+                </div>
+              )}
+              {(formData.type === "설문조사" && userAuth <= 3)&& (
+                <div className="dropSet" style={{ zIndex: "1" }}>
+                  <p>그룹 지정</p>
+                  <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
+                    {hortlist.map((h, idx) => (
+                      <p
+                        className={layoutStyles.subMenuList}
+                        key={idx}
+                        onClick={() => {
+                          console.log(h.cohortSn);
+                          console.log("기수전체");
+                          setFormData(s => ({ ...s, cohortSn: h.cohortSn, srvyScope: "기수전체", detailScopeNm: String(h.cohortNm) }));
+
+                        }}
+                      >
+                        {h.cohortNm}
+                      </p>
+                    ))}
+                  </Dropdown>
+                  <input type="hidden" name="scope" value={formData.scope} />
                 </div>
               )}
             </div>
