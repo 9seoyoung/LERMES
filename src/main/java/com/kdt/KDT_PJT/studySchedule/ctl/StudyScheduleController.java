@@ -22,7 +22,7 @@ public class StudyScheduleController {
 
     @GetMapping()
     public ResponseEntity<List<StudyScheduleResponseDTO>> getStudySchedule(@AuthenticationPrincipal AuthCustomUserDetails me,
-                                                                           @RequestParam(required = false) Integer cohortSn){
+                                                                           @RequestParam(required = false) Integer cohortSn){ // 관리자 급은 cohortSn 파라미터 필요
         int roleType = me.getRoleType().intValue();
         if (roleType == 4 || roleType == 5) {// 강사, 학생은 꺼내쓰기
                 cohortSn = me.getCohortSn().intValue();

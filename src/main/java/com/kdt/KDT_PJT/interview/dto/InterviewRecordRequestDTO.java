@@ -16,7 +16,7 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InterviewRecordRequestDTO {
-    private Integer itvSn;          //매칭되는 면담에 대한 일련번호
+    private Integer itvSn;          //매칭되는 면담에 대한 일련번호, 번개면 없어도됨
     private String itvRecordTtl;    // 면담 기록 제목
     private String itvRecordCn;     // 면담 기록 내용
     private String formUuid;        // 폼 UUID (첨부파일 매칭용)

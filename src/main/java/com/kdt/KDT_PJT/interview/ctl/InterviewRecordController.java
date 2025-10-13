@@ -20,34 +20,39 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class InterviewRecordController {
 
-    private final InterviewService interviewService;
-    private final InterviewRecordService interviewRecordService;
-    private final FileService fileService;
 
+    private final InterviewRecordService interviewRecordService;
+
+
+    // 면담기록 등록
     @PostMapping()
     public void createInterviewRecord(@AuthenticationPrincipal AuthCustomUserDetails me,
                                       @RequestBody InterviewRecordRequestDTO params){ //ResponseEntity<InterviewRecordDetailResponseDTO>
         interviewRecordService.createInterviewRecord(me,params);
     }
 
+    // 면담기록 리스트 조회 (본인과 관련된것만)
     @GetMapping() // /api/interviewRecord도 받고 /api/interviewRecord?cohortSn=100도 받음 (관리자는 반드시 cohortSn 필수)
     public List<InterviewRecordListResponseDTO> readInterviewRecord(@AuthenticationPrincipal AuthCustomUserDetails me,
                                                                     @RequestParam (required = false) Integer cohortSn){
         return interviewRecordService.readInterviewRecord(me,cohortSn);
     }
 
+    // 면담기록 상세 조회
     @GetMapping("/{itvRecordSn}")
     public ResponseEntity<InterviewRecordDetailResponseDTO> readInterviewRecordDetail(@AuthenticationPrincipal AuthCustomUserDetails me,
                                                                                       @PathVariable Integer itvRecordSn){
         return ResponseEntity.ok(interviewRecordService.readInterviewRecordDetail(me,itvRecordSn));
     }
 
+    // 면담기록 수정
     @PatchMapping("/{itvRecordSn}")
     public ResponseEntity<InterviewRecordDetailResponseDTO> updateInterviewRecord(@PathVariable Integer itvRecordSn,
                                                                                   @RequestBody InterviewRecordRequestDTO params){
         return ResponseEntity.ok(interviewRecordService.updateInterviewRecord(itvRecordSn,params));
     }
 
+    // 면담기록 삭제
     @DeleteMapping("/{itvRecordSn}")
     public void deleteInterviewRecord(@PathVariable Integer itvRecordSn){
         interviewRecordService.deleteInterviewRecord(itvRecordSn);
