@@ -50,6 +50,9 @@ export const CHANGE_POST_TYPE_NAME = {
     "QNA": "문의",
     "SURVEY": "설문조사",
     "FAQ": "FAQ",
+    "면담신청": "면담요청",
+    "면담확정": "면담확정",
+    "면담 기록": "면담기록"
 }
 
 export const CHANGE_PAGE_BY_POST_TYPE = {

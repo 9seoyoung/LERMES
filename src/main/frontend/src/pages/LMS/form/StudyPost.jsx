@@ -11,6 +11,7 @@ import { createPost } from '../../../services/postService';
 import SurveyPost from './SurveyPost';
 import { DateTimeInput } from '../../../components/ui/UiComp';
 import InterviewPost from './InterviewPost';
+import Applier from '../../../components/ui/Applier';
 
 
 // StudyPost.jsx
@@ -258,46 +259,47 @@ export function InterviewForm({
 }
 
 export function InterviewMemo({
-     domFormId, handleChange, formData, files, formId, setFiles,
+     domFormId, handleChange, formData, files, formId, setFiles, qContainerRef
   }) {
   return (
       <>
         <div className='formHeader'>
           <div className='inputSet inputTitleSet'>
-            <label className='formLabel' htmlFor={`${domFormId}_itvAplyTtl`}>제목</label>
+            <label className='formLabel' htmlFor={`${domFormId}_title`}>제목</label>
             <input
-                id={`${domFormId}_itvAplyTtl`}
+                id={`${domFormId}_title`}
                 className='formInput'
-                name='itvAplyTtl'
+                name='title'
                 placeholder='제목을 입력하세요.'
-                value={formData.itvAplyTtl}
+                value={formData.title}
                 onChange={handleChange}
             />
           </div>
 
           <div className='inputSet inputFlex1'>
-            <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-            <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+            <Applier handleChange={handleChange}/>
+            <FormInput type="text" labelNm="신청자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" ></FormInput>
+            <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel"  ></FormInput>
           </div>
         </div>
 
-        <div className="formContent">
+        <div className="formContent" ref={qContainerRef}>
           <textarea
-              id={`${formId}_itvAplyCn`}
-              name="itvAplyCn"
+              id={`${formId}_content`}
+              name="content"
               className='formTextarea'
               placeholder='본문을 입력하세요.'
-              value={formData.itvAplyCn}
+              value={formData.content}
               onChange={handleChange}>
           </textarea>
           <div className='inputSet'>
           </div>
           <div className='inputSet'>
             <div className='inputSet inputFlex1'>
-              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
-              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
-              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
-              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" ></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" ></DateTimeInput>
+              {/* <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput> */}
+              {/* <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput> */}
 
             </div>
           </div>

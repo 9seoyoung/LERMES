@@ -25,7 +25,7 @@ function GroupDropdown({setCohortSn, setCohortStts}) {
           if (cohorts.length > 0) {
             setGroupFilter(cohorts[0].cohortNm);
             setCohortSn(cohorts[0].cohortSn);
-            setCohortStts(cohorts[0].cohortSttsNm)
+            setCohortStts?.(cohorts[0].cohortSttsNm)
           }
           // console.log(data.data.map((value, idx)=> `${value.cohortNm} + ${idx}`))
         } catch (e) {
@@ -38,7 +38,7 @@ function GroupDropdown({setCohortSn, setCohortStts}) {
       <Dropdown className="dropset_dd" label={groupFilter || hortlist[0]?.cohortNm} >
         {/* <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p> */}
       { hortlist.map((hortlist, idx) => (
-          <p className="subMenuList" key={idx} onClick={()=> {console.log("그룹선택>>>>>>>>>>>>>>>>>>>>>>>>>>>>");setGroupFilter(`${hortlist.cohortNm}`);setCohortSn(hortlist.cohortSn); setCohortStts(hortlist.cohortSttsNm);}} >
+          <p className="subMenuList" key={idx} onClick={()=> {console.log("그룹선택>>>>>>>>>>>>>>>>>>>>>>>>>>>>");setGroupFilter(`${hortlist.cohortNm}`);setCohortSn(hortlist.cohortSn); setCohortStts?.(hortlist.cohortSttsNm);}} >
             {hortlist.cohortNm}
             <div className={`${hortlist.cohortSttsNm === "RECRUITING" ?
               styles.detailsGray : 
