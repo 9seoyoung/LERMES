@@ -11,4 +11,5 @@ public class CohortMemberDto {
         private String cohortName;  // Cohort.cohortName
         private String crclmName;   // Cohort.CRCLM_NM
         private Boolean aprwStts;  // CohortMemberStts.aprwStts
+        private String cohortMemStts;
 }

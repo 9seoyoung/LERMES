@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/cohort-member") // 선택적
@@ -30,9 +31,24 @@ public class CohortMemberController {
         return ResponseEntity.ok("수강신청 완료");
     }
 
+//    @PostMapping("/{memberId}/approve")
+//    public ResponseEntity<String> approveMember(
+//            @PathVariable Long memberId,
+//            @RequestBody Map<String, Long> body)
+//    {
+//        cohortMemberService.approveMember(memberId);
+//        return ResponseEntity.ok("승인 완료");
+//    }
+
     @PostMapping("/{memberId}/approve")
-    public ResponseEntity<String> approveMember(@PathVariable Long memberId) {
-        cohortMemberService.approveMember(memberId);
+    public ResponseEntity<String> approveMember(
+            @PathVariable Long memberId,
+            @RequestBody Map<String, Long> body
+    ) {
+        Long companySn = body.get("companySn");
+        Long cohortSn = body.get("cohortSn");
+
+        cohortMemberService.approveMember(memberId, cohortSn, companySn);
         return ResponseEntity.ok("승인 완료");
     }
 
@@ -41,5 +57,4 @@ public class CohortMemberController {
         cohortMemberService.rejectMember(memberId);
         return ResponseEntity.ok("반려 완료");
     }
-
 }
