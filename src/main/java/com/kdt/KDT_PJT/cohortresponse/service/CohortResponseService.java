@@ -24,7 +24,7 @@ public class CohortResponseService {
                 .rspnsDt(dto.getRspnsDt())
                 .rspnsCn(dto.getRspnsCn())
                 .viewCnt(dto.getViewCnt())
-                .delYn(dto.getDelYn())
+                .delYn(dto.getDelYn() != null ? dto.getDelYn() : Boolean.FALSE)
                 .formUuid(dto.getFormUuid())
                 .build();
         return repository.save(entity).getRspnsSn();
