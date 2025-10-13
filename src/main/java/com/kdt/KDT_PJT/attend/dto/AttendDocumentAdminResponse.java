@@ -21,7 +21,7 @@ public class AttendDocumentAdminResponse {
     private AttendDtlTypeNm attendDtlTypeNm;
     private String cohortName;
     private String userName;
-    private String stuRmrkCn;
+    private String rmrkCn;
     private LocalDate bgngDt;
     private LocalDate endDt;
     private boolean hasFile;
@@ -35,7 +35,7 @@ public class AttendDocumentAdminResponse {
                 .attendDtlTypeNm(d.getAttendDtlTypeNm())
                 .cohortName(cohortName)
                 .userName(userName)
-                .stuRmrkCn(d.getStuRmrkCn())
+                .rmrkCn(d.getRmrkCn())
                 .bgngDt(d.getBgngDt())
                 .endDt(d.getEndDt())
                 .hasFile(d.getFileSn() != null)

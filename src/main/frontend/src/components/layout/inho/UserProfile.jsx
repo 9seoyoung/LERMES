@@ -233,10 +233,13 @@ export default function UserProfile() {
               type="text"
               className="myInfoInput"
               value={formData.email}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, email: e.target.value }))
-              }
-              placeholder="example@test.com"
+              readOnly
+              style={{
+                backgroundColor: '#f5f5f5',
+                color: '#555',
+                cursor: 'not-allowed',
+                border: 'none',
+              }}
             />
           </div>
         </div>
