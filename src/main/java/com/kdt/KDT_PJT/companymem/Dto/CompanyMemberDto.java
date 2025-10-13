@@ -16,5 +16,8 @@ public class CompanyMemberDto {
     private LocalDateTime orgStartDate;
     private LocalDateTime orgEndDate;
     private String userName;
+    private String userEmlAddr;
+    private String userTelno;
+    private LocalDateTime applyDate;
 }
 
