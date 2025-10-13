@@ -40,8 +40,8 @@ export default function SuperMain() {
   }, [effectiveSn]);
 
   const handleGoLms = (selectedCoSn) => {
-    if (myCoSn !== selectedCoSn) {
-      navigate('/visitorHome', { replace: true });
+    if (!user) {
+      navigate('/unknownHome', { replace: true });
     } else {
       const path = authLvPath[myAuth] ?? 'visitorHome';
       navigate(`/${path}`, { replace: true });
