@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.companymem.service;
 
+import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.auth.repository.UserRepository;
 import com.kdt.KDT_PJT.companymem.Dto.CompanyMemberDto;
 import com.kdt.KDT_PJT.companymem.entity.CompanyMember;
@@ -75,10 +76,15 @@ public class CompanyMemberService {
                     .userSn(member.getUserSn())
                     .userAuthrtSn(member.getUserAuthrtSn())
                     .orgStartDate(member.getOrgStartDate())
-                    .orgEndDate(member.getOrgEndDate());
+                    .orgEndDate(member.getOrgEndDate())
+                    .applyDate(member.getApplyDate());
 
             userRepository.findById(member.getUserSn())
-                    .ifPresent(user -> dtoBuilder.userName(user.getName()));
+                    .ifPresent(user -> dtoBuilder
+                            .userName(user.getName())
+                            .userEmlAddr(user.getEmail())
+                            .userTelno(user.getUserTelno()));
+
 
             return dtoBuilder.build();
         }).toList();
@@ -120,6 +126,29 @@ public class CompanyMemberService {
         }
 
         companyMemberRepository.delete(entity);  // 승인 전 신청 취소는 삭제 처리
+    }
+
+    public void approveMember(Long memberId) {
+        CompanyMember companyMember = companyMemberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+
+        Long userSn = companyMember.getUserSn();
+        Long companySn = companyMember.getCompanySn();
+
+        User user = userRepository.findById(userSn)
+                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+
+        user.setCompanySn(companySn);
+        userRepository.save(user);
+
+        companyMemberRepository.delete(companyMember);
+    }
+
+    public void rejectMember(Long memberId) {
+        CompanyMember companyMember = companyMemberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+
+        companyMemberRepository.delete(companyMember);
     }
 
 

@@ -169,7 +169,7 @@ export default function AccountSet() {
                 ]}
                 gridTemplate="0.5fr 1fr 2.5fr 1.6fr 2.5fr 1fr"
                 apiData={dataListTop}
-                columnData={['userName', 'email', 'tel', 'formattedApplyDt']}
+                columnData={['userName', 'userEmlAddr', 'userTelno', 'applyDate']}
                 whereTogo={'/adminHome/accountSet'}
                 addStyle={{
                   height: '160px',
