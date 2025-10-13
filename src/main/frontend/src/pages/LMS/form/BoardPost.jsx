@@ -26,7 +26,7 @@ import {
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
+  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle, setCohortSn } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -96,6 +96,7 @@ function PostStatus(props) {
             FileList={FileList}
             files={files}
             setFiles={setFiles}
+            setCohortSn={setCohortSn}
         />
       )
     default:
@@ -120,7 +121,7 @@ function BoardPost() {
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const coSn = user.USER_OGDP_CO_SN;
-  const cohortSn = user.USER_COHORT_SN
+  const cohortSn = user.USER_COHORT_SN;
   const userAuth = user.USER_AUTHRT_SN;
   const qAddRef = useRef(null);
   const scrollRef = useRef(null);
@@ -130,6 +131,7 @@ function BoardPost() {
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
   const [prvToggle, setPrvToggle] = useState(0);
+  const [recordCohortSn, setCohortSn] = useState(null);
 
 
   // 설문 폼 (초기 페이지 하나 생성)
@@ -159,7 +161,8 @@ function BoardPost() {
     location: "", //일정 장소, 면담 장소
     author: user?.USER_NM, // 작성자
     mento: "-", // 담당자
-    isPrivate: (userAuth <=3 ? prvToggle : 1)
+    isPrivate: (userAuth <=3 ? prvToggle : 1),
+    authorSn: null,
   });
 
   console.log(user)
@@ -199,15 +202,14 @@ const selectType = (nextType) => {
   );
 };
   
-const handleChange = (e) => {
-  const { name, type, checked, value } = e.target;
-  setFormData(prev => ({
-    ...prev,
-    [name]: type === 'checkbox' ? checked : value
-  }));
-};
+  const handleChange = (e) => {
+    const { name, type, checked, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
-  const tempSubmit = () => {};
   const saveSubmit = async (e) => {
     e.preventDefault();
 
@@ -225,6 +227,22 @@ const handleChange = (e) => {
       }));
     }
     
+    if (formData.type === "면담기록") {
+      setFormData(prev => ({
+        ...prev,
+        // type: prev.type,
+        itvRecordTtl: prev.title,      // 제목
+        itvRecordCn: prev.content,       // 내용
+        itvPicAuthrt: (prev.scope === "강사" ? "INSTRUCTOR" : (prev.scope === "직원" ? "EMPLOYEE" : "REPRESENTATIVE")),    // 공개범위
+        itvPicSn: prev.userSn, //담당자
+        itvTrprSn: prev.authorSn, //신청자
+        date: prev.startDate,
+        time: prev.startTime,
+        coSn: effectiveSn,
+        itvSn: null,
+        cohortSn: recordCohortSn
+      }));
+    }
 
 
     // 2) 게시글 JSON (File 객체 넣지 말기!)
@@ -261,8 +279,8 @@ const handleChange = (e) => {
       content: formData.content,
       coSn: formData.coSn,
       type: formData.type,
-      cohortSn: cohortSn,
-      scope: formData.scope,
+      cohortSn: (formData.type === "면담기록" ? recordCohortSn : formData.cohortSn),
+      scope: (formData.type === "설문조사" ? "기수전체" : (userAuth <=3 ?  "그룹공개" : formData.scope)),
       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
       surveyStart: formData.surveyStart,
@@ -276,7 +294,7 @@ const handleChange = (e) => {
     //   size: u.size,
     //   // fileSn 내려오면 그걸 써도 OK
     // })),
-    ...(formData.type === "설문조사" ? { surveyForm: JSON.stringify(surveyForm) } : {}),
+    ...(formData.type === "설문조사" ? { surveyForm: JSON.stringify(surveyForm), srvyBgngDt: formData.surveyStart, srvyEndDt: formData.surveyEnd} : {}),
     formUuid, // 서버가 필요하면 같이 보내서 귀속 처리
   });
 
@@ -296,6 +314,10 @@ const handleChange = (e) => {
   console.log("[FILES state]", files.map(f => ({ name: f.name, size: f.size })));
   console.table(snapshot.formData);
 
+  console.log("DEBUG scope typeof/value:", typeof formData.scope, formData.scope);
+  console.log("DEBUG cohortSn typeof/value:", typeof formData.cohortSn, formData.cohortSn);
+  console.log("DEBUG payload:", JSON.stringify(postJson, null, 2));
+
   // 3) 게시글 저장 (설문이면 createSurvey, 일반이면 createPost)
   try {
     const type = String(formData.type).trim();
@@ -310,25 +332,25 @@ const handleChange = (e) => {
         case "일정":
           return registToDo(postJson);
         case "면담기록":
-          return createInterviewRecord(postJson);
+          return createInterviewRecord(formData);
         default:
           return createPost(postJson); // 규약대로
       }
     })();
 
     console.log("saved:", data);
-      if(postJson.type != "일정") {
+      if(!(postJson.type === "일정" || postJson.type === "면담기록")) {
         const serverFormUuid = data?.formUuid || data?.result?.formUuid;
-        if (!serverFormUuid) {
-          toast.error("서버에서 formUuid를 받지 못했어요.");
-          console.error("[createPost 응답]", data);
-          return; // 업로드 중단
-        }
+        // if (!serverFormUuid) {
+        //   toast.error("서버에서 formUuid를 받지 못했어요.");
+        //   console.error("[createPost 응답]", data);
+        //   return; // 업로드 중단
+        // }
 
         let uploads = [];
         if (Array.isArray(files) && files.length > 0) {
           uploads = await uploadFiles(files, {
-            formUuid: serverFormUuid,
+            formUuid: serverFormUuid ?? postJson.id,
             onProgress: pct => console.log("upload:", pct + "%"),
           });
         }
@@ -346,13 +368,14 @@ const handleChange = (e) => {
   useEffect(() => {
     (async () => {
       try {
-        const {data} = await hortlistByCpSn(coSn);
+        const {data} = await hortlistByCpSn(effectiveSn);
         setHortList(data.cohorts);
+        console.log(data.cohorts);
       } catch (e) {
         console.log(e.message);
       }
     })();
-  }, [coSn]);
+  }, [effectiveSn]);
 
   useEffect(() => {
     
@@ -382,6 +405,7 @@ const handleChange = (e) => {
                 questionAddRef={qAddRef}
                 setPrvToggle={setPrvToggle}
                 prvToggle={prvToggle}
+                setCohortSn={setCohortSn}
             />
           </div>
 
@@ -419,13 +443,8 @@ const handleChange = (e) => {
                       { locate.pathname === "/tutorHome/studySched/createPost"  ? 
                         <>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "일정" }))}>일정</p>
-                        </> : <></> } 
-
-                      { locate.pathname === "/tutorHome/studentManage/createPost"  ? 
-                        <>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담신청" }))}>면담신청</p>
                           <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, type: "면담기록" }))}>면담기록</p>
-
                         </> : <></> } 
                     </>
                     :
@@ -494,7 +513,7 @@ const handleChange = (e) => {
                   </div>
                 </> : null }
             </> : null }
-              {(formData.type === "면담신청") || (formData.type === "일정") || (formData.type === "면담기록")?
+              {(formData.type === "면담신청") || (formData.type === "일정") || (formData.type === "면담기록") || (formData.type === "설문조사") ?
                   null :
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
@@ -517,7 +536,7 @@ const handleChange = (e) => {
                 <input type="hidden" name="scope" value={formData.scope} />
               </div> }
 
-              {(formData.scope === "그룹공개" && userAuth <= 3) && (
+              {(formData.scope === "그룹공개" && userAuth <= 3)&& (
                 <div className="dropSet" style={{ zIndex: "1" }}>
                   <p>하위 그룹</p>
                   <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
@@ -527,7 +546,6 @@ const handleChange = (e) => {
                         key={idx}
                         onClick={() => {
                           setFormData(s => ({ ...s, cohortSn:h.cohortSn, detailScope: h.cohortSn, detailScopeNm: String(h.cohortNm) }));
-
                         }}
                       >
                         {h.cohortNm}
@@ -535,6 +553,28 @@ const handleChange = (e) => {
                     ))}
                   </Dropdown>
                   <input type="hidden" name="detailScope" value={formData.detailScope} />
+                </div>
+              )}
+              {(formData.type === "설문조사" && userAuth <= 3)&& (
+                <div className="dropSet" style={{ zIndex: "1" }}>
+                  <p>그룹 지정</p>
+                  <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
+                    {hortlist.map((h, idx) => (
+                      <p
+                        className={layoutStyles.subMenuList}
+                        key={idx}
+                        onClick={() => {
+                          console.log(h.cohortSn);
+                          console.log("기수전체");
+                          setFormData(s => ({ ...s, cohortSn: h.cohortSn, srvyScope: "기수전체", detailScopeNm: String(h.cohortNm) }));
+
+                        }}
+                      >
+                        {h.cohortNm}
+                      </p>
+                    ))}
+                  </Dropdown>
+                  <input type="hidden" name="scope" value={formData.scope} />
                 </div>
               )}
             </div>

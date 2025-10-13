@@ -340,12 +340,12 @@ export function FileUpload({ files, setFiles }) {
 export function FileList({ files, setFiles, noShow, uploadUser, editToggle }) {
   const {user} = useAccount();
   const removeFile = (idx) => {
-    setFiles((prev) => prev.filter((_, i) => i !== idx));
+    setFiles((prev) => prev?.filter((_, i) => i !== idx));
   };
 
   return (
     <ul className="addfileList">
-      {files.map((file, idx) => (
+      {files?.map((file, idx) => (
         <li key={idx}>
           <span>
             { noShow ? 

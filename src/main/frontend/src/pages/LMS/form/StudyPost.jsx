@@ -120,6 +120,7 @@ function StudyPost() {
                 setFiles={setFiles}
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
+                user={user}
             />
           </div>
 
@@ -259,8 +260,11 @@ export function InterviewForm({
 }
 
 export function InterviewMemo({
-     domFormId, handleChange, formData, files, formId, setFiles, qContainerRef
+     domFormId, handleChange, formData, files, formId, setFiles, qContainerRef, setCohortSn
   }) {
+
+    const {user} = useAccount();
+
   return (
       <>
         <div className='formHeader'>
@@ -277,10 +281,13 @@ export function InterviewMemo({
           </div>
 
           <div className='inputSet inputFlex1'>
-            <Applier handleChange={handleChange}/>
-            <FormInput type="text" labelNm="신청자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" ></FormInput>
-            <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel"  ></FormInput>
+            <label className='formLabel' htmlFor={`${domFormId}_applier`} style={{width: "100%"}}>신청자</label>
+            <Applier handleChange={handleChange} setCohortSn={setCohortSn} />
           </div>
+          <div className='inputSet inputFlex1'>
+              <label className='formLabel' htmlFor={`${domFormId}_mento`}>담당자</label>
+              <p>{user.USER_NM}</p>
+            </div>
         </div>
 
         <div className="formContent" ref={qContainerRef}>
@@ -296,8 +303,8 @@ export function InterviewMemo({
           </div>
           <div className='inputSet'>
             <div className='inputSet inputFlex1'>
-              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" ></DateTimeInput>
-              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" ></DateTimeInput>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="startDate" formData={formData} addLabelStyle="formLabel" ></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="startTime" formData={formData} addLabelStyle="formLabel" ></DateTimeInput>
               {/* <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput> */}
               {/* <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput> */}
 

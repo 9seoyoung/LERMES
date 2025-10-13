@@ -52,7 +52,8 @@ export const CHANGE_POST_TYPE_NAME = {
     "FAQ": "FAQ",
     "면담신청": "면담요청",
     "면담확정": "면담확정",
-    "면담 기록": "면담기록"
+    "면담 기록": "면담기록",
+    "공식일정": "공식일정"
 }
 
 export const CHANGE_PAGE_BY_POST_TYPE = {

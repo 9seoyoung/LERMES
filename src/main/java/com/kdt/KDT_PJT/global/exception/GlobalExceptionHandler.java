@@ -61,8 +61,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
-        ex.printStackTrace(); // 필요 시 로그 레벨 조절
-        return buildResponse("요청 처리 중 오류가 발생했습니다.", HttpStatus.BAD_REQUEST);
+        ex.printStackTrace();
+        // 백에서 만든 의미 있는 메시지를 그대로 내려보내자
+        String msg = (ex.getMessage() != null && !ex.getMessage().isBlank())
+                ? ex.getMessage()
+                : "요청 처리 중 오류가 발생했습니다.";
+        return buildResponse(msg, HttpStatus.BAD_REQUEST);
     }
 
 
@@ -72,6 +76,8 @@ public class GlobalExceptionHandler {
         // 409 Conflict는 자원의 현재 상태와 충돌하여 요청을 처리할 수 없을 때 사용됩니다.
         return buildResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
+
+
 
     /** 공통 응답 생성 */
     private ResponseEntity<ErrorResponse> buildResponse(String message, HttpStatus status) {

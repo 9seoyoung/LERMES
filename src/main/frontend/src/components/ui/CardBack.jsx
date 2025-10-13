@@ -109,28 +109,27 @@ function CardBack({ effectiveSn }) {
                         </div>
 
                         <div className={styles.crclmCell}>
-                          <button
-                            className={
-                              itemStatus === 'RECRUITING'
-                                ? styles.applyBtnOn
-                                : styles.applyBtnOff
-                            }
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
+                          { 
+                              itemStatus === 'RECRUITING' ?
 
-                              if (!isLoggedIn) {
-                                if (
-                                  toast.error('로그인이 필요한 작업입니다.')
-                                ) {
-                                  navigate('/welcome/login');
-                                }
-                                return;
-                              } else if (!cohortSn) {
-                                alert('recruitSn(cohortSn)이 없습니다.');
-                                return;
-                              } else if (!user?.USER_OGDP_CO_SN) {
-                                navigate(
+                              <button
+                              className={styles.applyBtnOn}
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                
+                                if (!isLoggedIn) {
+                                  if (
+                                    toast.error('로그인이 필요한 작업입니다.')
+                                  ) {
+                                    navigate('/welcome/login');
+                                  }
+                                  return;
+                                } else if (!cohortSn) {
+                                  alert('recruitSn(cohortSn)이 없습니다.');
+                                  return;
+                                } else if (!user?.USER_OGDP_CO_SN) {
+                                  navigate(
                                   `/visitorHome/applyRecruitPoster/${cohortSn}`
                                 );
                                 return;
@@ -138,9 +137,12 @@ function CardBack({ effectiveSn }) {
                                 alert('이미 수강중인 강좌가 있습니다.');
                               }
                             }}
-                          >
+                            >
                             신청
                           </button>
+                          :
+                          null
+                          }
                         </div>
                       </div>
                     );

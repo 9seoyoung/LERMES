@@ -15,6 +15,7 @@ import {
   pullApplyEmp,
   pullCohortApplicants,
   pullTeacherAccount,
+  rejectAccount,
 } from '../../../services/accountService';
 import styles from '../../../styles/account.module.css';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -52,10 +53,10 @@ export default function AccountSet() {
             ogdpCoSn: effectiveSn,
             userAuthrtSn: 3,
           });
-          console.log(account.data);
-          setAccountList(account.data);
+          console.log(account?.data);
+          setAccountList(account?.data);
           const pendingEmp = await pullApplyEmp(effectiveSn);
-          console.log(pendingEmp.data);
+          console.log(pendingEmp?.data);
           const formattedData = pendingEmp.data.map((item) => ({
             ...item,
             formattedApplyDt: formatDate(item.aplyDt),
@@ -169,7 +170,7 @@ export default function AccountSet() {
                 ]}
                 gridTemplate="0.5fr 1fr 2.5fr 1.6fr 2.5fr 1fr"
                 apiData={dataListTop}
-                columnData={['userName', 'email', 'tel', 'formattedApplyDt']}
+                columnData={['userName', 'userEmlAddr', 'userTelno', 'applyDate']}
                 whereTogo={'/adminHome/accountSet'}
                 addStyle={{
                   height: '160px',
@@ -179,7 +180,8 @@ export default function AccountSet() {
                 }}
                 apiBtn={true}
                 approveApi={approveAccount}
-                denyApi={deleteAccount}
+                denyApi={rejectAccount}
+                selectedIdx={selectedIdx}
               >
                 {/**
                        * tableHead={[,'이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
@@ -482,6 +484,7 @@ export default function AccountSet() {
                   handleChange={handleChange}
                   directPage={cohortStts === 'RECRUITING' ? true : false}
                   apiBtn={cohortStts === 'RECRUITING' ? true : false}
+                  selectedIdx={selectedIdx}
                   approveApi={
                     cohortStts === 'RECRUITING'
                       ? (userSn) => approveCohort(userSn, effectiveSn, cohortSn)

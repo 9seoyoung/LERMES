@@ -20,7 +20,8 @@ export default function ListTable({
   apiBtn = false,
   approveApi,
   denyApi,
-  directPage = false
+  directPage = false,
+  setRspnsSn
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +30,26 @@ export default function ListTable({
   if (!apiData?.length) {
     return <div className={styles.ListTbBg}>-</div>;
   }
+  const makeRowKey = (row, i) => {
+    // 유형(게시판 타입)
+    const type =
+      row?.[typeKey] ??
+      row?.postType ??
+      row?.bbsType ??
+      "UNK";
+  
+    // PK (탭별로 다른 키 맵핑됨)
+    const id = row?.[postKey] ?? i;
+  
+    // 시간(있으면 충돌방지에 도움)
+    const stamp =
+      row?.regDt ??
+      row?.formattedAPostFrstDt ??
+      "";
+  
+    // 탭 + 유형 + PK + (옵션)시간 + index
+    return `${selectedIdx}::${type}::${id}::${stamp}::${i}`;
+  };
 
   const resolvedTemplate = Array.isArray(gridTemplate)
     ? gridTemplate.join(" ")
@@ -48,7 +69,7 @@ export default function ListTable({
       >
         {tableHead?.length > 0 ? (
           <li id={styles.ListHeader} className={`${styles.gridRow}`}>
-            {tableHead.map((col, idx) => (
+            {tableHead?.map((col, idx) => (
               <div key={`th-${idx}`} className={styles.cell}>
                 {col}
               </div>
@@ -63,7 +84,7 @@ export default function ListTable({
           style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
         >
           {apiData.map((row, i) => {
-            const rowKey = row?.[postKey] ?? `row-${i}`; // 안정 키 우선
+            const rowKey = makeRowKey(row, i); // 안정 키 우선
 
             console.log('row:', row);
 
@@ -89,13 +110,15 @@ export default function ListTable({
                 
                 onClick={() => {
                   const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
-                  
+                  setRspnsSn?.(row.rspnsSn);
+                  console.log(row?.rspnsSn)
                   const targetPath = `${base}/${row[postKey]}`;
                   console.log(selectedIdx);
                   console.log('현재 경로:', location.pathname);
                   console.log('이동 대상:', targetPath);
                   
-                  if (location.pathname !== whereTogo) {
+                  //whereTogo 없고 필터 idx 0(전체보기)일 때는 이동안하게 막아버림
+                  if ((whereTogo || selectedIdx === 0) && location.pathname !== whereTogo) {
                     navigate(targetPath);
                   }
                 }}
@@ -111,7 +134,7 @@ export default function ListTable({
                 ))}
                 <>
                  {directPage ? 
-                  <div className={styles.cell} onClick={() => navigate('/visitorHome/applyRecruitPoster')}>
+                  <div className={styles.cell} onClick={() => navigate(`/adminHome/readRecruitApplier/${row?.rspnsSn}`)}>
                     바로가기
                   </div>
                  : null}
@@ -122,7 +145,7 @@ export default function ListTable({
                         type="button"
                         onClick={async () => {
                           try {
-                            await approveApi(row.userSn);
+                            await approveApi((selectedIdx === 0 ? row?.companyMemberSn : row?.userSn));
                             toast.success('승인되었습니다.');
                             setRowStatus((prev) => ({
                               ...prev,
@@ -141,7 +164,7 @@ export default function ListTable({
                         type="button"
                         onClick={async () => {
                           try {
-                            await denyApi(row.userSn);
+                            await denyApi((selectedIdx === 0 ? row?.companyMemberSn : row?.userSn));
                             toast.success('거절되었습니다.');
                             setRowStatus((prev) => ({
                               ...prev,

@@ -47,6 +47,7 @@ test-job:
 # 2️⃣ Build Job
 build-job:
   stage: build
+  timeout: 30m
   script:
     - echo "⚙️ React Build 시작"
     - cd src/main/frontend
@@ -55,7 +56,12 @@ build-job:
     - $env:CI="false"; npm run build
     - cd ../../../
     - echo "🚀 SpringBoot Gradle Build 시작"
-    - ./gradlew clean build  -x test --no-daemon
+    - ./gradlew clean build -x test --no-daemon --parallel
+  cache:   # ⚡ Gradle 캐시 활성화 (빌드 시간 단축)
+    key: "$CI_PROJECT_NAME-gradle"
+    paths:
+      - .gradle/wrapper
+      - .gradle/caches  
   artifacts:
     paths:
       - $REACT_BUILD_DIR
