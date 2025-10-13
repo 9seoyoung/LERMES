@@ -20,6 +20,7 @@ export const MENU_FILTER_COLUMNDATA = {
     2: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     3: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
     4: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
+    4: ["postType", "itvRecordTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
 }
 
 export const SELECT_POST_SN_KEY = {
@@ -28,6 +29,7 @@ export const SELECT_POST_SN_KEY = {
     2: "calSn",
     3: "itvSn",
     4: "itvSn",
+    5: "itvRecordSn",
 }
 
 //상세보기 API
@@ -43,5 +45,6 @@ export const SELECT_DETAIL_PAGE_PATH = {
     1: "/stdHome/studySched/calendar",
     2: "/stdHome/studySched/calendar",
     3: "/stdHome/studySched/interview", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
-    4: "/tutorHome/studySched/interview" //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    4: "/tutorHome/studySched/interview", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    5: "/tutorHome/studySched/interview" //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
 }

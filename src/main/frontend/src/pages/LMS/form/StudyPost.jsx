@@ -260,7 +260,7 @@ export function InterviewForm({
 }
 
 export function InterviewMemo({
-     domFormId, handleChange, formData, files, formId, setFiles, qContainerRef
+     domFormId, handleChange, formData, files, formId, setFiles, qContainerRef, setCohortSn
   }) {
 
     const {user} = useAccount();
@@ -282,7 +282,7 @@ export function InterviewMemo({
 
           <div className='inputSet inputFlex1'>
             <label className='formLabel' htmlFor={`${domFormId}_applier`} style={{width: "100%"}}>신청자</label>
-            <Applier handleChange={handleChange}/>
+            <Applier handleChange={handleChange} setCohortSn={setCohortSn} />
           </div>
           <div className='inputSet inputFlex1'>
               <label className='formLabel' htmlFor={`${domFormId}_mento`}>담당자</label>

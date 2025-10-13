@@ -29,6 +29,26 @@ export default function ListTable({
   if (!apiData?.length) {
     return <div className={styles.ListTbBg}>-</div>;
   }
+  const makeRowKey = (row, i) => {
+    // 유형(게시판 타입)
+    const type =
+      row?.[typeKey] ??
+      row?.postType ??
+      row?.bbsType ??
+      "UNK";
+  
+    // PK (탭별로 다른 키 맵핑됨)
+    const id = row?.[postKey] ?? i;
+  
+    // 시간(있으면 충돌방지에 도움)
+    const stamp =
+      row?.regDt ??
+      row?.formattedAPostFrstDt ??
+      "";
+  
+    // 탭 + 유형 + PK + (옵션)시간 + index
+    return `${selectedIdx}::${type}::${id}::${stamp}::${i}`;
+  };
 
   const resolvedTemplate = Array.isArray(gridTemplate)
     ? gridTemplate.join(" ")
@@ -63,9 +83,9 @@ export default function ListTable({
           style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
         >
           {apiData.map((row, i) => {
-            const rowKey = row?.[postKey] ?? `row-${i}`; // 안정 키 우선
+            const rowKey = makeRowKey(row, i); // 안정 키 우선
 
-            console.log('row:', row);
+            // console.log('row:', row);
 
             const status =
               rowStatus[rowKey] ||

@@ -15,6 +15,7 @@ import {
   pullApplyEmp,
   pullCohortApplicants,
   pullTeacherAccount,
+  rejectAccount,
 } from '../../../services/accountService';
 import styles from '../../../styles/account.module.css';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -179,7 +180,7 @@ export default function AccountSet() {
                 }}
                 apiBtn={true}
                 approveApi={approveAccount}
-                denyApi={deleteAccount}
+                denyApi={rejectAccount}
                 selectedIdx={selectedIdx}
               >
                 {/**

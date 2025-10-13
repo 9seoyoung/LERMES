@@ -57,7 +57,7 @@ import UnknownHome from '../pages/LMS/UnknownHome.jsx';
 import OAuth2Redirect from '../auth/loginPage/GoogleOAuth2Redirect.jsx';
 import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
 import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
-import { InterviewMemo } from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
+import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
 
 function AppRoutes() {
   return (
@@ -126,7 +126,7 @@ function AppRoutes() {
                 <Route path="adminHome/groupSet" element={<GroupSet />} />
                 <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
                 <Route path="adminHome/docuSet" element={<DocxSet />} />
-                <Route path="adminHome/boardSet/readItvMemo:itvMemoSn" element={<InterviewMemo />} />
+                <Route path="adminHome/boardSet/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="adminHome/accountSet" element={<AccountSet />} />
                 <Route path="adminHome/myPage" element={<AdminMypage />} />
               </Route>
