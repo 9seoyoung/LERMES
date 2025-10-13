@@ -26,8 +26,10 @@ public class AdminBoardListController {
                                                                                @PathVariable Integer cohortSn,
                                                                                AdminBoardListDTO adminBoardListDTO){
         Integer userSn = me.getId().intValue();
+        Integer roleType = me.getRoleType().intValue();
         adminBoardListDTO.setCohortSn(cohortSn);
         adminBoardListDTO.setUserSn(userSn);
+        adminBoardListDTO.setRoleType(roleType);
 
 //        adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
 //        return ResponseEntity.ok(Collections.emptyList()); // TODO 쓰레기 return중, 수정 필요
