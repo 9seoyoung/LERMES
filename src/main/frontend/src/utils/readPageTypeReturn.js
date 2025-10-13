@@ -1,5 +1,5 @@
 import { pullToDoList } from "../services/calService";
-import { readInterviewList, readInterview, callBoardList, readPostByPostSn, callSurveyList, pullInterviewRecordList } from "../services/postService";
+import { readInterviewList, readInterview, callBoardList, readPostByPostSn, callSurveyList, pullInterviewRecordList, readInterviewRecord } from "../services/postService";
 
 
 const PATH_BY_FILTER = {
@@ -34,7 +34,7 @@ const DETAIL_API_BY_FILTER = {
   'FAQ': readPostByPostSn,
   'Q&A': readPostByPostSn,
   '면담요청': readInterview,
-  // '면담기록': ,
+  '면담기록': readInterviewRecord,
   // '임시저장': readDraftList,
 };
 
@@ -75,7 +75,7 @@ export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
     5: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     7: ["postType", "itvAplyTtl", "formattedAPostFrstDt", "itvAplcntNm", "viewCnt"],
-    8: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    8: ["postType", "itvRecordTtl", "formattedAPostFrstDt", "itvPicNm", "viewCnt"],
 }
 
 export const ADMIN_SELECT_POST_SN_KEY = {
@@ -87,7 +87,7 @@ export const ADMIN_SELECT_POST_SN_KEY = {
     5: "postSn",
     6: "postSn",
     7: "itvSn",
-    8: "postSn",
+    8: "itvRecordSn",
 
 }
 
@@ -96,11 +96,11 @@ export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
     1: "/adminHome/boardSet/read",
     2: "/adminHome/boardSet/readSchedule",
     3: "/adminHome/boardSet/read",
-    4: "/adminHome/boardSet/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    4: "/adminHome/boardSet/survey", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
     5: "/adminHome/boardSet/read",
     6: "/adminHome/boardSet/read",
     7: "/adminHome/boardSet/readInterview",
-    8: "",
+    8: "/adminHome/boardSet/readItvMemo",
 
 }
 
@@ -124,7 +124,7 @@ export const CHANGE_ADMIN_PAGE_BY_POST_TYPE = {
   "FAQ": "/adminHome/boardSet/read",
   "면담신청": "/adminHome/boardSet/readInterview",
   "면담확정": "/adminHome/boardSet/readInterview",
-  "면담 기록": "면담기록",
-  "공식일정": "공식일정"
+  "면담 기록": "/adminHome/boardSet/readItvMemo",
+  "공식일정": "/adminHome/boardSet/readSchedule"
 }
 

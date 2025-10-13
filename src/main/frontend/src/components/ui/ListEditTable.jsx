@@ -1,5 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import styles from "../../styles/UiComp.module.css";
+import { deleteAccount } from "../../services/accountService";
+import { toast } from "react-toastify";
 // import Dropdown from "./Dropdown"; // 커스텀 드롭다운 쓸거면 주석 해제
 
 export default function ListEditTable({
@@ -81,16 +83,41 @@ export default function ListEditTable({
     });
   };
 
-  const handleBulkDelete = () => {
+  // const handleBulkDelete = () => {
+  //   if (selected.size === 0) return;
+  //   const next = rows.filter((r, i) => {
+  //     if (r.__placeholder) return true; // 플레이스홀더 보존
+  //     const id = getRowId(r, i);
+  //     return !selected.has(id);
+  //   });
+  //   emitRows(ensureTrailingPlaceholder(next));
+  //   setSelected(new Set());
+  // };
+  const handleBulkDelete = async () => {
     if (selected.size === 0) return;
+  
+    const checkedRows = rows
+      .filter((r, i) => !r.__placeholder && selected.has(getRowId(r, i)));
+  
+    const sns = checkedRows.map(r => r.userSn).filter(Boolean);
+  
+    try {
+      await Promise.all(sns.map(id => deleteAccount(id)));
+      toast.success(`${sns.length}개 계정이 삭제되었습니다.`);
+    } catch (err) {
+      console.error(err);
+      toast.error("삭제 중 오류 발생");
+    }
+  
     const next = rows.filter((r, i) => {
-      if (r.__placeholder) return true; // 플레이스홀더 보존
+      if (r.__placeholder) return true;
       const id = getRowId(r, i);
       return !selected.has(id);
     });
     emitRows(ensureTrailingPlaceholder(next));
     setSelected(new Set());
   };
+
 
   // ---------- 포커스 관리 ----------
   const refMap = useRef(new Map()); // key: `${rowKey}:${colIndex}` -> HTMLInputElement

@@ -5,8 +5,11 @@ export const pullAllAccount = (params) =>
 
 export const deleteAccount = (id) => api.delete(`/company-members/${id}`, {id});
 
-export const approveAccount = (id) =>
-  api.put(`/company-members/${id}/approve`, {userSn: id});
+export const approveAccount = (companyMemberSn) =>
+  api.post(`/company-members/${companyMemberSn}/approve`, {params: companyMemberSn},    {headers: { 'Content-Type': 'application/json' },});
+
+export const rejectAccount = (companyMemberSn) =>
+  api.post(`/company-members/${companyMemberSn}/reject`, {companyMemberSn: companyMemberSn},  { headers: { 'Content-Type': 'application/json' },});
 
 export const applyEmp = (params) =>
   api.post('/company-members/apply', params, {

@@ -110,7 +110,7 @@
             SRVY_SCOPE AS srvyScope
         FROM TB_BBS_SURVEY
         WHERE SRVY_SN = #{srvySn}
-          AND SRVY_DEL_YN = FALSE
+          AND DEL_YN = FALSE
             LIMIT 1
     </select>
 

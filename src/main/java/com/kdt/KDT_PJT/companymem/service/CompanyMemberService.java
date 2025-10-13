@@ -128,28 +128,38 @@ public class CompanyMemberService {
         companyMemberRepository.delete(entity);  // 승인 전 신청 취소는 삭제 처리
     }
 
-    public void approveMember(Long memberId) {
-        CompanyMember companyMember = companyMemberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+    @Transactional
+    public void approveMember(Long companyMemberSn) {
+        // 1. CompanyMember 조회
+        CompanyMember companyMember = companyMemberRepository.findById(companyMemberSn)
+                .orElseThrow(() -> new IllegalArgumentException("신청 정보를 찾을 수 없습니다. ID=" + companyMemberSn));
 
-        Long userSn = companyMember.getUserSn();
+        Long userId = companyMember.getUserSn();
         Long companySn = companyMember.getCompanySn();
 
-        User user = userRepository.findById(userSn)
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+        // 2. User 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다. userId=" + userId));
 
+        // 3. User의 회사 번호 업데이트
         user.setCompanySn(companySn);
+
+        // 4. 변경 사항 저장 (save 호출은 선택 사항. 변경감지로 자동 반영됨)
         userRepository.save(user);
 
-        companyMemberRepository.delete(companyMember);
-    }
-
-    public void rejectMember(Long memberId) {
-        CompanyMember companyMember = companyMemberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
-
-        companyMemberRepository.delete(companyMember);
+        // 5. 회사 멤버 신청 정보 삭제 (승인 처리)
+        companyMemberRepository.deleteById(companyMemberSn);
     }
 
 
-}
+
+    @Transactional
+    public void rejectMember(Long companyMemberSn) {
+        if (!companyMemberRepository.existsById(companyMemberSn)) {
+            throw new IllegalArgumentException("신청 정보를 찾을 수 없습니다. ID=" + companyMemberSn);
+        }
+
+        companyMemberRepository.deleteById(companyMemberSn);  // deleteById 사용
+    }
+    }
+

@@ -57,7 +57,7 @@ import UnknownHome from '../pages/LMS/UnknownHome.jsx';
 import OAuth2Redirect from '../auth/loginPage/GoogleOAuth2Redirect.jsx';
 import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
 import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
-import { InterviewMemo } from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
+import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
 
 function AppRoutes() {
   return (
@@ -122,11 +122,13 @@ function AppRoutes() {
                 <Route path="adminHome/boardSet" element={<BoardManage />} />
                 <Route path="adminHome/boardSet/createPost"  element={<BoardPost />} />
                 <Route path="adminHome/boardSet/read/:postSn" element={<BoardRead2 />} />
+                <Route path="adminHome/boardSet/survey/:srvySn" element={<SurveyRead />} />
                 <Route path="adminHome/boardSet/readSchedule/:calSn" element={<SchedEditPost />} />
                 <Route path="adminHome/groupSet" element={<GroupSet />} />
                 <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
+                <Route path="/adminHome/readRecruitApplier/:rspnsSn" element={<RecruitRead />} />
                 <Route path="adminHome/docuSet" element={<DocxSet />} />
-                <Route path="adminHome/boardSet/readItvMemo:itvMemoSn" element={<InterviewMemo />} />
+                <Route path="adminHome/boardSet/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="adminHome/accountSet" element={<AccountSet />} />
                 <Route path="adminHome/myPage" element={<AdminMypage />} />
               </Route>
@@ -143,6 +145,7 @@ function AppRoutes() {
                   path="tutorHome/board/read/:postSn"
                   element={<BoardRead2 />}
                 />
+                <Route path="tutorHome/board/survey/:srvySn" element={<SurveyRead />} />
                 <Route
                   path="tutorHome/studySched/createPost"
                   element={<BoardPost />}
