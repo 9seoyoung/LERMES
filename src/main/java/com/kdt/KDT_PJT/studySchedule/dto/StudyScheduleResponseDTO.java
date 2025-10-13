@@ -21,7 +21,7 @@ public class StudyScheduleResponseDTO {
     @JsonIgnore private LocalDateTime regDt;
     private String userNm;
     private Integer viewCnt;
-    private Integer userSn;
+//    private Integer userSn;
 
     public String getcreatedAt() {
         return regDt != null ? regDt.toLocalDate().toString() : null;

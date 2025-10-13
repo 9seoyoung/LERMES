@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Trash2Icon } from 'lucide-react';
 import { deleteSchedule } from '../../../services/calService';
+import styles2 from "../../../styles/SchedListPopUp.module.css";
 
 
 // Interview.jsx
@@ -118,7 +119,13 @@ function InterviewRead() {
         <h4 style={{ fontWeight: "500" }}>
           <div boxType="row">
           면담 신청 내역
-        <button type='button' onClick={() => setEditToggle(false)} >edit</button>
+          <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
+            { editToggle && formData?.postWriterName === user.USER_NM ?
+              <button type='button' onClick={() => setEditToggle(false)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
+              :
+              <></>
+            }
+          </span>
 
           </div>
           <button type='button' onClick={() => navigate(-1)}>back</button>

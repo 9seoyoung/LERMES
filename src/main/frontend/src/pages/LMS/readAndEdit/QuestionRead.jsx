@@ -213,6 +213,7 @@ const onSetAnswer = (qid, val) => {
           onAddOption={addOption}
           onUpdateOption={updateOption}
           onRemoveOption={removeOption}
+          saveSubmit={saveSubmit}
           setFiles={setFiles}
           />
         ))}
@@ -224,7 +225,7 @@ const onSetAnswer = (qid, val) => {
             <button className={styles.applyBtn} type="button" onClick={(e) => 
               ( pathname.split('/')[3] === "survey" ?
                 saveSrvyRes(e)
-              : saveSubmit())}>제출하기</button>
+              : saveSubmit(e))}>제출하기</button>
           }
                         <button
               className={styles.backBtn}

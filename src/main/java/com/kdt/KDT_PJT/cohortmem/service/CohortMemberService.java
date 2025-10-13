@@ -29,7 +29,7 @@ public class CohortMemberService {
     }
 
     public List<CohortMemberDto> getApplicantsByCohortSn(Long cohortSn) {
-        List<CohortMember> members = cohortMemberRepository.findByCohortSnAndAprvDtIsNull(cohortSn);
+        List<CohortMember> members = cohortMemberRepository.findByCohortSn(cohortSn);
 
         return members.stream().map(member -> {
             CohortMemberDto dto = new CohortMemberDto();
@@ -40,6 +40,7 @@ public class CohortMemberService {
             dto.setCohortName(member.getCohort().getCohortNm());  // 기수 이름
             dto.setCrclmName(member.getCohort().getCrclmNm());    // 과정 이름
             dto.setAprwStts(member.getAprvDt() != null);          // 승인여부 true/false
+            dto.setCohortMemStts(member.getCohortMemStts().name());
             return dto;
         }).collect(Collectors.toList());
     }
@@ -73,28 +74,46 @@ public class CohortMemberService {
         cohortMemberRepository.save(member);
     }
 
-    public void approveMember(Long memberId) {
-        CohortMember member = cohortMemberRepository.findById(memberId)
+//    public void approveMember(Long memberId) {
+//        CohortMember member = cohortMemberRepository.findByUserSn(memberId)
+//                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+//
+//        member.setAprvDt(LocalDateTime.now());
+//        member.setCohortMemStts(CohortMemberStts.ENROLLED);
+//        member.setUserAuthrtSn(5L);
+//
+//        User user = member.getUser();
+//        user.setRoleType(5L);
+//        userRepository.save(user);
+//
+//        cohortMemberRepository.save(member);
+//    }
+
+    public void approveMember(Long memberId, Long cohortSn, Long companySn) {
+        CohortMember member = cohortMemberRepository.findByUserSn(memberId)
                 .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
 
         member.setAprvDt(LocalDateTime.now());
         member.setCohortMemStts(CohortMemberStts.ENROLLED);
+        member.setUserAuthrtSn(5L);
 
         User user = member.getUser();
         user.setRoleType(5L);
+        user.setCohortSn(cohortSn);
+        user.setCompanySn(companySn);
+
         userRepository.save(user);
 
         cohortMemberRepository.save(member);
     }
 
     public void rejectMember(Long memberId) {
-        CohortMember member = cohortMemberRepository.findById(memberId)
+        CohortMember member = cohortMemberRepository.findByUserSn(memberId)
                 .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
 
         member.setAprvDt(LocalDateTime.now());
+        member.setCohortMemStts(CohortMemberStts.DENIED);
 
         cohortMemberRepository.save(member);
     }
-
-
 }
