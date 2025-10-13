@@ -26,7 +26,7 @@ import {
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle } = props;
+  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle, setCohortSn } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -96,6 +96,7 @@ function PostStatus(props) {
             FileList={FileList}
             files={files}
             setFiles={setFiles}
+            setCohortSn={setCohortSn}
         />
       )
     default:
@@ -130,6 +131,7 @@ function BoardPost() {
   const [hortlist, setHortList] = useState([]);
   const [files, setFiles] = useState([]);
   const [prvToggle, setPrvToggle] = useState(0);
+  const [recordCohortSn, setCohortSn] = useState(null);
 
 
   // 설문 폼 (초기 페이지 하나 생성)
@@ -239,6 +241,7 @@ const handleChange = (e) => {
         time: prev.startTime,
         coSn: effectiveSn,
         itvSn: null,
+        cohortSn: recordCohortSn
       }));
     }
 
@@ -277,7 +280,7 @@ const handleChange = (e) => {
       content: formData.content,
       coSn: formData.coSn,
       type: formData.type,
-      cohortSn: formData.cohortSn,
+      cohortSn: (formData.type === "면담기록" ? recordCohortSn : formData.cohortSn),
       scope: (formData.type === "설문조사" ? "기수전체" : (userAuth <=3 ?  "그룹공개" : formData.scope)),
       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
@@ -337,18 +340,18 @@ const handleChange = (e) => {
     })();
 
     console.log("saved:", data);
-      if(postJson.type != "일정") {
+      if(!(postJson.type === "일정" || postJson.type === "면담기록")) {
         const serverFormUuid = data?.formUuid || data?.result?.formUuid;
-        if (!serverFormUuid) {
-          toast.error("서버에서 formUuid를 받지 못했어요.");
-          console.error("[createPost 응답]", data);
-          return; // 업로드 중단
-        }
+        // if (!serverFormUuid) {
+        //   toast.error("서버에서 formUuid를 받지 못했어요.");
+        //   console.error("[createPost 응답]", data);
+        //   return; // 업로드 중단
+        // }
 
         let uploads = [];
         if (Array.isArray(files) && files.length > 0) {
           uploads = await uploadFiles(files, {
-            formUuid: serverFormUuid,
+            formUuid: serverFormUuid ?? postJson.id,
             onProgress: pct => console.log("upload:", pct + "%"),
           });
         }
@@ -403,6 +406,7 @@ const handleChange = (e) => {
                 questionAddRef={qAddRef}
                 setPrvToggle={setPrvToggle}
                 prvToggle={prvToggle}
+                setCohortSn={setCohortSn}
             />
           </div>
 

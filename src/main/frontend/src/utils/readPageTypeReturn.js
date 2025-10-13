@@ -75,7 +75,7 @@ export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
     5: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     7: ["postType", "itvAplyTtl", "formattedAPostFrstDt", "itvAplcntNm", "viewCnt"],
-    8: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    8: ["postType", "itvRecordTtl", "formattedAPostFrstDt", "itvPicNm", "viewCnt"],
 }
 
 export const ADMIN_SELECT_POST_SN_KEY = {
@@ -100,7 +100,7 @@ export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
     5: "/adminHome/boardSet/read",
     6: "/adminHome/boardSet/read",
     7: "/adminHome/boardSet/readInterview",
-    8: "",
+    8: "/adminHome/boardSet/readItvRecord",
 
 }
 
@@ -124,7 +124,7 @@ export const CHANGE_ADMIN_PAGE_BY_POST_TYPE = {
   "FAQ": "/adminHome/boardSet/read",
   "면담신청": "/adminHome/boardSet/readInterview",
   "면담확정": "/adminHome/boardSet/readInterview",
-  "면담 기록": "면담기록",
-  "공식일정": "공식일정"
+  "면담기록": "/adminHome/boardSet/readItvRecord",
+  "공식일정": "/adminHome/boardSet/readSchedule"
 }
 

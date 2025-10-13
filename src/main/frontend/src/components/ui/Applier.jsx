@@ -5,7 +5,7 @@ import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import styles from "../../styles/fontStyle.module.css";
 import { pullAllAccount } from "../../services/accountService";
 
-export default function Applier({ handleChange, formData }) {
+export default function Applier({ handleChange, formData, setCohortSn }) {
   const { effectiveSn } = useSelectedCompany();
   const [applierList, setApplierList] = useState([]);
   const [groupFilter, setGroupFilter] = useState(null);
@@ -32,7 +32,7 @@ export default function Applier({ handleChange, formData }) {
         const merged = [...list4, ...list5];
 
         setApplierList(merged);
-
+        console.log(res4);
         // 🔹 여기서 바로 초기값 설정 (applierList 참조하지 말고 merged 사용)
         if (merged.length > 0) {
           setGroupFilter(merged[0].userNm);
@@ -54,6 +54,8 @@ export default function Applier({ handleChange, formData }) {
             onClick={() => {
               setGroupFilter(applier.userNm);
               setApplierSn(applier.userSn);
+              setCohortSn(applier.ogdpCohortSn);
+
             }}
           >
             {applier.userNm}
