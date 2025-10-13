@@ -46,7 +46,7 @@ export function Nav({ setNavToggle }) {
           </button> */}
         </div>
         <div id="superNav">
-          {effectiveSn !== myCoSn ? (
+          {effectiveSn !== myCoSn && user?.USER_AUTHRT_SN !== 1? (
             <div onClick={() => navigate('/visitorHome')}>홈</div>
           ) : (
             <>
