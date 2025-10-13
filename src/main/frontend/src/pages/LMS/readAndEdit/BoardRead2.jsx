@@ -9,6 +9,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import { downloadByStoredName, findFileSnByFormUuid } from '../../../services/fileService';
 import styles from '../../../styles/form.module.css';
+import styles2 from "../../../styles/SchedListPopUp.module.css";
 import { Trash2Icon } from 'lucide-react';
 
 
@@ -120,13 +121,13 @@ function BoardRead() {
           <span style={{border: "none"}}>
                     </span>
                     { editToggle && formData?.postWriterName === user.USER_NM ? 
-                      <button type='button' onClick={() => setEditToggle(false)} style={{marginLeft: "8px", background: "var(--color-list-bg)", borderRadius:"4px", color:"white", padding:"2px 4px", marginTop: "4px" }} >edit</button>
+                      <button type='button' onClick={() => setEditToggle(false)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
                       :
                       <></>
                     }
-                    {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM ?
+                    {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1?
                     <button type='button'
-                      style={{marginLeft: "8px", background: "var(--bg-color-red1)", fontSize: "1.2rem" ,borderRadius:"4px", padding:"2px 4px", marginTop: "4px" }}
+                      className={styles2.grayBtn}
                       onClick={async () => {
                         const ok = window.confirm("정말 삭제하시겠습니까?");
                         if (!ok) return; // 취소하면 아무것도 안 함
@@ -142,7 +143,7 @@ function BoardRead() {
                         }
                       }}
                     >
-                      <Trash2Icon size={"1.8rem"} color={"var(--font-color-white)"}/>
+                      <Trash2Icon size={"1rem"} color={"var(--font-color-white)"}/>
                     </button>
                     : null}
           </div>
