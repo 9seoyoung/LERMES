@@ -13,6 +13,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
+import { submitRecruitForm } from '../../../services/responseService';
 
 function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
   const domFormId = useId();
@@ -83,6 +84,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
         setFormData((prev) => ({
           ...prev,
           cohortSn: c?.cohortSn ?? prev.cohortSn,
+          crclmCn: c?.crclmCn ?? surveyForm,
           groupName: c?.cohortNm ?? '',
           title: c?.crclmNm ?? '',
           surveyStart: c?.recruitBgngYmd ?? '',
@@ -126,11 +128,13 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
 
   const saveSubmit = async (e) => {
     e.preventDefault();
-    const body = { ...formData, surveyForm };
+    const body = { ...formData, crclmCn:JSON.stringify(surveyForm) };
     try {
-      const res = await applyGroup(body);
+      const res = await submitRecruitForm({body});
       console.log('[RecruitRead] applyGroup response:', res);
-      toast.success('게시 성공');
+      toast.success('폼 제출 성공');
+      const apply = await applyGroup({userSn: user?.USER_SN, cohortSn: finalSn});
+      toast.success("신청 완료")
       navigate(-1);
     } catch (err) {
       console.error('[RecruitRead] applyGroup error:', err);
@@ -148,7 +152,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
         <h2
           style={{ fontWeight: '500', display: 'flex', alignItems: 'baseline' }}
         >
-          <span>
+          <span noborder="no">
             [모집공고] {formData?.title} {formData.groupName}
           </span>
           {pathname === '/adminHome/groupSet' && (

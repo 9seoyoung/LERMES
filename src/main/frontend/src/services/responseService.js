@@ -19,3 +19,12 @@ export const pullSurveyResList = (srvySn) => api.get(`surveys/${srvySn}/list`)
  * 설문 응답 삭제 => 관리자 및 본인만
  * @param {Number} srvySn
  */
+
+
+/**
+ * 모집 공고 응답 제출
+ * @param {Object} dto
+ */
+export const submitRecruitForm = (params) => api.post('/cohort-responses', params, 
+    {headers: { 'Content-Type': 'application/json' },}
+)

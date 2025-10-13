@@ -37,7 +37,7 @@ export default function AccountSet() {
   const filterArr = ["직원", "회원"];
   
   useEffect(() => {
-
+    console.log(cohortStts)
     if (selectedIdx === 0){
     ( async () => {
       try {
@@ -319,10 +319,7 @@ export default function AccountSet() {
                     :
                     <ListTable
                     key={`${cohortSn}-std`}
-                    tableHead={cohortStts === "RECRUITING" ? 
-                      ['#', '이름', '이메일', '전화번호', '응답', '승인여부']
-                      :
-                      ['#', '이름', '이메일', '전화번호', '권한레벨', '활성여부']}
+                    tableHead={(cohortStts === "RECRUITING" ? ['#', '이름', '이메일', '전화번호', '응답', '승인여부'] : ['#', '이름', '이메일', '전화번호', '권한레벨', '활성여부'])}
                     columnData={cohortStts === "RECRUITING" ?
                       ['name', 'email', 'phone']
                       :
