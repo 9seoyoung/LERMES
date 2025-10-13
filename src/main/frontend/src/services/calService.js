@@ -24,3 +24,8 @@ export const detailSchedule = (calSn) => api.get(`/calendar/${calSn}`);
  */
 export const editSchedule = (calSn, payload) => api.patch(`/calendar/${calSn}`, payload,  {
   headers: { "Content-Type": "application/json" }});
+
+  /** 일정 삭제
+   * 
+   */
+export const deleteSchedule = (calSn) => api.delete(`/calendar/${calSn}`);
