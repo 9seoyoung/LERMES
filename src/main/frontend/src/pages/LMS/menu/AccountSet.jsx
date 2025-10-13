@@ -56,12 +56,12 @@ export default function AccountSet() {
         ( async () => {
       console.log(effectiveSn);
         try {
-        const accountT = await pullAllAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 4});
+        const accountT = await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 4});
         console.log(cohortStts);
         const accountStd = (cohortStts === "RECRUITING" ? 
           await pullCohortApplicants(cohortSn)
             :
-          await pullAllAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 5}
+          await pullTeacherAccount({ogdpCoSn: effectiveSn, ogdpCohortSn: cohortSn, userAuthrtSn: 5}
           ));
           console.log(accountStd.data);
           console.log(accountT.data);
@@ -72,7 +72,7 @@ export default function AccountSet() {
         }
       })();
     }
-  }, [selectedIdx, cohortSn, effectiveSn])
+  }, [selectedIdx, cohortSn, effectiveSn, cohortStts])
 
   // 직원 / 강사 / 수강생 관리(수정 + 저장)할 핸들러
   const handleSubmit = async () => {
@@ -248,6 +248,7 @@ export default function AccountSet() {
                   </h4>
                   {tutorManageState ? 
                     <ListEditTable 
+                    key={`${cohortSn}-editTeacher`}
                     tableHead={[,'이름', '이메일', '전화번호', '권한레벨', '활성여부']}
                     columnData={[ 'userNm','email', 'userTelno', 'userAuthrtSn', 'enabled']}
                     apiData={teacherList}
@@ -262,6 +263,7 @@ export default function AccountSet() {
                     />
                     :
                     <ListTable
+                    key={`${cohortSn}-teacher`}
                     tableHead={['#', '이름', '이메일', '전화번호', '권한레벨', '활성여부']}
                     columnData={['userNm','userEmlAddr', 'userTelno', 'userAuthrtSn', 'userActvtnYn']}
                     apiData={ teacherList }
@@ -302,6 +304,7 @@ export default function AccountSet() {
                     </h4>
                   {stdManageState ? 
                     <ListEditTable 
+                    key={`${cohortSn}-editStd`}
                     tableHead={[,'이름', '이메일', '전화번호', '권한레벨', '활성여부']}
                     columnData={['userNm','userEmlAddr', 'userTelno', 'userAuthrtSn', 'userActvtnYn']}
                     apiData={stdList}
@@ -315,6 +318,7 @@ export default function AccountSet() {
                     />
                     :
                     <ListTable
+                    key={`${cohortSn}-std`}
                     tableHead={cohortStts === "RECRUITING" ? 
                       ['#', '이름', '이메일', '전화번호', '응답', '승인여부']
                       :
@@ -329,10 +333,10 @@ export default function AccountSet() {
                     gridTemplate="0.5fr 1fr 2.5fr 1.6fr 0.7fr 1fr "
                     gap="12px"
                     handleChange = {handleChange}
-                    directPage={true}
-                    apiBtn={true}
-                    approveApi={approveCohort}
-                    denyApi={denyCohort}
+                    directPage={cohortStts === "RECRUITING" ? true : false}
+                    apiBtn={ cohortStts === "RECRUITING" ?  true : false}
+                    approveApi={ cohortStts === "RECRUITING" ? approveCohort : null}
+                    denyApi={ cohortStts === "RECRUITING" ? denyCohort : null}
                   /> 
                   } 
                   </div>
