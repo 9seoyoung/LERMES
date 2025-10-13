@@ -79,6 +79,34 @@
         LIMIT 50
         ) AS c
 
+        UNION ALL
+
+        SELECT * FROM (
+            SELECT
+                c.CAL_SN as scheduleSn,
+                CASE c.PRVT_YN
+                    WHEN 1 THEN '개인일정'
+                    WHEN 0 THEN '공식일정'
+                END AS boardType,
+                c.EVENT_NM as title,
+                c.EVENT_REG_DT as regDt,
+                u.USER_NM as userNm,
+                c.VIEW_CNT as viewCnt
+            FROM TB_CALENDAR c
+            LEFT JOIN TB_USER u ON u.USER_SN = c.USER_SN
+            WHERE 1=1
+            AND c.DEL_YN = 0
+            <if test="roleType == 1 or roleType == 2 or roleType == 3"> -- 슈퍼어드민, 대표, 직원은 기수 공식일정만 조회
+                AND c.PRVT_YN = 0 AND c.COHORT_SN = #{cohortSn}
+            </if>
+            <if test="roleType == 4 or roleType == 5">                  -- 강사, 학생은 공식, 개인일정 조회
+                AND ((c.PRVT_YN = 1 AND c.USER_SN = #{userSn})
+                    OR
+                     (c.PRVT_YN = 0 AND c.COHORT_SN = #{cohortSn})
+                    )
+            </if>
+        ) AS d
+
         ORDER BY regDt DESC
         LIMIT 50
 
