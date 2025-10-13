@@ -53,15 +53,16 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long cmntSn, AuthCustomUserDetails auth) {
+        // ✅ 1. 존재 여부 확인
         CommentDto existing = commentMapper.findCommentById(cmntSn);
         if (existing == null) {
             throw new IllegalArgumentException("존재하지 않는 댓글입니다.");
         }
 
+        // ✅ 2. 권한 확인
         BbsRole role = resolveRole(auth);
 
         boolean isOwner = Objects.equals(existing.getCmntWrtrSn(), auth.getId());
-
         boolean isAdmin = role == BbsRole.SUPER_ADMIN
                 || role == BbsRole.TENANT
                 || role == BbsRole.EMPLOYEE;
@@ -70,16 +71,21 @@ public class CommentService {
             throw new AccessDeniedException("댓글 삭제 권한이 없습니다.");
         }
 
+        // ✅ 3. 부모 댓글 soft delete
         commentMapper.softDeleteComment(cmntSn, auth.getId());
+
+        // ✅ 4. 자식 댓글(대댓글)도 함께 soft delete
+        List<CommentDto> replies = commentMapper.findRepliesByParent(cmntSn);
+        for (CommentDto reply : replies) {
+            commentMapper.softDeleteComment(reply.getCmntSn(), auth.getId());
+        }
     }
 
-    // ✅ PostService와 동일한 역할 변환 메서드
+    // ✅ 역할 변환 메서드 (PostService와 동일)
     private BbsRole resolveRole(AuthCustomUserDetails auth) {
         if (auth == null || !auth.isEnabled()) {
             return BbsRole.VISITOR;
         }
-        BbsRole role = BbsRole.fromCode(auth.getRoleType());
-        //log.info("Resolved Role: {}, from roleType={}", role, auth.getRoleType());
-        return role;
+        return BbsRole.fromCode(auth.getRoleType());
     }
 }

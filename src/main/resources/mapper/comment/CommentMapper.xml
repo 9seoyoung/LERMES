@@ -77,4 +77,19 @@
         WHERE CMNT_SN = #{cmntSn}
     </update>
 
+    <select id="findRepliesByParent" resultType="com.kdt.KDT_PJT.comment.dto.CommentDto">
+        SELECT
+            CMNT_SN,
+            POST_SN,
+            CMNT_CN,
+            CMNT_WRTR_SN,
+            CMNT_FRST_WRT_DT,
+            CMNT_LAST_MDFCN_DT,
+            DEL_YN,
+            PARENT_CMNT_SN
+        FROM TB_COMMENT
+        WHERE PARENT_CMNT_SN = #{parentCmntSn}
+          AND DEL_YN = FALSE
+    </select>
+
 </mapper>

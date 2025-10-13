@@ -24,4 +24,5 @@ public interface CommentMapper {
     // 댓글 삭제 (Soft Delete)
     void softDeleteComment(@Param("cmntSn") Long cmntSn,
                            @Param("userSn") Long userSn);
+    List<CommentDto> findRepliesByParent(@Param("parentCmntSn") Long parentCmntSn);
 }
