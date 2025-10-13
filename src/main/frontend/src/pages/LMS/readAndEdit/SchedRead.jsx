@@ -3,13 +3,14 @@ import styles from "../../../styles/SchedListPopUp.module.css";
 import React, { useEffect, useId, useRef, useState } from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useAccount} from "../../../auth/AuthContext";
-import { detailSchedule, editSchedule } from "../../../services/calService";
+import { deleteSchedule, detailSchedule, editSchedule } from "../../../services/calService";
 import { toast } from "react-toastify";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { buildScheduleUpdateBody, normalizeSchedulePayload } from "../../../utils/normalizeDto";
 import layoutStyles from "../../../styles/layout.module.css"
 import Dropdown from "../../../components/ui/Dropdown";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
+import { Trash2Icon } from "lucide-react";
 
 export default function SchedEditPost() {
   const domFormId = useId();
@@ -26,6 +27,7 @@ export default function SchedEditPost() {
   const locate = useLocation();
   const [prvToggle, setPrvToggle] = useState(0);
   const [cohrtSn, setCohortSn] = useState(null);
+  const {pathname} = useLocation();
   
   
   // 일반 게시글
@@ -133,6 +135,27 @@ const handleChange = (e) => {
             :
             null
             }
+            {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1 ?
+                        <button type='button'
+                          style={{marginLeft: "8px", background: "var(--bg-color-red1)", fontSize: "1.2rem" ,borderRadius:"4px", padding:"2px 4px", marginTop: "4px" }}
+                          onClick={async () => {
+                            const ok = window.confirm("정말 삭제하시겠습니까?");
+                            if (!ok) return; // 취소하면 아무것도 안 함
+              
+                            try {
+                              await deleteSchedule(calSn);
+                              toast.success("삭제되었습니다.", {
+                                onClose: () => navigate(-1) // ✅ 토스트 닫힐 때 리로드
+                              });
+                            } catch (err) {
+                              console.error(err);
+                              toast.error("삭제 중 오류가 발생했습니다.");
+                            }
+                          }}
+                        >
+                          <Trash2Icon size={"1.8rem"} color={"var(--font-color-white)"}/>
+                        </button>
+                        : null}
           </div>       
           {editToggle ? 
           <button type='button' className={styles.grayBtn} onClick={()=>{navigate(-1); setEdit(true)}}>돌아가기</button>
