@@ -15,15 +15,26 @@
         FROM TB_POST p
         JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = FALSE
-        AND (#{cohortSn} IS NULL OR p.COHORT_SN = #{cohortSn})
+<!--        <if test="coSn != null">-->
+<!--            AND p.CO_SN = #{coSn}-->
+<!--        </if>-->
+        <!-- ✅ 정확한 기수 + NULL 필터 -->
+<!--        <if test="cohortSn != null">-->
+<!--            AND (p.COHORT_SN = #{cohortSn} OR p.COHORT_SN IS NULL)-->
+<!--        </if>-->
+--      서영 추가
+        <if test="cohortSn == null">
+            AND (p.CO_SN = #{coSn})
+        </if>
+<!--        <if test="cohortSn == null">-->
+<!--            AND p.COHORT_SN IS NULL-->
+<!--        </if>-->
         AND (
         p.BBS_SCOPE IN ('PUBLIC', 'COMPANY', 'COHORT')
         OR (p.BBS_SCOPE = 'PRIVATE' AND p.POST_WRTR_SN = #{userSn})
         )
         )
-
         UNION ALL
-        <!--bbs_survey-->
         (
         SELECT
         s.SRVY_SN AS sn,
@@ -35,7 +46,12 @@
         FROM TB_BBS_SURVEY s
         JOIN TB_USER u ON s.USER_SN = u.USER_SN
         WHERE s.DEL_YN = FALSE
-        AND (#{cohortSn} IS NULL OR s.COHORT_SN = #{cohortSn})
+        <if test="coSn != null">
+            AND s.CO_SN = #{coSn}
+        </if>
+        <if test="cohortSn != null">
+            AND (s.COHORT_SN = #{cohortSn} OR s.COHORT_SN IS NULL)
+        </if>
         AND s.SRVY_SCOPE = 'COHORT'
         )
 

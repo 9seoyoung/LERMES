@@ -29,6 +29,11 @@
             <when test="coSn == null or cohortSn == null">
                 AND p.BBS_SCOPE = 'PUBLIC'
             </when>
+            <!-- ✅ (2) 회사 로그인: coSn 있음 + cohortSn 없음 -->
+            <when test="coSn != null and cohortSn == null">
+                AND p.CO_SN = #{coSn}
+                AND p.BBS_SCOPE IN ('PUBLIC', 'COMPANY')
+            </when>
             <!-- 로그인 + 회사 + 기수 모두 있음 -->
             <otherwise>
                 AND p.CO_SN = #{coSn}
