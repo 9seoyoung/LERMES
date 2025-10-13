@@ -8,7 +8,9 @@ import { createInterview, createInterviewMemo, readInterview } from '../../../se
 
 import { DateTimeInput } from '../../../components/ui/UiComp';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Trash2Icon } from 'lucide-react';
+import { deleteSchedule } from '../../../services/calService';
 
 
 // Interview.jsx
@@ -24,6 +26,7 @@ function InterviewRead() {
   const [postType, setPostType] = useState("면담신청");
   const [editToggle, setEditToggle] = useState(true);
   const [files, setFiles] = useState([]);
+  const {pathname} = useLocation();
 
   // 일반 게시글
   const [formData, setFormData] = useState({
@@ -116,6 +119,7 @@ function InterviewRead() {
           <div boxType="row">
           면담 신청 내역
         <button type='button' onClick={() => setEditToggle(false)} >edit</button>
+
           </div>
           <button type='button' onClick={() => navigate(-1)}>back</button>
           </h4>

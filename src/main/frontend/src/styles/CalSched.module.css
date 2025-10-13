@@ -21,5 +21,7 @@ border-radius: 16px;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  overflow: hidden;
+  
 /* z-index: 0; */   /* 이거 하니까 팝업창이 캘린더 아래로 뜸 */
 }

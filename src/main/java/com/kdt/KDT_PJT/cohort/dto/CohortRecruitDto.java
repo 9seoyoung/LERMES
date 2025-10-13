@@ -27,4 +27,7 @@ public class CohortRecruitDto {
 
     // 회사 로고
     private Long bigLogoFileSn;
+
+    // 기수 전용 이미지
+    private Long cohortImg;
 }

@@ -19,7 +19,7 @@ public class ResponseSurveyDto {
 
     private Long srvySn;            // 설문 일련번호 (PK)
     private String srvyTtl;         // 설문 제목
-    private String srvyQitem;       // 설문 문항 (JSON 문자열)
+    private Object srvyQitem;       // 설문 문항 (JSON 문자열)
     private LocalDate srvyBgngDt;   // 설문 시작일
     private LocalDate srvyEndDt;    // 설문 종료일
     private SurveyScope srvyScope;  // 설문 범위 (COHORT/INTERNAL → "기수 전체"/"기수 내부")

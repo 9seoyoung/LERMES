@@ -43,6 +43,8 @@ public class CohortController {
                     .map(Company::getBigLogoFileSn)
                     .orElse(null);
 
+            Long cohortImg = c.getCohortImg();
+
             CohortRecruitDto dto = new CohortRecruitDto(
                     c.getCohortSn(),
                     c.getCohortNm(),
@@ -55,8 +57,14 @@ public class CohortController {
                     c.getAttendEndTm(),
                     c.getCohortPl(),
                     c.getCrclmCn(),
-                    logoSn
+                    logoSn,
+                    cohortImg
             );
+            System.out.println("[DEBUG] cohortSn=" + c.getCohortSn() +
+                    " / cohortImg=" + c.getCohortImg() +
+                    " / logoSn=" + logoSn);
+
+
             return ResponseEntity.ok(dto);
         }).orElse(ResponseEntity.notFound().build());
     }

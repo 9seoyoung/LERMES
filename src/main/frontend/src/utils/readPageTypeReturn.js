@@ -67,8 +67,8 @@ export const ADMIN_BOARD_MENU_FILTER = {
 }
 
 export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
-    0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "view_CNT"],
-    1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "view_CNT"],
+    0: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
+    1: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     2: ["postType", "title", "formattedAPostFrstDt", "userNm", "viewCnt"],
     3: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     4: ["bbsType", "srvyTtl", "formattedAPostFrstDt", "userNm", "viewCnt"],

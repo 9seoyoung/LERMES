@@ -136,7 +136,7 @@ const styles = {
   body: { padding: 16 },
   label: { color: '#6b7280', fontSize: 14, marginBottom: 8 },
   bigCode: {
-    fontSize: 64,
+    fontSize: 50,
     fontWeight: 800,
     textAlign: 'center',
     minHeight: 70,

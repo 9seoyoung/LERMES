@@ -2,12 +2,16 @@ import React, { useEffect, useId, useState, useRef } from 'react'
 import {FileList, FormInput, SaveBtn } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
 import {v4 as uuidv4} from "uuid";
-import { editPostByPostSn, readPostByPostSn } from '../../../services/postService';
+import { deletePost, editPostByPostSn, readPostByPostSn } from '../../../services/postService';
 
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import { downloadByStoredName, findFileSnByFormUuid } from '../../../services/fileService';
+import styles from '../../../styles/form.module.css';
+import styles2 from "../../../styles/SchedListPopUp.module.css";
+import { Trash2Icon } from 'lucide-react';
+
 
 
 
@@ -23,6 +27,7 @@ function BoardRead() {
   const [editToggle, setEditToggle] = useState(true);
   const [files, setFiles] = useState([]);
   const { effectiveSn } = useSelectedCompany();
+  const {pathname} = useLocation();
 
   // 일반 게시글
   const [formData, setFormData] = useState({
@@ -71,7 +76,7 @@ function BoardRead() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const tempSubmit = () => {};
+  // const deletePost = () => {};
 
 
   const saveSubmit = async (e) => {
@@ -113,11 +118,34 @@ function BoardRead() {
         <h4 style={{ fontWeight: "500" }}>
           <div boxType="row">
           {`[${formData?.bbsType}] ${formData?.postTtl}`}
-          { editToggle ? 
-            <button type='button' onClick={() => setEditToggle(false)} style={{marginLeft: "8px", background: "var(--color-list-bg)", borderRadius:"4px", color:"white", padding:"2px 4px", marginTop: "4px" }} >edit</button>
-            :
-            <></>
-          }
+          <span style={{border: "none"}}>
+                    </span>
+                    { editToggle && formData?.postWriterName === user.USER_NM ? 
+                      <button type='button' onClick={() => setEditToggle(false)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
+                      :
+                      <></>
+                    }
+                    {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1?
+                    <button type='button'
+                      className={styles2.grayBtn}
+                      onClick={async () => {
+                        const ok = window.confirm("정말 삭제하시겠습니까?");
+                        if (!ok) return; // 취소하면 아무것도 안 함
+          
+                        try {
+                          await deletePost(postSn);
+                          toast.success("삭제되었습니다.", {
+                            onClose: () => navigate(-1) // ✅ 토스트 닫힐 때 리로드
+                          });
+                        } catch (err) {
+                          console.error(err);
+                          toast.error("삭제 중 오류가 발생했습니다.");
+                        }
+                      }}
+                    >
+                      <Trash2Icon size={"1rem"} color={"var(--font-color-white)"}/>
+                    </button>
+                    : null}
           </div>
           {editToggle ? 
             <button type='button' onClick={() => navigate(-1)}>back</button>

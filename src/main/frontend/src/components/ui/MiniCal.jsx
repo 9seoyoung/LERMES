@@ -2,20 +2,24 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "../../styles/MiniCal.module.css";
 import { buildOverlayBars, buildWeeks } from "../../utils/calendarBars";
+import { useAccount } from "../../auth/AuthContext";
 
 const z2 = (n) => String(n).padStart(2, "0");
 const makeKey = (...parts) => parts.filter(Boolean).join("|");
 
 export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw }) {
   // monthlyTodoRaw: 백에서 받은 "월 전체 이벤트 원본 배열" [{eventNm, eventBgngDt, eventEndDt, ...}, ...]
+  const {user} = useAccount();
 
   const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
+    if(user) {
     const today = new Date();
     setCurrentDate(today);
     const key = `${today.getFullYear()}-${z2(today.getMonth() + 1)}-${z2(today.getDate())}`;
     setSelectedDate?.(key);
+    }
   }, [setSelectedDate]);
 
   const year = currentDate.getFullYear();

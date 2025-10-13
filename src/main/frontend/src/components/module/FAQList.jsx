@@ -6,7 +6,7 @@ import { useAccount } from '../../auth/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { formatDate } from '../../utils/dateformat';
 
-function NoticeList() {
+function FAQList() {
   const [list, setList] = useState([]);
   const columnData = ["postTtl","postWriterName", "formattedAPostFrstDt"];
   const {effectiveSn} = useSelectedCompany();
@@ -17,7 +17,7 @@ function NoticeList() {
   useEffect(()=> {
     const params = {
       cohortSn: user?.USER_OGDP_COHORT_SN,
-      bbsType: "NOTICE",
+      bbsType: "FAQ",
       effectiveSn
     };
 
@@ -35,7 +35,7 @@ function NoticeList() {
 
   return (
     <>
-        <h4>공지사항
+        <h4>FAQ
           {pathname === "/unknownHome" || pathname === "/visitorHome" ? null :
             <div className="specificBtn" onClick={() => (navigate((pathname === "/admin" ? "boardSet"  : "board")))}>+ 더보기</div>
           }
@@ -53,4 +53,4 @@ function NoticeList() {
   )
 }
 
-export default NoticeList;
+export default FAQList;
