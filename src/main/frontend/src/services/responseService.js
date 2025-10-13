@@ -37,3 +37,9 @@ export const deleteSurveyRes = (responseSn) => api.delete(`/surveys/responses/${
 export const submitRecruitForm = (params) => api.post('/cohort-responses', params, 
     {headers: { 'Content-Type': 'application/json' },}
 )
+
+/**
+ * 모집 응답 단건 조회
+ * @param {Number} id 리스폰스 SN
+ */
+export const readApplierResult = (id) => api.get(`/cohort-responses/${id}`);

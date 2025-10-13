@@ -71,13 +71,15 @@ function SurveyRead({setEditToggle}) {
       if (!srvySn) return;
       try {
 
-          const myRes = await readSurveyRes(srvySn);
+        // 기수사람만 조회하다던가... 백에서 예외 에러 자꾸 보내서 동작 확인 불가......
+          const myRes = await readSurveyRes(getRspnsSn);
           // console.log(myRes.data);
 
           const res = await readSurvey({srvySn});
           console.log(myRes.data);
 
-          const c = res?.data;
+          const c = (chkSubmit ? myRes?. data : res?.data);
+          console.log(c);
 
           // const c = myRes?.data ?? res?.data;
           setReadOrEdit(( myRes?.data ? true: false));

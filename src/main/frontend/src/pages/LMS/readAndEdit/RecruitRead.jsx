@@ -9,16 +9,15 @@ import {
   deleteGroup,
   readRecruitPoster,
 } from '../../../services/postService';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, matchPath } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
-import { submitRecruitForm } from '../../../services/responseService';
+import { readApplierResult, submitRecruitForm } from '../../../services/responseService';
 
 function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
   const domFormId = useId();
-  const { recruitSn } = useParams();
-  const finalSn = propCohortSn ?? recruitSn;
+  const { recruitSn, rspnsSn } = useParams();
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const qAddRef = useRef(null);
@@ -27,6 +26,10 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
   const [showForm, setShowForm] = useState(true);
   const { pathname } = useLocation();
   const [files, setFiles] = useState([]);
+  const isApplier = !!matchPath('/adminHome/readRecruitApplier/:rspnsSn', pathname);
+  const finalSn = propCohortSn ?? recruitSn ;
+  const submittingRef = useRef(false);
+
 
   const [surveyForm, setSurveyForm] = useState({
     id: postId.current,
@@ -53,16 +56,56 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
     bigLogoFileSn: null,
     cohortImg: null,
   });
-
+  function handleRes(res) {
+    const c = res?.data;
+    if (!c) return;
+    // ... 기존 상태 세팅 로직
+  }
   // --------------------------
   // 모집공고 + 기수 이미지 조회
   // --------------------------
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       if (isApplier) {
+  //         if (!rspnsSn) return; 
+  //         const res = await readApplierResult(rspnsSn);
+  //         handleRes(res);
+  //       } else {
+  //         if (!finalSn) return; 
+  //         const res = await readRecruitPoster(finalSn);
+  //         handleRes(res);
+  //       }
+  //     } catch (err) {
+  //       toast.error(err?.response?.data?.message ?? err.message ?? '로드 실패');
+  //     }
+  //   })();
+  // }, [isApplier, rspnsSn, finalSn]);
+  
   useEffect(() => {
     (async () => {
-      if (!finalSn) return;
+      // if (!finalSn) return;
+      // try {
+      //   if (isApplier) {
+      //     if (!rspnsSn) return; 
+      //     const res = await readApplierResult(rspnsSn);
+      //     handleRes(res);
+      //   } else {
+      //     if (!finalSn) return; 
+      //     const res = await readRecruitPoster(finalSn);
+      //     handleRes(res);
+      //   }
+      // } catch (err) {
+      //   toast.error(err?.response?.data?.message ?? err.message ?? '로드 실패');
+      // }
+
       try {
-        const res = await readRecruitPoster(finalSn);
-        const c = res?.data;
+        const res = (isApplier ? await readApplierResult(rspnsSn) : await readRecruitPoster(finalSn));
+        const c = (isApplier ?  res?.data.responseJson : res?.data);
+        const s = (isApplier ?  res?.data.surveyForm : res?.data);
+        const p = (isApplier ?  res?.data.userInfo : res?.data);
+        console.log(c);
         if (!c) return;
 
         // 설문 복원
@@ -83,21 +126,26 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
         // 기본 데이터 세팅
         setFormData((prev) => ({
           ...prev,
-          cohortSn: c?.cohortSn ?? prev.cohortSn,
+          cohortSn: s?.cohortSn ?? prev.cohortSn,
           crclmCn: c?.crclmCn ?? surveyForm,
-          groupName: c?.cohortNm ?? '',
-          title: c?.crclmNm ?? '',
-          surveyStart: c?.recruitBgngYmd ?? '',
-          surveyEnd: c?.recruitEndYmd ?? '',
-          startDate: c?.crclmBgngYmd ?? '',
-          endDate: c?.crclmEndYmd ?? '',
-          classStart: c?.attendStartTm ?? '',
-          classEnd: c?.attendEndTm ?? '',
-          place: c?.cohortPl ?? '',
-          bigLogoFileSn: c?.bigLogoFileSn ?? null,
+          groupName: s?.cohortNm ?? s?.title,
+          title: s?.crclmNm ?? s?.content,
+          surveyStart: s?.recruitBgngYmd ?? s?.surveyStart,
+          surveyEnd: s?.recruitEndYmd ?? s?.surveyEnd,
+          startDate: s?.crclmBgngYmd ?? s?.startDate,
+          endDate: s?.crclmEndYmd ?? s?.endDate,
+          classStart: s?.attendStartTm ?? s?.classStart,
+          classEnd: s?.attendEndTm ?? s?.classEnd,
+          place: s?.cohortPl ?? s?.place,
+          bigLogoFileSn: s?.bigLogoFileSn ?? null,
           cohortImg: null,
+          type: c?.type ?? '',
+          userNm: p?.userNm ?? '',
+          userEmlAddr: p?.userEmlAddr ?? '',
+          userTelno: p?.userTelno ?? ''
         }));
 
+        
         // ✅ 기수 이미지 따로 조회
         if (c?.cohortSn) {
           const imgRes = await fetch(
@@ -113,21 +161,27 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
             }
           }
         }
-
+        
         console.log('[RecruitRead] finalSn =', finalSn, c);
       } catch (err) {
         console.error('[RecruitRead] readRecruitPoster error:', err);
       }
     })();
-  }, [finalSn]);
-
+  }, [finalSn, recruitSn, rspnsSn]);
+  
+  const imageId = formData.cohortImg ?? formData.bigLogoFileSn;
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  
   const saveSubmit = async (e) => {
     e.preventDefault();
+    if (isApplier) return;
+    if (submittingRef.current) return; // 중복 방지
+    submittingRef.current = true;
+    console.trace('[saveSubmit] called'); // 호출 스택 확인
     const body = { ...formData, crclmCn:JSON.stringify(formData) };
     try {
       const apply = await applyGroup({userSn: user?.USER_SN, cohortSn: finalSn});
@@ -179,7 +233,14 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
 
         {showForm ? (
           <div className={styles.explainBox}>
-            <div className="selectBoxArea" style={{ position: 'relative' }}>
+            <div className={isApplier ? null : "selectBoxArea"} style={{ height: "180px" }}>
+              {isApplier ?
+              <div style={{background: "var(--bg-color-gray5)", padding: "8px 12px", borderRadius: "8px"}}>
+              <div>신청인 : {formData.userNm}</div>
+              <div> Tel : {formData.userTelno}</div>
+              <div> Email : {formData.userEmlAddr}</div>
+              </div>  
+              : null }
               <div>
                 모집 기간: {formData.surveyStart} - {formData.surveyEnd}
               </div>
@@ -192,30 +253,51 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
               </div>
               <div>교육 장소: {formData.place}</div>
             </div>
-
+          {isApplier ?
+                      <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
+                      <div className="formArea_L">
+                        <RecruitForm
+                          handleChange={handleChange}
+                          formData={formData}
+                          setFiles={setFiles}
+                          surveyForm={surveyForm}
+                          setSurveyForm={setSurveyForm}
+                          containerRef={scrollRef}
+                          questionAddRef={qAddRef}
+                          saveSubmit={saveSubmit}
+                          setShowForm={setShowForm}
+                          showForm={showForm}
+                          setEditToggle={setEditToggle}
+                          isApplier={isApplier}
+                        />
+                      </div>
+                    </form>
+                    :
+                    <>
             <img
-              src={`http://localhost:940/api/files/id/${
-                formData.cohortImg !== null
-                  ? formData.cohortImg
-                  : formData.bigLogoFileSn
-              }/preview`}
-              alt="대표 이미지"
-              style={{ width: '80%', height: '800px', objectFit: 'cover' }}
+            src={`http://localhost:940/api/files/id/${
+              formData.cohortImg !== null
+              ? formData.cohortImg
+              : formData.bigLogoFileSn
+            }/preview`}
+            alt="대표 이미지"
+            style={{ width: '80%', height: '800px', objectFit: 'cover' }}
             />
 
             <button
-              className={styles.applyBtn}
-              type="button"
-              onClick={() => setShowForm(!showForm)}
+            className={styles.applyBtn}
+            type="button"
+            onClick={() => setShowForm(!showForm)}
             >
               {pathname === '/adminHome/groupSet'
                 ? '미리보기'
                 : '신청하러 가기'}
             </button>
+                </>
+              }
           </div>
         ) : (
-          <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
-            <div className="formArea_L">
+          <form onSubmit={(e) => e.preventDefault()}>
               <RecruitForm
                 handleChange={handleChange}
                 formData={formData}
@@ -229,7 +311,6 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
                 showForm={showForm}
                 setEditToggle={setEditToggle}
               />
-            </div>
           </form>
         )}
       </div>
@@ -251,6 +332,7 @@ function RecruitForm({
   setShowForm,
   showForm,
   setEditToggle,
+  isApplier
 }) {
   const qContainerRef = useRef(null);
   return (
@@ -258,6 +340,7 @@ function RecruitForm({
       <div className="formHeader" />
       <div className="formContent" ref={qContainerRef}>
         <QuestionRead
+        isApplier={isApplier}
           ref={questionAddRef}
           setFiles={setFiles}
           containerRef={containerRef}

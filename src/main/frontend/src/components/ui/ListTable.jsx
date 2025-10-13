@@ -111,7 +111,7 @@ export default function ListTable({
                 onClick={() => {
                   const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
                   setRspnsSn?.(row.rspnsSn);
-                  
+                  console.log(row?.rspnsSn)
                   const targetPath = `${base}/${row[postKey]}`;
                   console.log(selectedIdx);
                   console.log('현재 경로:', location.pathname);
@@ -134,7 +134,7 @@ export default function ListTable({
                 ))}
                 <>
                  {directPage ? 
-                  <div className={styles.cell} onClick={() => navigate(`/visitorHome/applyRecruitPoster/${row?.rspnsSn}`)}>
+                  <div className={styles.cell} onClick={() => navigate(`/adminHome/readRecruitApplier/${row?.rspnsSn}`)}>
                     바로가기
                   </div>
                  : null}

@@ -65,7 +65,7 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, readOrEdit ,containerRef, saveSubmit, showForm, setShowForm, setEditToggle, saveSrvyRes }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, readOrEdit ,containerRef, saveSubmit, isApplier, showForm, setShowForm, setEditToggle, saveSrvyRes }, ref) {
   const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
@@ -218,26 +218,35 @@ const onSetAnswer = (qid, val) => {
           />
         ))}
       </div>
+      {!isApplier ?
       <div className={styles.can}>
         {pathname === "/adminHome/groupSet" ?
             <button className={styles.applyBtn} type="button" onClick={() => setEditToggle(true)}>수정하기</button>
-          :
+            :
             <button className={styles.applyBtn} type="button" onClick={(e) => 
               ( pathname.split('/')[3] === "survey" ?
-                saveSrvyRes(e)
+              saveSrvyRes(e)
               : saveSubmit(e))}>{readOrEdit ? "수정하기": "제출하기"}</button>
           }
                         <button
               className={styles.backBtn}
               type="button"
               onClick={() =>
-              ( pathname.split('/')[3] === "survey" ?
+                ( pathname.split('/')[3] === "survey" ?
                 navigate(-1)
-              : setShowForm(!showForm))}
-            >
+                : setShowForm(!showForm))}
+                >
               뒤로
             </button>
-      </div>
+      </div> :    <button
+              className={styles.backBtn}
+              type="button"
+              onClick={() =>
+                navigate(-1)
+              }>
+              뒤로
+            </button>
+            }
     </>
   );
 });

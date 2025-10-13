@@ -126,6 +126,7 @@ function AppRoutes() {
                 <Route path="adminHome/boardSet/readSchedule/:calSn" element={<SchedEditPost />} />
                 <Route path="adminHome/groupSet" element={<GroupSet />} />
                 <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
+                <Route path="/adminHome/readRecruitApplier/:rspnsSn" element={<RecruitRead />} />
                 <Route path="adminHome/docuSet" element={<DocxSet />} />
                 <Route path="adminHome/boardSet/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="adminHome/accountSet" element={<AccountSet />} />
