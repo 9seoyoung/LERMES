@@ -8,6 +8,7 @@ import com.kdt.KDT_PJT.cohortmem.dto.CohortMemberDto;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMemberStts;
 import com.kdt.KDT_PJT.cohortmem.repository.CohortMemberRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,10 +29,11 @@ public class CohortMemberService {
     }
 
     public List<CohortMemberDto> getApplicantsByCohortSn(Long cohortSn) {
-        List<CohortMember> members = cohortMemberRepository.findByCohortSn(cohortSn);
+        List<CohortMember> members = cohortMemberRepository.findByCohortSnAndAprvDtIsNull(cohortSn);
 
         return members.stream().map(member -> {
             CohortMemberDto dto = new CohortMemberDto();
+            dto.setUserSn(member.getUserSn());
             dto.setName(member.getUser().getName());
             dto.setPhone(member.getUser().getUserTelno());
             dto.setEmail(member.getUser().getEmail());
@@ -42,8 +44,8 @@ public class CohortMemberService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     public void applyForCohort(Long userSn, Long cohortSn) {
-        // 중복 신청 방지
         if (cohortMemberRepository.existsByUserSnAndCohortSn(userSn, cohortSn)) {
             throw new RuntimeException("이미 신청한 사용자입니다.");
         }
