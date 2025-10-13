@@ -14,13 +14,10 @@ import SchedList from '../../components/ui/SchedList';
 
 export default function StdHome() {
   return (
-    <div className="mainCont_Lms_Row">
+    <div className="mainCont_Lms_Row" style={{height:"702px"}}>
       <div className="main_L" style={{ width: '40%' }}>
-        <div  className='dashBoardModule' style={{ height: '280px' }}>
-        {/* <CalSched /> */}
-        </div>
-        <div  className='dashBoardModule'style={{ height: '422px' }}>
-          {/* <SchedList /> */}
+        <div className='dashBoardModule' style={{ height: '100%' }}>
+          <CalSched></CalSched>
         </div>
       </div>
       <div className="main_R" style={{ flex: '1', gap: '16px' }}>

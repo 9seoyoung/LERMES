@@ -1,5 +1,7 @@
 // import { useState } from 'react';
 
+import FAQList from '../../components/module/FAQList';
+import MaterialList from '../../components/module/MaterialList';
 import NoticeList from '../../components/module/NoticeList';
 import CalSched from '../../components/ui/CalSched';
 
@@ -21,14 +23,10 @@ export default function StdHome() {
             <NoticeList></NoticeList>
           </div>
           <div className='dashBoardModule' style={{ height: '232px' }}>
-            <h4>
-              자료실<div className="specificBtn">+ 더보기</div>
-            </h4>
+            <MaterialList/>
           </div>
           <div className='dashBoardModule' style={{ height: '232px' }}>
-            <h4>
-              FAQ<div className="specificBtn">+ 더보기</div>
-            </h4>
+            <FAQList/>
           </div>
         </div>
       </div>

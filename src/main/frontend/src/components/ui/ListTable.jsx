@@ -68,6 +68,7 @@ export default function ListTable({
                 className={`${styles.row} ${styles.gridRow}`}
                 onClick={() => {
                   const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
+                  
                   const targetPath = `${base}/${row[postKey]}`;
                   console.log(selectedIdx);
                   console.log('현재 경로:', location.pathname);
@@ -83,7 +84,7 @@ export default function ListTable({
 
                 {/* 데이터 셀들 - 각 셀에 고유 key */}
                 {columnData.map((col, j) => (
-                  <div key={`cell-${rowKey}-${j}`} className={styles.cell}>
+                  <div key={`cell-${rowKey}-${j}`} className={styles.cell} style={(j === 0 && (location.pathname === "/stdHome" || location.pathname === "/tutorHome" || location.pathname === "/adminHome" || location.pathname === "/visitorHome" || location.pathname === "/unknownHome")? {justifyContent: "flex-start"}: {})}>
                     {row[col]}
                   </div>
                 ))}

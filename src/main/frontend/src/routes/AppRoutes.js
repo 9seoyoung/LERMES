@@ -97,6 +97,8 @@ function AppRoutes() {
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
         <Route path="unknownHome" element={<UnknownHome />} />
+        <Route path="/unknownHome/board/read/:postSn" element={<BoardRead2 />} />
+
 
         <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
           {/* 로그인이 필요한 테스트 페이지 */}
@@ -110,6 +112,7 @@ function AppRoutes() {
             <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
               <Route path="/visitorHome/applyRecruitPoster/:recruitSn" element={<RecruitRead />} />
               <Route path="visitorHome" element={<VisitorHome />} />
+              <Route path="/visitorHome/board/read/:postSn" element={<BoardRead2 />} />
               <Route path="lmsHomeIndex" element={<LmsHomeIndex />} />
               {/* 관리자(테넌트, 직원) */}
               <Route element={<RoleRoute roles={[1, 2, 3]} />}>

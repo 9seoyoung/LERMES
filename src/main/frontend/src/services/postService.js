@@ -179,3 +179,8 @@ export const callStudyPlanListByFilter = ({url, effectiveSn, isPrivate}) => api.
  * @returns {Array<Object>} 전체 / 공지 / 일정 / 자료실 / 설문 / FAQ / Q&A / 면담요청 / 면담기록 / 임시저장에 해당하는 게시물 목록
  */
 export const callAllPostByTypeAndCohortSn = (params) => api.get(`admin/boardList/${params.cohortSn}`);
+
+/**
+ * 게시글 삭제 컨트롤러들
+ */
+export const deletePost = (postSn) => api.delete(`/posts/${postSn}`)
