@@ -1,6 +1,11 @@
 import {api} from "../auth/api"
 
-export const pullAllAccount = (params) => api.get('/users/by-company-role', {params});
+/**
+ * 회사에서 해당 권한인 역할 가져오기
+ * @param {Object} params {ogdpCosn: effectiveSn, userAuthrtSn: 4, 5}
+ * @returns 
+ */
+export const pullAllAccount = ({ogdpCoSn, userAuthrtSn}) => api.get('/users/by-company-role', {params: { ogdpCoSn, userAuthrtSn },} );
 
 export const deleteAccount = (id) => api.delete(`/company-members/${id}`, id)
 

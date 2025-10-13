@@ -1,5 +1,5 @@
 import { pullToDoList } from "../services/calService";
-import { readInterviewList, readInterview, callAllPostByTypeAndCohortSn, writtenInterview, callBoardList, readPostByPostSn, callSurveyList } from "../services/postService";
+import { readInterviewList, readInterview, callBoardList, readPostByPostSn, callSurveyList, pullInterviewRecordList } from "../services/postService";
 
 
 const PATH_BY_FILTER = {
@@ -79,7 +79,7 @@ export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
 }
 
 export const ADMIN_SELECT_POST_SN_KEY = {
-    0: "postSn",
+    0: "sn",
     1: "postSn",
     2: "calSn",
     3: "postSn",
@@ -113,5 +113,17 @@ export const ADMIN_BOARD_API_FILTER = {
   5: callBoardList,
   6: callBoardList,
   7: readInterviewList,
-  8: writtenInterview,
+  8: pullInterviewRecordList,
 }
+
+export const CHANGE_ADMIN_PAGE_BY_POST_TYPE = {
+  "NOTICE": "/adminHome/boardSet/read",
+  "CLASS_MATERIAL": "/adminHome/boardSet/read",
+  "QNA": "/adminHome/boardSet/read",
+  "SURVEY": "/adminHome/boardSet/survey",
+  "FAQ": "/adminHome/boardSet/read",
+  "면담신청": "/adminHome/boardSet/readInterview",
+  "면담확정": "/adminHome/boardSet/readInterview",
+  "면담 기록": "면담기록"
+}
+

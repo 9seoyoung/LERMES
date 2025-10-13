@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.interview.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,9 @@ import java.time.temporal.ChronoUnit;
 public class InterviewRecordRequestDTO {
     private Integer itvSn;          //매칭되는 면담에 대한 일련번호
     private String itvRecordTtl;    // 면담 기록 제목
+    @JsonProperty("content")
     private String itvRecordCn;     // 면담 기록 내용
+    @JsonProperty("id")
     private String formUuid;        // 폼 UUID (첨부파일 매칭용)
     private Integer itvPicSn;       // 면담 담당자 일련번호
     private Integer itvTrprSn;      // 면담 대상자 일련번호

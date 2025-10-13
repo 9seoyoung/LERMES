@@ -57,7 +57,7 @@ function BoardRead() {
     (async () => {
       try {
         const {data}  = await readPostByPostSn(params);
-        console.log(`${data} 받아온 데이터`);
+        console.log(data);
         setFormData(data);
         const fileData = await findFileSnByFormUuid(data.formUuid);
     console.log(files);

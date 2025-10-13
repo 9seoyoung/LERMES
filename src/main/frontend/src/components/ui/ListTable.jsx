@@ -61,7 +61,7 @@ export default function ListTable({
           style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
         >
           {apiData.map((row, i) => {
-            const rowKey = row?.[postKey] ?? `row-${i}`; // 안정 키 우선
+            const rowKey = row?.[postKey] ?? `row-${i}-${row?.typeKey || row?.postKey}-${row?.sn}`; // 안정 키 우선
             return (
               <li
                 key={rowKey}

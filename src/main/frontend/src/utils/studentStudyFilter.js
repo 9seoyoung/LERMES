@@ -16,9 +16,7 @@ export const MENU_FILTER_COLUMNDATA = {
     0: [],
     1: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     2: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
-    3: [],
-    4: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
-    5: []
+    3: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
 }
 
 export const SELECT_POST_SN_KEY = {

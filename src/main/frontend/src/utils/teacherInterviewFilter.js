@@ -1,4 +1,4 @@
-import { readInterviewList, readInterview, callAllPostByTypeAndCohortSn, writtenInterview, callBoardList, readPostByPostSn } from "../services/postService";
+import { readInterviewList, readInterview, callBoardList, readPostByPostSn, pullInterviewRecordList } from "../services/postService";
 
 
 export const TEACHER_DETAIL_PATH_BY_FORM_TYPE = {
@@ -72,6 +72,6 @@ export const ADMIN_BOARD_API_FILTER = {
   5: callBoardList,
   6: callBoardList,
   7: readInterviewList,
-  8: writtenInterview,
+  8: pullInterviewRecordList,
   9: ""
 }
