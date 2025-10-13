@@ -36,7 +36,6 @@
         FROM TB_BBS_SURVEY s
         JOIN TB_USER u ON s.USER_SN = u.USER_SN
         WHERE s.DEL_YN = FALSE
-        AND (p.COHORT_SN IS NULL OR s.COHORT_SN = #{cohortSn})
         AND s.SRVY_SCOPE = 'COHORT'
         )
 
