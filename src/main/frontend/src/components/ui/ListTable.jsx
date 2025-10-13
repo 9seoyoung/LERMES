@@ -73,8 +73,8 @@ export default function ListTable({
                   console.log(selectedIdx);
                   console.log('현재 경로:', location.pathname);
                   console.log('이동 대상:', targetPath);
-
-                  if (!location.pathname.endsWith(`/${row[postKey]}`)) {
+                  
+                  if (location.pathname !== whereTogo) {
                     navigate(targetPath);
                   }
                 }}
@@ -99,6 +99,7 @@ export default function ListTable({
                     <div className={styles.cell}>
                       <button type="button" onClick={async() => {
                         try {
+                          console.log(row.userSn);
                           await approveApi(row.userSn);
                           toast.success("승인되었습니다.")
                         } catch(err) {
