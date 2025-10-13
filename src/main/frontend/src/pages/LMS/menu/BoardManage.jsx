@@ -54,6 +54,7 @@ export default function BoardManage(){
 
 
             try{
+                console.log(params);
                 const {data} = await api((selectedIdx === 2 ? ({isPrivate: false, cohortSn: cohortSn}) : params));
                 console.log(data);
                 const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt || item.eventRegDt || item.srvyFrstWrtDt || item.itvAplyDt),}));

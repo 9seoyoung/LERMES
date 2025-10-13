@@ -106,12 +106,12 @@ public class PostService {
         };
     }
 
-    // 🔹 단건 조회 전용 권한 체크 메서드 (신규 추가)
+    // 단건 조회 전용 권한 체크 메서드 (신규 추가)
     private boolean canAccessPostForSingle(PostResponseDto post, AuthCustomUserDetails auth) {
         return canAccessPost(post, auth, auth.getCohortSn(), post.getBbsType().name());
     }
 
-    // 🔹 리스트 조회 전용 권한 체크 메서드 (신규 추가)
+    // 리스트 조회 전용 권한 체크 메서드 (신규 추가)
     private boolean canAccessPostForList(PostResponseDto post,
                                          AuthCustomUserDetails auth,
                                          Long filterCohortSn,
@@ -130,43 +130,54 @@ public class PostService {
     }
 
     // 게시글 목록 조회
-    public List<PostResponseDto> getPosts(AuthCustomUserDetails auth, Long filterCohortSn, String filterBbsType) {
+    public List<PostResponseDto> getPosts(AuthCustomUserDetails auth,
+                                          Long filterCohortSn,
+                                          String filterBbsType,
+                                          Long requestCoSn) {
+
         BbsRole role = resolveRole(auth);
+        Long companySn = null; // 최종 조회용 coSn
 
-        Long companySn = auth.getCompanySn();
+        // 1. SUPER_ADMIN → 프론트에서 전달된 회사 번호 그대로 사용
         if (role == BbsRole.SUPER_ADMIN) {
-            companySn = null;
+            companySn = requestCoSn;
         }
 
-        List<PostResponseDto> posts = postMapper.findByFilters(companySn, filterCohortSn, filterBbsType);
+        // 2. TENANT_ADMIN / EMPLOYEE / INSTRUCTOR / STUDENT → 자기 회사만 허용
+        else if (role == BbsRole.TENANT || role == BbsRole.EMPLOYEE
+                || role == BbsRole.INSTRUCTOR || role == BbsRole.STUDENT) {
+            Long myCompanySn = auth.getCompanySn();
+            if (requestCoSn != null && !Objects.equals(myCompanySn, requestCoSn)) {
+                throw new AccessDeniedException("다른 회사 게시판 접근 불가: 요청 coSn=" + requestCoSn);
+            }
+            companySn = myCompanySn;
+        }
 
-        return posts.stream()
-                .filter(post -> canAccessPostForList(post, auth, filterCohortSn, filterBbsType))
-                .toList();
+        // 3. GENERAL / VISITOR → 프론트에서 넘어온 회사번호 사용 (공개글만 허용)
+        else if (role == BbsRole.GENERAL || role == BbsRole.VISITOR) {
+            if (requestCoSn == null) {
+                throw new AccessDeniedException("회사 번호(coSn)가 필요합니다.");
+            }
+            companySn = requestCoSn;
+        }
+
+        // Mapper 호출
+        List<PostResponseDto> posts =
+                postMapper.findByFilters(companySn, filterCohortSn, filterBbsType);
+
+        // PUBLIC 범위 필터링 (GENERAL, VISITOR)
+        if (role == BbsRole.GENERAL || role == BbsRole.VISITOR) {
+            posts = posts.stream()
+                    .filter(post -> post.getBbsScope() == BbsScope.PUBLIC)
+                    .toList();
+        } else {
+            posts = posts.stream()
+                    .filter(post -> canAccessPostForList(post, auth, filterCohortSn, filterBbsType))
+                    .toList();
+        }
+
+        return posts;
     }
-
-    // 게시글 단건 조회
-    @Transactional
-    public PostResponseDto getPost(Long postSn, AuthCustomUserDetails auth) {
-        // 1. 조회수 먼저 증가
-        postMapper.increaseViewCnt(postSn);
-
-        // 2. 글 상세 가져오기
-        PostResponseDto post = postMapper.findById(postSn);
-
-        if (post == null) {
-            throw new NoSuchElementException("게시글 없음: postSn=" + postSn);
-        }
-
-        // 3. 권한 체크
-        if (!canAccessPostForSingle(post, auth)) {
-            throw new AccessDeniedException("조회 권한 없음");
-        }
-
-        // 4. 최신 조회수 포함된 데이터 리턴
-        return post;
-    }
-
     // 게시글 수정
     public PostResponseDto updatePost(PostRequestDto requestDto, AuthCustomUserDetails auth) {
         PostResponseDto existing = postMapper.findById(requestDto.getPostSn());

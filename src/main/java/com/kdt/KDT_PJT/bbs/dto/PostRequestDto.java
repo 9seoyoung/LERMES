@@ -26,6 +26,7 @@ public class PostRequestDto {
     @JsonProperty("userSn")
     private Long postWrtrSn;    // 작성자 일련번호 (세션에서 꺼내서 넣을 수도 있음)
     @JsonProperty("coSn")
+    @JsonAlias("effectiveSn")
     private Long coSn;          // 회사 일련번호 (FK)
     @JsonProperty("cohortSn")
     @JsonAlias("detailScope")

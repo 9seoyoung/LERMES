@@ -25,17 +25,17 @@ public class SrvyResponseController {
     public ResponseEntity<SrvyResponseResponseDto> createSrvyResponse(
             @PathVariable Long srvySn,
             @RequestBody SrvyRequestResponseDto requestDto,
-            @AuthenticationPrincipal AuthCustomUserDetails auth,
-            @PathVariable Long srvySn) { // 👈 추가됨
+            @AuthenticationPrincipal AuthCustomUserDetails auth)
+            {
 
         Long userSn = auth.getId();
-        Long roleId = auth.getRoleType();     // 👈 추가됨
-        Long coSn = auth.getCompanySn();      // 👈 추가됨
-        Long cohortSn = auth.getCohortSn();   // 👈 추가됨
+        Long roleId = auth.getRoleType();
+        Long coSn = auth.getCompanySn();
+        Long cohortSn = auth.getCohortSn();
 
         // 요청 DTO 보정
         requestDto.setUserSn(userSn);
-        requestDto.setParentSn(srvySn);       // 👈 추가됨 (설문 번호 설정)
+        requestDto.setParentSn(srvySn);
 
         // 서비스 호출 (권한/소속 검증 포함)
         SrvyResponseResponseDto saved =
