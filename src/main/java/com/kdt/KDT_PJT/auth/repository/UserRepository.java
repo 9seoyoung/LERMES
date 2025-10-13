@@ -39,8 +39,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("companySn") Long companySn,
             @Param("roleType") Long roleType
     );
-    @Modifying(clearAutomatically = true)
-    @Query("UPDATE User u SET u.companySn = :companySn WHERE u.id = :userSn")
-    int updateCompanySnByUserSn(@Param("companySn") Long companySn, @Param("userSn") Long userSn);
 
 }

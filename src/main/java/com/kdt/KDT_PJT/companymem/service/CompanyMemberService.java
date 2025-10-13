@@ -130,19 +130,25 @@ public class CompanyMemberService {
 
     @Transactional
     public void approveMember(Long companyMemberSn) {
+        // 1. CompanyMember 조회
         CompanyMember companyMember = companyMemberRepository.findById(companyMemberSn)
                 .orElseThrow(() -> new IllegalArgumentException("신청 정보를 찾을 수 없습니다. ID=" + companyMemberSn));
 
-        Long userSn = companyMember.getUserSn();
+        Long userId = companyMember.getUserSn();
         Long companySn = companyMember.getCompanySn();
 
-        User user = userRepository.findById(userSn)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다. userSn=" + userSn));
+        // 2. User 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다. userId=" + userId));
 
-        user.setCompanySn(companySn); // companySn 업데이트
-        userRepository.save(user);    // 저장
+        // 3. User의 회사 번호 업데이트
+        user.setCompanySn(companySn);
 
-        companyMemberRepository.deleteById(companyMemberSn); // 승인 처리된 신청 삭제
+        // 4. 변경 사항 저장 (save 호출은 선택 사항. 변경감지로 자동 반영됨)
+        userRepository.save(user);
+
+        // 5. 회사 멤버 신청 정보 삭제 (승인 처리)
+        companyMemberRepository.deleteById(companyMemberSn);
     }
 
 
