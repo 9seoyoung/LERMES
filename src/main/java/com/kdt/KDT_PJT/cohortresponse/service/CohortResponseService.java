@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,7 +35,7 @@ public class CohortResponseService {
                 .parentType(dto.getParentType())
                 .parentSn(dto.getParentSn())
                 .userSn(dto.getUserSn())
-                .rspnsDt(dto.getRspnsDt())
+                .rspnsDt(dto.getRspnsDt() != null ? dto.getRspnsDt() : LocalDateTime.now())
                 .rspnsCn(dto.getRspnsCn())
                 .viewCnt(dto.getViewCnt())
                 .delYn(dto.getDelYn() != null ? dto.getDelYn() : Boolean.FALSE)
