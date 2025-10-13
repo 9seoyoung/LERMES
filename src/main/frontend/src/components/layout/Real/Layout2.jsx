@@ -17,7 +17,7 @@ import { Nav } from "../../ui/navModule/Nav";
 export default function Layout2() {
   const { effectiveSn, clearFixedSn, fixedSn } = useSelectedCompany();
   const navigate = useNavigate();
-  const [navToggle, setNavToggle] = useState(false);
+  const [navToggle, setNavToggle] = useState(true);
   const { user, signOut, patchUser, setUser } = useAccount();
   const { pathname } = useLocation();
   const navKind = pathname.split('/', 2)[1] || pathname.split('/',2)[1];
@@ -30,6 +30,22 @@ export default function Layout2() {
   //   setUser(saved);           // 서버 결과로 전역 user 교체
   // };
 
+  useEffect(()=>{
+    switch (pathname){
+      case "/adminHome":
+      return setNavToggle(true);
+      case "/visitorHome":
+        return setNavToggle(true);
+      case "/unknownHome":
+        return setNavToggle(true);
+      case "/tutorHome":
+      return setNavToggle(true);
+      case "/stdHome":
+        return setNavToggle(true);
+      default:
+        return setNavToggle(p => p);
+    }
+  },[pathname])
 
   const myAuth = user?.USER_AUTHRT_SN;
   const authLvPath = {
@@ -163,7 +179,7 @@ export default function Layout2() {
             <Nav setNavToggle={setNavToggle}></Nav>
           }
           {/* Outlet에서 페이지 바뀌는거 보일 예정 */}
-          <Outlet />
+          <Outlet context={{setNavToggle}} />
         </main>
         <footer>
           {(user?.USER_AUTHRT_SN === 1) ?          

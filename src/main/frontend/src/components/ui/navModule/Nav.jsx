@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../../../auth/AuthContext';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
+import { useEffect } from 'react';
 
 export function Nav({ setNavToggle }) {
   const { user, fetchedOnce } = useAccount();
   const { clearFixedSn, effectiveSn } = useSelectedCompany();
   const navigate = useNavigate();
+
+
 
   if (!fetchedOnce) {
     return <div className="navCont">로딩중…{/* 스켈레톤 */}</div>;

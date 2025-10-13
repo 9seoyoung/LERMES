@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { applyEmp } from '../../services/accountService';
 import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
 import { useAccount } from '../../auth/AuthContext';
@@ -7,10 +7,13 @@ import MaterialList from '../../components/module/MaterialList';
 import FAQList from '../../components/module/FAQList';
 import BigCal from '../../components/ui/BigCal';
 import MiniCal from '../../components/ui/MiniCal';
+import { useOutletContext } from 'react-router-dom';
 
 function VisitorHome() {
   const { effectiveSn } = useSelectedCompany();
   const {user} = useAccount();
+
+
   const handleSubmit1 = () => {
     
     (async () => {
