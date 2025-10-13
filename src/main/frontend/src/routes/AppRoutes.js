@@ -122,6 +122,7 @@ function AppRoutes() {
                 <Route path="adminHome/boardSet" element={<BoardManage />} />
                 <Route path="adminHome/boardSet/createPost"  element={<BoardPost />} />
                 <Route path="adminHome/boardSet/read/:postSn" element={<BoardRead2 />} />
+                <Route path="adminHome/boardSet/survey/:srvySn" element={<SurveyRead />} />
                 <Route path="adminHome/boardSet/readSchedule/:calSn" element={<SchedEditPost />} />
                 <Route path="adminHome/groupSet" element={<GroupSet />} />
                 <Route path="adminHome/groupSet/createGroup" element={<RecruitPost />} />
@@ -143,6 +144,7 @@ function AppRoutes() {
                   path="tutorHome/board/read/:postSn"
                   element={<BoardRead2 />}
                 />
+                <Route path="tutorHome/board/survey/:srvySn" element={<SurveyRead />} />
                 <Route
                   path="tutorHome/studySched/createPost"
                   element={<BoardPost />}

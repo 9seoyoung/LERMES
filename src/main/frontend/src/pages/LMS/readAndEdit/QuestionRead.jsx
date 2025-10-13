@@ -65,7 +65,7 @@ const scrollToChild = (container, el, { offsetTop = 0, offsetLeft = 0, behavior 
 };
 
 // ───────── component ─────────
-const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, containerRef, saveSubmit, showForm, setShowForm, setEditToggle, saveSrvyRes }, ref) {
+const QuestionRead = forwardRef(function QuestionRead({ questions = [], onChange, readOrEdit ,containerRef, saveSubmit, showForm, setShowForm, setEditToggle, saveSrvyRes }, ref) {
   const [files, setFiles] = useState([]);
   const itemRefs = useRef({});
   const pendingFocusId = useRef(null);
@@ -225,7 +225,7 @@ const onSetAnswer = (qid, val) => {
             <button className={styles.applyBtn} type="button" onClick={(e) => 
               ( pathname.split('/')[3] === "survey" ?
                 saveSrvyRes(e)
-              : saveSubmit(e))}>제출하기</button>
+              : saveSubmit(e))}>{readOrEdit ? "수정하기": "제출하기"}</button>
           }
                         <button
               className={styles.backBtn}

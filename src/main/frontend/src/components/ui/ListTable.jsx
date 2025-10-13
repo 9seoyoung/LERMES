@@ -20,7 +20,8 @@ export default function ListTable({
   apiBtn = false,
   approveApi,
   denyApi,
-  directPage = false
+  directPage = false,
+  setRspnsSn
 }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export default function ListTable({
       >
         {tableHead?.length > 0 ? (
           <li id={styles.ListHeader} className={`${styles.gridRow}`}>
-            {tableHead.map((col, idx) => (
+            {tableHead?.map((col, idx) => (
               <div key={`th-${idx}`} className={styles.cell}>
                 {col}
               </div>
@@ -85,7 +86,7 @@ export default function ListTable({
           {apiData.map((row, i) => {
             const rowKey = makeRowKey(row, i); // 안정 키 우선
 
-            // console.log('row:', row);
+            console.log('row:', row);
 
             const status =
               rowStatus[rowKey] ||
@@ -109,13 +110,15 @@ export default function ListTable({
                 
                 onClick={() => {
                   const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
+                  setRspnsSn?.(row.rspnsSn);
                   
                   const targetPath = `${base}/${row[postKey]}`;
                   console.log(selectedIdx);
                   console.log('현재 경로:', location.pathname);
                   console.log('이동 대상:', targetPath);
                   
-                  if (location.pathname !== whereTogo) {
+                  //whereTogo 없고 필터 idx 0(전체보기)일 때는 이동안하게 막아버림
+                  if ((whereTogo || selectedIdx === 0) && location.pathname !== whereTogo) {
                     navigate(targetPath);
                   }
                 }}

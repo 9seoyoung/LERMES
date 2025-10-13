@@ -68,7 +68,7 @@ public class SrvyResponseController {
      * - 설문 마감 전까지만 삭제 가능
      * - 관리자 및 본인만 가능
      */
-    @DeleteMapping("responses/{responseSn}")
+    @DeleteMapping("/responses/{responseSn}")
     public ResponseEntity<Void> deleteSrvyResponse(
             @PathVariable Long responseSn,
             @AuthenticationPrincipal AuthCustomUserDetails auth) {

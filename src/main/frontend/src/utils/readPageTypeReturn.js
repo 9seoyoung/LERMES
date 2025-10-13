@@ -96,7 +96,7 @@ export const ADMIN_SELECT_DETAIL_PAGE_PATH = {
     1: "/adminHome/boardSet/read",
     2: "/adminHome/boardSet/readSchedule",
     3: "/adminHome/boardSet/read",
-    4: "/adminHome/boardSet/read", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
+    4: "/adminHome/boardSet/survey", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
     5: "/adminHome/boardSet/read",
     6: "/adminHome/boardSet/read",
     7: "/adminHome/boardSet/readInterview",

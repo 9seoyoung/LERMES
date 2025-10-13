@@ -154,9 +154,9 @@ export function Nav({ setNavToggle }) {
                       <div onClick={() => navigate('/adminHome/accountSet')}>
                         계정 관리
                       </div>
-                      <div onClick={() => navigate('/adminHome/docuSet')}>
+                      {/* <div onClick={() => navigate('/adminHome/docuSet')}>
                         서류 관리
-                      </div>
+                      </div> */}
                     </>
                   ) : (
                     <>

@@ -16,7 +16,9 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
-import { pullSurveyResList, submitSurvey } from '../../../services/responseService';
+import { pullSurveyResList, readSurveyRes, submitSurvey } from '../../../services/responseService';
+import { getErrorMessage } from '../../../utils/errorMessageHandler';
+import {ApplyList2} from '../../../components/module/ApplyList2.jsx';
 
 // CreatePost.jsx
 // ...import 생략
@@ -35,6 +37,10 @@ function SurveyRead({setEditToggle}) {
   const [showForm, setShowForm] = useState(true);
   const {pathname} = useLocation();
   const [files, setFiles] = useState([]);
+  const [chkSubmit, setChkSubmit] = useState(false);
+  const [getRspnsSn, setRspnsSn] = useState(null);
+  const [finalSn, setFinalSn] = useState(srvySn);
+  const [readOrEdit, setReadOrEdit] = useState(false);
 
   console.log(srvySn);
   // 설문 폼 (초기 페이지 하나 생성)
@@ -64,43 +70,58 @@ function SurveyRead({setEditToggle}) {
     (async () => {
       if (!srvySn) return;
       try {
-        const res = await readSurvey({srvySn});
-        const c = res?.data;
 
-        // 설문 복원 srvyQitem(JSON 문자열) >> surveyForm
-        if (typeof c?.srvyQitem === 'string' && c.srvyQitem.trim()) {
-          try {
-            const parsed = JSON.parse(c.srvyQitem); // { id, pages: [{ id, questions: [...] }] }
-            const pages = Array.isArray(parsed?.pages) ? parsed.pages : [];
-            const first = pages[0] ?? {
-              id: crypto.randomUUID?.() ?? 'page-1',
-              questions: [],
-            };
-            // 옵션/타입 정규화 (최소 2개 옵션 보장, type 정상화)
-            const normalize = (q) => {
-              const base = { ...q };
-              // 허용 타입만 유지
-              const allowed = new Set(['single', 'multiple', 'text', 'image']);
-              if (!allowed.has(base.type)) base.type = 'single';
-              // 선택형이면 옵션 최소 2개
-              if (base.type === 'single' || base.type === 'multiple') {
-                const opts = Array.isArray(base.options) ? base.options : [];
-                const withIds = opts.map((o) => ({
-                  id: o.id ?? crypto.randomUUID?.() ?? String(Math.random()),
-                  label: o.label ?? '',
-                }));
-                while (withIds.length < 2)
-                  withIds.push({
-                    id: crypto.randomUUID?.() ?? String(Math.random()),
-                    label: '',
-                  });
+          const myRes = await readSurveyRes(srvySn);
+          // console.log(myRes.data);
+
+          const res = await readSurvey({srvySn});
+          console.log(myRes.data);
+
+          const c = res?.data;
+
+          // const c = myRes?.data ?? res?.data;
+          setReadOrEdit(( myRes?.data ? true: false));
+          // console.log(c);
+          // console.log(myRes?.data ? true : false);
+          
+        // }
+
+        // c = myRes?.data;
+          
+          // 설문 복원 srvyQitem(JSON 문자열) >> surveyForm
+          if (typeof c?.srvyQitem === 'string' && c.srvyQitem.trim()) {
+            try {
+              const parsed = JSON.parse(c.srvyQitem); // { id, pages: [{ id, questions: [...] }] }
+              const pages = Array.isArray(parsed?.pages) ? parsed.pages : [];
+              const first = pages[0] ?? {
+                id: crypto.randomUUID?.() ?? 'page-1',
+                questions: [],
+              } 
+              // 옵션/타입 정규화 (최소 2개 옵션 보장, type 정상화)
+              const normalize = (q) => {
+                const base = { ...q };
+                // 허용 타입만 유지
+                const allowed = new Set(['single', 'multiple', 'text', 'image']);
+                if (!allowed.has(base.type)) base.type = 'single';
+                // 선택형이면 옵션 최소 2개
+                if (base.type === 'single' || base.type === 'multiple') {
+                  const opts = Array.isArray(base.options) ? base.options : [];
+                  const withIds = opts.map((o) => ({
+                    id: o.id ?? crypto.randomUUID?.() ?? String(Math.random()),
+                    label: o.label ?? '',
+                  }));
+                  while (withIds.length < 2)
+                    withIds.push({
+                  id: crypto.randomUUID?.() ?? String(Math.random()),
+                  label: '',
+                });
                 base.options = withIds;
               } else {
                 base.options = [];
               }
               // 필드 기본값
               base.qid =
-                base.qid ?? crypto.randomUUID?.() ?? String(Math.random());
+              base.qid ?? crypto.randomUUID?.() ?? String(Math.random());
               base.title = base.title ?? '';
               base.explain = base.explain ?? '';
               base.answer = base.answer ?? '';
@@ -108,8 +129,8 @@ function SurveyRead({setEditToggle}) {
               return base;
             };
             const restoredQs = Array.isArray(first.questions)
-              ? first.questions.map(normalize)
-              : [];
+            ? first.questions.map(normalize)
+            : [];
             setSurveyForm((prev) => ({
               id: parsed?.id ?? prev.id, // 원래 id 유지 or JSON의 id
               pages: [{ id: first.id, questions: restoredQs }],
@@ -118,12 +139,12 @@ function SurveyRead({setEditToggle}) {
             console.warn('[SurveyRead] srvyQitem JSON parse 실패:', e);
           }
         }
-
+        
         setFormData((prev) => ({
           ...prev,
           /**
            *     id: postId.current,
-            userSn: user.USER_SN, //유저같지만 회사임
+          userSn: user.USER_SN, //유저같지만 회사임
             title: '', //과정명
             answer: '', // 신청자 답변
             groupName: '', //그룹명
@@ -156,10 +177,11 @@ function SurveyRead({setEditToggle}) {
         }));
         console.log('[SurveyRead] srvySn =', srvySn, c);
       } catch (e) {
+        toast.error(getErrorMessage(e));
         console.log('[SurveyRead] read error:', e?.message, e);
       }
     })();
-  }, [srvySn]);
+  }, [srvySn, getRspnsSn, chkSubmit]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -266,12 +288,19 @@ function SurveyRead({setEditToggle}) {
           <span noborder = "no">{`[${formData.surveyStart} ~ ${formData.surveyEnd}]`}</span>
           <span noborder = "no">{`${formData.title}`}</span>
           { formData.userSn === user.USER_SN ? 
-            <button noborder = "no" onClick={() => pullFormResponses()}>응답 내역</button >
+            <>
+            {chkSubmit ? 
+            <button noborder = "no" onClick={() => {setChkSubmit(!chkSubmit); setRspnsSn(null)}}>내역 닫기</button >
+            :
+            <button noborder = "no" onClick={() => setChkSubmit(!chkSubmit)}>응답 내역</button >
+            }
+            </>
             : null }
         </h4>
           <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
             <div className="formArea_L">
               <RecruitForm
+                readOrEdit={readOrEdit}
                 type={formData.type}
                 postId={postId.current}
                 domFormId={domFormId}
@@ -293,6 +322,7 @@ function SurveyRead({setEditToggle}) {
             </div>
           </form>
       </div>
+      {chkSubmit ? <ApplyList2 setRspnsSn={setRspnsSn} srvySn={srvySn} /> : null}
     </div>
   );
 }
@@ -312,7 +342,8 @@ function RecruitForm({
   saveSubmit,
   setShowForm,
   showForm,
-  setEditToggle
+  setEditToggle,
+  readOrEdit
 }) {
   // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
   // const firstPage = surveyForm.pages[0];
@@ -333,6 +364,7 @@ function RecruitForm({
           saveSrvyRes={saveSrvyRes}
           showForm={showForm}
           setShowForm={setShowForm}
+          readOrEdit={readOrEdit}
           setEditToggle={setEditToggle}
           onChange={(updaterOrQs) => {
             setSurveyForm((prev) => {
