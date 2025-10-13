@@ -278,7 +278,7 @@ const handleChange = (e) => {
       coSn: formData.coSn,
       type: formData.type,
       cohortSn: formData.cohortSn,
-      scope: (formData.type === "설문조사" ? "기수전체" : formData.scope),
+      scope: (formData.type === "설문조사" ? "기수전체" : (userAuth <=3 ?  "그룹공개" : formData.scope)),
       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
       surveyStart: formData.surveyStart,
