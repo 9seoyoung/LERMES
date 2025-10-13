@@ -1,12 +1,10 @@
 package com.kdt.KDT_PJT.interview.ctl;
 
 import com.kdt.KDT_PJT.auth.AuthCustomUserDetails;
-import com.kdt.KDT_PJT.file.service.FileService;
 import com.kdt.KDT_PJT.interview.dto.InterviewRecordDetailResponseDTO;
 import com.kdt.KDT_PJT.interview.dto.InterviewRecordListResponseDTO;
 import com.kdt.KDT_PJT.interview.dto.InterviewRecordRequestDTO;
 import com.kdt.KDT_PJT.interview.service.InterviewRecordService;
-import com.kdt.KDT_PJT.interview.service.InterviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +26,7 @@ public class InterviewRecordController {
     @PostMapping()
     public void createInterviewRecord(@AuthenticationPrincipal AuthCustomUserDetails me,
                                       @RequestBody InterviewRecordRequestDTO params){ //ResponseEntity<InterviewRecordDetailResponseDTO>
-        interviewRecordService.createInterviewRecord(me,params);
+        interviewRecordService.createInterviewRecord(me,params); // 상세조회 쿼리 호출해서 올라간거 보여줘도 좋을듯
     }
 
     // 면담기록 리스트 조회 (본인과 관련된것만)
@@ -54,8 +52,9 @@ public class InterviewRecordController {
 
     // 면담기록 삭제
     @DeleteMapping("/{itvRecordSn}")
-    public void deleteInterviewRecord(@PathVariable Integer itvRecordSn){
+    public ResponseEntity<Void> deleteInterviewRecord(@PathVariable Integer itvRecordSn){
         interviewRecordService.deleteInterviewRecord(itvRecordSn);
+        return ResponseEntity.noContent().build(); // 204 No Content 반환
     }
 
 }
