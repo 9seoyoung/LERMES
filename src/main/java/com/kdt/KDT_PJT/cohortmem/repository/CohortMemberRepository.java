@@ -15,4 +15,5 @@ public interface CohortMemberRepository extends JpaRepository<CohortMember, Long
 
     List<CohortMember> findByCohortSnAndUserCompanySnAndUserRoleType(Long cohortSn, Long companySn, Long roleType);
 
+    List<CohortMember> findByCohortSnAndAprvDtIsNull(Long cohortSn);
 }

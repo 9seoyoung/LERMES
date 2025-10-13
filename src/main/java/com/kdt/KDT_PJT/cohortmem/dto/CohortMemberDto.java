@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CohortMemberDto {
-
+        private Long userSn;
         private String name;        // User.name
         private String phone;       // User.userTelno
         private String email;       // User.email
