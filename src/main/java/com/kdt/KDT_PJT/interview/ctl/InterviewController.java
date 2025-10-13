@@ -135,6 +135,7 @@ public class InterviewController {
         // SQL 분기에 필요한 최소 파라미터만 전달 (Integer 타입 보장)
         // ㅇㅎ params에 권한레벨 넣음
         params.put("roleType", roleType);
+        System.out.println("roleType = " + roleType);
 //        params.put("userSn",   userSn);
         // params에 받아온 기수정보 넣음
         params.put("cohortSn", resolvedCohortSn);
@@ -205,9 +206,10 @@ public class InterviewController {
         }
         CmmnMap resp = interviewService.readInterviewbyItvSn(params); //실제 상세 조회
 
-        String formUuid = resp.get("formUuid").toString();
+        String formUuid = Objects.toString(resp.get("formUuid"), ""); // formUuid 비었으면 ""로 처리
         List<CmmnMap> files = fileService.readFileSnAndNmbyFormUuid(formUuid); //formUuid로 파일명, 파일SN 받아옴 없으면 []
         resp.put("files",files);
+        System.out.println("출력전 확인 resp = " + resp);
 
 
         return ResponseEntity.ok(resp);

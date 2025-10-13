@@ -11,7 +11,9 @@ export default function ListTable({
   gridTemplate,
   gap = 0,
   whereTogo,
+  allPage,
   postKey,
+  typeKey,
   addStyle = {},
   selectedIdx,
   apiBtn = false,
@@ -65,8 +67,15 @@ export default function ListTable({
                 key={rowKey}
                 className={`${styles.row} ${styles.gridRow}`}
                 onClick={() => {
-                  if (location.pathname !== whereTogo)
-                    navigate(`${(selectedIdx === 0 ? null : whereTogo)}/${(selectedIdx === 0 ? null : row[postKey])}`);
+                  const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
+                  const targetPath = `${base}/${row[postKey]}`;
+                  console.log(selectedIdx);
+                  console.log('현재 경로:', location.pathname);
+                  console.log('이동 대상:', targetPath);
+
+                  if (!location.pathname.endsWith(`/${row[postKey]}`)) {
+                    navigate(targetPath);
+                  }
                 }}
               >
                 {/* 번호 셀 - 이건 map 안의 첫 자식이라 별도 key 필요 없음 */}
@@ -95,7 +104,7 @@ export default function ListTable({
                           console.log(err.message);
                         }
                         }} 
-                        className={`${styles.blueBtn} ${styles.cell}`} style={{width: "40px"}}>승인</button>
+                        className={`${styles.blueBtn}`} style={{width: "40px"}}>승인</button>
                       <button type="button" onClick={async() => {
                         try {
                           await denyApi(row.userSn);
@@ -104,7 +113,7 @@ export default function ListTable({
                           console.log(err.message);
                         }
                         }}
-                      className={`${styles.redBtn} ${styles.cell}`} style={{width: "40px"}}>거절</button>
+                      className={`${styles.redBtn}`} style={{width: "40px"}}>거절</button>
                     </div>
                   </>
                  : ""}

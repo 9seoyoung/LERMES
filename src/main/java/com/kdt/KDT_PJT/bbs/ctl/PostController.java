@@ -40,10 +40,11 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostResponseDto>> getPosts(
             @AuthenticationPrincipal AuthCustomUserDetails auth,
+            @RequestParam (required = false) Long coSn,      //프론트 전달용
             @RequestParam(required = false) Long cohortSn,   // 기수 필터
             @RequestParam(required = false) String bbsType   // 게시판 유형 필터 (Enum 이름: NOTICE, SURVEY 등)
     ) {
-        List<PostResponseDto> posts = postService.getPosts(auth, cohortSn, bbsType);
+        List<PostResponseDto> posts = postService.getPosts(auth, cohortSn, bbsType, coSn);
         return ResponseEntity.ok(posts);
     }
 

@@ -70,7 +70,7 @@
 <!--    </select>-->
 
     <!-- 목록 조회 -->
-    <select id="findByFilters" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
+    <!-- <select id="findByFilters" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
         SELECT
         p.POST_SN,
         p.POST_TTL,
@@ -89,15 +89,55 @@
         FROM TB_POST p
         JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
         WHERE p.DEL_YN = 0
-        <if test="coSn != null">
-            AND p.CO_SN = #{coSn}
-        </if>
-        <if test="cohortSn != null">
-            AND p.COHORT_SN = #{cohortSn}
-        </if>
-        <if test="bbsType != null and bbsType != ''">
+        AND p.CO_SN = #{coSn}
+        <if test="bbsType != null">
             AND p.BBS_TYPE = #{bbsType}
         </if>
+        <choose>
+            <when test="cohortSn != null">
+                AND (p.COHORT_SN = #{cohortSn} OR p.COHORT_SN IS NULL)
+            </when>
+            <otherwise>
+                AND (p.BBS_SCOPE = 'PUBLIC' OR p.BBS_SCOPE IS NULL)
+            </otherwise>
+        </choose>
+        ORDER BY p.POST_FRST_WRT_DT DESC
+    </select> -->
+     <select id="findByFilters" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">
+        SELECT
+        p.POST_SN,
+        p.POST_TTL,
+        p.POST_CN,
+        p.POST_WRTR_SN,
+        u.USER_NM AS postWriterName,
+        p.POST_FRST_WRT_DT,
+        p.POST_LAST_MDFCN_DT,
+        p.DEL_YN,
+        p.CO_SN,
+        p.COHORT_SN,
+        p.FORM_UUID,
+        p.BBS_TYPE,
+        p.BBS_SCOPE,
+        p.VIEW_CNT
+        FROM TB_POST p
+        JOIN TB_USER u ON p.POST_WRTR_SN = u.USER_SN
+        WHERE p.DEL_YN = 0
+         <if test="coSn != null">
+             AND p.CO_SN = #{coSn}
+         </if>
+
+        <if test="bbsType != null">
+            AND p.BBS_TYPE = #{bbsType} 
+        </if>
+        <choose>
+            <when test="cohortSn != null">
+                AND (p.COHORT_SN = #{cohortSn} OR p.COHORT_SN IS NULL)
+            </when>
+            <otherwise>
+                AND (p.BBS_SCOPE = 'PUBLIC' OR p.BBS_SCOPE IS NULL)
+            </otherwise>
+        </choose>
+
         ORDER BY p.POST_FRST_WRT_DT DESC
     </select>
 <!--    <select id="findByFilters" resultType="com.kdt.KDT_PJT.bbs.dto.PostResponseDto">-->

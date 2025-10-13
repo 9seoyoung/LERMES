@@ -64,7 +64,6 @@ export const ADMIN_BOARD_MENU_FILTER = {
     6: "QNA", //문의
     7: "면담요청", //면담요청들어온 것
     8: "면담기록", //면담확정후 기록한 것
-    9: "PRIVATE" //임시저장
 }
 
 export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
@@ -77,7 +76,6 @@ export const ADMIN_BOARD_MENU_FILTER_COLUMNDATA = {
     6: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
     7: ["postType", "itvAplyTtl", "formattedAPostFrstDt", "itvAplcntNm", "viewCnt"],
     8: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"],
-    9: ["bbsType", "postTtl", "formattedAPostFrstDt", "postWriterName", "viewCnt"]
 }
 
 export const ADMIN_SELECT_POST_SN_KEY = {
@@ -90,7 +88,6 @@ export const ADMIN_SELECT_POST_SN_KEY = {
     6: "postSn",
     7: "itvSn",
     8: "postSn",
-    9: "postSn",
 
 }
 
@@ -117,5 +114,4 @@ export const ADMIN_BOARD_API_FILTER = {
   6: callBoardList,
   7: readInterviewList,
   8: writtenInterview,
-  9: ""
 }
