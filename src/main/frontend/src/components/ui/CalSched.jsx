@@ -35,7 +35,7 @@ const CalSched = () => {
       year,
       month,
       day,
-      isPrivate: (user.USER_AUTHRT_SN <= 3 ? 1 : 0),
+      isPrivate: (user.USER_AUTHRT_SN <= 3 ? 1 : null),
     };
 
     setDisplayDate(`${month}월 ${day}일`);
@@ -59,7 +59,7 @@ const CalSched = () => {
         }));
 
         // 월 전체 목록
-        const monthlyRes = await pullToDoList({ year, month, isPrivate: 1 });
+        const monthlyRes = await pullToDoList(user.USER_AUTHRT_SN <= 3 ? { year, month, isPrivate: 1 } : {year, month});
 
         const raw = monthlyRes?.data;
         const monthlyList = Array.isArray(raw) ? raw : Object.values(raw ?? {});

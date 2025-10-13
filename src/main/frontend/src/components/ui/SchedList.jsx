@@ -67,7 +67,7 @@ function SchedList({
       <h4>
          <div style={{color: "#E9623A", display:"flex", gap:"4px", alignItems:"center"}}>TODO <p style={{fontSize:"1.4rem", fontWeight:"500"}}>({displayDate})</p></div>
          {curloc.pathname === "/adminHome/groupSet" ? null :
-         <div className="specificBtn">+일정등록</div>}
+         <div className="specificBtn" onClick={() => setShowPopup(true)}>+일정등록</div>}
       </h4>
 
       <ul className={styles.schedList}>
