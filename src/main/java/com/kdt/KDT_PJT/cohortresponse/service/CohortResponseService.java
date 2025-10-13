@@ -1,5 +1,8 @@
 package com.kdt.KDT_PJT.cohortresponse.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.auth.repository.UserRepository;
 import com.kdt.KDT_PJT.cohort.dto.CohortDto;
@@ -23,6 +26,7 @@ public class CohortResponseService {
     private final CohortResponseRepository repository;
     private final CohortRepository cohortRepository;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public Long save(CohortResponseDto dto) {
@@ -41,36 +45,65 @@ public class CohortResponseService {
 
 
     @Transactional(readOnly = true)
-    public CohortResponseDetailDto get(Long responseId) {
-        // 1. 응답 데이터 조회
+    public CohortResponseDetailDto get(Long responseId) throws JsonProcessingException {
+        // 1. 응답 조회
         CohortResponse response = repository.findById(responseId)
                 .orElseThrow(() -> new IllegalArgumentException("응답이 존재하지 않습니다. ID = " + responseId));
 
+        // 2. 응답 DTO 매핑 (rspnsCn은 String 타입이라고 가정)
+        CohortResponseDto responseDto = CohortResponseDto.builder()
+                .rspnsSn(response.getRspnsSn())
+                .parentType(response.getParentType())
+                .parentSn(response.getParentSn())
+                .userSn(response.getUserSn())
+                .rspnsDt(response.getRspnsDt())
+                .rspnsCn(response.getRspnsCn())  // JSON 문자열 그대로 전달
+                .viewCnt(response.getViewCnt())
+                .delYn(response.getDelYn())
+                .formUuid(response.getFormUuid())
+                .build();
 
-        // 2. 모집 설문 JSON (surveyForm) 초기화
-        String surveyForm = null;
-
+        // 3. 모집 설문 정보 (CohortDto)
+        CohortDto cohortDto = null;
         if ("COHORT".equals(response.getParentType())) {
-            // 이제 Optional 사용
             Cohort cohort = cohortRepository.findById(response.getParentSn().longValue())
                     .orElseThrow(() -> new IllegalArgumentException("모집이 존재하지 않습니다. ID = " + response.getParentSn()));
-            surveyForm = cohort.getCrclmCn();
+
+            JsonNode surveyJson = objectMapper.readTree(cohort.getCrclmCn());
+
+            cohortDto = CohortDto.builder()
+                    .coSn(cohort.getCoSn())            // cohort.getCoSn() 사용 (중복 제거)
+                    .title(cohort.getCohortNm())       // 모집명
+                    .content(cohort.getCrclmNm())      // 커리큘럼명
+                    .surveyForm(surveyJson)   // JSON 문자열 그대로 전달
+                    .surveyStart(cohort.getRecruitBgngDt())
+                    .surveyEnd(cohort.getRecruitEndDt())
+                    .startDate(cohort.getCrclmBgngYmd())
+                    .endDate(cohort.getCrclmEndYmd())
+                    .stts(cohort.getCohortSttsNm().name())
+                    .type(cohort.getCohortCate().name())
+                    .classStart(cohort.getAttendStartTm())
+                    .classEnd(cohort.getAttendEndTm())
+                    .place(cohort.getCohortPl())
+                    .build();
         }
 
-
-        // 3. 사용자 정보 조회
+        // 4. 사용자 정보
         User user = userRepository.findById(response.getUserSn().longValue())
                 .orElseThrow(() -> new IllegalArgumentException("사용자가 존재하지 않습니다. ID = " + response.getUserSn()));
 
         UserDto userDto = UserDto.fromEntity(user);
 
-        // 4. DTO 빌드 후 리턴
+        // 5. 최종 DTO 조립 및 반환
         return CohortResponseDetailDto.builder()
-                .responseJson(response.getRspnsCn())
-                .surveyForm(surveyForm)
+                .responseJson(responseDto)
+                .surveyForm(cohortDto)
                 .userInfo(userDto)
                 .build();
     }
+
+
+
 
 
 

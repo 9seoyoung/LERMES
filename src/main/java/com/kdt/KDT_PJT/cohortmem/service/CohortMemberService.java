@@ -8,6 +8,7 @@ import com.kdt.KDT_PJT.cohortmem.dto.CohortMemberDto;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMemberStts;
 import com.kdt.KDT_PJT.cohortmem.repository.CohortMemberRepository;
+import com.kdt.KDT_PJT.cohortresponse.repository.CohortResponseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,13 @@ public class CohortMemberService {
     private final CohortMemberRepository cohortMemberRepository;
     private final CohortRepository cohortRepository;
     private final UserRepository userRepository;
+    private final CohortResponseRepository cohortResponseRepository;
 
-    public CohortMemberService(CohortMemberRepository cohortMemberRepository, CohortRepository cohortRepository, UserRepository userRepository) {
+    public CohortMemberService(CohortMemberRepository cohortMemberRepository, CohortRepository cohortRepository, UserRepository userRepository, CohortResponseRepository cohortResponseRepository) {
         this.cohortMemberRepository = cohortMemberRepository;
         this.cohortRepository = cohortRepository;
         this.userRepository = userRepository;
+        this.cohortResponseRepository = cohortResponseRepository;
     }
 
     public List<CohortMemberDto> getApplicantsByCohortSn(Long cohortSn) {
@@ -41,6 +44,13 @@ public class CohortMemberService {
             dto.setCrclmName(member.getCohort().getCrclmNm());    // 과정 이름
             dto.setAprwStts(member.getAprvDt() != null);          // 승인여부 true/false
             dto.setCohortMemStts(member.getCohortMemStts().name());
+
+            cohortResponseRepository.findByUserSnAndParentSnAndParentType(
+                    member.getUserSn().intValue(),
+                    cohortSn.intValue(),
+                    "COHORT"
+            ).ifPresent(response -> dto.setRspnsSn(response.getRspnsSn()));
+
             return dto;
         }).collect(Collectors.toList());
     }
