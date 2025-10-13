@@ -111,7 +111,7 @@ export default function ListTable({
                 ))}
                 <>
                  {directPage ? 
-                  <div className={styles.cell} onClick={() => navigate('/visitorHome/applyRecruitPoster')}>
+                  <div className={styles.cell} onClick={() => navigate(`/visitorHome/applyRecruitPoster/${row?.rspnsSn}`)}>
                     바로가기
                   </div>
                  : null}
@@ -122,7 +122,7 @@ export default function ListTable({
                         type="button"
                         onClick={async () => {
                           try {
-                            await approveApi(row.userSn);
+                            await approveApi((selectedIdx === 0 ? row?.companyMemberSn : row?.userSn));
                             toast.success('승인되었습니다.');
                             setRowStatus((prev) => ({
                               ...prev,
@@ -141,7 +141,7 @@ export default function ListTable({
                         type="button"
                         onClick={async () => {
                           try {
-                            await denyApi(row.userSn);
+                            await denyApi((selectedIdx === 0 ? row?.companyMemberSn : row?.userSn));
                             toast.success('거절되었습니다.');
                             setRowStatus((prev) => ({
                               ...prev,

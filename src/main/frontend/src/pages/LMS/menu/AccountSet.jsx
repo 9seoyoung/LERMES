@@ -180,6 +180,7 @@ export default function AccountSet() {
                 apiBtn={true}
                 approveApi={approveAccount}
                 denyApi={deleteAccount}
+                selectedIdx={selectedIdx}
               >
                 {/**
                        * tableHead={[,'이름', '이메일', '전화번호', '메모', '권한레벨', '활성여부']}
@@ -482,6 +483,7 @@ export default function AccountSet() {
                   handleChange={handleChange}
                   directPage={cohortStts === 'RECRUITING' ? true : false}
                   apiBtn={cohortStts === 'RECRUITING' ? true : false}
+                  selectedIdx={selectedIdx}
                   approveApi={
                     cohortStts === 'RECRUITING'
                       ? (userSn) => approveCohort(userSn, effectiveSn, cohortSn)

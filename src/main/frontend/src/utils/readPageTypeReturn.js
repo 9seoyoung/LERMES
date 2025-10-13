@@ -124,6 +124,7 @@ export const CHANGE_ADMIN_PAGE_BY_POST_TYPE = {
   "FAQ": "/adminHome/boardSet/read",
   "면담신청": "/adminHome/boardSet/readInterview",
   "면담확정": "/adminHome/boardSet/readInterview",
-  "면담 기록": "면담기록"
+  "면담 기록": "면담기록",
+  "공식일정": "공식일정"
 }
 
