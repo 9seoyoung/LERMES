@@ -91,8 +91,36 @@ export function editInterview( itvSn, formData ) {
 
 /**
  * 면담 기록 API
+ * @param {Object} dto
  */
-export const writtenInterview = (params) => api.get("/interview/record");
+export const createInterviewRecord = (params) => api.post("/interviewRecord", params, {      headers: { 'Content-Type': 'application/json' }});
+
+/**
+ * 면담 기록 리스트 API
+ * @param {Number} cohortSn 관리자만
+ */
+export const pullInterviewRecordList = (params) => api.get("/interviewRecord", {params});
+
+/**
+ * 면담 기록 상세 API
+ * @param {Number} itvRecordSn
+ */
+export const readInterviewRecord = (itvRecordSn) => api.get("/interviewRecord", itvRecordSn);
+
+/**
+ * 면담 기록 수정 API
+ * @param {Number} itvRecordSn
+ * @param {Object} params
+ */
+export const editItvRecord = (itvRecordSn, params) => api.patch(`/interviewRecord/${itvRecordSn}`, params, {
+  headers: { 'Content-Type': 'application/json' },
+})
+
+/**
+ * 면담 기록 삭제 API
+ * @param {Number} itvRecordSn
+ */
+export const deleteItvRecord = (itvRecordSn) => api.delete(`/interviewRecord/${itvRecordSn}`);
 
 /**
  * 관리자 게시글 관리 메뉴 - 전체 게시글 리스트(모집공고 제외)
@@ -129,6 +157,9 @@ export const readPostByPostSn = ({postSn, effectiveSn, type}) => api.get(`/posts
  * @returns 
  */
 export const editPostByPostSn = ({postSn, effectiveSn, formData}) => api.put(`/posts/${postSn}`, formData, {params: {effectiveSn}});
+
+//관리자 게시글 전체 조회
+export const pullAdminBoardList = (cohortSn) => api.get(`/admin/boardList/${cohortSn}`)
 
 /**
  * 게시글 목록 전체 조회(bbs + 설문)

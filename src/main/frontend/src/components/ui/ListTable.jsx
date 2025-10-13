@@ -1,7 +1,9 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import styles from '../../styles/UiComp.module.css';
-import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "../../styles/UiComp.module.css";
+import { toast } from "react-toastify";
+import { useState } from "react";
+
+
 
 export default function ListTable({
   tableHead = [],
@@ -18,30 +20,30 @@ export default function ListTable({
   apiBtn = false,
   approveApi,
   denyApi,
-  directPage = false,
+  directPage = false
 }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [rowStatus, setRowStatus] = useState({}); // ✅ 승인/거절 상태 저장
+  const [rowStatus, setRowStatus] = useState({}); 
 
   if (!apiData?.length) {
     return <div className={styles.ListTbBg}>-</div>;
   }
 
   const resolvedTemplate = Array.isArray(gridTemplate)
-    ? gridTemplate.join(' ')
+    ? gridTemplate.join(" ")
     : gridTemplate ||
-      `repeat(${tableHead?.length || columnData?.length || 1}, minmax(0,1fr))`;
+      `repeat(${(tableHead?.length || columnData?.length || 1)}, minmax(0,1fr))`;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <ul
         style={{
-          ['--cols']: resolvedTemplate,
-          ['--gap']: gap,
-          boxShadow: '4px 4px 4px #00000025',
-          position: 'relative',
-          zIndex: '3',
+          ["--cols"]: resolvedTemplate,
+          ["--gap"]: gap,
+          boxShadow: "4px 4px 4px #00000025",
+          position: "relative",
+          zIndex: "3",
         }}
       >
         {tableHead?.length > 0 ? (
@@ -58,12 +60,10 @@ export default function ListTable({
       <div style={{ ...addStyle }}>
         <ul
           className={styles.ListTbBg}
-          style={{ ['--cols']: resolvedTemplate, ['--gap']: gap }}
+          style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
         >
           {apiData.map((row, i) => {
-            const rowKey =
-              row?.[postKey] ??
-              `row-${i}-${row?.typeKey || row?.postKey}-${row?.sn}`;
+            const rowKey = row?.[postKey] ?? `row-${i}`; // 안정 키 우선
 
             console.log('row:', row);
 
@@ -77,64 +77,48 @@ export default function ListTable({
                 : status === 'denied'
                 ? '#ffd6d6' // 빨강
                 : 'transparent'; // applied나 approved는 흰색
-
             return (
               <li
                 key={rowKey}
                 className={`${styles.row} ${styles.gridRow}`}
-                style={{
+                style={ (location.pathname === "/adminHome/accountSet" ? {
                   backgroundColor: bgColor,
                   opacity: status ? 0.7 : 1,
                   transition: 'background-color 0.3s ease',
-                }}
+                } : null )}
+                
                 onClick={() => {
-                  const base =
-                    selectedIdx === 0
-                      ? `${allPage?.[row[typeKey]]}`
-                      : whereTogo;
-
+                  const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
+                  
                   const targetPath = `${base}/${row[postKey]}`;
+                  console.log(selectedIdx);
+                  console.log('현재 경로:', location.pathname);
+                  console.log('이동 대상:', targetPath);
+                  
                   if (location.pathname !== whereTogo) {
                     navigate(targetPath);
                   }
                 }}
               >
+                {/* 번호 셀 - 이건 map 안의 첫 자식이라 별도 key 필요 없음 */}
                 <div className={styles.cell}>{i + 1}</div>
 
+                {/* 데이터 셀들 - 각 셀에 고유 key */}
                 {columnData.map((col, j) => (
-                  <div
-                    key={`cell-${rowKey}-${j}`}
-                    className={styles.cell}
-                    style={
-                      j === 0 &&
-                      (location.pathname === '/stdHome' ||
-                        location.pathname === '/tutorHome' ||
-                        location.pathname === '/adminHome' ||
-                        location.pathname === '/visitorHome' ||
-                        location.pathname === '/unknownHome')
-                        ? { justifyContent: 'flex-start' }
-                        : {}
-                    }
-                  >
+                  <div key={`cell-${rowKey}-${j}`} className={styles.cell} style={(j === 0 && (location.pathname === "/stdHome" || location.pathname === "/tutorHome" || location.pathname === "/adminHome" || location.pathname === "/visitorHome" || location.pathname === "/unknownHome")? {justifyContent: "flex-start"}: {})}>
                     {row[col]}
                   </div>
                 ))}
-
                 <>
-                  {directPage ? (
-                    <div
-                      className={styles.cell}
-                      onClick={() =>
-                        navigate('/visitorHome/applyRecruitPoster')
-                      }
-                    >
-                      바로가기
-                    </div>
-                  ) : null}
-
-                  {apiBtn && status !== 'enrolled' && status !== 'denied' ? (
+                 {directPage ? 
+                  <div className={styles.cell} onClick={() => navigate('/visitorHome/applyRecruitPoster')}>
+                    바로가기
+                  </div>
+                 : null}
+                 {apiBtn ? 
+                  <>
                     <div className={styles.cell}>
-                      <button
+                                            <button
                         type="button"
                         onClick={async () => {
                           try {
@@ -152,10 +136,7 @@ export default function ListTable({
                         }}
                         className={styles.blueBtn}
                         style={{ width: '40px' }}
-                      >
-                        승인
-                      </button>
-
+                      >승인</button>
                       <button
                         type="button"
                         onClick={async () => {
@@ -177,7 +158,8 @@ export default function ListTable({
                         거절
                       </button>
                     </div>
-                  ) : null}
+                  </>
+                 : ""}
                 </>
               </li>
             );

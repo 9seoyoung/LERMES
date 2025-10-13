@@ -123,7 +123,7 @@ function InterviewEditPost() {
     <div className="BigListBox">
         <h4 style={{ fontWeight: "500", display:"flex", alignItems:"center"}}>
           <div style={{display:"flex", gap:"4px", alignItems:"baseline"}}>
-            {editMyData ? "면담 신청" : "면담 요청"}
+            {!editMyData ? "면담 신청" : "면담 요청"}
             {editToggle ? 
             <button type='button'  className={styles.grayBtn} style={{width:"3rem", fontSize:"1rem"}} onClick={() => setEdit(false)}>edit</button>
             :
@@ -133,7 +133,10 @@ function InterviewEditPost() {
           {editToggle ? 
           <button type='button' className={styles.grayBtn} onClick={()=>{navigate(-1); setEdit(true)}}>돌아가기</button>
           :
+          <div style={{display:"flex", gap:"4px"}}>
+          <button type='button' className={styles.grayBtn} onClick={(e)=>{setEdit(true)}}>취소</button>
           <button type='button' className={styles.grayBtn} onClick={(e)=>{saveSubmit(e); navigate(-1); setEdit(true)}}>저장</button>
+          </div>
           }
         </h4>
       

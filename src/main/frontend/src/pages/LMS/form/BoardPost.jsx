@@ -7,7 +7,7 @@ import { ArticlePost } from './ArticlePost';
 import { hortlistByCpSn } from "../../../services/cohortService";
 import SurveyPost from './SurveyPost';
 import {v4 as uuidv4} from "uuid";
-import { createSurvey, createPost, createInterview } from '../../../services/postService';
+import { createSurvey, createPost, createInterview, createInterviewMemo, createInterviewRecord } from '../../../services/postService';
 import { uploadFiles } from '../../../services/fileService';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -309,6 +309,8 @@ const handleChange = (e) => {
           return createInterview(postJson);
         case "일정":
           return registToDo(postJson);
+        case "면담기록":
+          return createInterviewRecord(postJson);
         default:
           return createPost(postJson); // 규약대로
       }
@@ -492,7 +494,7 @@ const handleChange = (e) => {
                   </div>
                 </> : null }
             </> : null }
-              {(formData.type === "면담신청") || (formData.type === "일정") ?
+              {(formData.type === "면담신청") || (formData.type === "일정") || (formData.type === "면담기록")?
                   null :
               <div className="dropSet" style={{ zIndex: "2" }}>
                 <p>공개 범위</p>
