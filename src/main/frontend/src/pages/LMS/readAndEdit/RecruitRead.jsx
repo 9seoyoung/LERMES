@@ -196,7 +196,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
                   : formData.bigLogoFileSn
               }/preview`}
               alt="대표 이미지"
-              style={{ width: '20%', height: '200px', objectFit: 'cover' }}
+              style={{ width: '80%', height: '800px', objectFit: 'cover' }}
             />
 
             <button
