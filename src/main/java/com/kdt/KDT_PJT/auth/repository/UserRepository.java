@@ -3,6 +3,7 @@ package com.kdt.KDT_PJT.auth.repository;
 import com.kdt.KDT_PJT.auth.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -38,6 +39,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("companySn") Long companySn,
             @Param("roleType") Long roleType
     );
-
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE User u SET u.companySn = :companySn WHERE u.id = :userSn")
+    int updateCompanySnByUserSn(@Param("companySn") Long companySn, @Param("userSn") Long userSn);
 
 }

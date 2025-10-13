@@ -128,28 +128,32 @@ public class CompanyMemberService {
         companyMemberRepository.delete(entity);  // 승인 전 신청 취소는 삭제 처리
     }
 
-    public void approveMember(Long memberId) {
-        CompanyMember companyMember = companyMemberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+    @Transactional
+    public void approveMember(Long companyMemberSn) {
+        CompanyMember companyMember = companyMemberRepository.findById(companyMemberSn)
+                .orElseThrow(() -> new IllegalArgumentException("신청 정보를 찾을 수 없습니다. ID=" + companyMemberSn));
 
         Long userSn = companyMember.getUserSn();
         Long companySn = companyMember.getCompanySn();
 
         User user = userRepository.findById(userSn)
-                .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다. userSn=" + userSn));
 
-        user.setCompanySn(companySn);
-        userRepository.save(user);
+        user.setCompanySn(companySn); // companySn 업데이트
+        userRepository.save(user);    // 저장
 
-        companyMemberRepository.delete(companyMember);
-    }
-
-    public void rejectMember(Long memberId) {
-        CompanyMember companyMember = companyMemberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
-
-        companyMemberRepository.delete(companyMember);
+        companyMemberRepository.deleteById(companyMemberSn); // 승인 처리된 신청 삭제
     }
 
 
-}
+
+    @Transactional
+    public void rejectMember(Long companyMemberSn) {
+        if (!companyMemberRepository.existsById(companyMemberSn)) {
+            throw new IllegalArgumentException("신청 정보를 찾을 수 없습니다. ID=" + companyMemberSn);
+        }
+
+        companyMemberRepository.deleteById(companyMemberSn);  // deleteById 사용
+    }
+    }
+

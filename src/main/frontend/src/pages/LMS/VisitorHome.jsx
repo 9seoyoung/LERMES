@@ -15,7 +15,7 @@ function VisitorHome() {
     
     (async () => {
       const params = {
-        userAuthrtSn: 4,
+        userAuthrtSn: 3,
         companySn: effectiveSn,
         userSn: user?.USER_SN
       }
