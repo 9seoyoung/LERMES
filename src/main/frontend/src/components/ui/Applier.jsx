@@ -18,7 +18,7 @@ export default function Applier({ handleChange, formData }) {
         target: { name: "authorSn", value: applierSn, type: "text" }
       });
     }
-  }, []);
+  }, [applierSn]);
 
   useEffect(() => {
     (async () => {
@@ -62,7 +62,7 @@ export default function Applier({ handleChange, formData }) {
       </Dropdown>
 
       {/* 🔹 hidden input은 값만 바인딩. onChange 제거 */}
-      <input type="hidden" name="authorSn" value={applierSn ?? ""} />
+      <input type="hidden" name="applierSn" value={applierSn ?? ""} />
     </div>
   );
 }
