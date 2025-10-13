@@ -28,6 +28,7 @@ public class PostRequestDto {
     @JsonProperty("coSn")
     private Long coSn;          // 회사 일련번호 (FK)
     @JsonProperty("cohortSn")
+    @JsonAlias("detailScope")
     private Long cohortSn;      // 기수/과정 일련번호 (FK)
     @JsonProperty("type")
     @JsonAlias({"bbsType"})

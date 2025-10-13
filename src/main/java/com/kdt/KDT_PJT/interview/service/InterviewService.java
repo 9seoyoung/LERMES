@@ -121,4 +121,8 @@ public class InterviewService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "삭제실패, 이미삭제됐거나 뭐 잘못됨~");
         }
     }
+
+    public LocalDateTime getItvPrnmntDtByItvSn(Integer itvSn){
+        return dao.selectOne("com.kdt.mapper.interview.getItvPrnmntDtByItvSn",itvSn);
+    }
 }

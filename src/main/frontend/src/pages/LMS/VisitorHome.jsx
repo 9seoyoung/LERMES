@@ -1,15 +1,18 @@
 import React from 'react'
 import { applyEmp } from '../../services/accountService';
 import { useSelectedCompany } from '../../contexts/SelectedCompanyContext';
+import { useAccount } from '../../auth/AuthContext';
 
 function VisitorHome() {
   const { effectiveSn } = useSelectedCompany();
+  const {user} = useAccount();
   const handleSubmit1 = () => {
     
     (async () => {
       const params = {
-        applyDuty: 4,
-        companySn: effectiveSn
+        userAuthrtSn: 4,
+        companySn: effectiveSn,
+        userSn: user?.USER_SN
       }
       try{
         const res = await applyEmp(params);

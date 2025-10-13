@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kdt.mapper.studySchedule">
+    <select id="getStudyScheduleByCohortSn" parameterType="Integer" resultType="com.kdt.KDT_PJT.studySchedule.dto.StudyScheduleResponseDTO">
+        SELECT
+            c.CAL_SN AS scheduleSn,
+            CASE c.PRVT_YN
+                WHEN 1 THEN '개인일정'
+                WHEN 0 THEN '공식일정'
+                END AS boardType,
+            c.EVENT_NM AS title,
+            c.EVENT_REG_DT AS regDt,
+            u.USER_NM AS userNm,
+            c.VIEW_CNT AS viewCnt
+
+        FROM TB_CALENDAR c
+        LEFT JOIN TB_USER u ON c.USER_SN = u.USER_SN
+        WHERE 1=1
+        AND DEL_YN = 0
+          -- 전체 조회 (공식, 개인 일정)
+        AND ((c.PRVT_YN = 1 AND c.USER_SN = #{userSn})
+          OR
+             (c.PRVT_YN = 0 AND c.COHORT_SN = #{cohortSn})
+          )
+        ORDER BY CAL_SN DESC -- EVENT_REG_DT ASC -- 최신글 우선 보이기
+        LIMIT 100 -- 일단 최대 100개만 보이게
+
+        UNION ALL
+
+        SELECT
+
+    </select>
+
+
+</mapper>

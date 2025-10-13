@@ -91,15 +91,28 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   color: #fff; */
   background-color: var(--color-primary);
   color: var(--color-text-primary);
+  border-radius: 4px;
 }
 
 .blueBtn:hover,
 .blueBtn:focus,
 .blueBtn:active {
-  border: 1px solid #0088ff;
   outline: none;
+  background-color: var(--bg-color-blue2);
 }
 
+.redBtn {
+  background-color: var(--bg-color-red1);
+  color: var(--font-color-white);
+  border-radius: 4px;
+}
+
+.redBtn:hover,
+.redBtn:focus,
+.redBtn:active {
+  outline: none;
+  background-color: var(--bg-color-red2);
+}
 /* 회색 버튼 ex. 비밀번호 변경, ←back */
 .grayBtn {
   width: 8rem;

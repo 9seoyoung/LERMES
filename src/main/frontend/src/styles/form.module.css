@@ -23,6 +23,14 @@
   border-radius: 40px;
 }
 
+.backBtn {
+  background-color: var(--bg-color-gray2);
+  color: var(--font-color-white);
+  height: 40px;
+  width: 300px;
+  border-radius: 40px;
+}
+
 .applyBtn:hover {
   background-color: var(--bg-color-blue1);
 }
@@ -31,11 +39,20 @@
   background-color: var(--bg-color-blue3);
 }
 
+.backBtn:hover {
+  background-color: var(--bg-color-gray1);
+}
+
+.backBtn:active {
+  background-color: var(--bg-color-gray3);
+}
+
 .can {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: center;
+  gap: 12px;
 }
 
 .selected {
@@ -55,4 +72,21 @@
   background: var(--color-accent);         
   border-radius: 50%;     
   opacity: var(--opacity-25);   
+}
+
+.redBtn {
+  color: var(--bg-color-red1);
+  border-radius: 4px;
+  height: min-content;
+  padding: 2px 4px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  gap: 4px;
+}
+
+.redBtn:hover,
+.redBtn:focus,
+.redBtn:active {
+  outline: none;
+  color: var(--bg-color-red2);
 }

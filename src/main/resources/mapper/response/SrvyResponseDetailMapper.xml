@@ -33,7 +33,7 @@
                  JOIN TB_USER U ON R.USER_SN = U.USER_SN
         WHERE R.PARENT_SN = #{srvySn}
           AND R.DEL_YN = FALSE
-        ORDER BY R.RSPSN_SN ASC
+        ORDER BY R.RSPNS_SN ASC
 
     </select>
 

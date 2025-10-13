@@ -25,7 +25,7 @@ public interface SrvyResponseMapper {
                                                           @Param("userSn") Long userSn);
 
     // 응답 단건 조회 (PK 기준)
-    SrvyResponseResponseDto findById(@Param("rspsnSn") Long rspsnSn);
+    SrvyResponseResponseDto findById(@Param("rspnsSn") Long rspnsSn);
 
     // 관리자·강사용 전체 응답 조회 (유저명 포함)
     List<SrvyResponseResponseDto> findAllByParentWithUserName(@Param("parentSn") Long parentSn);
@@ -34,8 +34,10 @@ public interface SrvyResponseMapper {
     List<SrvyResponseResponseDto> findAllByParentWithFilter(@Param("parentSn") Long parentSn,
                                                             @Param("coSn") Long coSn,
                                                             @Param("cohortSn") Long cohortSn);
-
+    //응답개수 확인용
+    int countResponsesByParent(@Param("srvySn") Long srvySn,
+                               @Param("bbsType") String bbsType);
     // Soft Delete
-    void softDelete(@Param("rspsnSn") Long rspsnSn,
+    void softDelete(@Param("rspnsSn") Long rspnsSn,
                     @Param("userSn") Long userSn);
 }

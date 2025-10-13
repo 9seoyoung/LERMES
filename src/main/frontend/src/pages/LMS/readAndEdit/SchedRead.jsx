@@ -85,13 +85,15 @@ export default function SchedEditPost() {
     })();
   
     return () => { mounted = false; };
-  }, [calSn]);
+  }, [calSn, editToggle]);
 
-  const handleChange = (e) => {
-
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, type, value, checked } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value,
+  }));
+};
 
   const saveSubmit = async (e) => {
     e.preventDefault();
@@ -162,8 +164,8 @@ export default function SchedEditPost() {
             {prvToggle ?
                   null :
               <div className="dropSet" style={{ zIndex: "2" }}>
+                { (userAuth <=3  && (effectiveSn === coSn)) ? <> 
                 <p>공개 범위</p>
-                  { (userAuth <=3  && (effectiveSn === coSn)) ? <> 
                   <GroupDropdown setCohortSn={setCohortSn} className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
                   </GroupDropdown>
                   </>: null }
@@ -209,7 +211,7 @@ const SchedRead = ({formId, handleChange, formData = {}, prvToggle, setPrvToggle
                     <input
                         type="checkbox"
                         name="isPrivate"
-                        checked={!!formData.isPrivate}
+                        checked={Boolean(formData.isPrivate)} 
                         onChange={(e) => {setPrvToggle(v => !v); handleChange(e);}}
                         id="privateBox"
                         />

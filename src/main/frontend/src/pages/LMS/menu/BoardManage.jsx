@@ -22,7 +22,7 @@ export default function BoardManage(){
   const [whereTogo, setWhereToGo] = useState("");
   const [cohortSn, setCohortSn] = useState(null);
     
-    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록", "학습일지"]
+    const filterArr = ["전체", "공지", "일정", "자료실", "설문", "FAQ", "Q&A", "면담요청", "면담기록"]
     
     //게시물 목록 불러오기
     useEffect(() => {
@@ -83,6 +83,7 @@ export default function BoardManage(){
             </div>
             <div className="BigListBox">
                 <ListTable
+                key={`board-${selectedIdx}`}
                 tableHead={['#', '유형', '제목', '작성일', '작성자', '조회수']}
                 columnData={columnData}
                 apiData={pullList}
@@ -90,6 +91,7 @@ export default function BoardManage(){
                 gridTemplate="0.5fr 1fr 5fr 1.25fr 1fr 1fr"
                 gap="12px"
                 postKey={postKey}
+                selectedIdx={selectedIdx}
                 whereTogo={whereTogo}
               /> 
             </div>

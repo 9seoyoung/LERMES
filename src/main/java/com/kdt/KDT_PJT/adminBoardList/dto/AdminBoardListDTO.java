@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.adminBoardList.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,6 @@ public class AdminBoardListDTO {
     private LocalDateTime regDt;    // 게시일 YYYYMMDD
     private String userNm;          // 글 작성자 이름 (userTB와 join 필요)
     private Integer viewCnt;        // 게시글 조회수
+    @JsonIgnore private Integer cohortSn;
+    @JsonIgnore private Integer userSn;
 }

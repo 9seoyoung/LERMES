@@ -115,6 +115,7 @@
     </select>
 
 
+
     <!-- 수정 (작성자용) -->
     <update id="updateSurveyOwner">
         UPDATE TB_BBS_SURVEY
