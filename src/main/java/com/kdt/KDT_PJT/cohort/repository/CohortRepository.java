@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface CohortRepository extends JpaRepository<Cohort, Long> {
 
     List<Cohort> findByCoSn(Long coSn);
+
     Optional<Cohort> findById(Long id);
 
     @Query("SELECT c.cohortNm FROM Cohort c")
