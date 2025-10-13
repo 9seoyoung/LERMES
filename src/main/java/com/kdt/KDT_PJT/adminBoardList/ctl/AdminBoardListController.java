@@ -27,8 +27,10 @@ public class AdminBoardListController {
                                                                                @RequestParam(required = false) Integer coSn,
                                                                                AdminBoardListDTO adminBoardListDTO){
         Integer userSn = me.getId().intValue();
+        Integer roleType = me.getRoleType().intValue();
         adminBoardListDTO.setCohortSn(cohortSn);
         adminBoardListDTO.setUserSn(userSn);
+        adminBoardListDTO.setRoleType(roleType);
 
 //        adminBoardListService.getAdminBoardListByCohortSn(adminBoardListDTO);
 //        return ResponseEntity.ok(Collections.emptyList()); // TODO 쓰레기 return중, 수정 필요

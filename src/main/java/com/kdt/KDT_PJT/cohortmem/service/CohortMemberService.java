@@ -8,6 +8,7 @@ import com.kdt.KDT_PJT.cohortmem.dto.CohortMemberDto;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMemberStts;
 import com.kdt.KDT_PJT.cohortmem.repository.CohortMemberRepository;
+import com.kdt.KDT_PJT.cohortresponse.repository.CohortResponseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,17 @@ public class CohortMemberService {
     private final CohortMemberRepository cohortMemberRepository;
     private final CohortRepository cohortRepository;
     private final UserRepository userRepository;
+    private final CohortResponseRepository cohortResponseRepository;
 
-    public CohortMemberService(CohortMemberRepository cohortMemberRepository, CohortRepository cohortRepository, UserRepository userRepository) {
+    public CohortMemberService(CohortMemberRepository cohortMemberRepository, CohortRepository cohortRepository, UserRepository userRepository, CohortResponseRepository cohortResponseRepository) {
         this.cohortMemberRepository = cohortMemberRepository;
         this.cohortRepository = cohortRepository;
         this.userRepository = userRepository;
+        this.cohortResponseRepository = cohortResponseRepository;
     }
 
     public List<CohortMemberDto> getApplicantsByCohortSn(Long cohortSn) {
-        List<CohortMember> members = cohortMemberRepository.findByCohortSnAndAprvDtIsNull(cohortSn);
+        List<CohortMember> members = cohortMemberRepository.findByCohortSn(cohortSn);
 
         return members.stream().map(member -> {
             CohortMemberDto dto = new CohortMemberDto();
@@ -40,6 +43,14 @@ public class CohortMemberService {
             dto.setCohortName(member.getCohort().getCohortNm());  // 기수 이름
             dto.setCrclmName(member.getCohort().getCrclmNm());    // 과정 이름
             dto.setAprwStts(member.getAprvDt() != null);          // 승인여부 true/false
+            dto.setCohortMemStts(member.getCohortMemStts().name());
+
+            cohortResponseRepository.findByUserSnAndParentSnAndParentType(
+                    member.getUserSn().intValue(),
+                    cohortSn.intValue(),
+                    "COHORT"
+            ).ifPresent(response -> dto.setRspnsSn(response.getRspnsSn()));
+
             return dto;
         }).collect(Collectors.toList());
     }
@@ -73,28 +84,46 @@ public class CohortMemberService {
         cohortMemberRepository.save(member);
     }
 
-    public void approveMember(Long memberId) {
-        CohortMember member = cohortMemberRepository.findById(memberId)
+//    public void approveMember(Long memberId) {
+//        CohortMember member = cohortMemberRepository.findByUserSn(memberId)
+//                .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
+//
+//        member.setAprvDt(LocalDateTime.now());
+//        member.setCohortMemStts(CohortMemberStts.ENROLLED);
+//        member.setUserAuthrtSn(5L);
+//
+//        User user = member.getUser();
+//        user.setRoleType(5L);
+//        userRepository.save(user);
+//
+//        cohortMemberRepository.save(member);
+//    }
+
+    public void approveMember(Long memberId, Long cohortSn, Long companySn) {
+        CohortMember member = cohortMemberRepository.findByUserSn(memberId)
                 .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
 
         member.setAprvDt(LocalDateTime.now());
         member.setCohortMemStts(CohortMemberStts.ENROLLED);
+        member.setUserAuthrtSn(5L);
 
         User user = member.getUser();
         user.setRoleType(5L);
+        user.setCohortSn(cohortSn);
+        user.setCompanySn(companySn);
+
         userRepository.save(user);
 
         cohortMemberRepository.save(member);
     }
 
     public void rejectMember(Long memberId) {
-        CohortMember member = cohortMemberRepository.findById(memberId)
+        CohortMember member = cohortMemberRepository.findByUserSn(memberId)
                 .orElseThrow(() -> new RuntimeException("신청 정보를 찾을 수 없습니다."));
 
         member.setAprvDt(LocalDateTime.now());
+        member.setCohortMemStts(CohortMemberStts.DENIED);
 
         cohortMemberRepository.save(member);
     }
-
-
 }

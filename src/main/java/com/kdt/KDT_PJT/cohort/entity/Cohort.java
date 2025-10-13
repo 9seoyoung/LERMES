@@ -24,7 +24,7 @@ public class Cohort {
     @Column(name = "CRCLM_NM")
     private String crclmNm;
 
-//    @Column(name = "CRCLM_CN")
+    //    @Column(name = "CRCLM_CN")
 //    private String crclmCn;
     @Column(name = "CRCLM_CN", columnDefinition = "json")
     private String crclmCn;
@@ -60,4 +60,7 @@ public class Cohort {
 
     @Column(name = "COHORT_PL")
     private String cohortPl;
+
+    @Column(name = "COHORT_IMAGE_FILE_SN")
+    private Long cohortImg;
 }

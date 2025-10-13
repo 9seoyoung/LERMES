@@ -5,11 +5,12 @@ import ListTable from "../../../components/ui/ListTable";
 import { useAccount } from "../../../auth/AuthContext";
 import FilterList from "../../../components/ui/FilterList";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
-import { ADMIN_BOARD_MENU_FILTER_COLUMNDATA, ADMIN_BOARD_MENU_FILTER, ADMIN_SELECT_POST_SN_KEY, ADMIN_BOARD_API_FILTER, ADMIN_SELECT_DETAIL_PAGE_PATH } from "../../../utils/readPageTypeReturn";
+import { ADMIN_BOARD_MENU_FILTER_COLUMNDATA, ADMIN_BOARD_MENU_FILTER, ADMIN_SELECT_POST_SN_KEY, ADMIN_BOARD_API_FILTER, ADMIN_SELECT_DETAIL_PAGE_PATH, CHANGE_ADMIN_PAGE_BY_POST_TYPE } from "../../../utils/readPageTypeReturn";
 import { toast } from "react-toastify";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
-import { callAllPostByTypeAndCohortSn } from "../../../services/postService";
+import { callAllPostByTypeAndCohortSn, pullAdminBoardList } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
+import { CHANGE_POST_TYPE_NAME } from "../../../utils/studentBoardFilter";
 
 export default function BoardManage(){
   const navigate = useNavigate();
@@ -29,14 +30,19 @@ export default function BoardManage(){
         const userCohortSn = user?.USER_COHORT_SN;
         const bbsType = ADMIN_BOARD_MENU_FILTER[selectedIdx];
         const api = ADMIN_BOARD_API_FILTER[selectedIdx];
-
+        
+        setPostKey(ADMIN_SELECT_POST_SN_KEY[selectedIdx]);
         // console.log(cohortSn, bbsType, api);
 
-        setWhereToGo("/");
-        console.log(filterArr[selectedIdx]);
-        setColumnData(ADMIN_BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
-        setPostKey(ADMIN_SELECT_POST_SN_KEY[selectedIdx]);
-        setWhereToGo(ADMIN_SELECT_DETAIL_PAGE_PATH[selectedIdx])
+        if(selectedIdx === 0){
+            setColumnData(["renamePostType", "title", "formattedAPostFrstDt", "userNm", "viewCnt"]);
+        } else {
+            setWhereToGo("/");
+            console.log(filterArr[selectedIdx]);
+            setColumnData(ADMIN_BOARD_MENU_FILTER_COLUMNDATA[selectedIdx]);
+            setWhereToGo(ADMIN_SELECT_DETAIL_PAGE_PATH[selectedIdx])
+
+        }
 
         const params = {};
 
@@ -55,9 +61,9 @@ export default function BoardManage(){
 
             try{
                 console.log(params);
-                const {data} = await api((selectedIdx === 2 ? ({isPrivate: false, cohortSn: cohortSn}) : params));
+                const {data} = (selectedIdx === 0 ? await pullAdminBoardList(cohortSn) : await api((selectedIdx === 2 ? ({isPrivate: false, cohortSn: cohortSn}) : (selectedIdx === 8 ? {cohortSn: cohortSn} : params))));
                 console.log(data);
-                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt || item.eventRegDt || item.srvyFrstWrtDt || item.itvAplyDt),}));
+                const formattedData = data.map(item => ({...item, formattedAPostFrstDt:  formatDate(item.postFrstWrtDt || item.eventRegDt || item.srvyFrstWrtDt || item.itvAplyDt || item.regDt), postType: (item.postType === "면담신청" ? "면담요청" : item.postType),renamePostType: CHANGE_POST_TYPE_NAME[item.boardType]}));
                 setPullList(formattedData);
             } catch(err) {
                 toast.error(err.message);
@@ -94,6 +100,8 @@ export default function BoardManage(){
                 postKey={postKey}
                 selectedIdx={selectedIdx}
                 whereTogo={whereTogo}
+                allPage={CHANGE_ADMIN_PAGE_BY_POST_TYPE}
+                typeKey={"boardType"}
               /> 
             </div>
         </div>

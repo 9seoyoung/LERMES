@@ -2,6 +2,8 @@ package com.kdt.KDT_PJT.auth.api;
 
 import com.kdt.KDT_PJT.auth.entity.Company;
 import com.kdt.KDT_PJT.auth.repository.CompanyRepository;
+import com.kdt.KDT_PJT.cohort.entity.Cohort;
+import com.kdt.KDT_PJT.cohort.repository.CohortRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.Map;
 public class CompanyLogoController {
 
     private final CompanyRepository companyRepository;
+    private final CohortRepository cohortRepository;
 
     // 회사 스몰 로고 갱신
     @PostMapping("/{companyId}/logo/small")
@@ -107,5 +110,41 @@ public class CompanyLogoController {
 
         companyRepository.save(company);
         return ResponseEntity.ok(company);
+    }
+
+    // ========================== 기수 ==========================
+
+    @PostMapping("/cohort/{cohortSn}/image")
+    public ResponseEntity<Map<String, Object>> updateCohortImage(
+            @PathVariable Long cohortSn,
+            @RequestParam(value = "fileSn", required = false) Long fileSn
+    ) {
+        Cohort cohort = cohortRepository.findById(cohortSn)
+                .orElseThrow(() -> new IllegalArgumentException("기수 없음: " + cohortSn));
+
+        cohort.setCohortImg(fileSn);
+        cohortRepository.save(cohort);
+
+        return ResponseEntity.ok(Map.of(
+                "ok", true,
+                "fileSn", fileSn
+        ));
+    }
+
+    @DeleteMapping("/{companyId}/cohort/{cohortSn}/image")
+    public ResponseEntity<Map<String, Object>> deleteCohortImage(
+            @PathVariable Long companyId,
+            @PathVariable Long cohortSn
+    ) {
+        Cohort cohort = cohortRepository.findById(cohortSn)
+                .orElseThrow(() -> new IllegalArgumentException("기수 없음: " + cohortSn));
+
+        cohort.setCohortImg(null);
+        cohortRepository.save(cohort);
+
+        return ResponseEntity.ok(Map.of(
+                "ok", true,
+                "message", "기수 이미지 삭제 완료"
+        ));
     }
 }

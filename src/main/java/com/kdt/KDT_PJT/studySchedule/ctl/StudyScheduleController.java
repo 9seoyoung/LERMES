@@ -20,15 +20,17 @@ public class StudyScheduleController {
 
     private final StudyScheduleService studyScheduleService;
 
+    // 학습일정 전체보기용 (강사 이상은 cohortSn 파라미터 필수)
     @GetMapping()
     public ResponseEntity<List<StudyScheduleResponseDTO>> getStudySchedule(@AuthenticationPrincipal AuthCustomUserDetails me,
-                                                                           @RequestParam(required = false) Integer cohortSn){
+                                                                           @RequestParam(required = false) Integer cohortSn){ // 관리자 급은 cohortSn 파라미터 필요
         int roleType = me.getRoleType().intValue();
-        if (roleType == 4 || roleType == 5) {// 강사, 학생은 꺼내쓰기
+        int userSn = me.getId().intValue();
+        if (roleType == 4 || roleType == 5) { // 강사, 학생은 꺼내쓰기
                 cohortSn = me.getCohortSn().intValue();
         }
         if (cohortSn == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "cohortSn이 없음");
 
-        return ResponseEntity.ok(studyScheduleService.getStudySchedule(cohortSn));
+        return ResponseEntity.ok(studyScheduleService.getStudySchedule(cohortSn,roleType,userSn));
     }
 }

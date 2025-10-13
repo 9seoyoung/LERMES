@@ -160,6 +160,7 @@ public class DailyAttendTotService {
         Map<Long, Long> totalByCohort = new HashMap<>();
         for (User u : users) {
             if (!companySn.equals(u.getCompanySn())) continue;
+            if (u.getRoleType() != 5) continue;
             Long cohortSn = u.getCohortSn();
             if (cohortSn == null) continue;
             totalByCohort.put(cohortSn, totalByCohort.getOrDefault(cohortSn, 0L) + 1);
@@ -176,6 +177,7 @@ public class DailyAttendTotService {
         Map<Long, Long> checkedInByCohort = new HashMap<>();
         for (User u : users) {
             if (!companySn.equals(u.getCompanySn())) continue;
+            if (u.getRoleType() != 5) continue;
             Long cohortSn = u.getCohortSn();
             if (cohortSn == null) continue;
 

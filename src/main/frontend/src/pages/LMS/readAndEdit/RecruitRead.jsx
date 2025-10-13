@@ -1,42 +1,33 @@
 // RecruitRead.jsx
 import QuestionRead from './QuestionRead';
-
 import React, { useEffect, useId, useState, useRef } from 'react';
-import {
-  FileList,
-  FormInput,
-  DateTimeInput,
-} from '../../../components/ui/UiComp';
+import { FileList } from '../../../components/ui/UiComp';
 import { useAccount } from '../../../auth/AuthContext';
-import { hortlistByCpSn } from '../../../services/cohortService';
 import { v4 as uuidv4 } from 'uuid';
-
-import { applyGroup, deleteGroup, readRecruitPoster } from '../../../services/postService';
-import { redirect, useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+  applyGroup,
+  deleteGroup,
+  readRecruitPoster,
+} from '../../../services/postService';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { formatTime } from '../../../utils/dateformat';
 import styles from '../../../styles/form.module.css';
-import { Trash2Icon } from 'lucide-react';
+import { submitRecruitForm } from '../../../services/responseService';
 
-// CreatePost.jsx
-// ...import 생략
-
-function RecruitRead({propCohortSn, editToggle, setEditToggle}) {
+function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
   const domFormId = useId();
   const { recruitSn } = useParams();
-  const finalSn = propCohortSn ?? recruitSn; 
-  const domId = useId();
+  const finalSn = propCohortSn ?? recruitSn;
   const postId = useRef(uuidv4());
   const { user } = useAccount();
-  const coSn = user.USER_OGDP_CO_SN;
   const qAddRef = useRef(null);
   const navigate = useNavigate();
   const scrollRef = useRef(null);
   const [showForm, setShowForm] = useState(true);
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const [files, setFiles] = useState([]);
 
-  // 설문 폼 (초기 페이지 하나 생성)
   const [surveyForm, setSurveyForm] = useState({
     id: postId.current,
     pages: [{ id: uuidv4(), questions: [] }],
@@ -45,103 +36,87 @@ function RecruitRead({propCohortSn, editToggle, setEditToggle}) {
   const [formData, setFormData] = useState({
     cohortSn: finalSn,
     id: postId.current,
-    userSn: user.USER_SN, //유저같지만 회사임
-    title: '', //과정명
-    answer: '', // 신청자 답변
-    groupName: '', //그룹명
-    type: '모집공고',
+    userSn: user.USER_SN,
+    title: '',
+    answer: '',
+    groupName: '',
+    type: 'COHORT',
     content: '',
     scope: [1, 2, 3],
-    surveyStart: '', // 모집시작
+    surveyStart: '',
     surveyEnd: '',
     startDate: '',
-    place: '', // 장소
-    endDate: '', //  모집종료
-    classStart: '', //수업시작시간
-    classEnd: '', //수업종료시간
-    files: [
-      { qid: '', fid: '' },
-      { qid: '', fid: '' },
-    ],
+    endDate: '',
+    place: '',
+    classStart: '',
+    classEnd: '',
+    bigLogoFileSn: null,
+    cohortImg: null,
   });
 
+  // --------------------------
+  // 모집공고 + 기수 이미지 조회
+  // --------------------------
   useEffect(() => {
     (async () => {
       if (!finalSn) return;
       try {
         const res = await readRecruitPoster(finalSn);
         const c = res?.data;
+        if (!c) return;
 
-        // 설문 복원 crclmCn(JSON 문자열) >> surveyForm
+        // 설문 복원
         if (typeof c?.crclmCn === 'string' && c.crclmCn.trim()) {
           try {
-            const parsed = JSON.parse(c.crclmCn); // { id, pages: [{ id, questions: [...] }] }
+            const parsed = JSON.parse(c.crclmCn);
             const pages = Array.isArray(parsed?.pages) ? parsed.pages : [];
-            const first = pages[0] ?? {
-              id: crypto.randomUUID?.() ?? 'page-1',
-              questions: [],
-            };
-            // 옵션/타입 정규화 (최소 2개 옵션 보장, type 정상화)
-            const normalize = (q) => {
-              const base = { ...q };
-              // 허용 타입만 유지
-              const allowed = new Set(['single', 'multiple', 'text', 'image']);
-              if (!allowed.has(base.type)) base.type = 'single';
-              // 선택형이면 옵션 최소 2개
-              if (base.type === 'single' || base.type === 'multiple') {
-                const opts = Array.isArray(base.options) ? base.options : [];
-                const withIds = opts.map((o) => ({
-                  id: o.id ?? crypto.randomUUID?.() ?? String(Math.random()),
-                  label: o.label ?? '',
-                }));
-                while (withIds.length < 2)
-                  withIds.push({
-                    id: crypto.randomUUID?.() ?? String(Math.random()),
-                    label: '',
-                  });
-                base.options = withIds;
-              } else {
-                base.options = [];
-              }
-              // 필드 기본값
-              base.qid =
-                base.qid ?? crypto.randomUUID?.() ?? String(Math.random());
-              base.title = base.title ?? '';
-              base.explain = base.explain ?? '';
-              base.answer = base.answer ?? '';
-              base.required = !!base.required;
-              return base;
-            };
-            const restoredQs = Array.isArray(first.questions)
-              ? first.questions.map(normalize)
-              : [];
-            setSurveyForm((prev) => ({
-              id: parsed?.id ?? prev.id, // 원래 id 유지 or JSON의 id
-              pages: [{ id: first.id, questions: restoredQs }],
-            }));
-          } catch (e) {
-            console.warn('[RecruitRead] crclmCn JSON parse 실패:', e);
+            const first = pages[0] ?? { id: uuidv4(), questions: [] };
+            setSurveyForm({
+              id: parsed?.id ?? postId.current,
+              pages: [{ id: first.id, questions: first.questions ?? [] }],
+            });
+          } catch (err) {
+            console.warn('[RecruitRead] crclmCn parse 실패', err);
           }
         }
 
+        // 기본 데이터 세팅
         setFormData((prev) => ({
           ...prev,
-          content: c?.crclmCn ?? '',
+          cohortSn: c?.cohortSn ?? prev.cohortSn,
+          crclmCn: c?.crclmCn ?? surveyForm,
           groupName: c?.cohortNm ?? '',
-          answer: c?.answer ?? '',
           title: c?.crclmNm ?? '',
-          surveyStart: c?.recruitBgngYmd ?? c?.recruitBgngDt ?? '',
-          surveyEnd: c?.recruitEndYmd ?? c?.recruitEndDt ?? '',
-          startDate: c?.crclmBgngYmd ?? c?.crclmBgngDt ?? '',
-          endDate: c?.crclmEndYmd ?? c?.crclmEndDt ?? '',
+          surveyStart: c?.recruitBgngYmd ?? '',
+          surveyEnd: c?.recruitEndYmd ?? '',
+          startDate: c?.crclmBgngYmd ?? '',
+          endDate: c?.crclmEndYmd ?? '',
           classStart: c?.attendStartTm ?? '',
           classEnd: c?.attendEndTm ?? '',
           place: c?.cohortPl ?? '',
           bigLogoFileSn: c?.bigLogoFileSn ?? null,
+          cohortImg: null,
         }));
+
+        // ✅ 기수 이미지 따로 조회
+        if (c?.cohortSn) {
+          const imgRes = await fetch(
+            `http://localhost:940/api/cohorts/${c.cohortSn}`
+          );
+          if (imgRes.ok) {
+            const imgData = await imgRes.json();
+            if (imgData?.cohortImg) {
+              setFormData((prev) => ({
+                ...prev,
+                cohortImg: imgData.cohortImg,
+              }));
+            }
+          }
+        }
+
         console.log('[RecruitRead] finalSn =', finalSn, c);
-      } catch (e) {
-        console.log('[RecruitRead] read error:', e?.message, e);
+      } catch (err) {
+        console.error('[RecruitRead] readRecruitPoster error:', err);
       }
     })();
   }, [finalSn]);
@@ -149,79 +124,20 @@ function RecruitRead({propCohortSn, editToggle, setEditToggle}) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log('[change]', name, value);
   };
 
-  // 응답 요약을 사람이 읽기 좋은 문자열로 합치기
-  const flattenAnswers = (answersMap) => {
-    const parts = [];
-    for (const [qid, v] of Object.entries(answersMap || {})) {
-      if (!v) continue;
-      // single: {id, label}
-      if (v && typeof v === 'object' && 'label' in v && 'id' in v) {
-        parts.push(v.label);
-        continue;
-      }
-      // multiple: [{id,label}, ...]
-      if (Array.isArray(v)) {
-        const labels = v
-          .map((x) => x?.label)
-          .filter(Boolean)
-          .join(', ');
-        if (labels) parts.push(labels);
-        continue;
-      }
-      // text/image: { text: "..." }
-      if (v && typeof v === 'object' && 'text' in v) {
-        if (v.text?.trim()) parts.push(v.text.trim());
-        continue;
-      }
-    }
-    return parts.join(' | ');
-  };
-
-  const buildAnswersMap = (surveyForm) => {
-    const out = {};
-    for (const p of surveyForm.pages || []) {
-      for (const q of p.questions || []) {
-        if (q.type === 'single') out[q.qid] = q.answer ? { ...q.answer } : null;
-        else if (q.type === 'multiple')
-          out[q.qid] = (q.selected || []).map((x) => ({ ...x }));
-        else out[q.qid] = { text: q.answerText ?? '' };
-      }
-    }
-    return out;
-  };
   const saveSubmit = async (e) => {
     e.preventDefault();
-
-    const snapshot = structuredClone
-      ? structuredClone({ surveyForm, formData })
-      : JSON.parse(JSON.stringify({ surveyForm, formData }));
-
-    const answersMap = buildAnswersMap(snapshot.surveyForm);
-    const flatAnswer = flattenAnswers(answersMap); // ★ 요약 문자열 생성
-
-    const body = {
-      ...snapshot.formData,
-      answer: flatAnswer,
-      surveyForm: snapshot.surveyForm,
-      surveyAnswers: answersMap,
-    };
-
-    console.log('[will send to server]', JSON.stringify(body, null, 2));
-    console.table(snapshot.formData);
-
-    console.time('[RecruitRead] readRecruitPoster');
+    const body = { ...formData, crclmCn:JSON.stringify(surveyForm) };
     try {
-      const res = await applyGroup(body);
-      console.log(Object.keys(snapshot));
-      console.log(Object.keys(snapshot.formData));
-      console.log('[RecruitRead] readRecruitPoster response:', res);
-      toast.success('게시 성공');
+      const res = await submitRecruitForm(body);
+      console.log('[RecruitRead] applyGroup response:', res);
+      toast.success('폼 제출 성공');
+      const apply = await applyGroup({userSn: user?.USER_SN, cohortSn: finalSn});
+      toast.success("신청 완료")
       navigate(-1);
     } catch (err) {
-      console.error('[RecruitRead] readRecruitPoster error:', err);
+      console.error('[RecruitRead] applyGroup error:', err);
       toast.error(err.message);
     }
   };
@@ -233,83 +149,79 @@ function RecruitRead({propCohortSn, editToggle, setEditToggle}) {
         ref={scrollRef}
         style={{ position: 'relative' }}
       >
-        <h2 style={{ fontWeight: '500', display: "flex", alignItems: "baseline" }}>
-          <span style={{border: "none"}}>
-          [모집공고] {formData?.title} {formData.groupName}
+        <h2
+          style={{ fontWeight: '500', display: 'flex', alignItems: 'baseline' }}
+        >
+          <span noborder="no">
+            [모집공고] {formData?.title} {formData.groupName}
           </span>
-          {pathname === "/adminHome/groupSet" ?
-          <button type='button'
-            className={styles.redBtn}
-            onClick={async () => {
-              const ok = window.confirm("정말 삭제하시겠습니까?");
-              if (!ok) return; // 취소하면 아무것도 안 함
-
-              try {
-                await deleteGroup(finalSn);
-                toast.success("삭제되었습니다.", {
-                  onClose: () => window.location.reload() // ✅ 토스트 닫힐 때 리로드
-                });
-              } catch (err) {
-                console.error(err);
-                toast.error("삭제 중 오류가 발생했습니다.");
-              }
-            }}
-          >
-            삭제 [x]
-          </button>
-          : null}
-        </h2>
-        {showForm === true ? (
-          <>
-            <div className={styles.explainBox}>
-              <div className="selectBoxArea" style={{ position: 'relative' }}>
-                <div>
-                  {' '}
-                  모집 기간: {formData.surveyStart} - {formData.surveyEnd}
-                </div>
-                <div>
-                  {' '}
-                  교육 기간: {formData.startDate} - {formData.endDate}
-                </div>
-                <div>
-                  {' '}
-                  수업 시간: {formatTime(formData.classStart)} ~{' '}
-                  {formatTime(formData.classEnd)}
-                </div>
-                <div> 교육 장소: {formData.place}</div>
-              </div>
-              <img
-                src={`http://localhost:940/api/files/id/${formData.bigLogoFileSn}`}
-              />
-
-              <button
-                className={styles.applyBtn}
-                type="button"
-                onClick={() => setShowForm(!showForm)}
-              >
-                {pathname === "/adminHome/groupSet" ?
-                "미리보기"
-                :
-                "신청하러 가기"
+          {pathname === '/adminHome/groupSet' && (
+            <button
+              type="button"
+              className={styles.redBtn}
+              onClick={async () => {
+                const ok = window.confirm('정말 삭제하시겠습니까?');
+                if (!ok) return;
+                try {
+                  await deleteGroup(finalSn);
+                  toast.success('삭제되었습니다.', {
+                    onClose: () => window.location.reload(),
+                  });
+                } catch (err) {
+                  toast.error('삭제 중 오류');
                 }
-              </button>
+              }}
+            >
+              삭제 [x]
+            </button>
+          )}
+        </h2>
+
+        {showForm ? (
+          <div className={styles.explainBox}>
+            <div className="selectBoxArea" style={{ position: 'relative' }}>
+              <div>
+                모집 기간: {formData.surveyStart} - {formData.surveyEnd}
+              </div>
+              <div>
+                교육 기간: {formData.startDate} - {formData.endDate}
+              </div>
+              <div>
+                수업 시간: {formatTime(formData.classStart)} ~{' '}
+                {formatTime(formData.classEnd)}
+              </div>
+              <div>교육 장소: {formData.place}</div>
             </div>
-          </>
+
+            <img
+              src={`http://localhost:940/api/files/id/${
+                formData.cohortImg !== null
+                  ? formData.cohortImg
+                  : formData.bigLogoFileSn
+              }/preview`}
+              alt="대표 이미지"
+              style={{ width: '80%', height: '800px', objectFit: 'cover' }}
+            />
+
+            <button
+              className={styles.applyBtn}
+              type="button"
+              onClick={() => setShowForm(!showForm)}
+            >
+              {pathname === '/adminHome/groupSet'
+                ? '미리보기'
+                : '신청하러 가기'}
+            </button>
+          </div>
         ) : (
           <form className="formAreaRow" onSubmit={(e) => e.preventDefault()}>
             <div className="formArea_L">
               <RecruitForm
-                type={formData.type}
-                postId={postId.current}
-                domFormId={domFormId}
                 handleChange={handleChange}
                 formData={formData}
-                setFormData={setFormData}
+                setFiles={setFiles}
                 surveyForm={surveyForm}
                 setSurveyForm={setSurveyForm}
-                FileList={FileList}
-                files={files}
-                setFiles={setFiles}
                 containerRef={scrollRef}
                 questionAddRef={qAddRef}
                 saveSubmit={saveSubmit}
@@ -328,7 +240,6 @@ function RecruitRead({propCohortSn, editToggle, setEditToggle}) {
 export default RecruitRead;
 
 function RecruitForm({
-  domFormId,
   handleChange,
   formData,
   setFiles,
@@ -339,18 +250,13 @@ function RecruitForm({
   saveSubmit,
   setShowForm,
   showForm,
-  setEditToggle
+  setEditToggle,
 }) {
-  // pages[0]이 항상 존재하도록 보장(상위 CreatePost에서 초기화함)
-  // const firstPage = surveyForm.pages[0];
   const qContainerRef = useRef(null);
-
   return (
     <>
-      <div className="formHeader"></div>
-
+      <div className="formHeader" />
       <div className="formContent" ref={qContainerRef}>
-        {/* ☆ 초기 질문 주입 + 변경시 surveyForm 갱신 */}
         <QuestionRead
           ref={questionAddRef}
           setFiles={setFiles}
@@ -367,55 +273,11 @@ function RecruitForm({
                 typeof updaterOrQs === 'function'
                   ? updaterOrQs(page.questions)
                   : updaterOrQs;
-              return {
-                ...prev,
-                pages: [{ ...page, questions: nextQs }, ...prev.pages.slice(1)],
-              };
+              return { ...prev, pages: [{ ...page, questions: nextQs }] };
             });
           }}
         />
       </div>
-      <ul
-        style={{
-          position: 'fixed',
-          background: 'var(--color-table-bg)',
-          right: '0',
-          padding: '16px 12px',
-          display: 'flex',
-          gap: '8px',
-          flexDirection: 'column',
-        }}
-      >
-        {surveyForm.pages.map((page) => (
-          <React.Fragment key={page.id}>
-            {page.questions.map((q, i) => (
-              <li key={q.qid}>
-                <button
-                  type="button"
-                  className="specificBtn"
-                  onClick={() => {
-                    // r_bottom 버튼 onClick 직전에 찍어봐
-                    console.log(
-                      'child root?',
-                      questionAddRef.current?.focusQuestion ? 'ok' : 'no'
-                    );
-
-                    questionAddRef.current?.focusQuestion(q.qid, {
-                      behavior: 'smooth',
-                      offsetTop: 8, // 고정 헤더 있으면 px 조절
-                    });
-                  }}
-                >
-                  {q.title?.trim()
-                    ? `Q${i + 1} ${q.title}`
-                    : `Q${i + 1} (제목 없음)`}{' '}
-                  · {q.type}
-                </button>
-              </li>
-            ))}
-          </React.Fragment>
-        ))}
-      </ul>
     </>
   );
 }

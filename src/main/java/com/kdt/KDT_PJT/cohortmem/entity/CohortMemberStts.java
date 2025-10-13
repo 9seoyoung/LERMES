@@ -11,7 +11,8 @@ public enum CohortMemberStts {
     CANCELED(3, "강의시작전취소"),
     WITHDRAWN(4, "강의 중도 하차"),
     ONGOING(5, "강의 진행중"),
-    COMPLETED(6, "강의수료");
+    COMPLETED(6, "강의수료"),
+    DENIED(7, "수강신청승인거부");
 
     // DB에 저장된 숫자 코드 (1~6)
     private final int code;

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/UiComp.module.css";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 
 
@@ -23,6 +24,7 @@ export default function ListTable({
 }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [rowStatus, setRowStatus] = useState({}); 
 
   if (!apiData?.length) {
     return <div className={styles.ListTbBg}>-</div>;
@@ -62,10 +64,29 @@ export default function ListTable({
         >
           {apiData.map((row, i) => {
             const rowKey = row?.[postKey] ?? `row-${i}`; // 안정 키 우선
+
+            console.log('row:', row);
+
+            const status =
+              rowStatus[rowKey] ||
+              (row.cohortMemStts ? row.cohortMemStts.toLowerCase() : null);
+
+            const bgColor =
+              status === 'enrolled'
+                ? '#d9fdd3' // 초록
+                : status === 'denied'
+                ? '#ffd6d6' // 빨강
+                : 'transparent'; // applied나 approved는 흰색
             return (
               <li
                 key={rowKey}
                 className={`${styles.row} ${styles.gridRow}`}
+                style={ (location.pathname === "/adminHome/accountSet" ? {
+                  backgroundColor: bgColor,
+                  opacity: status ? 0.7 : 1,
+                  transition: 'background-color 0.3s ease',
+                } : null )}
+                
                 onClick={() => {
                   const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
                   
@@ -73,8 +94,8 @@ export default function ListTable({
                   console.log(selectedIdx);
                   console.log('현재 경로:', location.pathname);
                   console.log('이동 대상:', targetPath);
-
-                  if (!location.pathname.endsWith(`/${row[postKey]}`)) {
+                  
+                  if (location.pathname !== whereTogo) {
                     navigate(targetPath);
                   }
                 }}
@@ -97,24 +118,45 @@ export default function ListTable({
                  {apiBtn ? 
                   <>
                     <div className={styles.cell}>
-                      <button type="button" onClick={async() => {
-                        try {
-                          await approveApi(row.userSn);
-                          toast.success("승인되었습니다.")
-                        } catch(err) {
-                          console.log(err.message);
-                        }
-                        }} 
-                        className={`${styles.blueBtn}`} style={{width: "40px"}}>승인</button>
-                      <button type="button" onClick={async() => {
-                        try {
-                          await denyApi(row.userSn);
-                          toast.success("거부되었습니다.")
-                        } catch(err) {
-                          console.log(err.message);
-                        }
+                                            <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            await approveApi(row.userSn);
+                            toast.success('승인되었습니다.');
+                            setRowStatus((prev) => ({
+                              ...prev,
+                              [rowKey]: 'enrolled',
+                            }));
+                            row.cohortMemStts = 'ENROLLED';
+                          } catch (err) {
+                            console.log(err.message);
+                            toast.error('승인 중 오류 발생');
+                          }
                         }}
-                      className={`${styles.redBtn}`} style={{width: "40px"}}>거절</button>
+                        className={styles.blueBtn}
+                        style={{ width: '40px' }}
+                      >승인</button>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          try {
+                            await denyApi(row.userSn);
+                            toast.success('거절되었습니다.');
+                            setRowStatus((prev) => ({
+                              ...prev,
+                              [rowKey]: 'denied',
+                            }));
+                          } catch (err) {
+                            console.log(err.message);
+                            toast.error('거절 중 오류 발생');
+                          }
+                        }}
+                        className={styles.redBtn}
+                        style={{ width: '40px' }}
+                      >
+                        거절
+                      </button>
                     </div>
                   </>
                  : ""}

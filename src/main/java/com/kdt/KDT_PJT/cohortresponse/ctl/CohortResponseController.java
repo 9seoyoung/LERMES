@@ -1,5 +1,7 @@
 package com.kdt.KDT_PJT.cohortresponse.ctl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.kdt.KDT_PJT.cohortresponse.dto.CohortResponseDetailDto;
 import com.kdt.KDT_PJT.cohortresponse.dto.CohortResponseDto;
 import com.kdt.KDT_PJT.cohortresponse.service.CohortResponseService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class CohortResponseController {
     }
 
     @GetMapping("/{id}")
-    public CohortResponseDto get(@PathVariable Long id) {
+    public CohortResponseDetailDto get(@PathVariable Long id) throws JsonProcessingException {
         return service.get(id);
     }
 

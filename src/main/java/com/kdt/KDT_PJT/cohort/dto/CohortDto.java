@@ -2,16 +2,17 @@ package com.kdt.KDT_PJT.cohort.dto;
 
 import com.kdt.KDT_PJT.cohort.entity.QuestionType;
 import com.kdt.KDT_PJT.cohort.entity.cohortSttsNm;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map;
 
-@Data @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Setter
+@Builder
 public class CohortDto {
     private String id;               // UUID string
     private Long userSn;
@@ -29,6 +30,7 @@ public class CohortDto {
     private com.fasterxml.jackson.databind.JsonNode surveyForm;
     private String place;
     private String stts;
+
 
     // 기본 생성자, getter/setter 생략 가능 (롬복 사용 가능)
 }

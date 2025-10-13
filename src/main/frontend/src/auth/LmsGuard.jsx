@@ -27,7 +27,7 @@ export default function LmsGuard() {
   if (!Number.isFinite(selected)) return <Outlet />;
 
   // 2) 남의 회사 접근 차단
-  if (myCompany !== selected) {
+  if (myCompany !== selected && user.USER_AUTHRT_SN != 1) {
     return <Navigate to="/visitorHome" replace />;
   }
 

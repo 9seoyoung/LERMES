@@ -45,18 +45,20 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-        // 1. 회사Sn + 코호트Sn + 권한
-        @GetMapping("/by-company-cohort-role")
-        public ResponseEntity<List<UserDto>> getUsersByCompanyCohortAndRole(
-                @RequestParam Long ogdpCoSn,
-                @RequestParam Long ogdpCohortSn,
-                @RequestParam Long userAuthrtSn
-        ) {
-            List<UserDto> users = userService.findUsersByCompanyCohortAndRole(ogdpCoSn, ogdpCohortSn, userAuthrtSn);
-            return ResponseEntity.ok(users);
-        }
+    // 2. 회사Sn + 권한+코호트
+    @GetMapping("/by-company-cohort-role")
+    public ResponseEntity<List<UserDto>> getUsersByCompanyCohortAndRole(
+            @RequestParam("ogdpCoSn") Long ogdpCoSn,
+            @RequestParam("ogdpCohortSn") Long ogdpCohortSn,
+            @RequestParam("userAuthrtSn") Long userAuthrtSn
+    ) {
+        List<UserDto> users = userService.findUsersByCompanyCohortAndRole(ogdpCoSn, ogdpCohortSn, userAuthrtSn);
+        return ResponseEntity.ok(users);
+    }
 
-        // 2. 회사Sn + 권한
+
+
+    // 2. 회사Sn + 권한
         @GetMapping("/by-company-role")
         public ResponseEntity<List<UserDto>> getUsersByCompanyAndRole(
                 @RequestParam Long ogdpCoSn,

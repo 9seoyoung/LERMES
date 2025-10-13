@@ -21,6 +21,5 @@ public class AdminBoardListDTO {
     private Integer viewCnt;        // 게시글 조회수
     @JsonIgnore private Integer cohortSn;
     @JsonIgnore private Integer userSn;
-    private Integer coSn;
-
+    @JsonIgnore private Integer roleType;
 }
