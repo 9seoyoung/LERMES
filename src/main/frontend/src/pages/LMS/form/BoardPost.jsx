@@ -202,15 +202,14 @@ const selectType = (nextType) => {
   );
 };
   
-const handleChange = (e) => {
-  const { name, type, checked, value } = e.target;
-  setFormData(prev => ({
-    ...prev,
-    [name]: type === 'checkbox' ? checked : value
-  }));
-};
+  const handleChange = (e) => {
+    const { name, type, checked, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
 
-  const tempSubmit = () => {};
   const saveSubmit = async (e) => {
     e.preventDefault();
 

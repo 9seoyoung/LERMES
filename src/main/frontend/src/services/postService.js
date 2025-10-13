@@ -105,7 +105,7 @@ export const pullInterviewRecordList = (params) => api.get("/interviewRecord", {
  * 면담 기록 상세 API
  * @param {Number} itvRecordSn
  */
-export const readInterviewRecord = (itvRecordSn) => api.get("/interviewRecord", itvRecordSn);
+export const readInterviewRecord = (itvRecordSn) => api.get(`/interviewRecord/${itvRecordSn}`);
 
 /**
  * 면담 기록 수정 API

@@ -85,7 +85,7 @@ export default function ListTable({
           {apiData.map((row, i) => {
             const rowKey = makeRowKey(row, i); // 안정 키 우선
 
-            console.log('row:', row);
+            // console.log('row:', row);
 
             const status =
               rowStatus[rowKey] ||
