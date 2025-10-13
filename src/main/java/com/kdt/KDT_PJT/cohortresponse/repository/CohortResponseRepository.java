@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.cohortresponse.repository;
 
+import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import com.kdt.KDT_PJT.cohortresponse.entity.CohortResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,11 +1,13 @@
 package com.kdt.KDT_PJT.cohort.entity;
 
+import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Setter
@@ -60,4 +62,8 @@ public class Cohort {
 
     @Column(name = "COHORT_PL")
     private String cohortPl;
+
+    @OneToMany(mappedBy = "cohort")
+    private List<CohortMember> cohortMembers;
+
 }
