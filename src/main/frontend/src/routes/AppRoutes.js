@@ -145,44 +145,27 @@ function AppRoutes() {
                   path="tutorHome/board/read/:postSn"
                   element={<BoardRead2 />}
                 />
+                <Route path="tutorHome/board/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="tutorHome/board/survey/:srvySn" element={<SurveyRead />} />
-                <Route
-                  path="tutorHome/studySched/createPost"
-                  element={<BoardPost />}
-                />
+                <Route path="tutorHome/studySched/createPost" element={<BoardPost />} />
                 <Route path="tutorHome/studySched" element={<StudyManage />} />
-                <Route
-                  path="tutorHome/studentManage"
-                  element={<StudentManage />}
-                />
-                <Route
-                  path="tutorHome/studentManage/createPost"
-                  element={<BoardPost />}
-                />
                 <Route path="tutorHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route path="tutorHome/myPage" element={<TutorMypage />} />
+                <Route path="tutorHome/board/readInterview/:itvSn" element={<AdminPostRead />} />
               </Route>
 
               {/* 수강생 */}
               <Route element={<RoleRoute roles={[1, 5]} />}>
                 <Route path="stdHome" element={<StdHome />} />
                 <Route path="stdHome/board" element={<Board />} />
-                <Route
-                  path="stdHome/board/createPost"
-                  element={<BoardPost />}
-                />
+                <Route path="stdHome/board/createPost" element={<BoardPost />} />
+                <Route path="stdHome/studySched" element={<StudyPlan />} />
                 <Route path="stdHome/board/read/:postSn" element={<BoardRead2 />} />
                 <Route path="stdHome/board/survey/:srvySn" element={<SurveyRead />} />
-                <Route path="stdHome/studySched" element={<StudyPlan />} />
-                <Route
-                  path="stdHome/studySched/createPost"
-                  element={<BoardPost />}
-                />
+                <Route path="stdHome/studySched/createPost" element={<BoardPost />} />
                 <Route path="stdHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
-                <Route
-                  path="stdHome/studySched/interview/:postSn"
-                  element={<InterviewRead />}
-                />
+                <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />
+                <Route path="stdHome/board/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="stdHome/myPage" element={<StdMypage />} />
               </Route>
             </Route>

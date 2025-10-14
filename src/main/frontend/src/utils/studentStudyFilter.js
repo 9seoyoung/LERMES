@@ -6,7 +6,7 @@ import {pullToDoList} from "../services/calService";
 //리스트 목록 api url
 export const STUDENT_STUDY_MENU_FILTER = {
     // key는 선택한 필터의 인덱스 (=selectedIdx)
-    0: "", // 전체
+    0: "/studySchedule", // 전체
     1: "/calendar", // 공식
     2: "/calendar", //내 일정
     3: "/interview/my-requests", //면담
@@ -15,16 +15,16 @@ export const STUDENT_STUDY_MENU_FILTER = {
 }
 
 export const MENU_FILTER_COLUMNDATA = {
-    0: [],
+    0: ["boardType", "title", "formattedAplyDt", "userNm", "viewCnt"],
     1: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     2: ["postType", "title", "eventRegDt", "userNm", "viewCnt"],
     3: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
     4: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
-    4: ["postType", "itvRecordTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
+    5: ["postType", "itvRecordTtl", "formattedAplyDt", "itvPicNm", "viewCnt" ],
 }
 
 export const SELECT_POST_SN_KEY = {
-    0: "",
+    0: "scheduleSn",
     1: "calSn",
     2: "calSn",
     3: "itvSn",
@@ -48,3 +48,10 @@ export const SELECT_DETAIL_PAGE_PATH = {
     4: "/tutorHome/studySched/interview", //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
     5: "/tutorHome/studySched/interview" //상세보기 뒷부분: :postSn은 navigate로 동적으로 추가
 }
+
+export const CHANGE_SCHEDULE_PAGE_BY_POST_TYPE = {
+    "공식일정": "/stdHome/studySched/calendar",
+    "개인일정": "/stdHome/studySched/calendar",
+    "면담 기록": "/adminHome/boardSet/readItvMemo",
+    "공식일정": "/adminHome/boardSet/readSchedule"
+  }

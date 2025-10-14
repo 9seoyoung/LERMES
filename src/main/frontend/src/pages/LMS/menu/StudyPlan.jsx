@@ -8,6 +8,7 @@ import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, 
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
 import { useAccount } from "../../../auth/AuthContext";
+import { CHANGE_ADMIN_PAGE_BY_POST_TYPE } from "../../../utils/readPageTypeReturn";
 
 function StudyPlan() {
     const navigate = useNavigate();
@@ -20,20 +21,52 @@ function StudyPlan() {
     const [postKey, setPostKey] = useState("");
     const [whereTogo, setWhereToGo] = useState("");
     
+  // useEffect(() => {
+  //   const url = STUDENT_STUDY_MENU_FILTER[selectedIdx];
+  //   const column = MENU_FILTER_COLUMNDATA[selectedIdx];
+  //   const postSn = SELECT_POST_SN_KEY[selectedIdx];
+  //   const path = SELECT_DETAIL_PAGE_PATH[selectedIdx];
+
+  //     const params = {
+  //         url: url,
+  //         effectiveSn: effectiveSn,
+  //         isPrivate: null,
+  //         cohortSn: user.USER_OGDP_COHORT_SN
+  //     };
+  //     if (selectedIdx === 1) params.isPrivate = 0;
+  //     if (selectedIdx === 2) params.isPrivate = 1;
+
+  //   setColumnData(column);
+  //   setPostKey(postSn);
+  //   setWhereToGo(path);
+  //   console.log(columnData);
+  //   (async () => {
+  //       try {
+  //           const data = await callStudyPlanListByFilter(params);
+  //           console.log(data.data);
+  //           const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item.itvAplyDt),}));
+  //           setPullList(formattedData);
+  //     } catch (e) {
+  //       console.log(e.message);
+  //     }
+  //   })();
+  // }, [effectiveSn, selectedIdx]);
+
   useEffect(() => {
     const url = STUDENT_STUDY_MENU_FILTER[selectedIdx];
     const column = MENU_FILTER_COLUMNDATA[selectedIdx];
     const postSn = SELECT_POST_SN_KEY[selectedIdx];
     const path = SELECT_DETAIL_PAGE_PATH[selectedIdx];
 
-      const params = {
-          url: url,
-          effectiveSn: effectiveSn,
-          isPrivate: null,
-          cohortSn: user.USER_OGDP_COHORT_SN
-      };
-      if (selectedIdx === 1) params.isPrivate = 0;
-      if (selectedIdx === 2) params.isPrivate = 1;
+    const params = {
+        url: url,
+        effectiveSn: effectiveSn,
+        isPrivate: null,
+        cohortSn: user.USER_OGDP_COHORT_SN
+
+    };
+    if (selectedIdx === 1) params.isPrivate = 0;
+    if (selectedIdx === 2) params.isPrivate = 1;
 
     setColumnData(column);
     setPostKey(postSn);
@@ -43,13 +76,13 @@ function StudyPlan() {
         try {
             const data = await callStudyPlanListByFilter(params);
             console.log(data.data);
-            const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item.itvAplyDt),}));
+            const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item?.itvAplyDt || item?.createdAt),}));
             setPullList(formattedData);
-      } catch (e) {
-        console.log(e.message);
-      }
+        } catch (e) {
+            console.log(e.message);
+        }
     })();
-  }, [effectiveSn, selectedIdx]);
+}, [effectiveSn, selectedIdx]);
 
   
 
@@ -76,8 +109,10 @@ function StudyPlan() {
                 gridTemplate="0.5fr 1fr 5fr 1.25fr 1fr 1fr"
                 gap="12px"
                 postKey={postKey}
+                selectedIdx={selectedIdx}
                 whereTogo={whereTogo}
-              /> 
+                allPage={CHANGE_ADMIN_PAGE_BY_POST_TYPE}
+                typeKey={"boardType"}              /> 
             </div>
         </div>
     );

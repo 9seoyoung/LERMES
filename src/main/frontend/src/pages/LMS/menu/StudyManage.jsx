@@ -40,7 +40,7 @@ function StudyManage() {
             try {
                 const data = await callStudyPlanListByFilter(params);
                 console.log(data.data);
-                const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item.itvAplyDt),}));
+                const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item.itvAplyDt || item?.regDt || item?.createdAt), postType: (item?.postType === "면담신청" ? "면담요청" : item?.postType )}));
                 setPullList(formattedData);
             } catch (e) {
                 console.log(e.message);
