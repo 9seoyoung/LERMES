@@ -25,6 +25,9 @@ public class UserService {
     @Autowired
     private CohortRepository cohortRepository;
 
+    @Autowired
+    private CohortMemberRepository cohortMemberRepository;
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
