@@ -52,7 +52,7 @@ export default function SchedEditPost() {
     isPrivate: ""
   });
   
-  const editMyData = (myName === formData.itvAplcntNm ? false : true);
+  const editMyData = (myName === (formData?.itvAplcntNm ?? formData?.userNm ) ? false : true);
   
   // const handleFixed = async() => {
     //   console.log("면담요청 확정 ㄱㄱ --> itvSn(면담신청SN 수동입력 필요)")
@@ -131,12 +131,12 @@ const handleChange = (e) => {
           <div style={{display:"flex", gap:"4px", alignItems:"baseline"}}>
             {`[${formData.calType}] ${formData.title}`}
             <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
-              { editToggle && formData?.postWriterName === user.USER_NM ?
+              { editToggle && formData?.postWriterName === user.USER_NM  || !editMyData ?
                 <button type='button' onClick={() => setEdit(false)} className={styles.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
                 :
                 <></>
               }
-              {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1?
+              {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1 || !editMyData ?
                         <button type='button'
                           className={styles.redBtn}
                           onClick={async () => {
