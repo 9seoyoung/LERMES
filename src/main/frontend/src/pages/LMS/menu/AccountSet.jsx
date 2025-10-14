@@ -60,6 +60,7 @@ export default function AccountSet() {
           const formattedData = pendingEmp.data.map((item) => ({
             ...item,
             formattedApplyDt: formatDate(item.aplyDt),
+            active: item?.userAuthrtYn
           }));
           setDataListTop(formattedData);
         } catch (err) {
@@ -76,6 +77,11 @@ export default function AccountSet() {
             ogdpCohortSn: cohortSn,
             userAuthrtSn: 4,
           });
+          const formattedDataT = accountT.data.map((item) => ({
+            ...item,
+            formattedApplyDt: formatDate(item.aplyDt),
+            active: `${item?.userActvtnYn ? "활성" : "차단"}`,
+          }));
           console.log(cohortStts);
           const accountStd =
             cohortStts === 'RECRUITING'
@@ -85,14 +91,23 @@ export default function AccountSet() {
                   ogdpCohortSn: cohortSn,
                   userAuthrtSn: 5,
                 });
+                const formattedDataS = accountStd.data.map((item) => ({
+                  ...item,
+                  formattedApplyDt: formatDate(item.aplyDt),
+                  active: `${item?.userActvtnYn ? "활성" : "차단"}`,
+                }));
           console.log(accountStd.data);
           console.log(accountT.data);
-          setTeacherList(accountT.data);
-          setStdList(accountStd.data);
+          setTeacherList(formattedDataT);
+          setStdList(formattedDataS);
         } catch (err) {
           console.log(err);
         }
       })();
+
+      setManageState(false);
+      setStdManageState(false);
+      setTutorManageState(false);
     }
   }, [selectedIdx, cohortSn, effectiveSn, cohortStts]);
 
@@ -231,7 +246,7 @@ export default function AccountSet() {
                   'userEmlAddr',
                   'userTelno',
                   'userAuthrtSn',
-                  'userActvtnYn',
+                  'active',
                 ]}
                 apiData={accountList}
                 gridTemplate="0.5fr 0.3fr 1fr 2.5fr 1.6fr  0.7fr 1fr "
@@ -263,7 +278,7 @@ export default function AccountSet() {
                   'userEmlAddr',
                   'userTelno',
                   'userAuthrtSn',
-                  'userActvtnYn',
+                  'active',
                 ]}
                 apiData={accountList}
                 whereTogo={'/adminHome/accountSet'}
@@ -343,10 +358,10 @@ export default function AccountSet() {
                   ]}
                   columnData={[
                     'userNm',
-                    'email',
+                    'userEmlAddr',
                     'userTelno',
                     'userAuthrtSn',
-                    'enabled',
+                    'active',
                   ]}
                   apiData={teacherList}
                   gridTemplate="0.5fr 0.3fr 1fr 2.5fr 1.6fr 0.7fr 1fr "
@@ -379,7 +394,7 @@ export default function AccountSet() {
                     'userEmlAddr',
                     'userTelno',
                     'userAuthrtSn',
-                    'userActvtnYn',
+                    'active',
                   ]}
                   apiData={teacherList}
                   whereTogo={'/adminHome/accountSet'}
@@ -439,7 +454,7 @@ export default function AccountSet() {
                     'userEmlAddr',
                     'userTelno',
                     'userAuthrtSn',
-                    'userActvtnYn',
+                    'active',
                   ]}
                   apiData={stdList}
                   gridTemplate="0.5fr 0.3fr 1fr 2.5fr 1.6fr  0.7fr 1fr "
@@ -473,7 +488,7 @@ export default function AccountSet() {
                           'userEmlAddr',
                           'userTelno',
                           'userAuthrtSn',
-                          'userActvtnYn',
+                          'active',
                         ]
                   }
                   apiData={stdList}

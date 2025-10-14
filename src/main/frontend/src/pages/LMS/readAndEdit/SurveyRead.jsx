@@ -10,7 +10,6 @@ import {
 import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from '../../../services/cohortService';
 import { v4 as uuidv4 } from 'uuid';
-
 import { applyGroup, readRecruitPoster, readSurvey } from '../../../services/postService';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -26,6 +25,7 @@ import {ApplyList2} from '../../../components/module/ApplyList2.jsx';
 function SurveyRead({setEditToggle}) {
   const domFormId = useId();
   const { srvySn } = useParams();
+  console.log(useParams());
   // const finalSn = propCohortSn ?? recruitSn; 
   const domId = useId();
   const postId = useRef(uuidv4());

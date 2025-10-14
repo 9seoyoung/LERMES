@@ -187,7 +187,7 @@ export const callSurveyList = ({cohortSn, bbsType, coSn}) => api.get(`/survey/li
  * 설문 단건 조회
  * @param {Number} srvySn
  */
-export const readSurvey = ({srvySn}) => api.get(`/survey/${srvySn}`);
+export const readSurvey = (srvySn) => api.get(`/survey/${srvySn}`);
 
 
 /**
