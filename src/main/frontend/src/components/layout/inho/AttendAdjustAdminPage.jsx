@@ -117,7 +117,7 @@ export default function AttendAdjustAdminPage() {
                   <td style={{ padding: '8px' }}>
                     {r.hasFile ? (
                       <a
-                        href={`http://localhost:940/api/files/id/${r.fileSn}`}
+                        href={`http://onopco2.iptime.org:940/api/files/id/${r.fileSn}`}
                         target="_blank"
                         rel="noreferrer"
                         style={{

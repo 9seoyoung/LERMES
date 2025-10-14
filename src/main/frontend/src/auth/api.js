@@ -7,7 +7,7 @@ import axios from 'axios';
 // 배치파일도 포트번호 맞춰줘야되는듯? 일단 맞췃음.
 // 배포는 https로 443
 //const deployURL = 'http://onopco2.iptime.org:940'
- const developURL = 'http://localhost:940'
+ const developURL = 'http://onopco2.iptime.org:940'
 
 export const api = axios.create({
   baseURL: `${developURL}/api`,

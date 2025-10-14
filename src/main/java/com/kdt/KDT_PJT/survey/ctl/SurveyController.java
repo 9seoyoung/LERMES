@@ -50,11 +50,16 @@ public class SurveyController {
     // 목록 조회
     @GetMapping("/list/{coSn}")
     public ResponseEntity<List<ResponseSurveyDto>> getSurveyList(
-            @PathVariable Long coSn,
-            @RequestParam(value = "cohortSn", required = false) Long cohortSn,
-            @RequestParam(value = "bbsType", required = false) BbsType bbsType
+            @AuthenticationPrincipal AuthCustomUserDetails me,
+            @RequestParam(required = false) Long coSn,
+            @RequestParam(required = false) Long cohortSn,
+            @RequestParam(required = false) BbsType bbsType
     ) {
-        return ResponseEntity.ok(surveyService.getSurveyList(coSn, cohortSn, bbsType));
+        // 👇 로그인한 유저의 roleId 가져오기
+        Long roleId = me.getRoleType(); // getRoleId() 혹은 getRoleCode() 등 프로젝트 구조에 따라 수정
+
+        List<ResponseSurveyDto> list = surveyService.getSurveyList(coSn, cohortSn, roleId, bbsType);
+        return ResponseEntity.ok(list);
     }
 
     // 설문 수정

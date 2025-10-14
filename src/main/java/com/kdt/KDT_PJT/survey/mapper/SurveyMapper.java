@@ -3,6 +3,7 @@ package com.kdt.KDT_PJT.survey.mapper;
 import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
 import com.kdt.KDT_PJT.survey.dto.ResponseSurveyDto;
+import com.kdt.KDT_PJT.survey.enums.SurveyScope;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,9 +22,9 @@ public interface SurveyMapper {
     void increaseViewCnt(@Param("srvySn") Long srvySn);
 
 
-    List<ResponseSurveyDto> findSurveyList(@Param("coSn") Long coSn,
-                                                    @Param("cohortSn") Long cohortSn,
-                                                    @Param("bbsType") BbsType bbsType);
+//    List<ResponseSurveyDto> findSurveyList(@Param("coSn") Long coSn,
+//                                                    @Param("cohortSn") Long cohortSn,
+//                                                    @Param("bbsType") BbsType bbsType);
     //응답 단건조회시 사용
     Map<String, Object> findWriterBySurveySn(@Param("srvySn") Long srvySn);
 
@@ -31,6 +32,13 @@ public interface SurveyMapper {
 
 
     void updateSurveyByAdmin(@Param("srvySn") Long srvySn, @Param("dto") RequestSurveyDto dto);
+
+    List<ResponseSurveyDto> findSurveyListFiltered(
+            @Param("coSn") Long coSn,
+            @Param("cohortSn") Long cohortSn,
+            @Param("bbsType") BbsType bbsType,
+            @Param("allowedScopes") List<SurveyScope> allowedScopes
+    );
 
 
     void softDeleteSurvey(@Param("srvySn") Long srvySn,

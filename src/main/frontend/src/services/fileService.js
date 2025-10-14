@@ -1,7 +1,7 @@
 // src/services/fileService.js
 import axios from "axios";
 
-const API_BASE = "http://localhost:940/api/files";
+const API_BASE = "http://onopco2.iptime.org:940/api/files";
 
 export const api = axios.create({
     baseURL: API_BASE,

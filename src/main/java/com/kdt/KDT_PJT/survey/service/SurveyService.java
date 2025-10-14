@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.survey.service;
 
+import com.kdt.KDT_PJT.bbs.enums.BbsRole;
 import com.kdt.KDT_PJT.bbs.enums.BbsType;
 import com.kdt.KDT_PJT.response.mapper.SrvyResponseMapper;
 import com.kdt.KDT_PJT.survey.dto.RequestSurveyDto;
@@ -104,8 +105,69 @@ public class SurveyService {
     }
 
     // 설문 전체/회사별 조회
-    public List<ResponseSurveyDto> getSurveyList(Long coSn, Long cohortSn, BbsType bbsType) {
-        return surveyMapper.findSurveyList(coSn, cohortSn, bbsType);
+    @Transactional(readOnly = true)
+    public List<ResponseSurveyDto> getSurveyList(Long coSn, Long cohortSn, Long roleId, BbsType bbsType) {
+        if (roleId == null) {
+            throw new SecurityException("권한 정보가 없습니다.");
+        }
+
+        // 🔹 SurveyRole → BbsRole로 교체
+        BbsRole role = BbsRole.fromCode(roleId);
+
+        // 🔹 역할별 허용 스코프 지정 (SurveyScope은 그대로 사용)
+        List<SurveyScope> allowedScopes = switch (role) {
+            case SUPER_ADMIN, TENANT, EMPLOYEE -> List.of(SurveyScope.COHORT);
+            case INSTRUCTOR -> List.of(SurveyScope.INTERNAL);
+            case STUDENT -> List.of(SurveyScope.COHORT, SurveyScope.INTERNAL);
+            default -> List.of(); // GENERAL, VISITOR는 설문 접근 불가
+        };
+
+        if (allowedScopes.isEmpty()) {
+            throw new SecurityException("설문 목록 조회 권한이 없습니다.");
+        }
+
+        // Mapper에서 스코프 기준으로 1차 필터링
+        List<ResponseSurveyDto> all = surveyMapper.findSurveyListFiltered(coSn, cohortSn, bbsType, allowedScopes);
+
+        // 회사/기수 및 역할 기반 2차 필터링
+        return all.stream()
+                .filter(s -> {
+                    // 1️⃣ SUPER_ADMIN → 현재 전역 허용/프론트에서 보내주는 거 사용
+                    if (role == BbsRole.SUPER_ADMIN) {
+                        boolean hasCompany = coSn != null;
+                        boolean hasCohort = cohortSn != null;
+
+                        if (hasCompany && !Objects.equals(s.getCoSn(), coSn)) return false;
+                        if (hasCohort && !Objects.equals(s.getCohortSn(), cohortSn)) return false;
+
+                        if (!hasCompany && !hasCohort) {
+                            System.out.println("SUPER_ADMIN 전체 조회 (coSn/cohortSn 미지정)");
+                        }
+                        return true;
+                    }
+
+                    // 2️⃣ TENANT, EMPLOYEE → 같은 회사만
+                    if ((role == BbsRole.TENANT || role == BbsRole.EMPLOYEE)) {
+                        boolean sameCompany = Objects.equals(s.getCoSn(), coSn);
+                        boolean sameCohort = (cohortSn == null) || Objects.equals(s.getCohortSn(), cohortSn);
+                        if (!sameCompany || !sameCohort) return false;
+                    }
+
+                    // 3️⃣ INSTRUCTOR, STUDENT → 같은 회사 + 같은 기수만
+                    if ((role == BbsRole.INSTRUCTOR || role == BbsRole.STUDENT)) {
+                        boolean sameCompany = Objects.equals(s.getCoSn(), coSn);
+                        boolean sameCohort = Objects.equals(s.getCohortSn(), cohortSn);
+                        if (!sameCompany || !sameCohort) return false;
+                    }
+
+                    // 4️⃣ GENERAL, VISITOR → 설문 접근 불가
+                    if (role == BbsRole.VISITOR || role == BbsRole.GENERAL) {
+                        return false;
+                    }
+
+                    return true;
+                })
+                .toList();
     }
 
     // 설문 수정 (응답 있으면 차단)

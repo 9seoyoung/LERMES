@@ -83,7 +83,7 @@ function RecruitPost() {
         // 3️⃣ 기수 이미지 등록 (기수가 생성된 경우)
         if (cohortSn) {
           await api.post(
-            `http://localhost:940/api/company/cohort/${cohortSn}/image`,
+            `http://onopco2.iptime.org:940/api/company/cohort/${cohortSn}/image`,
             null,
             {
               params: { fileSn: bigLogoFileSn },
@@ -226,7 +226,7 @@ function RecruitPost() {
                 />
                 {bigLogoFileSn && (
                   <img
-                    src={`http://localhost:940/api/files/id/${bigLogoFileSn}`}
+                    src={`http://onopco2.iptime.org:940/api/files/id/${bigLogoFileSn}`}
                     alt="미리보기"
                     style={{
                       marginTop: '30px',

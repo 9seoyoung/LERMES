@@ -35,10 +35,6 @@ public class UserDto {
         dto.setUserTelno(user.getUserTelno());
         dto.setOgdpCoSn(user.getCompanySn());
         dto.setOgdpCohortSn(user.getCohortSn());
-        cohortMemberRepository.findByUserSn(user.getUserSn())
-                .ifPresent(cohortMem -> {
-                    dto.setCohortMemStts(cohortMem.getCohortMemStts().name()); // enum이면 .name()
-                });
         return dto;
     }
 //

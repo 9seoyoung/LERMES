@@ -27,14 +27,16 @@ public class BbsListController {
         Long coSn=null;
         Long cohortSn=null;
         Long userSn=null;
+        Long roleId = null;
 
         if (auth !=null){
             coSn=auth.getCompanySn();
             cohortSn=auth.getCohortSn();
             userSn=auth.getId();
+            roleId = auth.getRoleType();
         }
-        List<BbsListResponseDto>List = bbsListService.getBbsList(coSn, cohortSn, userSn);
-        return ResponseEntity.ok(List);
+        List<BbsListResponseDto> list = bbsListService.getBbsList(coSn, cohortSn, userSn, roleId);
+        return ResponseEntity.ok(list);
     }
 
 }
