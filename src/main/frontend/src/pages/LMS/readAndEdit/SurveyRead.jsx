@@ -10,7 +10,6 @@ import {
 import { useAccount } from '../../../auth/AuthContext';
 import { hortlistByCpSn } from '../../../services/cohortService';
 import { v4 as uuidv4 } from 'uuid';
-
 import { applyGroup, readRecruitPoster, readSurvey } from '../../../services/postService';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -26,6 +25,7 @@ import {ApplyList2} from '../../../components/module/ApplyList2.jsx';
 function SurveyRead({setEditToggle}) {
   const domFormId = useId();
   const { srvySn } = useParams();
+  console.log(useParams());
   // const finalSn = propCohortSn ?? recruitSn; 
   const domId = useId();
   const postId = useRef(uuidv4());
@@ -68,11 +68,12 @@ function SurveyRead({setEditToggle}) {
 
   useEffect(() => {
     (async () => {
-      if (!srvySn) return;
+      if (!srvySn) return toast.error("srvySn 없는거  맞음 ㅇㅇ");
+      console.log(parseInt(srvySn));
       try {
 
         // 기수사람만 조회하다던가... 백에서 예외 에러 자꾸 보내서 동작 확인 불가......
-          const myRes = await readSurveyRes(getRspnsSn);
+          const myRes = await readSurveyRes(parseInt(srvySn));
           // console.log(myRes.data);
 
           const res = await readSurvey(Number(srvySn));
