@@ -51,7 +51,10 @@ build-job:
   script:
     - echo "⚙️ React Build 시작"
     - cd src/main/frontend
-    - npm install
+    #- npm install
+    - echo "📦 NPM 패키지 설치 (경고 숨김 모드)"
+    - $env:NODE_OPTIONS="--no-warnings"
+    - npm ci --prefer-offline --no-audit --no-fund
     # PowerShell 환경에서 CI=false 설정
     - $env:CI="false"; npm run build
     - cd ../../../
