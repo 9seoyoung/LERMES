@@ -4,14 +4,15 @@ import uiStyle from "../../../styles/UiComp.module.css"
 import FilterList from "../../../components/ui/FilterList";
 import { use, useEffect, useState } from "react";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
-import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH } from "../../../utils/studentStudyFilter";
+import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH, SELECT_TUTORS_DETAIL_PAGE_PATH, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_STD, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_TUTOR } from "../../../utils/studentStudyFilter";
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
+import { STUDENT_BOARD_MENU_FILTER } from "../../../utils/studentBoardFilter";
 
 function StudyManage() {
     const navigate = useNavigate();
     const { effectiveSn } = useSelectedCompany();
-    const filterArr = ["전체", "공식 일정", "내 일정", "학습 일지", "면담 요청", "면담 기록"];
+    const filterArr = ["전체", "공식 일정", "내 일정", "면담 요청", "면담 기록"];
     const [selectedIdx, setSelected] = useState(0)
     const [pullList, setPullList] = useState([]);
     const [columnData, setColumnData] = useState([]);
@@ -19,10 +20,12 @@ function StudyManage() {
     const [whereTogo, setWhereToGo] = useState("");
 
     useEffect(() => {
+        const bbsType = STUDENT_BOARD_MENU_FILTER[selectedIdx];
+        
         const url = STUDENT_STUDY_MENU_FILTER[selectedIdx];
         const column = MENU_FILTER_COLUMNDATA[selectedIdx];
         const postSn = SELECT_POST_SN_KEY[selectedIdx];
-        const path = SELECT_DETAIL_PAGE_PATH[selectedIdx];
+        const path = SELECT_TUTORS_DETAIL_PAGE_PATH[selectedIdx];
 
         const params = {
             url: url,
@@ -40,7 +43,7 @@ function StudyManage() {
             try {
                 const data = await callStudyPlanListByFilter(params);
                 console.log(data.data);
-                const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item.itvAplyDt || item?.regDt || item?.createdAt), postType: (item?.postType === "면담신청" ? "면담요청" : item?.postType )}));
+                const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item?.itvAplyDt || item?.regDt || item?.createdAt || item?.eventRegDt), postType: (item?.postType === "면담신청" ? "면담요청" : item?.postType ), renameType: (item?.boardType === "면담신청" ? "면담요청" : item.boardType) }));
                 setPullList(formattedData);
             } catch (e) {
                 console.log(e.message);
@@ -73,7 +76,10 @@ function StudyManage() {
                     gridTemplate="0.5fr 1fr 5fr 1.25fr 1fr 1fr"
                     gap="12px"
                     postKey={postKey}
-                    whereTogo={whereTogo}
+                selectedIdx={selectedIdx}
+                whereTogo={whereTogo}
+                allPage={CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_TUTOR}
+                typeKey={"boardType"}
                 />
             </div>
         </div>

@@ -198,7 +198,10 @@ export const readSurvey = (srvySn) => api.get(`/survey/${srvySn}`);
 export const callStudyPlanListByFilter = ({url, effectiveSn, isPrivate, cohortSn}) => api.get(`${url}`, (url === "/interviewRecord") ? {params: {cohortSn: cohortSn }}: {params: {isPrivate, effectiveSn}});
 
 
-
+/**
+ * 학습일정 전체 게시글
+ * @param {Number} cohortSn 강사 이상 필수
+ */
 
 
 

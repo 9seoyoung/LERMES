@@ -58,6 +58,7 @@ import OAuth2Redirect from '../auth/loginPage/GoogleOAuth2Redirect.jsx';
 import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
 import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
 import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
+import SchedEdit2 from '../pages/LMS/readAndEdit/SchedRead2.jsx';
 
 function AppRoutes() {
   return (
@@ -145,13 +146,13 @@ function AppRoutes() {
                   path="tutorHome/board/read/:postSn"
                   element={<BoardRead2 />}
                 />
-                <Route path="tutorHome/board/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="tutorHome/board/survey/:srvySn" element={<SurveyRead />} />
                 <Route path="tutorHome/studySched/createPost" element={<BoardPost />} />
                 <Route path="tutorHome/studySched" element={<StudyManage />} />
                 <Route path="tutorHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route path="tutorHome/myPage" element={<TutorMypage />} />
-                <Route path="tutorHome/board/readInterview/:itvSn" element={<AdminPostRead />} />
+                <Route path="tutorHome/studySched/interview/:itvSn" element={<InterviewEditPost />} />
+                <Route path="tutorHome/studySched/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
               </Route>
 
               {/* 수강생 */}
@@ -165,7 +166,7 @@ function AppRoutes() {
                 <Route path="stdHome/studySched/createPost" element={<BoardPost />} />
                 <Route path="stdHome/studySched/calendar/:calSn" element={<SchedEditPost />} />
                 <Route path="stdHome/studySched/interview/:postSn" element={<InterviewRead />} />
-                <Route path="stdHome/board/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
+                {/* <Route path="stdHome/studySched/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} /> */}
                 <Route path="stdHome/myPage" element={<StdMypage />} />
               </Route>
             </Route>
