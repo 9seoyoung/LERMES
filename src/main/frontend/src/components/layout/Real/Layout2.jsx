@@ -75,6 +75,7 @@ export default function Layout2() {
     // navKind가 홈맵에 있는데, 경로가 null(=비활성)로 지정된 경우만 클리어
     if (pathname === '/') {
       clearFixedSn();
+      setNavToggle(false);
     }
   }, [navKind]);
 

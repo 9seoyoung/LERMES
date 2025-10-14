@@ -28,6 +28,12 @@ export default function TenantSignup() {
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const getErrMsg = (e) =>
+    e?.response?.data?.message ||
+    e?.response?.data?.error ||
+    e?.message ||
+    '알 수 없는 오류가 발생했습니다.';
+
   const sendCode = async () => {
     if (!emailRef.current?.reportValidity()) return;
 
@@ -40,7 +46,7 @@ export default function TenantSignup() {
       setCodeSent(true);
       toast.success('인증코드를 전송했습니다.');
     } catch (e) {
-      toast.error(e.message || '인증코드 전송 실패');
+      toast.error(getErrMsg(e)); // 예: "이미 가입된 이메일입니다."
     } finally {
       setSending(false);
     }
