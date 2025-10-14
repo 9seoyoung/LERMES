@@ -18,7 +18,7 @@ public class CohortMemberController {
 
     @GetMapping("/cohort/{cohortSn}/applicants")
     public ResponseEntity<List<CohortMemberDto>> getApplicants(@PathVariable Long cohortSn) {
-        List<CohortMemberDto> applicants = cohortMemberService.getApplicantsByCohortSn(cohortSn); // <- 이름도 맞춰야 함
+        List<CohortMemberDto> applicants = cohortMemberService.getAppByCohortSn(cohortSn); // <- 이름도 맞춰야 함
         return ResponseEntity.ok(applicants);
     }
 

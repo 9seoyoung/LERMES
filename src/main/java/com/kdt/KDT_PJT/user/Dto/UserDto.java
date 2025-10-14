@@ -3,6 +3,8 @@ package com.kdt.KDT_PJT.user.Dto;
 
 
 import com.kdt.KDT_PJT.auth.entity.User;
+import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
+import com.kdt.KDT_PJT.cohortmem.entity.CohortMemberStts;
 import lombok.*;
 
 @Getter
@@ -20,7 +22,7 @@ public class UserDto {
     private String userTelno;
     private Long ogdpCoSn;
     private Long ogdpCohortSn;
-
+    private CohortMemberStts cohortMemStts;
 
     public static UserDto fromEntity(User user) {
         UserDto dto = new UserDto();

@@ -52,7 +52,7 @@ export default function SuperMain() {
     <div className={cardStyle.mainContainer_cardGrid}>
       {[...companyList].reverse().map((v, idx) => {
         const bg = v?.bigLogoFileSn
-          ? `url(http://localhost:940/api/files/id/${v.bigLogoFileSn})`
+          ? `url(http://onopco2.iptime.org:940/api/files/id/${v.bigLogoFileSn})`
           : 'none';
 
         const isFlipped = flipped === v.id;
@@ -84,7 +84,7 @@ export default function SuperMain() {
               <div className={cardStyle.company_card}>
                 {v?.bigLogoFileSn ? (
                   <img
-                    src={`http://localhost:940/api/files/id/${v.bigLogoFileSn}`}
+                    src={`http://onopco2.iptime.org:940/api/files/id/${v.bigLogoFileSn}`}
                     alt={v?.name || 'company banner'}
                     className={cardStyle.company_img}
                   />

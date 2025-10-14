@@ -149,7 +149,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
         // ✅ 기수 이미지 따로 조회
         if (c?.cohortSn) {
           const imgRes = await fetch(
-            `http://localhost:940/api/cohorts/${c.cohortSn}`
+            `http://onopco2.iptime.org:940/api/cohorts/${c.cohortSn}`
           );
           if (imgRes.ok) {
             const imgData = await imgRes.json();
@@ -275,7 +275,7 @@ function RecruitRead({ propCohortSn, editToggle, setEditToggle }) {
                     :
                     <>
             <img
-            src={`http://localhost:940/api/files/id/${
+            src={`http://onopco2.iptime.org:940/api/files/id/${
               formData.cohortImg !== null
               ? formData.cohortImg
               : formData.bigLogoFileSn
