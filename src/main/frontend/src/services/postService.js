@@ -218,3 +218,12 @@ export const callAllPostByTypeAndCohortSn = (params) => api.get(`admin/boardList
  * 게시글 삭제 컨트롤러들
  */
 export const deletePost = (postSn) => api.delete(`/posts/${postSn}`)
+
+
+/**
+ * 일반 게시글 댓글 전체 조회
+ * @param {Number} postSn 게시글SN
+ */
+export const pullCommentList = (postSn) => api.get(`/comments/${postSn}`);
+
+export const createComment = (postSn, params) => api.post(`/comments/${postSn}`, params,   {headers: { 'Content-Type': 'application/json' }} );

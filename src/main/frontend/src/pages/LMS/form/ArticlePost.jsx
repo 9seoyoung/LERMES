@@ -2,7 +2,7 @@
 import React from 'react'
 import { FileList } from '../../../components/ui/UiComp'
 
-export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) => {
+export const ArticlePost = ({formId, handleChange, formData, files, setFiles, commentToggle, setCommentToggle}) => {
   return (
     <>
     <div className='formHeader'>

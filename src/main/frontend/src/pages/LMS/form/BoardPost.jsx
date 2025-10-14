@@ -26,7 +26,7 @@ import {
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle, setCohortSn } = props;
+  const { type, postId, domFormId, commentToggle, setCommentToggle, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle, setCohortSn } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -41,6 +41,8 @@ function PostStatus(props) {
               FileList={FileList}
               files={files}
               setFiles={setFiles}
+              commentToggle={commentToggle}
+              setCommentToggle={setCommentToggle}
           />
       );
     case "설문조사":
@@ -132,6 +134,7 @@ function BoardPost() {
   const [files, setFiles] = useState([]);
   const [prvToggle, setPrvToggle] = useState(0);
   const [recordCohortSn, setCohortSn] = useState(null);
+  const [commentToggle, setCommentToggle] = useState(false);
 
 
   // 설문 폼 (초기 페이지 하나 생성)
@@ -264,9 +267,6 @@ const selectType = (nextType) => {
       startTime: formData.startTime,
       location: formData.location,
       isPrivate: (formData.type === "일정" && userAuth <=3 ? formData.isPrivate : 1),      
-      surveyStart: formData.surveyStart,
-      surveyEnd: formData.surveyEnd,
-      startTime: formData.startTime,
     //   attachments: uploads.map(u => ({
     //   storedFileName: u.storedFileName,
     //   originalFileName: u.originalFileName,
@@ -409,6 +409,8 @@ const selectType = (nextType) => {
                 setPrvToggle={setPrvToggle}
                 prvToggle={prvToggle}
                 setCohortSn={setCohortSn}
+                commentToggle={commentToggle}
+                setCommentToggle={setCommentToggle}
             />
           </div>
 

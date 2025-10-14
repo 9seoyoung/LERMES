@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import CommentItem from "./CommentItem";
 import CommentInput from "./CommentInput";
+import {createComment, pullCommentList} from "../../../services/postService";
+import {toast} from "react-toastify";
 
-export default function CommentSection() {
+export default function CommentSection({postSn}) {
   const [comments, setComments] = useState([
     {
       id: 1,
@@ -12,6 +14,7 @@ export default function CommentSection() {
       replies: [],
     },
   ]);
+
 
   // ✅ 새 댓글 추가
   const handleAddComment = (newText) => {
@@ -23,6 +26,14 @@ export default function CommentSection() {
       replies: [],
     };
     setComments([newComment, ...comments]);
+      (async () => {
+          try {
+              const {data} = await createComment(postSn, comments);
+                console.log(data);
+          } catch (err){
+              toast.error(err.message);
+          }
+      })();
   };
 
   // ✅ 특정 댓글에 대댓글 추가
@@ -47,6 +58,28 @@ export default function CommentSection() {
     setComments(updated);
   };
 
+
+    useEffect(() => {
+        (async () => {
+            try{
+                const {data} = await pullCommentList(postSn);
+                console.log(data);
+                const formattedComment = data.map((item) => ({
+                    id: item.cmntWrtrSn,
+                    user: `${item.cmntWrtrSn}번 유저`,
+                    time: item.cmntLastMdfcnDt ?? item.cmntFrstWrtDt,
+                    text: item.cmntCn,
+                    replies: [item.parentCmntSn],
+                }));
+
+                setComments(formattedComment);
+            } catch (err){
+                toast.error(err.message);
+            }
+
+        })();
+    }, [postSn]);
+
   return (
     <div
       style={{
@@ -60,9 +93,9 @@ export default function CommentSection() {
     >
       <h3>💬 Comments</h3>
 
-      {comments.map((c) => (
+      {comments.map((c, idx) => (
         <CommentItem
-          key={c.id}
+          key={`${c.id}-${idx}`}
           comment={c}
           onAddReply={handleAddReply}
         />
