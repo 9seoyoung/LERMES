@@ -31,7 +31,7 @@ public class CohortMemberService {
         this.cohortResponseRepository = cohortResponseRepository;
     }
 
-    public List<CohortMemberDto> getApplicantsByCohortSn(Long cohortSn) {
+    public List<CohortMemberDto> getAppByCohortSn(Long cohortSn) {
         List<CohortMember> members = cohortMemberRepository.findByCohortSn(cohortSn);
 
         return members.stream().map(member -> {
