@@ -118,7 +118,9 @@ deploy-job:
           foreach ($c in $connections) {
               try {
                   $proc = Get-Process -Id $c.OwningProcess -ErrorAction SilentlyContinue
-                  if ($proc) { $procs += $proc }
+                  if ($proc -and $proc.ProcessName -notin @('Idle','System')) {
+                      $procs += $proc
+                  }
               } catch { Write-Host "프로세스 없음" }
           }
       }
