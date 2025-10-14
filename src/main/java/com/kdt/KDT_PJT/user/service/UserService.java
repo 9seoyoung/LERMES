@@ -8,6 +8,7 @@ import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import com.kdt.KDT_PJT.user.Dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
             user.setName(updatedUser.getName());
@@ -50,9 +52,9 @@ public class UserService {
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-
+    @Transactional
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        userRepository.nullifyCoSnByUserSn(id);
     }
 
     // 회사 + 권한 + 코호트SN
