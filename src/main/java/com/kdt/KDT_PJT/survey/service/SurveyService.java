@@ -104,8 +104,27 @@ public class SurveyService {
     }
 
     // 설문 전체/회사별 조회
-    public List<ResponseSurveyDto> getSurveyList(Long coSn, Long cohortSn, BbsType bbsType) {
-        return surveyMapper.findSurveyList(coSn, cohortSn, bbsType);
+    @Transactional(readOnly = true)
+    public List<ResponseSurveyDto> getSurveyList(Long coSn, Long cohortSn, Long roleId, BbsType bbsType) {
+        if (roleId == null) {
+            throw new SecurityException("권한 정보가 없습니다.");
+        }
+
+        SurveyRole role = SurveyRole.fromCode(roleId);
+
+        // 역할별 허용 스코프 지정
+        List<SurveyScope> allowedScopes = switch (role) {
+            case SUPER_ADMIN, TENANT_ADMIN, EMPLOYEE -> List.of(SurveyScope.COHORT);
+            case INSTRUCTOR -> List.of(SurveyScope.INTERNAL);
+            case STUDENT -> List.of(SurveyScope.COHORT, SurveyScope.INTERNAL);
+            default -> List.of(); // GENERAL, VISITOR
+        };
+
+        if (allowedScopes.isEmpty()) {
+            throw new SecurityException("설문 목록 조회 권한이 없습니다.");
+        }
+
+        return surveyMapper.findSurveyListFiltered(coSn, cohortSn, bbsType, allowedScopes);
     }
 
     // 설문 수정 (응답 있으면 차단)

@@ -42,7 +42,7 @@ function SurveyRead({setEditToggle}) {
   const [finalSn, setFinalSn] = useState(srvySn);
   const [readOrEdit, setReadOrEdit] = useState(false);
 
-  console.log(srvySn);
+  console.log(typeof  srvySn);
   // 설문 폼 (초기 페이지 하나 생성)
   const [surveyForm, setSurveyForm] = useState({
     id: postId.current,
@@ -75,7 +75,7 @@ function SurveyRead({setEditToggle}) {
           const myRes = await readSurveyRes(getRspnsSn);
           // console.log(myRes.data);
 
-          const res = await readSurvey({srvySn});
+          const res = await readSurvey(Number(srvySn));
           console.log(myRes.data);
 
           const c = (chkSubmit ? myRes?. data : res?.data);
