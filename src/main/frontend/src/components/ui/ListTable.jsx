@@ -83,14 +83,14 @@ export default function ListTable({
           className={styles.ListTbBg}
           style={{ ["--cols"]: resolvedTemplate, ["--gap"]: gap }}
         >
-          {apiData.map((row, i) => {
+          {apiData?.map((row, i) => {
             const rowKey = makeRowKey(row, i); // 안정 키 우선
 
             // console.log('row:', row);
 
             const status =
               rowStatus[rowKey] ||
-              (row.cohortMemStts ? row.cohortMemStts.toLowerCase() : null);
+              (row?.cohortMemStts ? row?.cohortMemStts.toLowerCase() : null);
 
             const bgColor =
               status === 'enrolled'
@@ -109,7 +109,7 @@ export default function ListTable({
                 } : null )}
                 
                 onClick={() => {
-                  const base = selectedIdx === 0 ? `${allPage[row[typeKey]]}` : whereTogo;
+                  const base = selectedIdx === 0 ? `${allPage?.[row?.[typeKey]]}` : whereTogo;
                   setRspnsSn?.(row.rspnsSn);
                   console.log(row?.rspnsSn)
                   const targetPath = `${base}/${row[postKey]}`;
@@ -127,7 +127,7 @@ export default function ListTable({
                 <div className={styles.cell}>{i + 1}</div>
 
                 {/* 데이터 셀들 - 각 셀에 고유 key */}
-                {columnData.map((col, j) => (
+                {columnData?.map((col, j) => (
                   <div key={`cell-${rowKey}-${j}`} className={styles.cell} style={(j === 0 && (location.pathname === "/stdHome" || location.pathname === "/tutorHome" || location.pathname === "/adminHome" || location.pathname === "/visitorHome" || location.pathname === "/unknownHome")? {justifyContent: "flex-start"}: {})}>
                     {row[col]}
                   </div>

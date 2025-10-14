@@ -14,6 +14,7 @@ export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) =
                   placeholder='제목을 입력하세요.' 
                   value={formData.title} 
                   onChange={handleChange}
+                  required
                 />
               </div>
             </div>
@@ -25,6 +26,7 @@ export const ArticlePost = ({formId, handleChange, formData, files, setFiles}) =
                 placeholder='본문을 입력하세요.'
                 value={formData.content}
                 onChange={handleChange}>
+                  required
             </textarea>
             <div className='inputSet'>
               <label className='formLabel' htmlFor={`${formId}_file`}>파일</label>
