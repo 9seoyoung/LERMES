@@ -9,7 +9,7 @@ export default function FilesPage() {
     if (!files.length) return;
     const form = new FormData();
     files.forEach(f => form.append('files', f));
-    const res = await fetch('http://onopco2.iptime.org:940/api/files', {
+    const res = await fetch('http://localhost:940/api/files', {
       method: 'POST',
       body: form,
       credentials: 'include',
@@ -35,13 +35,13 @@ export default function FilesPage() {
               <div>크기: {r.size} bytes</div>
               <button onClick={() =>
                 window.open(
-                  `http://onopco2.iptime.org:940/api/files/${encodeURIComponent(r.storedFileName)}/preview?original=${encodeURIComponent(r.originalFileName||'')}`,
+                  `http://localhost:940/api/files/${encodeURIComponent(r.storedFileName)}/preview?original=${encodeURIComponent(r.originalFileName||'')}`,
                   '_blank'
                 )
               }>미리보기</button>
               <button onClick={() =>
                 window.open(
-                  `http://onopco2.iptime.org:940/api/files/${encodeURIComponent(r.storedFileName)}?original=${encodeURIComponent(r.originalFileName||'')}`,
+                  `http://localhost:940/api/files/${encodeURIComponent(r.storedFileName)}?original=${encodeURIComponent(r.originalFileName||'')}`,
                   '_blank'
                 )
               } style={{marginLeft:8}}>다운로드</button>

@@ -197,7 +197,7 @@ export default function CompanyBigLogoUploader() {
               alignItems: 'center',
               justifyContent: 'center',
               backgroundImage: logoFileSn
-                ? `url(http://onopco2.iptime.org:940/api/files/id/${logoFileSn})`
+                ? `url(http://localhost:940/api/files/id/${logoFileSn})`
                 : 'none',
               backgroundSize: 'cover',
               backgroundPosition: 'center',

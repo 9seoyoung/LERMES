@@ -52,7 +52,7 @@ export default function UserProfile() {
       });
       setPreviewUrl(
         res.userProfileImage
-          ? `http://onopco2.iptime.org:940/api/files/id/${res.userProfileImage}/preview`
+          ? `http://localhost:940/api/files/id/${res.userProfileImage}/preview`
           : null
       );
     } catch (e) {
@@ -77,7 +77,7 @@ export default function UserProfile() {
       const fileSn = uploaded.fileSn;
 
       setFormData((prev) => ({ ...prev, userProfileImage: fileSn }));
-      setPreviewUrl(`http://onopco2.iptime.org:940/api/files/id/${fileSn}`);
+      setPreviewUrl(`http://localhost:940/api/files/id/${fileSn}`);
 
       toast.info('사진이 변경되었습니다. "edit" 버튼을 눌러야 저장됩니다.');
     } catch (err) {
