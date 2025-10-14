@@ -68,11 +68,12 @@ function SurveyRead({setEditToggle}) {
 
   useEffect(() => {
     (async () => {
-      if (!srvySn) return;
+      if (!srvySn) return toast.error("srvySn 없는거  맞음 ㅇㅇ");
+      console.log(parseInt(srvySn));
       try {
 
         // 기수사람만 조회하다던가... 백에서 예외 에러 자꾸 보내서 동작 확인 불가......
-          const myRes = await readSurveyRes(getRspnsSn);
+          const myRes = await readSurveyRes(parseInt(srvySn));
           // console.log(myRes.data);
 
           const res = await readSurvey({srvySn});
