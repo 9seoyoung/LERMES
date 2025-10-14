@@ -50,7 +50,7 @@ export function VisitorNav({ setNavToggle, loc }) {
           <img
             src={
               user?.USER_PROFILE_IMAGE
-                ? `http://localhost:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
+                ? `http://onopco2.iptime.org:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
                 : '/img/default-profile.png'
             }
             alt="사용자 프로필"
@@ -103,7 +103,7 @@ function StdNav({ setNavToggle }) {
           <img
             src={
               user?.USER_PROFILE_IMAGE
-                ? `http://localhost:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
+                ? `http://onopco2.iptime.org:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
                 : '/img/default-profile.png'
             }
             alt="사용자 프로필"
@@ -159,7 +159,7 @@ function TutorNav({ setNavToggle }) {
           <img
             src={
               user?.USER_PROFILE_IMAGE
-                ? `http://localhost:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
+                ? `http://onopco2.iptime.org:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
                 : '/img/default-profile.png'
             }
             alt="사용자 프로필"
@@ -218,7 +218,7 @@ function AdminNav({ setNavToggle }) {
           <img
             src={
               user?.USER_PROFILE_IMAGE
-                ? `http://localhost:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
+                ? `http://onopco2.iptime.org:940/api/files/id/${user.USER_PROFILE_IMAGE}/preview`
                 : '/img/default-profile.png'
             }
             alt="사용자 프로필"

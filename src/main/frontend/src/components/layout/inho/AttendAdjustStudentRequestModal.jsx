@@ -249,7 +249,7 @@ export default function AttendAdjustStudentRequestModal({
               <div style={{ marginTop: 8 }}>
                 <div style={sx.fileTag}>
                   <a
-                    href={`http://localhost:940/api/files/${uploadRes.fileSn}/name`}
+                    href={`http://onopco2.iptime.org:940/api/files/${uploadRes.fileSn}/name`}
                     target="_blank"
                     rel="noreferrer"
                     style={{
