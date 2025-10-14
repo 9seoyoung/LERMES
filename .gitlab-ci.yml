@@ -51,27 +51,48 @@ build-job:
   script:
     - echo "⚙️ React Build 시작"
     - cd src/main/frontend
-    #- npm install
-    - echo "📦 NPM 패키지 설치 (경고 숨김 모드)"
+
+    # 📦 npm 최신화 + 캐시 기반 설치
+    - npm install -g npm@latest
+    - echo "📦 NPM 패키지 설치 (캐시 활용, 경고 최소화)"
     - $env:NODE_OPTIONS="--no-warnings"
     - npm ci --prefer-offline --no-audit --no-fund
-    # PowerShell 환경에서 CI=false 설정
-    - $env:CI="false"; npm run build
+
+    # ⚡ React 빌드 최적화
+    - echo "⚙️ React 빌드 최적화 옵션 적용"
+    - $env:CI="false"
+    - $env:GENERATE_SOURCEMAP="false"
+    - $env:DISABLE_ESLINT_PLUGIN="true"
+    - $env:BROWSER="none"
+    - npm run build
+
     - cd ../../../
     - echo "🚀 SpringBoot Gradle Build 시작"
     - ./gradlew clean build -x test --no-daemon --parallel
-  cache:   # ⚡ Gradle 캐시 활성화 (빌드 시간 단축)
+
+  # Gradle 캐시 활성화
+  cache:
     key: "$CI_PROJECT_NAME-gradle"
     paths:
       - .gradle/wrapper
-      - .gradle/caches  
+      - .gradle/caches
+      - src/main/frontend/node_modules/
+      - .npm/
+
   artifacts:
     paths:
       - $REACT_BUILD_DIR
       - build/libs/*.jar
+
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
+
+  before_script:
+    - $ProgressPreference = 'SilentlyContinue'
+    - $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+    - $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(512,3000)
+    - echo "🧩 PowerShell 콘솔 버퍼 확장 완료"
 
 # 3️⃣ Deploy Job
 deploy-job:
