@@ -54,10 +54,11 @@ public class UserService {
     }
 
     @Transactional
-    public void nullifyCompanySn(Long userId) {
+    public void nullifyCompanyAndCohortSnByUserSn(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        user.setCompanySn(null);  // 필드 null로 변경
+        user.setCompanySn(null);   // 회사 null
+        user.setCohortSn(null);    // 코호트 null
         // save() 호출 안 해도 트랜잭션 끝날 때 자동 업데이트 됨 (Dirty Checking)
     }
 

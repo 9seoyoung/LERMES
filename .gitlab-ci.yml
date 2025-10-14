@@ -48,15 +48,24 @@ test-job:
 build-job:
   stage: build
   timeout: 30m
+
+  before_script:
+    # PowerShell 출력 버퍼 확장 + 진행바 비활성화
+    - $ProgressPreference = 'SilentlyContinue'
+    - $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+    - $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(512,3000)
+    - echo "🧩 PowerShell 콘솔 버퍼 확장 완료"
+
   script:
     - echo "⚙️ React Build 시작"
     - cd src/main/frontend
 
     # 📦 npm 최신화 + 캐시 기반 설치
+    - echo "📦 NPM 최신화"
     - npm install -g npm@latest
     - echo "📦 NPM 패키지 설치 (캐시 활용, 경고 최소화)"
     - $env:NODE_OPTIONS="--no-warnings"
-    - npm ci --prefer-offline --no-audit --no-fund
+    - npm ci --prefer-offline --no-audit --no-fund --silent
 
     # ⚡ React 빌드 최적화
     - echo "⚙️ React 빌드 최적화 옵션 적용"
@@ -64,20 +73,21 @@ build-job:
     - $env:GENERATE_SOURCEMAP="false"
     - $env:DISABLE_ESLINT_PLUGIN="true"
     - $env:BROWSER="none"
-    - npm run build
+    - npm run build --silent
 
     - cd ../../../
     - echo "🚀 SpringBoot Gradle Build 시작"
-    - ./gradlew clean build -x test --no-daemon --parallel
+    - ./gradlew clean build -x test --no-daemon --parallel --build-cache
 
-  # Gradle 캐시 활성화
+  # 캐시 설정 (npm + Gradle)
   cache:
-    key: "$CI_PROJECT_NAME-gradle"
+    key: "$CI_PROJECT_NAME-build-cache"
     paths:
-      - .gradle/wrapper
-      - .gradle/caches
+      # Gradle 캐시 경로는 현재 working dir 기준
+      - .gradle/
+      # npm/node_modules 캐시
       - src/main/frontend/node_modules/
-      - .npm/
+      - $env:APPDATA\npm-cache/
 
   artifacts:
     paths:
@@ -88,11 +98,6 @@ build-job:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
 
-  before_script:
-    - $ProgressPreference = 'SilentlyContinue'
-    - $OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
-    - $Host.UI.RawUI.BufferSize = New-Object Management.Automation.Host.Size(512,3000)
-    - echo "🧩 PowerShell 콘솔 버퍼 확장 완료"
 
 # 3️⃣ Deploy Job
 deploy-job:
