@@ -41,7 +41,7 @@ public class UserController {
 
     @PutMapping("/{id}/company")
     public ResponseEntity<Void> nullifyCompany(@PathVariable Long id) {
-        userService.nullifyCompanySn(id);
+        userService.nullifyCompanyAndCohortSnByUserSn(id);
         return ResponseEntity.noContent().build();
     }
 
