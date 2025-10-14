@@ -6,8 +6,10 @@ import com.kdt.KDT_PJT.auth.entity.User;
 import com.kdt.KDT_PJT.auth.repository.UserRepository;
 import com.kdt.KDT_PJT.cohortmem.entity.CohortMember;
 import com.kdt.KDT_PJT.user.Dto.UserDto;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -36,6 +38,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public User updateUser(Long id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
             user.setName(updatedUser.getName());
@@ -50,9 +53,13 @@ public class UserService {
         }).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    @Transactional
+    public void nullifyCompanyAndCohortSnByUserSn(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setCompanySn(null);   // 회사 null
+        user.setCohortSn(null);    // 코호트 null
+        // save() 호출 안 해도 트랜잭션 끝날 때 자동 업데이트 됨 (Dirty Checking)
     }
 
     // 회사 + 권한 + 코호트SN
