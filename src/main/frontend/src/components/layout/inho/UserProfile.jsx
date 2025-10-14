@@ -8,7 +8,7 @@ import { uploadEvidenceFile } from '../../../attend/attendService';
 import { useAccount } from '../../../auth/AuthContext';
 import { toast } from 'react-toastify';
 
-export default function UserProfile() {
+export default function UserProfile({ onAdminSave }) {
   const { user, patchUser } = useAccount();
 
   const [profile, setProfile] = useState(null);
@@ -21,7 +21,6 @@ export default function UserProfile() {
     userProfileImage: null,
   });
 
-  // ✅ 전화번호 포맷 (조회용)
   const formatPhone = (phone) => {
     if (!phone) return '';
     const onlyNum = phone.replace(/\D/g, '');
@@ -39,7 +38,6 @@ export default function UserProfile() {
     )}`;
   };
 
-  // ✅ 프로필 불러오기
   const fetchProfile = async () => {
     try {
       setLoading(true);
@@ -47,12 +45,12 @@ export default function UserProfile() {
       setProfile(res);
       setFormData({
         email: res.email,
-        phoneNumber: res.phoneNumber ? formatPhone(res.phoneNumber) : '', // ✅ 조회 시 하이픈 표시
+        phoneNumber: res.phoneNumber ? formatPhone(res.phoneNumber) : '',
         userProfileImage: res.userProfileImage || null,
       });
       setPreviewUrl(
         res.userProfileImage
-          ? `http://onopco2.iptime.org:940/api/files/id/${res.userProfileImage}/preview`
+          ? `http://localhost:940/api/files/id/${res.userProfileImage}/preview`
           : null
       );
     } catch (e) {
@@ -67,7 +65,6 @@ export default function UserProfile() {
     fetchProfile();
   }, []);
 
-  // ✅ 프로필 사진 업로드
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -77,18 +74,16 @@ export default function UserProfile() {
       const fileSn = uploaded.fileSn;
 
       setFormData((prev) => ({ ...prev, userProfileImage: fileSn }));
-      setPreviewUrl(`http://onopco2.iptime.org:940/api/files/id/${fileSn}`);
-
-      toast.info('사진이 변경되었습니다. "edit" 버튼을 눌러야 저장됩니다.');
+      setPreviewUrl(`http://localhost:940/api/files/id/${fileSn}`);
+      toast.info('사진이 변경되었습니다. "저장" 버튼을 눌러야 저장됩니다.');
     } catch (err) {
       console.error(err);
       toast.error('업로드 실패');
     }
   };
 
-  // ✅ edit 버튼 → DB 반영
   const handleSave = async () => {
-    const plainPhone = formData.phoneNumber.replace(/[^0-9]/g, ''); // 숫자만 추출
+    const plainPhone = formData.phoneNumber.replace(/[^0-9]/g, '');
 
     if (!plainPhone || plainPhone.length !== 11) {
       toast.error('휴대폰 번호는 숫자 11자리여야 합니다.');
@@ -116,7 +111,14 @@ export default function UserProfile() {
       });
 
       toast.success('프로필이 수정되었습니다.');
-      fetchProfile(); // ✅ 저장 후 다시 조회 → 하이픈 포함 표시
+
+      // ✅ 관리자면 회사정보도 같이 저장
+      const authSn = user?.USER_AUTHRT_SN;
+      if (authSn === 2 || authSn === 3) {
+        onAdminSave?.();
+      }
+
+      fetchProfile();
     } catch (err) {
       console.error(err);
       toast.error('수정 실패');
@@ -133,12 +135,11 @@ export default function UserProfile() {
       <h2 className="myInfoTitle myInfoTitleA">
         {profile.name} ({profile.status})
         <button className="myInfoEditBtn" onClick={handleSave}>
-          edit
+          저장
         </button>
       </h2>
 
       <div className="myInfoContent">
-        {/* 프로필 사진 */}
         <div
           style={{
             display: 'flex',
@@ -171,7 +172,7 @@ export default function UserProfile() {
                 setFormData((prev) => ({ ...prev, userProfileImage: null }));
                 setPreviewUrl(null);
                 toast.info(
-                  '사진이 삭제되었습니다. "edit" 버튼을 눌러야 저장됩니다.'
+                  '사진이 삭제되었습니다. "저장" 버튼을 눌러야 저장됩니다.'
                 );
               }}
             >
@@ -180,7 +181,6 @@ export default function UserProfile() {
           )}
         </div>
 
-        {/* 상세 정보 */}
         <div className="myInfoDetails">
           {(authSn === 4 || authSn === 5) && (
             <>
@@ -208,7 +208,6 @@ export default function UserProfile() {
             </>
           )}
 
-          {/* 공통 */}
           <div className="myInfoRow">
             <span className="myInfoLabel">휴대폰 번호</span>
             <input
@@ -220,7 +219,7 @@ export default function UserProfile() {
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
-                  phoneNumber: e.target.value.replace(/[^0-9]/g, ''), // 숫자만 입력
+                  phoneNumber: e.target.value.replace(/[^0-9]/g, ''),
                 }))
               }
               placeholder="숫자 11자리"

@@ -12,7 +12,7 @@ import Dropdown from "../../../components/ui/Dropdown";
 import GroupDropdown from "../../../components/ui/GroupDropdown";
 import { Trash2Icon } from "lucide-react";
 
-export default function SchedEditPost() {
+export default function SchedEdit2() {
   const domFormId = useId();
   const { user } = useAccount();
   const {calSn} = useParams();
@@ -131,7 +131,7 @@ const handleChange = (e) => {
           <div style={{display:"flex", gap:"4px", alignItems:"baseline"}}>
             {`[${formData.calType}] ${formData.title}`}
             <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
-              { editToggle && formData?.postWriterName === user.USER_NM  || !editMyData ?
+              { editToggle && formData?.postWriterName === user.USER_NM  || !editMyData || userAuth === 4 ?
                 <button type='button' onClick={() => setEdit(false)} className={styles.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
                 :
                 <></>

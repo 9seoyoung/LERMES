@@ -246,7 +246,7 @@ const selectType = (nextType) => {
 
 
     // 2) 게시글 JSON (File 객체 넣지 말기!)
-    const postJson = (formData.type === "면담신청" ? {
+    const postJson = (formData.type !== "설문조사" ? {
       id: formData.id,
       surveyStart: formData.surveyStart,
       surveyEnd: formData.surveyEnd,
@@ -255,7 +255,7 @@ const selectType = (nextType) => {
       content: formData.content,
       coSn: formData.coSn,
       type: formData.type,
-      cohortSn: cohortSn,
+      cohortSn: (formData.type === "면담기록" ? recordCohortSn : cohortSn),
       scope: formData.scope,
       detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
@@ -263,7 +263,10 @@ const selectType = (nextType) => {
       endDate: formData.endDate,
       startTime: formData.startTime,
       location: formData.location,
-      isPrivate: formData.isPrivate,
+      isPrivate: (formData.type === "일정" && userAuth <=3 ? formData.isPrivate : 1),      
+      surveyStart: formData.surveyStart,
+      surveyEnd: formData.surveyEnd,
+      startTime: formData.startTime,
     //   attachments: uploads.map(u => ({
     //   storedFileName: u.storedFileName,
     //   originalFileName: u.originalFileName,
@@ -281,7 +284,7 @@ const selectType = (nextType) => {
       type: formData.type,
       cohortSn: (formData.type === "면담기록" ? recordCohortSn : formData.cohortSn),
       scope: (formData.type === "설문조사" ? "기수전체" : (userAuth <=3 ?  "그룹공개" : formData.scope)),
-      detailScope: (formData.scope === "그룹공개" && userAuth > 3 ? cohortSn : formData.detailScope),
+      detailScope: (formData.scope === "그룹공개" && userAuth <= 3 ? cohortSn : formData.detailScope),
       detailScopeNm: formData.detailScopeNm,
       surveyStart: formData.surveyStart,
       surveyEnd: formData.surveyEnd,
@@ -483,17 +486,17 @@ const selectType = (nextType) => {
                 <FormInput type="text" formData={formData} handleChange={handleChange} disabled={false} addLabelStyle="formLabel" name="location" labelNm="장소"/>
 
                 {(userAuth <=3  && (effectiveSn === coSn)) ? <>
-                  <div className="dropSet" style={{ zIndex: "2" }}>
-                  <p>공개 범위</p>
-                    <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
+                  {/* <div className="dropSet" style={{ zIndex: "2" }}> */}
+                  {/* <p>공개 범위</p> */}
+                    {/* <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}> */}
                     {/* 관리자 공개 범위 */}
-                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
+                      {/* <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "전체공개" }))}>전체공개</p>
                       <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "회사공개" }))}>회사공개</p>
                       <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "그룹공개" }))}>그룹공개</p>
-                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p>
-                    </Dropdown>
-                    <input type="hidden" name="scope" value={formData.scope} />
-                  </div>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "비공개" }))}>비공개</p> */}
+                    {/* </Dropdown> */}
+                    {/* <input type="hidden" name="scope" value={formData.scope} /> */}
+                  {/* </div> */}
                 </> : null }
             </> : null }              
               {formData.type === "면담신청"?

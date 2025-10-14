@@ -35,6 +35,7 @@ public class UserDto {
         dto.setUserTelno(user.getUserTelno());
         dto.setOgdpCoSn(user.getCompanySn());
         dto.setOgdpCohortSn(user.getCohortSn());
+
         return dto;
     }
 //

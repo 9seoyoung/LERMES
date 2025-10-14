@@ -6,7 +6,7 @@ import UserProfile from '../components/layout/inho/UserProfile';
 import '../components/layout/inho/Mypage.css';
 import CompanyBigLogoUploader from '../components/layout/inho/CompanyBigLogoUploader';
 import CompanyInfoForm from '../components/layout/inho/CompanyInfoForm';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PasswordChangeModal from '../components/layout/inho/PasswordChangeModal';
 
 export default function Mypage() {
@@ -50,6 +50,8 @@ export default function Mypage() {
 
 export function AdminMypage() {
   const [open, setOpen] = useState(false);
+  const companyRef = useRef(null);
+
   return (
     <div
       style={{
@@ -62,8 +64,11 @@ export function AdminMypage() {
       <h2>내 정보</h2>
       <div className="my-page-div" style={{ minHeight: '646px' }}>
         <section style={{ display: 'flex', flexDirection: 'column' }}>
-          <UserProfile />
-          {/* 비번바꾸기 모달 */}
+          {/* ✅ ref 전달용 onAdminSave props 추가 */}
+          <UserProfile
+            onAdminSave={() => companyRef.current?.saveCompanyInfo()}
+          />
+
           <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
             <button
               onClick={() => setOpen(true)}
@@ -82,10 +87,13 @@ export function AdminMypage() {
               비밀번호 변경
             </button>
           </div>
+
           {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
-          {/* 비번 바꾸기 모달 */}
-          <CompanyInfoForm />
+
+          {/* ✅ ref 연결 */}
+          <CompanyInfoForm ref={companyRef} />
         </section>
+
         <section style={{ width: '100%' }}>
           <CompanyBigLogoUploader />
         </section>

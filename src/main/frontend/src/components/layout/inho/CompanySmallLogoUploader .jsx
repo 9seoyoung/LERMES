@@ -70,7 +70,7 @@ export default function CompanySmallLogoUploader() {
       <div className="logoWrapper">
         {logoFileSn ? (
           <img
-            src={`http://onopco2.iptime.org:940/api/files/id/${logoFileSn}/preview`}
+            src={`http://localhost:940/api/files/id/${logoFileSn}/preview`}
             alt="회사 로고"
             className="companyLogo"
           />
