@@ -28,7 +28,7 @@ const CompanyInfoForm = () => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // ✅ 전화번호 포맷 함수
+  // 전화번호 포맷 함수
   const formatPhone = (tel) => {
     if (!tel) return '';
     const digits = tel.replace(/\D/g, '');
@@ -279,7 +279,7 @@ const CompanyInfoForm = () => {
 
           <div className="companyInfoActions">
             <button
-              className="companyInfoButton"
+              className="companyInfoButtonA"
               onClick={handleSave}
               disabled={loading}
             >

@@ -89,6 +89,7 @@
     transition: background 0.2s;
 }
 
+
 .companyInfoButton:hover:not(:disabled) {
     background: #333;
 }
@@ -97,6 +98,32 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* 버튼 기본 스타일 */
+.companyInfoButtonA {
+    margin-left: 5px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    background: #000;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+    transform: translateY(-10px);
+}
+
+
+.companyInfoButtonA:hover:not(:disabled) {
+    background: #333;
+}
+
+.companyInfoButtonA:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
 
 /* 주소 검색 버튼 */
 .companyInfoAddressButton {
