@@ -3,7 +3,12 @@ import { api } from '../auth/api';
 export const pullAllAccount = (params) =>
   api.get('/users/by-company-role', { params });
 
-export const deleteAccount = (id) => api.delete(`/company-members/${id}`, {id});
+/**
+ * 유저TB COSN 제거
+ * @param {Number} id 유저SN 
+ * @returns 
+ */
+export const deleteAccount = (id) => api.put(`/users/${id}/company`, {id});
 
 export const approveAccount = (companyMemberSn) =>
   api.post(`/company-members/${companyMemberSn}/approve`, {params: companyMemberSn},    {headers: { 'Content-Type': 'application/json' },});
