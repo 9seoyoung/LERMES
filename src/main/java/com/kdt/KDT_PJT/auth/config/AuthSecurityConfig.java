@@ -101,7 +101,8 @@ public class AuthSecurityConfig {
                         .logoutUrl("/logout")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                        .logoutSuccessUrl("http://localhost:3000/welcome/login")
+                        //.logoutSuccessUrl("http://localhost:3000/welcome/login")
+                        .logoutSuccessUrl("http://onopco2.iptime.org:3000/welcome/login")
                 )
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
