@@ -48,6 +48,7 @@ test-job:
 build-job:
   stage: build
   timeout: 30m
+
   before_script:
     # PowerShell 출력 버퍼 확장 + 진행바 비활성화
     - $ProgressPreference = 'SilentlyContinue'
@@ -64,7 +65,7 @@ build-job:
     - npm install -g npm@latest
     - echo "📦 NPM 패키지 설치 (캐시 활용, 경고 최소화)"
     - $env:NODE_OPTIONS="--no-warnings"
-    - npm ci --prefer-offline --no-audit --no-fund
+    - npm ci --prefer-offline --no-audit --no-fund --silent
 
     # ⚡ React 빌드 최적화
     - echo "⚙️ React 빌드 최적화 옵션 적용"
@@ -72,7 +73,7 @@ build-job:
     - $env:GENERATE_SOURCEMAP="false"
     - $env:DISABLE_ESLINT_PLUGIN="true"
     - $env:BROWSER="none"
-    - npm run build
+    - npm run build --silent
 
     - cd ../../../
     - echo "🚀 SpringBoot Gradle Build 시작"
@@ -82,10 +83,11 @@ build-job:
   cache:
     key: "$CI_PROJECT_NAME-build-cache"
     paths:
-      - .gradle/wrapper
-      - .gradle/caches
+      # Gradle 캐시 경로는 현재 working dir 기준
+      - .gradle/
+      # npm/node_modules 캐시
       - src/main/frontend/node_modules/
-      - .npm/
+      - $env:APPDATA\npm-cache/
 
   artifacts:
     paths:
