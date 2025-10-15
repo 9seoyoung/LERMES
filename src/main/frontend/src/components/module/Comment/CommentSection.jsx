@@ -89,19 +89,37 @@ export default function CommentSection({postSn}) {
         boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
         maxWidth: 900,
         margin: "0 auto",
+          width:"100%",
+          height:"100%",
       }}
     >
-      <h3>💬 Comments</h3>
+        <div
+            style={{
+                width:"100%",
+                display:"flex",
+                flexDirection:"column",
+                height:"100%",
+                justifyContent:"space-between",
+            }}
+        >
+            <h3>💬 Comments</h3>
 
-      {comments.map((c, idx) => (
-        <CommentItem
-          key={`${c.id}-${idx}`}
-          comment={c}
-          onAddReply={handleAddReply}
-        />
-      ))}
+            <div style={{flex:1, overflowY: "scroll"}}>
+                <div style={{overflowY:"scroll"}}>
 
-      <CommentInput onAddComment={handleAddComment} />
+                  {comments.map((c, idx) => (
+                    <CommentItem
+                      key={`${c.id}-${idx}`}
+                      comment={c}
+                      onAddReply={handleAddReply}
+                    />
+                  ))}
+                </div>
+
+        </div>
+
+            <CommentInput onAddComment={handleAddComment} />
+        </div>
     </div>
   );
 }

@@ -172,7 +172,7 @@ function BoardRead() {
               />
           </div>
             {commentToggle ?
-            <div className="formArea_R">
+            <div className="formArea_R" style={{width: "400px"}}>
                 <CommentSection postSn={postSn} />
             </div>: null
             }
