@@ -9,20 +9,32 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    // 댓글 등록
-    void insertComment(@Param("dto") CommentDto dto);
+//    // 댓글 등록
+//    void insertComment(@Param("dto") CommentDto dto);
+//
+//    // 게시글 기준 댓글 전체 조회
+//    List<CommentDto> findCommentsByPost(@Param("postSn") Long postSn);
+//
+//    // 댓글 단건 조회
+//    CommentDto findCommentById(@Param("cmntSn") Long cmntSn);
+//
+//    // 댓글 수정
+//    void updateComment(@Param("dto") CommentDto dto);
+//
+//    // 댓글 삭제 (Soft Delete)
+//    void softDeleteComment(@Param("cmntSn") Long cmntSn,
+//                           @Param("userSn") Long userSn);
+//    List<CommentDto> findRepliesByParent(@Param("parentCmntSn") Long parentCmntSn);
 
-    // 게시글 기준 댓글 전체 조회
-    List<CommentDto> findCommentsByPost(@Param("postSn") Long postSn);
+    void insertComment(CommentDto dto);
 
-    // 댓글 단건 조회
-    CommentDto findCommentById(@Param("cmntSn") Long cmntSn);
+    List<CommentDto> findCommentsByPost(Long postSn);
 
-    // 댓글 수정
-    void updateComment(@Param("dto") CommentDto dto);
+    CommentDto findCommentById(Long cmntSn);
 
-    // 댓글 삭제 (Soft Delete)
-    void softDeleteComment(@Param("cmntSn") Long cmntSn,
-                           @Param("userSn") Long userSn);
-    List<CommentDto> findRepliesByParent(@Param("parentCmntSn") Long parentCmntSn);
+    void updateComment(CommentDto dto);
+
+    void softDeleteComment(Long cmntSn, Long userSn); // userSn은 Audit용 필요시 추가 가능
+
+    List<CommentDto> findRepliesByParent(Long parentCmntSn);
 }

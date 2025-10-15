@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +22,6 @@ public class CommentDto {
     private LocalDateTime cmntLastMdfcnDt;  // 댓글 최종 수정일시
     private Boolean delYn;                  // 삭제 여부 (0=false, 1=true)
     private Long parentCmntSn;           // 대댓글 / NULL이면 원댓글
+
+    private List<CommentDto> children;      //대댓글 리스트 반환
 }
