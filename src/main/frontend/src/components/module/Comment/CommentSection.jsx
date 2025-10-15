@@ -104,7 +104,7 @@ export default function CommentSection({postSn}) {
         toast.error(err.message);
       } finally {
         if (!stopped) {
-          pollTimerRef.current = setTimeout(fetchOnce, INTERVAL);
+          // pollTimerRef.current = setTimeout(fetchOnce, INTERVAL);
         }
       }
     };
@@ -148,7 +148,7 @@ export default function CommentSection({postSn}) {
             {comments.map((c) => (
               <div
                 key={c.id}                                  // 고유키만 사용
-                ref={c.id === lastAddedId ? newCommentRef : newCommentRef}  // 새 댓글에만 ref
+                ref={c.id === lastAddedId ? newCommentRef : null}  // 새 댓글에만 ref
               >
                 <CommentItem comment={c} />
               </div>
