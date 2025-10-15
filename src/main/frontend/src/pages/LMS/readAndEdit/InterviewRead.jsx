@@ -25,7 +25,7 @@ function InterviewRead() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [postType, setPostType] = useState("면담신청");
-  const [editToggle, setEditToggle] = useState(true);
+  const [editToggle, setEditToggle] = useState(false);
   const [files, setFiles] = useState([]);
   const {pathname} = useLocation();
 
@@ -54,7 +54,7 @@ function InterviewRead() {
       try {
         const {data}  = await readInterview(postSn);
         toast.success("불러오기 성공");
-        setFormData((prev)=> ({...prev, itvAplyCn: data.itvAplyCn, itvAplyTtl: data.itvAplyTtl, itvAplcntNm: data.itvAplcntNm, itvSn: data.itvSn, viewCnt: data.viewCnt}))
+        setFormData((prev)=> ({...prev, itvAplyCn: data.itvAplyCn, itvAplyTtl: data.itvAplyTtl, itvPicAutht: data.itvPicAutht ,itvAplcntNm: data.itvAplcntNm, itvSn: data.itvSn, viewCnt: data.viewCnt}))
       } catch(err) {
         toast.error(err);
       }
@@ -118,10 +118,10 @@ function InterviewRead() {
       <div className="limitedHeightBox" style={{height: "706px"}}>
         <h4 style={{ fontWeight: "500" }}>
           <div boxType="row">
-          면담 신청 내역
+          { formData?.itvPicAutht === userAuth ? "면담 요청 내역" : "면담 신청 내역"}
           <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
-            { editToggle && formData?.postWriterName === user.USER_NM ?
-              <button type='button' onClick={() => setEditToggle(false)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
+            { !editToggle && (formData?.postWriterName === user.USER_NM || formData.itvPicAutht === 4) ?
+              <button type='button' onClick={() => setEditToggle(true)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
               :
               <></>
             }
@@ -143,6 +143,7 @@ function InterviewRead() {
                   files={files}
                   setFiles={setFiles}
                   editToggle={editToggle}
+                  userAuth={userAuth}
               />
               :
               <InterviewMemo
@@ -154,6 +155,7 @@ function InterviewRead() {
                   FileList={FileList}
                   files={files}
                   setFiles={setFiles}
+                  userAuth={userAuth}
               />
             }
           </div>
@@ -169,7 +171,7 @@ export default InterviewRead;
 
 
 function InterviewForm({
-  domFormId, handleChange, formData, files, formId, setFiles, editToggle
+  domFormId, handleChange, formData, files, formId, setFiles, editToggle, userAuth
 }) {
 
   return (
@@ -189,8 +191,8 @@ function InterviewForm({
         </div>
 
         <div className='inputSet inputFlex1'>
-          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
+          <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel"  disabled={true}></FormInput>
         </div>
       </div>
 
@@ -202,16 +204,16 @@ function InterviewForm({
                 placeholder='본문을 입력하세요.'
                 value={formData.itvAplyCn}
                 onChange={handleChange}
-                disabled = {editToggle}>
+                disabled={true}>
             </textarea>
             <div className='inputSet'>
           </div>
           <div className='inputSet'>
             <div className='inputSet inputFlex1'>
-              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
-              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
-              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
-              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
+              <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></DateTimeInput>
+              <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></DateTimeInput>
+              <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></FormInput>
+              <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></FormInput>
               
             </div>
           </div>
@@ -225,7 +227,7 @@ function InterviewForm({
 }
 
 function InterviewMemo({
-  domFormId, handleChange, formData, files, formId, setFiles,editToggle
+  domFormId, handleChange, formData, files, formId, setFiles,editToggle, userAuth
 }) {
   return (
   <>
@@ -243,8 +245,8 @@ function InterviewMemo({
       </div>
 
       <div className='inputSet inputFlex1'>
-        <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
-        <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={true}></FormInput>
+        <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></FormInput>
+        <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel" addStyle="limitedInput" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></FormInput>
       </div>
     </div>
 
@@ -262,10 +264,10 @@ function InterviewMemo({
         </div>
         <div className='inputSet'>
           <div className='inputSet inputFlex1'>
-            <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
-            <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></DateTimeInput>
-            <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
-            <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
+            <DateTimeInput type="date" labelNm="면담일" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></DateTimeInput>
+            <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></DateTimeInput>
+            <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></FormInput>
+            <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></FormInput>
             
           </div>
         </div>

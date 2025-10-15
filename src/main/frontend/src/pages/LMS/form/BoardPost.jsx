@@ -26,7 +26,7 @@ import {
 // ...import 생략
 
 function PostStatus(props) {
-  const { type, postId, domFormId, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle, setCohortSn } = props;
+  const { type,userAuth ,postId, domFormId, commentToggle, setCommentToggle, handleChange, formData, setFormData, FileList, files, setFiles, surveyForm, setSurveyForm, containerRef, questionAddRef, prvToggle, setPrvToggle, setCohortSn } = props;
   switch (type) {
     case "공지사항":
     case "자료실":
@@ -41,6 +41,8 @@ function PostStatus(props) {
               FileList={FileList}
               files={files}
               setFiles={setFiles}
+              commentToggle={commentToggle}
+              setCommentToggle={setCommentToggle}
           />
       );
     case "설문조사":
@@ -132,6 +134,7 @@ function BoardPost() {
   const [files, setFiles] = useState([]);
   const [prvToggle, setPrvToggle] = useState(0);
   const [recordCohortSn, setCohortSn] = useState(null);
+  const [commentToggle, setCommentToggle] = useState(false);
 
 
   // 설문 폼 (초기 페이지 하나 생성)
@@ -264,9 +267,6 @@ const selectType = (nextType) => {
       startTime: formData.startTime,
       location: formData.location,
       isPrivate: (formData.type === "일정" && userAuth <=3 ? formData.isPrivate : 1),      
-      surveyStart: formData.surveyStart,
-      surveyEnd: formData.surveyEnd,
-      startTime: formData.startTime,
     //   attachments: uploads.map(u => ({
     //   storedFileName: u.storedFileName,
     //   originalFileName: u.originalFileName,
@@ -398,6 +398,7 @@ const selectType = (nextType) => {
                 type={formData.type}
                 postId={postId.current}
                 domFormId={domFormId}
+                userAuth={userAuth}
                 handleChange={handleChange}
                 formData={formData}
                 surveyForm={surveyForm}
@@ -409,6 +410,8 @@ const selectType = (nextType) => {
                 setPrvToggle={setPrvToggle}
                 prvToggle={prvToggle}
                 setCohortSn={setCohortSn}
+                commentToggle={commentToggle}
+                setCommentToggle={setCommentToggle}
             />
           </div>
 
@@ -558,7 +561,7 @@ const selectType = (nextType) => {
                   <input type="hidden" name="detailScope" value={formData.detailScope} />
                 </div>
               )}
-              {(formData.type === "설문조사" && userAuth <= 3)&& (
+              {(formData.type === "설문조사" && userAuth <= 3) && (
                 <div className="dropSet" style={{ zIndex: "1" }}>
                   <p>그룹 지정</p>
                   <Dropdown className="dropset_dd" label={formData.detailScopeNm || "---- 필수 선택 ----"}>
@@ -569,7 +572,7 @@ const selectType = (nextType) => {
                         onClick={() => {
                           console.log(h.cohortSn);
                           console.log("기수전체");
-                          setFormData(s => ({ ...s, cohortSn: h.cohortSn, srvyScope: "기수전체", detailScopeNm: String(h.cohortNm) }));
+                          setFormData(s => ({ ...s, cohortSn: h.cohortSn, srvyScope: (userAuth <= 3 ? "기수전체" : "기수내부"), detailScope: Number(h.cohortSn) ,detailScopeNm: String(h.cohortNm) }));
 
                         }}
                       >

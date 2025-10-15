@@ -11,6 +11,7 @@ import { downloadByStoredName, findFileSnByFormUuid } from '../../../services/fi
 import styles from '../../../styles/form.module.css';
 import styles2 from "../../../styles/SchedListPopUp.module.css";
 import { Trash2Icon } from 'lucide-react';
+import CommentSection from "../../../components/module/Comment/CommentSection";
 
 
 
@@ -28,6 +29,7 @@ function BoardRead() {
   const [files, setFiles] = useState([]);
   const { effectiveSn } = useSelectedCompany();
   const {pathname} = useLocation();
+  const [commentToggle, setCommentToggle] = useState(false);
 
   // 일반 게시글
   const [formData, setFormData] = useState({
@@ -146,8 +148,10 @@ function BoardRead() {
                     </button>
                     : null}
               </span>
+              <button type={"button"} onClick={() => setCommentToggle(!commentToggle)}>나를눌러라</button>
+
           </div>
-          {editToggle ? 
+          {editToggle ?
             <button type='button' onClick={() => navigate(-1)} className={styles2.grayBtn}>back</button>
             :
             <SaveBtn type='button' onClick={(e) => {setEditToggle(true); saveSubmit(e)}} style={{color: "#fff", marginTop: "4px"}} textType={"저장"}></SaveBtn>
@@ -167,7 +171,11 @@ function BoardRead() {
                   editToggle={editToggle}
               />
           </div>
-
+            {commentToggle ?
+            <div className="formArea_R" style={{width: "400px"}}>
+                <CommentSection postSn={postSn} />
+            </div>: null
+            }
           
         </form>
       </div>

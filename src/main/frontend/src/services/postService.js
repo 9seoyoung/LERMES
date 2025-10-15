@@ -198,7 +198,10 @@ export const readSurvey = (srvySn) => api.get(`/survey/${srvySn}`);
 export const callStudyPlanListByFilter = ({url, effectiveSn, isPrivate, cohortSn}) => api.get(`${url}`, (url === "/interviewRecord") ? {params: {cohortSn: cohortSn }}: {params: {isPrivate, effectiveSn}});
 
 
-
+/**
+ * 학습일정 전체 게시글
+ * @param {Number} cohortSn 강사 이상 필수
+ */
 
 
 
@@ -215,3 +218,12 @@ export const callAllPostByTypeAndCohortSn = (params) => api.get(`admin/boardList
  * 게시글 삭제 컨트롤러들
  */
 export const deletePost = (postSn) => api.delete(`/posts/${postSn}`)
+
+
+/**
+ * 일반 게시글 댓글 전체 조회
+ * @param {Number} postSn 게시글SN
+ */
+export const pullCommentList = (postSn) => api.get(`/comments/${postSn}`);
+
+export const createComment = (postSn, requestDto) => api.post(`/comments/${postSn}`, requestDto );

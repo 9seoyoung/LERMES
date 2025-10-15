@@ -20,12 +20,14 @@ public class CommentController {
     private final CommentService commentService;
 
     // 댓글 등록 (원댓글 / 대댓글)
-    @PostMapping
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto requestDto,
+    @PostMapping("/{postSn}")
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long postSn,
+                                                    @RequestBody CommentDto requestDto,
                                                     @AuthenticationPrincipal AuthCustomUserDetails auth) {
-
+        requestDto.setPostSn((postSn));
         requestDto.setCmntWrtrSn(auth.getId());
         requestDto.setCmntFrstWrtDt(LocalDateTime.now());
+        requestDto.setCmntSn(requestDto.getCmntSn());
         requestDto.setDelYn(false);
 
         CommentDto responseDto = commentService.createComment(requestDto);
