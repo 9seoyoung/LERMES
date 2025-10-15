@@ -101,7 +101,7 @@ export default function CommentSection({postSn}) {
         toast.error(err.message);
       } finally {
         if (!stopped) {
-          pollTimerRef.current = setTimeout(fetchOnce, 1000);
+          // pollTimerRef.current = setTimeout(fetchOnce, 1000);
         }
       }
     };

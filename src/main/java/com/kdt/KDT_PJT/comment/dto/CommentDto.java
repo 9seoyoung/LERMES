@@ -1,6 +1,7 @@
 package com.kdt.KDT_PJT.comment.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,8 @@ public class CommentDto {
     private String cmntCn;                  // 댓글 내용
 
     private Long cmntWrtrSn;                // 댓글 작성자 일련번호 (FK)
+    @JsonProperty("authorNm")
+    private Long cmntWrtrNm;                // 댓글 작성자 이름 (FK)
 
     private LocalDateTime cmntFrstWrtDt;    // 댓글 최초 작성일시
     private LocalDateTime cmntLastMdfcnDt;  // 댓글 최종 수정일시

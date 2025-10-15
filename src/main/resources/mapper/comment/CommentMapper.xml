@@ -34,7 +34,11 @@
             C.CMNT_FRST_WRT_DT,
             C.CMNT_LAST_MDFCN_DT,
             C.DEL_YN,
-            C.PARENT_CMNT_SN
+            C.PARENT_CMNT_SN,
+            (SELECT U.USER_NM
+                FROM TB_USER U
+                WHERE U.USER_SN = #{dto.cmntWrtrSn}
+            ) AS cmntWrtrNm
         FROM TB_COMMENT C
         WHERE C.POST_SN = #{postSn}
           AND C.DEL_YN = FALSE
