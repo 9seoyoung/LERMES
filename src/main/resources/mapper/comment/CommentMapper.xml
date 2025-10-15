@@ -96,7 +96,7 @@
         SET
             DEL_YN = TRUE,
             CMNT_LAST_MDFCN_DT = NOW(),
-            LAST_MDFCN_USER_SN = #{userSn}
+            CMNT_WRTR_SN = #{userSn}
         WHERE CMNT_SN = #{cmntSn}
     </update>
 

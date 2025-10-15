@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useId, useRef, useState} from "react";
 import CommentItem from "./CommentItem";
 import CommentInput from "./CommentInput";
 import {createComment, pullCommentList} from "../../../services/postService";
@@ -14,7 +14,7 @@ export default function CommentSection({postSn}) {
   const pendingScrollRef = useRef(false);   // 방금 쓴 댓글 스크롤 플래그
 
   const { user } = useAccount();
-
+  const commentId = useId();
   const [comments, setComments] = useState([]);
   const [lastAddedId, setLastAddedId] = useState(null); // 방금 추가한 댓글 id
 
@@ -24,6 +24,7 @@ export default function CommentSection({postSn}) {
     const newComment = {
       id: newId,
       cmntSn: null,
+      userId: null,
       user: user?.USER_NM ?? "방문자",
       time: timeAgo(Date.now()),
       text: newText,
@@ -58,7 +59,7 @@ export default function CommentSection({postSn}) {
     box.scrollTo({ top: nextTop, behavior: "smooth" });
 
     // 방법 2) 혹시 모를 레이아웃 이슈 대비해서 한 번 더 보정
-    // el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    el.scrollIntoView({ block: "nearest", behavior: "smooth" });
 
     pendingScrollRef.current = false; // 한 번만
   }, [comments, lastAddedId]);
@@ -69,7 +70,7 @@ export default function CommentSection({postSn}) {
     startedRef.current = true;
 
     let stopped = false;
-    const INTERVAL = 3000; // 3초
+    const INTERVAL = 1000;
 
     const fetchOnce = async () => {
       if (stopped) return;
@@ -89,9 +90,9 @@ export default function CommentSection({postSn}) {
             const ts = tsStr ? new Date(tsStr).getTime() : 0;
 
             return {
-              id: item.cmntSn ?? `${item.cmntWrtrSn}-${ts}`,
+              id: item?.cmntSn,
+              userId: item?.cmntWrtrSn,
               user: item.cmntWrtrNm ?? "알 수 없음",
-              ts,
               time: timeAgo(tsStr ?? Date.now()),
               text: item.cmntCn,
               replies: item?.children ? [...item.children] : [],
@@ -138,6 +139,7 @@ export default function CommentSection({postSn}) {
           flexDirection: "column",
           height: "100%",
           justifyContent: "space-between",
+          gap: "4px",
         }}
       >
         <h3>💬 Comments</h3>
@@ -147,7 +149,7 @@ export default function CommentSection({postSn}) {
           <div>
             {comments.map((c) => (
               <div
-                key={c.id}                                  // 고유키만 사용
+                key={`${c.id}-${commentId}`}                                  // 고유키만 사용
                 ref={c.id === lastAddedId ? newCommentRef : null}  // 새 댓글에만 ref
               >
                 <CommentItem comment={c} />

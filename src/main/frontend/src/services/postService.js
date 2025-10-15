@@ -227,3 +227,12 @@ export const deletePost = (postSn) => api.delete(`/posts/${postSn}`)
 export const pullCommentList = (postSn) => api.get(`/comments/${postSn}`);
 
 export const createComment = (postSn, requestDto) => api.post(`/comments/${postSn}`, requestDto );
+
+/**
+ * @author 구서영
+ * @since 2025-10-16
+ * @description 주어진 댓글 번호를 기반으로 서버에서 댓글을 삭제한다.
+ * @param {Number} cmntSn 댓글SN
+ * @return {status} 삭제 결과 응답 코드 204
+ */
+export const deleteComment = (cmntSn) => api.delete(`/comments/${cmntSn}`);

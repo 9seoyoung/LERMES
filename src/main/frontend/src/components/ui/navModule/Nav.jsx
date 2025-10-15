@@ -7,7 +7,14 @@ export function Nav({ setNavToggle }) {
   const { user, fetchedOnce } = useAccount();
   const { clearFixedSn, effectiveSn } = useSelectedCompany();
   const navigate = useNavigate();
-
+  const userAuthRole = {
+    1: "관리자",
+    2: "대표",
+    3: "직원",
+    4: "강사",
+    5: "수강생",
+    6: "일반"
+  }
 
 
   if (!fetchedOnce) {
@@ -36,7 +43,7 @@ export function Nav({ setNavToggle }) {
           ></img>
           <div className="infoWrap">
             <div style={{ fontSize: '18px', fontWeight: '600' }}>
-              {user?.USER_NM}
+              {user?.USER_NM}{` [${user?.USER_OGDP_CO_SN === effectiveSn ?  userAuthRole[user?.USER_AUTHRT_SN] ?? "일반" : (user?.USER_AUTHRT_SN === 1 ? "관리자" : "방문자") }]`}
             </div>
             <div>{user?.USER_EML_ADDR}</div>
           </div>
