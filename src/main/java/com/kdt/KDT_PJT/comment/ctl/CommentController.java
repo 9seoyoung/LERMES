@@ -5,29 +5,29 @@ import com.kdt.KDT_PJT.comment.dto.CommentDto;
 import com.kdt.KDT_PJT.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.events.Comment;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
-//@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class CommentController {
 
     private final CommentService commentService;
 
-    // ✅ 댓글 등록 (원댓글 / 대댓글)
-    @PreAuthorize("isAuthenticated()") // (로그인 사용자만 가능)
-    @PostMapping
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto requestDto,
+    // 댓글 등록 (원댓글 / 대댓글)
+    @PostMapping("/{postSn}")
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long postSn,
+                                                    @RequestBody CommentDto requestDto,
                                                     @AuthenticationPrincipal AuthCustomUserDetails auth) {
-
+        requestDto.setPostSn((postSn));
         requestDto.setCmntWrtrSn(auth.getId());
         requestDto.setCmntFrstWrtDt(LocalDateTime.now());
+        requestDto.setCmntSn(requestDto.getCmntSn());
         requestDto.setDelYn(false);
 
         CommentDto responseDto = commentService.createComment(requestDto);
@@ -43,7 +43,6 @@ public class CommentController {
     }
 
     // ✅ 댓글 수정
-    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{cmntSn}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Long cmntSn,
                                                     @RequestBody CommentDto requestDto,
@@ -57,8 +56,7 @@ public class CommentController {
         return ResponseEntity.ok(responseDto);
     }
 
-    // ✅ 댓글 삭제 (Soft Delete)
-    @PreAuthorize("isAuthenticated()")
+    // 댓글 삭제 (Soft Delete)
     @DeleteMapping("/{cmntSn}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long cmntSn,
                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
@@ -68,4 +66,3 @@ public class CommentController {
         // 204 No Content : 요청 성공했으나 반환할 데이터 없음 → 삭제 요청에 가장 적합한 상태코드
     }
 }
-

@@ -202,7 +202,7 @@ export default function ListEditTable({
           <li key="tableHead" id={styles.ListHeader} className={styles.gridRow}>
             <div className={styles.cell} />         {/* 체크박스 헤더 빈칸 */}
             <div className={styles.cell}>#</div>    {/* # 헤더 */}
-            {tableHead.map((col, idx) => (
+            {tableHead?.map((col, idx) => (
               <div key={`th-${idx}`} className={styles.cell}>
                 {col}
               </div>
@@ -218,7 +218,7 @@ export default function ListEditTable({
         style={{ ['--cols']: resolvedTemplate, ['--gap']: gap , position: "relative", zIndex: "3" }}
       >
 
-        {rows.map((row, i) => {
+        {rows?.map((row, i) => {
           const rowKey = getRowId(row, i);
           const isPh = !!row.__placeholder;
           const checked = !isPh && selected.has(rowKey);
@@ -243,7 +243,7 @@ export default function ListEditTable({
               <div className={styles.cell}>{i + 1}</div>
 
               {/* 데이터 컬럼 */}
-              {columnData.map((field, j) => {
+              {columnData?.map((field, j) => {
                 const isSelect = type[j] === "select";
                 const fieldOptions = options[field] ?? [];
 
@@ -292,7 +292,7 @@ export default function ListEditTable({
                         {/* 문자열/숫자 배열 */}
                         {Array.isArray(fieldOptions) &&
                           (typeof fieldOptions[0] !== "object") &&
-                          fieldOptions.map((val, idx) => (
+                          fieldOptions?.map((val, idx) => (
                             <option key={`${rowKey}-${j}-${idx}`} value={val}>
                               {String(val)}
                             </option>

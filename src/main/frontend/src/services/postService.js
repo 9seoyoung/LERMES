@@ -226,4 +226,4 @@ export const deletePost = (postSn) => api.delete(`/posts/${postSn}`)
  */
 export const pullCommentList = (postSn) => api.get(`/comments/${postSn}`);
 
-export const createComment = (postSn, params) => api.post(`/comments/${postSn}`, params,   {headers: { 'Content-Type': 'application/json' }} );
+export const createComment = (postSn, requestDto) => api.post(`/comments/${postSn}`, requestDto );

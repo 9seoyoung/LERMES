@@ -19,6 +19,7 @@ export const SchedPost = ({formId, handleChange, formData, prvToggle, setPrvTogg
                 placeholder='제목을 입력하세요.'
                 value={formData.title}
                 onChange={handleChange}
+                required
               />
             </div>
             { user?.USER_AUTHRT_SN <= 3 && pathname !== "/adminHome" ? (
