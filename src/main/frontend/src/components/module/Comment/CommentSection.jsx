@@ -1,19 +1,19 @@
-import React, {useEffect, useRef, useState} from "react";
-import CommentItem from "./CommentItem";
-import CommentInput from "./CommentInput";
-import {createComment, pullCommentList} from "../../../services/postService";
-import {toast} from "react-toastify";
-import { useAccount } from "../../../auth/AuthContext";
-import { timeAgo } from "../../../utils/dateformat";
+import React, { useEffect, useRef, useState } from 'react';
+import CommentItem from './CommentItem';
+import CommentInput from './CommentInput';
+import { createComment, pullCommentList } from '../../../services/postService';
+import { toast } from 'react-toastify';
+import { useAccount } from '../../../auth/AuthContext';
+import { timeAgo } from '../../../utils/dateformat';
 
-export default function CommentSection({postSn}) {
-  const newCommentRef = useRef(null);       // 새로 달린 댓글 요소
-  const scrollBoxRef = useRef(null);        // 댓글 리스트 스크롤 박스
-  const pollTimerRef = useRef(null);        // 폴링 타이머
-  const startedRef = useRef(false);         // StrictMode 이중 실행 가드
-  const pendingScrollRef = useRef(false);   // 내가 방금 쓴 댓글일 때만 스크롤
+export default function CommentSection({ postSn }) {
+  const newCommentRef = useRef(null); // 새로 달린 댓글 요소
+  const scrollBoxRef = useRef(null); // 댓글 리스트 스크롤 박스
+  const pollTimerRef = useRef(null); // 폴링 타이머
+  const startedRef = useRef(false); // StrictMode 이중 실행 가드
+  const pendingScrollRef = useRef(false); // 내가 방금 쓴 댓글일 때만 스크롤
 
-  const {user} = useAccount();
+  const { user } = useAccount();
 
   const [comments, setComments] = useState([
     // {
@@ -28,25 +28,27 @@ export default function CommentSection({postSn}) {
 
   // ✅ 새 댓글 추가 (맨 아래에 추가 + 스크롤 예약)
   const handleAddComment = (newText) => {
-    const newId = `${user ? `${user.USER_AUTHRT_SN}-${Date.now()}` : `7-${Date.now()}`}`;
+    const newId = `${
+      user ? `${user.USER_AUTHRT_SN}-${Date.now()}` : `7-${Date.now()}`
+    }`;
     const newComment = {
       id: newId,
       cmntSn: '',
-      user: user?.USER_NM ?? "방문자",
+      user: user?.USER_NM ?? '방문자',
       time: timeAgo(Date.now()),
       text: newText,
       replies: [],
     };
     (async () => {
       try {
-        const {data} = await createComment(postSn, newComment);
+        const { data } = await createComment(postSn, newComment);
         console.log(data);
-      } catch (err){
+      } catch (err) {
         toast.error(err.message);
       }
-      pendingScrollRef.current = true;                  // 🔸 스크롤 예약
-      setComments(prev => [...prev, newComment]);       // 🔸 맨 아래에 추가
-      setLastAddedId(newId);                            // 🔸 방금 추가한 id
+      pendingScrollRef.current = true; // 🔸 스크롤 예약
+      setComments((prev) => [...prev, newComment]); // 🔸 맨 아래에 추가
+      setLastAddedId(newId); // 🔸 방금 추가한 id
     })();
   };
 
@@ -61,7 +63,7 @@ export default function CommentSection({postSn}) {
     const targetTop = el.offsetTop - box.offsetTop;
     const targetBottom = targetTop + el.offsetHeight;
     const nextTop = Math.max(0, targetBottom - box.clientHeight);
-    box.scrollTo({ top: nextTop, behavior: "smooth" });
+    box.scrollTo({ top: nextTop, behavior: 'smooth' });
 
     pendingScrollRef.current = false; // 한 번만
   }, [comments, lastAddedId]);
@@ -82,26 +84,28 @@ export default function CommentSection({postSn}) {
         return;
       }
 
-      try{
-        const {data} = await pullCommentList(postSn);
+      try {
+        const { data } = await pullCommentList(postSn);
         console.log(data);
         const formattedComment = (data || [])
           .map((item) => ({
-            id: item.cmntSn ?? item.cmntWrtrSn,                      // 가급적 고유키
-            user: item.cmntWrtrNm ?? user.authorNm,    // 외부 user 의존 X
-            ts: new Date(item?.cmntLastMdfcnDt ?? item?.cmntFrstWrtDt).getTime(),
+            id: item.cmntSn ?? item.cmntWrtrSn, // 가급적 고유키
+            user: item.cmntWrtrNm ?? user.authorNm, // 외부 user 의존 X
+            ts: new Date(
+              item?.cmntLastMdfcnDt ?? item?.cmntFrstWrtDt
+            ).getTime(),
             time: timeAgo(item?.cmntLastMdfcnDt ?? item?.cmntFrstWrtDt),
             text: item.cmntCn,
             replies: item.parentCmntSn ? [item.parentCmntSn] : [],
           }))
-          .sort((a, b) => a.ts - b.ts);                              // 오래된→최신 (최신이 아래)
+          .sort((a, b) => a.ts - b.ts); // 오래된→최신 (최신이 아래)
 
         setComments(() => formattedComment);
-      } catch (err){
+      } catch (err) {
         toast.error(err.message);
       } finally {
         if (!stopped) {
-          // pollTimerRef.current = setTimeout(fetchOnce, 1000);
+          pollTimerRef.current = setTimeout(fetchOnce, 1000);
         }
       }
     };
@@ -118,29 +122,29 @@ export default function CommentSection({postSn}) {
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+        boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
         maxWidth: 900,
-        margin: "0 auto",
-        width:"100%",
-        height:"100%",
+        margin: '0 auto',
+        width: '100%',
+        height: '100%',
       }}
     >
       <div
         style={{
-          width:"100%",
-          display:"flex",
-          flexDirection:"column",
-          height:"100%",
-          justifyContent:"space-between",
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          justifyContent: 'space-between',
         }}
       >
         <h3>💬 Comments</h3>
 
         {/* 🔸 스크롤 박스: ref 여기다 */}
-        <div style={{flex:1, overflowY: "scroll"}} ref={scrollBoxRef}>
+        <div style={{ flex: 1, overflowY: 'scroll' }} ref={scrollBoxRef}>
           {/* ⚠️ 아래 내부 div의 overflowY:"scroll"는 제거하는 게 안전 */}
           <div>
             {comments.map((c, idx) => (
