@@ -102,7 +102,7 @@ export default function Login() {
               className="googleLoginBtn"
               onClick={() => {
                 window.location.href =
-                  'http://onopco2.iptime.org:940/oauth2/authorization/google';
+                  'http://localhost:940/oauth2/authorization/google';
               }}
             >
               <img
@@ -138,7 +138,7 @@ export default function Login() {
               className="kakaoLoginBtn"
               onClick={() => {
                 window.location.href =
-                  'http://onopco2.iptime.org:940/oauth2/authorization/kakao';
+                  'http://localhost:940/oauth2/authorization/kakao';
               }}
             >
               <img
@@ -171,7 +171,7 @@ export default function Login() {
               className="naverLoginBtn"
               onClick={() => {
                 window.location.href =
-                  'http://onopco2.iptime.org:940/oauth2/authorization/naver';
+                  'http://localhost:940/oauth2/authorization/naver';
               }}
             >
               <img

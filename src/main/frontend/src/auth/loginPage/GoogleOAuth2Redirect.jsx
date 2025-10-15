@@ -36,7 +36,7 @@ export default function OAuth2Redirect() {
         fontSize: '1.2rem',
       }}
     >
-      구글 로그인 중입니다...
+      로그인 중입니다...
     </div>
   );
 }
