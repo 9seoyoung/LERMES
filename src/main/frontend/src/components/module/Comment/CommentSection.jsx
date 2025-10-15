@@ -16,13 +16,13 @@ export default function CommentSection({postSn}) {
   const {user} = useAccount();
 
   const [comments, setComments] = useState([
-    {
-      id: 1,
-      user: "아저씨",
-      time: "2분 전",
-      text: "안녕하세요 반갑습니다!",
-      replies: [],
-    },
+    // {
+    //   id: 1,
+    //   user: "아저씨",
+    //   time: "2분 전",
+    //   text: "안녕하세요 반갑습니다!",
+    //   replies: [],
+    // },
   ]);
   const [lastAddedId, setLastAddedId] = useState(null); // 방금 추가한 댓글 id
 
@@ -88,7 +88,7 @@ export default function CommentSection({postSn}) {
         const formattedComment = (data || [])
           .map((item) => ({
             id: item.cmntSn ?? item.cmntWrtrSn,                      // 가급적 고유키
-            user: item.cmntWrtrNm ?? user.USER_NM,    // 외부 user 의존 X
+            user: item.cmntWrtrNm ?? user.authorNm,    // 외부 user 의존 X
             ts: new Date(item?.cmntLastMdfcnDt ?? item?.cmntFrstWrtDt).getTime(),
             time: timeAgo(item?.cmntLastMdfcnDt ?? item?.cmntFrstWrtDt),
             text: item.cmntCn,
