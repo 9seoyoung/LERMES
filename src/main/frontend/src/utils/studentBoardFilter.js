@@ -56,10 +56,28 @@ export const CHANGE_POST_TYPE_NAME = {
     "공식일정": "공식일정"
 }
 
-export const CHANGE_PAGE_BY_POST_TYPE = {
+export const CHANGE_PAGE_BY_POST_TYPE= {
     "NOTICE": "/stdHome/board/read",
     "CLASS_MATERIAL": "/stdHome/board/read",
     "QNA": "/stdHome/board/read",
     "SURVEY": "/stdHome/board/survey",
     "FAQ": "/stdHome/board/read",
 }
+
+
+export const CHANGE_PAGE_BY_POST_TYPE_S = {
+    "NOTICE": "/stdHome/board/read",
+    "CLASS_MATERIAL": "/stdHome/board/read",
+    "QNA": "/stdHome/board/read",
+    "SURVEY": "/stdHome/board/survey",
+    "FAQ": "/stdHome/board/read",
+}
+
+export const CHANGE_PAGE_BY_POST_TYPE_T = {
+    "NOTICE": "/tutorHome/board/read",
+    "CLASS_MATERIAL": "/tutorHome/board/read",
+    "QNA": "/tutorHome/board/read",
+    "SURVEY": "/tutorHome/board/survey",
+    "FAQ": "/tutorHome/board/read",
+}
+

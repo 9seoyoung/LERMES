@@ -1,10 +1,10 @@
 // 페이지찾기 - 게시판
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ListTable from "../../components/ui/ListTable";
 import uiStyle from "../../styles/UiComp.module.css"
 import FilterList from "../../components/ui/FilterList";
 import { useEffect, useState } from "react";
-import { BOARD_MENU_FILTER_COLUMNDATA, CHANGE_PAGE_BY_POST_TYPE, CHANGE_POST_TYPE_NAME, SELECT_DETAIL_PAGE_PATH, SELECT_POST_SN_KEY, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
+import { BOARD_MENU_FILTER_COLUMNDATA, CHANGE_PAGE_BY_POST_TYPE, CHANGE_PAGE_BY_POST_TYPE_S, CHANGE_PAGE_BY_POST_TYPE_T, CHANGE_POST_TYPE_NAME, SELECT_DETAIL_PAGE_PATH, SELECT_POST_SN_KEY, STUDENT_BOARD_MENU_FILTER } from "../../utils/studentBoardFilter";
 import { callBoardList, callSurveyList, pullAllBoardList } from "../../services/postService";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../auth/AuthContext";
@@ -22,9 +22,25 @@ export default function Board(){
     const [postKey, setPostKey] = useState("");
     const [whereTogo, setWhereToGo] = useState("");
     const filterArr = ["전체", "공지", "자료실", "설문", "FAQ", "Q&A"]
+    const {pathname} = useLocation();
+    const homeRoot = pathname.split('/')[1];
+    const [catAllPage, setCatAllPage] = useState({});
+
+    const chgPageUrlByHomeRoot = (root) => {
+        switch(root){
+            case "tutorHome":
+                return CHANGE_PAGE_BY_POST_TYPE_T;
+            case "stdHome":
+                return CHANGE_PAGE_BY_POST_TYPE_S;
+            default :
+                return new Error("잘못된 접근입니다.");
+        }
+    }
+    console.log(homeRoot);
 
     //게시물 목록 불러오기
     useEffect(() => {
+        setCatAllPage(chgPageUrlByHomeRoot(homeRoot));
         let cancelled = false; 
           setPullList([]);   
         const cohortSn = user?.USER_COHORT_SN;
@@ -83,7 +99,7 @@ export default function Board(){
                 gap="12px"
                 postKey={postKey}
                 whereTogo={whereTogo}
-                allPage={CHANGE_PAGE_BY_POST_TYPE}
+                allPage={catAllPage}
                 selectedIdx={selectedIdx}
                 typeKey={"bbsType"}
               /> 
