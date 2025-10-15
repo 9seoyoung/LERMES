@@ -168,7 +168,7 @@ export default function AttendAdjustStudentRequestList() {
                   <td style={sx.td}>
                     {r.fileSn ? (
                       <a
-                        href={`http://localhost:940/api/files/id/${r.fileSn}/preview`}
+                        href={`http://localhost:940/api/files/${r.fileSn}/name`}
                         target="_blank"
                         rel="noreferrer"
                         style={{
