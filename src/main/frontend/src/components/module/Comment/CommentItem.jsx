@@ -125,9 +125,9 @@ const CommentItem = forwardRef(function CommentItem(
             <MessageCircle size={16} />
           </div>
         </div>
-      )*/}
+      )}
 
-      {/* 🧩 답글 리스트 */}
+      🧩 답글 리스트
       {showReplies && hasReplies && (
         <div
           style={{

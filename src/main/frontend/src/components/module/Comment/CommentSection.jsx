@@ -94,7 +94,7 @@ export default function CommentSection({postSn}) {
               ts,
               time: timeAgo(tsStr ?? Date.now()),
               text: item.cmntCn,
-              replies: item.parentCmntSn ? [item.parentCmntSn] : [],
+              replies: item?.children ? [...item.children] : [],
             };
           })
           .sort((a, b) => a.ts - b.ts); // 오래된 → 최신
@@ -104,7 +104,7 @@ export default function CommentSection({postSn}) {
         toast.error(err.message);
       } finally {
         if (!stopped) {
-          // pollTimerRef.current = setTimeout(fetchOnce, INTERVAL);
+          pollTimerRef.current = setTimeout(fetchOnce, INTERVAL);
         }
       }
     };
