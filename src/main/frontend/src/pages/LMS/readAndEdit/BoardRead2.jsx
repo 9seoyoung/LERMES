@@ -10,7 +10,7 @@ import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import { downloadByStoredName, findFileSnByFormUuid } from '../../../services/fileService';
 import styles from '../../../styles/form.module.css';
 import styles2 from "../../../styles/SchedListPopUp.module.css";
-import { Trash2Icon } from 'lucide-react';
+import { MessageCircle, Trash2Icon } from 'lucide-react';
 import CommentSection from "../../../components/module/Comment/CommentSection";
 
 
@@ -148,7 +148,10 @@ function BoardRead() {
                     </button>
                     : null}
               </span>
-              <button type={"button"} onClick={() => setCommentToggle(!commentToggle)}>나를눌러라</button>
+              <button type={"button"} style={{marginLeft: "4px"}} onClick={() => setCommentToggle(!commentToggle)}>
+              <MessageCircle size={16} />
+
+                {!commentToggle ? "댓글 보기": "댓글 닫기"}</button>
 
           </div>
           {editToggle ?

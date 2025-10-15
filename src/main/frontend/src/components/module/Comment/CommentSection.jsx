@@ -21,7 +21,7 @@ export default function CommentSection({postSn}) {
     },
   ]);
   const [lastAddedId, setLastAddedId] = useState(null); // ★ 방금 추가한 댓글 id 추적
-
+  const pendingScrollRef = useRef(false);
 
   // ✅ 새 댓글 추가 (원래 로직 유지 + 마지막 id만 기록)
   const handleAddComment = (newText) => {
@@ -48,9 +48,10 @@ export default function CommentSection({postSn}) {
 
   // ★ 스크롤 전용 (comments가 바뀔 때, 마지막 추가건으로 이동)
   useEffect(() => {
-    if (newCommentRef.current) {
-      newCommentRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
+    if (pendingScrollRef.current && newCommentRef.current) {
+          newCommentRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+          pendingScrollRef.current = false; // ✅ 한 번만 스크롤
+        }
   }, [comments, lastAddedId]);
 
   // ★ 3초 폴링 (요청 끝난 후 다음 예약)
@@ -81,7 +82,7 @@ export default function CommentSection({postSn}) {
         toast.error(err.message);
       } finally {
         if (!stopped) {
-          pollTimerRef.current = setTimeout(fetchOnce, 3000); // ★ 3초 후 재호출
+          pollTimerRef.current = setTimeout(fetchOnce, 1000); // ★ 3초 후 재호출
         }
       }
     };
@@ -130,7 +131,7 @@ export default function CommentSection({postSn}) {
               >
                 <CommentItem
                   comment={c}
-                  ref={idx === comments.length - 1 ? newCommentRef : null}
+                  // ref={idx === comments.length - 1 ? newCommentRef : null}
                   // onAddReply={handleAddReply}
                 />
               </div>
