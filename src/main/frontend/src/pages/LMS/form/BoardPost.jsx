@@ -266,7 +266,8 @@ const selectType = (nextType) => {
       endDate: formData.endDate,
       startTime: formData.startTime,
       location: formData.location,
-      isPrivate: (formData.type === "일정" && userAuth <=3 ? formData.isPrivate : 1),      
+      isPrivate: (formData.type === "일정" && userAuth <=3 ? formData.isPrivate : 1),    
+      itvPicAuthrt: formData.scope,
     //   attachments: uploads.map(u => ({
     //   storedFileName: u.storedFileName,
     //   originalFileName: u.originalFileName,
@@ -291,6 +292,7 @@ const selectType = (nextType) => {
       startTime: formData.startTime,
       location: formData.location,
       isPrivate: formData.isPrivate,
+      itvPicAuthrt: formData.scope,
     //   attachments: uploads.map(u => ({
     //   storedFileName: u.storedFileName,
     //   originalFileName: u.originalFileName,
@@ -509,13 +511,13 @@ const selectType = (nextType) => {
                   <p>면담 대상</p>
                     <Dropdown className="dropset_dd" label={formData.scope || "---- 필수 선택 ----"}>
                     {/* 관리자 공개 범위 */}
-                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "대표" }))}>대표</p>
-                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "직원" }))}>직원</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "REPRESENTATIVE", scope: "대표" }))}>대표</p>
+                      <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "EMPLOYEE" , scope: "직원"}))}>직원</p>
                       {userAuth != 4 ?
-                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, scope: "강사" }))}>강사</p>
+                        <p data-dd-select className={layoutStyles.subMenuList} onClick={() => setFormData(s => ({ ...s, itvPicAuthrt: "INSTRUCTOR", scope: "강사" }))}>강사</p>
                       : null }
                     </Dropdown>
-                    <input type="hidden" name="scope" value={formData.scope} />
+                    <input type="hidden" name="scope" value={formData.itvPicAuthrt} />
                   </div>
                 </> : null }
             </> : null }
