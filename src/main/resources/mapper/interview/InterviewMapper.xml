@@ -12,7 +12,7 @@
             ITV_APLY_TTL, ITV_APLY_CN, COHORT_SN, FORM_UUID, ITV_PIC_AUTHRT, ITV_APLY_DT, CO_SN
         ) VALUES (
                      #{itvAplcntSn},
-                     #{itvAplyTtl}, #{itvAplyCn}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}, #{itvAplyDt}, #{coSn}
+                     #{title}, #{content}, #{cohortSn}, #{formUuid}, #{itvPicAuthrt}, #{itvAplyDt}, #{coSn}
                  )
     </insert>
 
