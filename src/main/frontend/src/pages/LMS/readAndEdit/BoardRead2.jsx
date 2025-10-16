@@ -148,7 +148,7 @@ function BoardRead() {
                     </button>
                     : null}
               </span>
-              <button type={"button"} onClick={() => setCommentToggle(!commentToggle)}>나를눌러라</button>
+              <button type={"button"} onClick={() => setCommentToggle(!commentToggle)}>{commentToggle ? "댓글 닫기" : "댓글 보기"}</button>
 
           </div>
           {editToggle ?
