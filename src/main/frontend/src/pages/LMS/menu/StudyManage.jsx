@@ -4,7 +4,7 @@ import uiStyle from "../../../styles/UiComp.module.css"
 import FilterList from "../../../components/ui/FilterList";
 import { use, useEffect, useState } from "react";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
-import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH, SELECT_TUTORS_DETAIL_PAGE_PATH, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_STD, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_TUTOR } from "../../../utils/studentStudyFilter";
+import { STUDENT_STUDY_MENU_FILTER, MENU_FILTER_COLUMNDATA, SELECT_POST_SN_KEY, SELECT_DETAIL_PAGE_PATH, SELECT_TUTORS_DETAIL_PAGE_PATH, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_STD, CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_TUTOR, MENU_FILTER_COLUMNDATA_T } from "../../../utils/studentStudyFilter";
 import { callStudyPlanListByFilter } from "../../../services/postService";
 import { formatDate } from "../../../utils/dateformat";
 import { STUDENT_BOARD_MENU_FILTER } from "../../../utils/studentBoardFilter";
@@ -23,7 +23,7 @@ function StudyManage() {
         const bbsType = STUDENT_BOARD_MENU_FILTER[selectedIdx];
         
         const url = STUDENT_STUDY_MENU_FILTER[selectedIdx];
-        const column = MENU_FILTER_COLUMNDATA[selectedIdx];
+        const column = MENU_FILTER_COLUMNDATA_T[selectedIdx];
         const postSn = SELECT_POST_SN_KEY[selectedIdx];
         const path = SELECT_TUTORS_DETAIL_PAGE_PATH[selectedIdx];
 

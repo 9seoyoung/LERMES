@@ -23,6 +23,17 @@ export const MENU_FILTER_COLUMNDATA = {
     5: ["postType", "itvRecordTtl", "formattedAplyDt", "itvPicNm", "viewCnt" ],
 }
 
+
+export const MENU_FILTER_COLUMNDATA_T = {
+    0: ["boardType", "title", "formattedAplyDt", "userNm", "viewCnt"],
+    1: ["postType", "title", "formattedAplyDt", "userNm", "viewCnt"],
+    2: ["postType", "title", "formattedAplyDt", "userNm", "viewCnt"],
+    3: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
+    4: ["postType", "itvRecordTtl", "formattedAplyDt", "itvPicNm", "viewCnt" ],
+    5: ["postType", "itvRecordTtl", "formattedAplyDt", "itvPicNm", "viewCnt" ],
+}
+
+
 export const SELECT_POST_SN_KEY = {
     0: "scheduleSn",
     1: "calSn",
