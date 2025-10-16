@@ -52,7 +52,7 @@ function VisitorHome() {
         </div>
         <div className='dashBoardModule' style={{ height: '300px', display: "flex", alignItems: "center", flexDirection:"row", justifyContent: "space-around" }}>
           <button type='button' onClick={handleSubmit1}>직원신청</button>
-          <button type='button' onClick={"가짜버튼"} textType={"강사신청"}>강사신청</button>
+          <button type='button' textType={"강사신청"}>강사신청</button>
         </div>
       </div>
     </div>
