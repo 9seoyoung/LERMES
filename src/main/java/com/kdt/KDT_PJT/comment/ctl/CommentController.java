@@ -35,7 +35,7 @@ public class CommentController {
     }
 
     // ✅ 게시글 기준 댓글 전체 조회 (트리 구조 반환)
-    @GetMapping("/{postSn}")
+    @GetMapping("/{postSn}m s")
     public ResponseEntity<List<CommentDto>> getCommentsByPost(@PathVariable Long postSn,
                                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
         List<CommentDto> comments = commentService.getCommentsByPost(postSn); //(이제 트리 구조 반환)

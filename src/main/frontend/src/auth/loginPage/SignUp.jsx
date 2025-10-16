@@ -1,19 +1,23 @@
 import styles from '../../styles/SignUp.module.css';
 import icon from '../../webapp/img/penIcon.png';
+import bg from '../../webapp/img/loginBg.png';
 
 function signUp() {
   return (
     <>
       <div className={styles.section}>
         {/* 왼쪽 영역 */}
-        <div className={styles.left_section}>
-          <h1 style={{ marginTop: '90px' }}>학습 관리를 더 효율적으로!</h1>
-          <h1>LMS</h1>
+        <img className={styles.left_section}
+             src={bg}
+             alt="icon"
+        >
+          <h1 style={{ marginTop: '90px' }}></h1>
+          <h1></h1>
           <p className={styles.subText}>
-            더욱 체계적인, 맞춤화된 환경으로 교육의 질을 높여보세요!
+
           </p>
           <button className={styles.startBtn}>시작하기</button>
-        </div>
+        </img>
         {/* 오른쪽 영역 */}
         <div>
           <div className={styles.form}>
