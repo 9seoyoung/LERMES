@@ -76,7 +76,7 @@ function StudyPlan() {
         try {
             const data = await callStudyPlanListByFilter(params);
             console.log(data.data);
-            const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item?.itvAplyDt || item?.regDt || item?.createdAt || item?.eventRegDt),}));
+            const formattedData = data.data.map(item => ({...item, formattedAplyDt:  formatDate(item?.itvAplyDt || item?.regDt || item?.createdAt || item?.eventRegDt), renameBoardType: (item.boardType === "면담 요청" ? "면담신청" : item.boardType)}));
             setPullList(formattedData);
         } catch (e) {
             console.log(e.message);

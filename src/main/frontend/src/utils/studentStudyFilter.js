@@ -15,7 +15,7 @@ export const STUDENT_STUDY_MENU_FILTER = {
 }
 
 export const MENU_FILTER_COLUMNDATA = {
-    0: ["boardType", "title", "formattedAplyDt", "userNm", "viewCnt"],
+    0: ["renameBoardType", "title", "formattedAplyDt", "userNm", "viewCnt"],
     1: ["postType", "title", "formattedAplyDt", "userNm", "viewCnt"],
     2: ["postType", "title", "formattedAplyDt", "userNm", "viewCnt"],
     3: ["postType", "itvAplyTtl", "formattedAplyDt", "itvAplcntNm", "viewCnt" ],
