@@ -173,7 +173,7 @@ export const pullAllBoardList = () => api.get('/bbs/all/list');
  * @param {Number} effectiveSn 클릭으로 들어온 회사시리얼번호 or 내가 속한 회사 시리얼번호
  * @returns {Array<Object>} 게시글 목록
  */
-export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn}})
+export const callBoardList = ({cohortSn, bbsType, effectiveSn, coSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn, coSn}})
 
 /**
  * 설문 목록 조회

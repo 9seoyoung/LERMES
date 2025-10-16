@@ -18,7 +18,7 @@ function MaterialList() {
     const params = {
       cohortSn: user?.USER_COHORT_SN,
       bbsType: "CLASS_MATERIAL",
-      effectiveSn
+      coSn:effectiveSn
     };
 
     (async() => {
