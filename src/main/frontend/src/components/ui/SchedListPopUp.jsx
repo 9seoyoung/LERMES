@@ -1,6 +1,6 @@
 // src/components/calendar/SchedListPopUp.jsx
 import React, { useState, useMemo } from "react";
-import { SaveBtn, CancelBtn, DateTimeInput } from "./UiComp.jsx";
+import { SaveBtn, CancelBtn, DateTimeInput, FormInput } from "./UiComp.jsx";
 import styles from "../../styles/SchedListPopUp.module.css";
 import { registToDo } from "../../services/calService.js";
 import { useAccount } from "../../auth/AuthContext.jsx";
@@ -25,7 +25,7 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
     startTime: "",
     endTime: "",
     location: "",
-    isPrivate: true,
+    isPrivate: 1,
   });
 
   const handleChange = (e) => {
@@ -102,7 +102,7 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
             <span className={`${styles.arrow} ${showOptions ? styles.arrowOpen : ""}`}>▼</span>
             상세보기
           </div>
-          { user?.USER_AUTHRT_SN <= 3 && pathname !== "/adminHome" ? (
+          { user?.USER_AUTHRT_SN <= 3 && pathname === "/adminHome" ? (
             <div className={styles.private}>
               <input
                 type="checkbox"
@@ -153,6 +153,7 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
                   labelNm={"시간"}
                   addLabelStyle="formLabel"
                   value={formData.startTime}
+                  formData={formData}
                 disabled={false}
                 handleChange={handleChange}
                 />
@@ -161,6 +162,7 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
                   type="time"
                   name="endTime"
                   value={formData.endTime}
+                  formData={formData}
                 disabled={false}
                 handleChange={handleChange}
                 />
@@ -168,8 +170,16 @@ function SchedListPopUp({ onClose, onSave, selectedDate }) {
             </div>
 
             <div className={styles.content}>
-              <label className="formLabel">장소</label>
-              <input type="text" name="location" value={formData.location} handleChange={handleChange} />
+              <FormInput 
+                labelNm={"장소"}
+                  type="text"
+                  name="location"
+                  addLabelStyle="formLabel"
+                  value={formData.location}
+                  formData={formData}
+                disabled={false}
+                handleChange={handleChange}
+              />
             </div>
           </div>
         )}
