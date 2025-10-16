@@ -222,8 +222,10 @@ public class PostService {
         }
 
         // 3. 권한 체크
-        if (!canAccessPostForSingle(post, auth)) {
-            throw new AccessDeniedException("조회 권한 없음");
+        if(auth != null){
+            if (!canAccessPostForSingle(post, auth)) {
+                throw new AccessDeniedException("조회 권한 없음");
+            }
         }
 
         // 4. 최신 조회수 포함된 데이터 리턴

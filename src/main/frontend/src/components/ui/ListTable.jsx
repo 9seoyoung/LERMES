@@ -3,7 +3,17 @@ import styles from "../../styles/UiComp.module.css";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
+const joinPath = (...parts) =>
+  "/" + parts
+    .filter(Boolean)
+    .map(s => String(s).replace(/^\/+|\/+$/g, "")) // 앞/뒤 슬래시 제거
+    .join("/");
 
+// 2) 유틸: 항상 절대경로로 보정
+const toAbs = (p) => {
+  if (!p) return null;
+  return p.startsWith("/") ? p : `/${p}`;
+};
 
 export default function ListTable({
   tableHead = [],

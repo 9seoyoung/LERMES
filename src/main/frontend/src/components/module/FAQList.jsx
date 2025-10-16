@@ -18,7 +18,7 @@ function FAQList() {
     const params = {
       cohortSn: user?.USER_COHORT_SN,
       bbsType: "FAQ",
-      effectiveSn
+      coSn:effectiveSn
     };
 
     (async() => {

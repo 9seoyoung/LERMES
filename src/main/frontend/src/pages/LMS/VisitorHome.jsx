@@ -8,6 +8,8 @@ import FAQList from '../../components/module/FAQList';
 import BigCal from '../../components/ui/BigCal';
 import MiniCal from '../../components/ui/MiniCal';
 import { useOutletContext } from 'react-router-dom';
+import { GrayBtn } from '../../components/ui/UiComp';
+import { toast } from 'react-toastify';
 
 function VisitorHome() {
   const { effectiveSn } = useSelectedCompany();
@@ -25,6 +27,7 @@ function VisitorHome() {
       try{
         const res = await applyEmp(params);
         console.log(res);
+        toast.success("직원신청완료!");
       } catch(err) {
         console.log(err.message);
       }
@@ -47,8 +50,9 @@ function VisitorHome() {
             <FAQList/>
           </div>
         </div>
-        <div className='dashBoardModule' style={{ height: '300px', display: "flex", alignItems: "center" }}>
+        <div className='dashBoardModule' style={{ height: '300px', display: "flex", alignItems: "center", flexDirection:"row", justifyContent: "space-around" }}>
           <button type='button' onClick={handleSubmit1}>직원신청</button>
+          <button type='button' textType={"강사신청"}>강사신청</button>
         </div>
       </div>
     </div>

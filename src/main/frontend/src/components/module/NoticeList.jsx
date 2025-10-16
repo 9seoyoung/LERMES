@@ -18,7 +18,7 @@ function NoticeList() {
     const params = {
       cohortSn: user?.USER_COHORT_SN,
       bbsType: "NOTICE",
-      effectiveSn
+      coSn: effectiveSn
     };
 
     (async() => {

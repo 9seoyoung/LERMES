@@ -9,12 +9,13 @@
   max-width: 1440px;
   margin: 0 auto;
   gap: 12px;
+    overflow: hidden;
 }
 
 .panel {
   display: flex;
   align-items: center;
-  background-color: #00000025;
+  /*background-color: #00000025;*/
   justify-content: center;
   min-width: 420px;
   padding: 0;
@@ -23,7 +24,6 @@
 .left-panel {
   width: 636px;
   display: flex;
-  flex-direction: column;
 }
 
 .welcome-inner {

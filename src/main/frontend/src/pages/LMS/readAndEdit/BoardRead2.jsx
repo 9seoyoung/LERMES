@@ -21,8 +21,8 @@ function BoardRead() {
   const postId = useRef(uuidv4());
   const { user } = useAccount();
   const {postSn} = useParams();
-  const userAuth = user.USER_AUTHRT_SN;
-  const userSn = user.USER_SN;
+  const userAuth = user?.USER_AUTHRT_SN;
+  const userSn = user?.USER_SN;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [editToggle, setEditToggle] = useState(true);
@@ -34,7 +34,7 @@ function BoardRead() {
   // 일반 게시글
   const [formData, setFormData] = useState({
     formUuid: postId.current,
-    userSn: user.USER_SN,
+    userSn: user?.USER_SN,
     postTtl: "",
     postCn: "", //내용
     type: "",
@@ -121,12 +121,12 @@ function BoardRead() {
           <div boxType="row">
           {`[${formData?.bbsType}] ${formData?.postTtl}`}
           <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
-                    { editToggle && formData?.postWriterName === user.USER_NM ?
+                    { editToggle && formData?.postWriterName === user?.USER_NM ?
                       <button type='button' onClick={() => setEditToggle(false)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
                       :
                       <></>
                     }
-                    {pathname === "/adminHome/boardSet" || formData?.postWriterName === user.USER_NM || userAuth === 1?
+                    {pathname === "/adminHome/boardSet" || formData?.postWriterName === user?.USER_NM || userAuth === 1?
                     <button type='button'
                     className={styles2.redBtn}
                     onClick={async () => {

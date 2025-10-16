@@ -173,7 +173,7 @@ export const pullAllBoardList = () => api.get('/bbs/all/list');
  * @param {Number} effectiveSn 클릭으로 들어온 회사시리얼번호 or 내가 속한 회사 시리얼번호
  * @returns {Array<Object>} 게시글 목록
  */
-export const callBoardList = ({cohortSn, bbsType, effectiveSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn}})
+export const callBoardList = ({cohortSn, bbsType, effectiveSn, coSn}) => api.get(`/posts`, {params: {cohortSn, bbsType, effectiveSn, coSn}})
 
 /**
  * 설문 목록 조회
@@ -227,3 +227,12 @@ export const deletePost = (postSn) => api.delete(`/posts/${postSn}`)
 export const pullCommentList = (postSn) => api.get(`/comments/${postSn}`);
 
 export const createComment = (postSn, requestDto) => api.post(`/comments/${postSn}`, requestDto );
+
+/**
+ * @author 구서영
+ * @since 2025-10-16
+ * @description 주어진 댓글 번호를 기반으로 서버에서 댓글을 삭제한다.
+ * @param {Number} cmntSn 댓글SN
+ * @return {status} 삭제 결과 응답 코드 204
+ */
+export const deleteComment = (cmntSn) => api.delete(`/comments/${cmntSn}`);

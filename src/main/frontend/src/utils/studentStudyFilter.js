@@ -59,11 +59,11 @@ export const CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_TUTOR = {
     "공식일정": "/tutorHome/studySched/calendar",
     "개인일정": "/tutorHome/studySched/calendar",
     "면담 기록": "/tutorHome/studySched/readItvMemo",
-    "면담신청": "/tutorHome/studySched/interview"
+    "면담 신청": "/tutorHome/studySched/interview"
   }
 
   export const CHANGE_SCHEDULE_PAGE_BY_POST_TYPE_STD = {
     "공식일정": "/stdHome/studySched/calendar",
     "개인일정": "/stdHome/studySched/calendar",
-    "면담신청": "/stdHome/studySched/interview"
+    "면담 신청": "/stdHome/studySched/interview"
   }
