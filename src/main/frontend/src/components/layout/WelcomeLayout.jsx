@@ -27,7 +27,9 @@ function WelcomeLayout() {
         />
       </header>
       <div className="main-container">
-        <div className="panel left-panel">
+        <div className="panel left-panel"
+          style={{position: "relative"}}
+        >
               <img
                    src={process.env.PUBLIC_URL + '/img/loginBg.png'}
                    alt="bg"
@@ -45,8 +47,8 @@ function WelcomeLayout() {
                   }}
                   style={{
                       position:"absolute",
-                      left:"105px",
-                      bottom: "200px"
+                      left:"56px",
+                      bottom: "35%"
                   }}
               >
                   시작하기
