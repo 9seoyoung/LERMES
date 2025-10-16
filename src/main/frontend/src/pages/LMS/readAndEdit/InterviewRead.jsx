@@ -118,7 +118,8 @@ function InterviewRead() {
       <div className="limitedHeightBox" style={{height: "706px"}}>
         <h4 style={{ fontWeight: "500" }}>
           <div boxType="row">
-          { formData?.itvPicAutht === userAuth ? "면담 요청 내역" : "면담 신청 내역"}
+          { formData?.itvPicAutht === userAuth ? "면담 요청 내역" : `[면담 신청] ${formData?.itvAplyTtl} `}
+          <p style={{fontSize: "1.2rem"}}>{`담당자: ${formData?.mento === '-' ? "미정": formData?.mento}`}</p>
           <span style={{border: "none", display: "flex", alignItems: "flex-end", height:"100%", gap: "4px", margin: "0 0 14px 4px"}}>
             { !editToggle && (formData?.postWriterName === user.USER_NM || formData.itvPicAutht === 4) ?
               <button type='button' onClick={() => setEditToggle(true)} className={styles2.grayBtn} style={{width:"3rem", fontSize:"1rem"}} >edit</button>
@@ -177,7 +178,7 @@ function InterviewForm({
   return (
     <>
       <div className='formHeader'>
-        <div className='inputSet inputTitleSet'>
+        {/* <div className='inputSet inputTitleSet'>
           <label className='formLabel' htmlFor={`${domFormId}_itvAplyTtl`}>제목</label>
           <input
             id={`${domFormId}_itvAplyTtl`}
@@ -188,12 +189,11 @@ function InterviewForm({
             onChange={handleChange}
             disabled = {editToggle}
           />
-        </div>
-
-        <div className='inputSet inputFlex1'>
+        </div> */}
+        {/* <div className='inputSet inputFlex1'>
           <FormInput type="text" labelNm="작성자" handleChange={handleChange} name="author" formData={formData} addLabelStyle="formLabel" disabled={true}></FormInput>
           <FormInput type="text" labelNm="담당자" handleChange={handleChange} name="mento" formData={formData} addLabelStyle="formLabel"  disabled={true}></FormInput>
-        </div>
+        </div> */}
       </div>
 
       <div className="formContent">
@@ -214,7 +214,6 @@ function InterviewForm({
               <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></DateTimeInput>
               <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></FormInput>
               <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={!editToggle}></FormInput>
-              
             </div>
           </div>
           <div className='inputSet'>
@@ -268,7 +267,6 @@ function InterviewMemo({
             <DateTimeInput type="time" labelNm="시간" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></DateTimeInput>
             <FormInput type="text" labelNm="장소" handleChange={handleChange} name="surveyStart" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></FormInput>
             <FormInput type="text" labelNm="요청사항" handleChange={handleChange} name="surveyEnd" formData={formData} addLabelStyle="formLabel" disabled={(formData?.itvPicAutht === userAuth ? editToggle : false )}></FormInput>
-            
           </div>
         </div>
         <div className='inputSet'>
