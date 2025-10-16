@@ -16,7 +16,7 @@ function MaterialList() {
 
   useEffect(()=> {
     const params = {
-      cohortSn: user?.USER_OGDP_COHORT_SN,
+      cohortSn: user?.USER_COHORT_SN,
       bbsType: "CLASS_MATERIAL",
       effectiveSn
     };

@@ -256,6 +256,7 @@ function InterviewMemo({
           placeholder='제목을 입력하세요.'
           value={formData.itvAplyTtl}
           onChange={handleChange}
+          required
         />
       </div>
 

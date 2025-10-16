@@ -20,26 +20,29 @@ public class CommentController {
     private final CommentService commentService;
 
     // 댓글 등록 (원댓글 / 대댓글)
-    @PostMapping
-    public ResponseEntity<CommentDto> createComment(@RequestBody CommentDto requestDto,
+    @PostMapping("/{postSn}")
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long postSn,
+                                                    @RequestBody CommentDto requestDto,
                                                     @AuthenticationPrincipal AuthCustomUserDetails auth) {
-
+        requestDto.setPostSn((postSn));
         requestDto.setCmntWrtrSn(auth.getId());
         requestDto.setCmntFrstWrtDt(LocalDateTime.now());
+        requestDto.setCmntSn(requestDto.getCmntSn());
         requestDto.setDelYn(false);
 
         CommentDto responseDto = commentService.createComment(requestDto);
         return ResponseEntity.ok(responseDto);
     }
 
-    // 게시글 기준 댓글 전체 조회
+    // ✅ 게시글 기준 댓글 전체 조회 (트리 구조 반환)
     @GetMapping("/{postSn}")
     public ResponseEntity<List<CommentDto>> getCommentsByPost(@PathVariable Long postSn,
                                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
-        List<CommentDto> comments = commentService.getCommentsByPost(postSn);
+        List<CommentDto> comments = commentService.getCommentsByPost(postSn); //(이제 트리 구조 반환)
         return ResponseEntity.ok(comments);
     }
-    // 댓글 수정
+
+    // ✅ 댓글 수정
     @PutMapping("/{cmntSn}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Long cmntSn,
                                                     @RequestBody CommentDto requestDto,
@@ -58,8 +61,8 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable Long cmntSn,
                                               @AuthenticationPrincipal AuthCustomUserDetails auth) {
         commentService.deleteComment(cmntSn, auth);
-        return ResponseEntity.noContent().build(); //204 댓글 삭제 완료시 아무 데이터도 내려주지 않는다고함/ 반환할 데이터 없음!!결과만 필요한 요청에서 사용
+        return ResponseEntity.noContent().build();
+
+        // 204 No Content : 요청 성공했으나 반환할 데이터 없음 → 삭제 요청에 가장 적합한 상태코드
     }
-
-
 }

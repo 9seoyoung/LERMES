@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { MessageCircle, MoreVertical } from "lucide-react";
 import CommentInput from "./CommentInput";
 
-export default function CommentItem({ comment, onAddReply, isReply = false }) {
+const CommentItem = forwardRef(function CommentItem(
+  { comment, onAddReply, isReply = false, style },   // ← style 받기
+  ref                                                 // ← ref 받기
+) {
   const [showReplies, setShowReplies] = useState(false);
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [hovering, setHovering] = useState(false); // 👈 hover 감지
+  const [hovering, setHovering] = useState(false);
 
   const handleReplySubmit = (replyText) => {
-    onAddReply(comment.id, replyText);
+    onAddReply?.(comment.id, replyText);
     setShowReplyInput(false);
     setShowReplies(true);
   };
@@ -69,15 +72,25 @@ export default function CommentItem({ comment, onAddReply, isReply = false }) {
 
       {/* 👤 작성자 + 시간 (한 줄) */}
       <div
-        style={{
+      ref={ref}   // ← 여기!
+      style={{
+        position: "relative",
+        backgroundColor: isReply ? "#f9fafb" : "#ffffff",
+        marginLeft: isReply ? 28 : 0,
+        transition: "background 0.2s",
           display: "flex",
           alignItems: "center",
           gap: 6,
           marginBottom: 6,
           fontWeight: "bold",
           color: "#111827",
-        }}
-      >
+      }}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => {
+        setHovering(false);
+        setShowMenu(false);
+      }}
+    >
         <span>{comment.user}</span>
         <span style={{ fontWeight: "normal", color: "gray", fontSize: "0.8rem" }}>
           · {comment.time}
@@ -88,7 +101,7 @@ export default function CommentItem({ comment, onAddReply, isReply = false }) {
       <p style={{ margin: 0, color: "#374151", lineHeight: "1.5" }}>{comment.text}</p>
 
       {/* 👇 답글 보기 / 말풍선 입력창 토글 */}
-      {!isReply && (
+      {/*!isReply && (
         <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 12 }}>
           <button
             onClick={() => setShowReplies(!showReplies)}
@@ -114,7 +127,7 @@ export default function CommentItem({ comment, onAddReply, isReply = false }) {
         </div>
       )}
 
-      {/* 🧩 답글 리스트 */}
+      🧩 답글 리스트
       {showReplies && hasReplies && (
         <div
           style={{
@@ -146,7 +159,9 @@ export default function CommentItem({ comment, onAddReply, isReply = false }) {
       )}
     </div>
   );
-}
+});
+
+export default CommentItem;
 
 const textBtn = {
   background: "none",
