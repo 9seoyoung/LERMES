@@ -198,7 +198,7 @@ function GroupSet() {
             setDisplayDate={setDisplayDate}
             todayList={todayList}/>
           </div>
-          <div className="dashBoardModule" style={{ overflow: 'hidden' }}>
+          <div className="dashBoardModule" style={{ overflow: 'hidden', flex: '1' }}>
             <TodayAttendList cohortSn={cohortSn} />
           </div>
         </div>
