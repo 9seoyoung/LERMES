@@ -127,57 +127,22 @@ const MyInfoForm = () => {
 
           <div className="myInfoRow">
             <span className="myInfoLabel">주소</span>
-            <input
-              type="text"
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              className="myDetailInfoInput"
-              placeholder="주소 검색 버튼 클릭"
-              readOnly
-            />
-            <button
-              type="button"
-              onClick={openPostcode}
-              className="myInfoAddressButton"
-              disabled={!scriptLoaded}
-            >
-              주소 검색
-            </button>
+            <span noborder={"no"}>{form.address || "-"}</span>
           </div>
 
           <div className="myInfoRow">
             <span className="myInfoLabel">상세 주소</span>
-            <input
-              type="text"
-              name="addressDetail"
-              value={form.addressDetail}
-              onChange={handleChange}
-              className="myDetailInfoInput"
-              placeholder="상세 주소 입력"
-            />
+            <span noborder={"no"}>{form.addressDetail || "-"}</span>
           </div>
 
           <div className="myInfoRow">
             <span className="myInfoLabel">전공</span>
-            <input
-              type="text"
-              name="major"
-              value={form.major}
-              onChange={handleChange}
-              className="myDetailInfoInput"
-            />
+            <span noborder={"no"}>{form.major || "-"}</span>
           </div>
 
           <div className="myInfoRow">
             <span className="myInfoLabel">보유자격</span>
-            <input
-              type="text"
-              name="cert"
-              value={form.cert}
-              onChange={handleChange}
-              className="myDetailInfoInput"
-            />
+            <span noborder={"no"}>{form.cert || "-"}</span>
           </div>
 
           <div className="myInfoRow">

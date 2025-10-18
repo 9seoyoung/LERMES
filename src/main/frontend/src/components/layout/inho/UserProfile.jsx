@@ -7,9 +7,13 @@ import {
 import { uploadEvidenceFile } from '../../../attend/attendService';
 import { useAccount } from '../../../auth/AuthContext';
 import { toast } from 'react-toastify';
+import PasswordChangeModal from "./PasswordChangeModal";
+import MyInfoForm from "./MyInfoForm";
+import {UserInfo} from "../../module/mypage/UserInfo";
 
-export default function UserProfile({ onAdminSave }) {
+export default function UserProfile({ onAdminSave, infoEditToggle, setInfoEditToggle }) {
   const { user, patchUser } = useAccount();
+  const [open, setOpen] = useState(false);
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -119,6 +123,7 @@ export default function UserProfile({ onAdminSave }) {
       }
 
       fetchProfile();
+      setInfoEditToggle(false);
     } catch (err) {
       console.error(err);
       toast.error('수정 실패');
@@ -131,15 +136,21 @@ export default function UserProfile({ onAdminSave }) {
   const authSn = user?.USER_AUTHRT_SN;
 
   return (
-    <section className="myInfoSection">
+      <>
+        {infoEditToggle ?
+    <section className="myInfoSection" style={{background:"white"}}>
       <h2 className="myInfoTitle myInfoTitleA">
         {profile.name} ({profile.status})
-        <button className="myInfoEditBtn" onClick={handleSave}>
+        <button className="myInfoEditBtn blue" onClick={handleSave}>
           저장
+        </button>
+        <button type={"button"} className="myInfoEditBtn gray" onClick={() => setInfoEditToggle(false)}>
+          취소
         </button>
       </h2>
 
       <div className="myInfoContent">
+        <div id={"userInfoCont"}>
         <div
           style={{
             display: 'flex',
@@ -241,8 +252,33 @@ export default function UserProfile({ onAdminSave }) {
               }}
             />
           </div>
+          <div style={{ textAlign: 'right', margin: '8px 0', width: '100%' }}>
+            <button
+                onClick={() => setOpen(true)}
+                style={{
+                  background: '#eee',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  padding: '6px 12px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'end',
+                }}
+            >
+              비밀번호 변경
+            </button>
+          </div>
+
+          {open && <PasswordChangeModal onClose={() => setOpen(false)} />}
         </div>
+        </div>
+        <MyInfoForm />
       </div>
     </section>
+            :
+            <UserInfo formData={formData} formatBrNo={formatBrNo} previewUrl={previewUrl} setInfoEditToggle={setInfoEditToggle} profile={profile} authSn={authSn}/>
+        }
+        </>
   );
 }

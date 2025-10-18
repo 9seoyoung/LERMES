@@ -27,7 +27,7 @@ export default function GeneralJoin() {
     userNm: '',
     email: '',
     verificationCode: '',
-    userPwd: '',
+    pass: '',
     confirmPassword: '',
     phoneNumber: '',
   });

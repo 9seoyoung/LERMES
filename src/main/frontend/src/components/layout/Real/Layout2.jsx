@@ -105,26 +105,6 @@ export default function Layout2() {
     return component;
   }
 
-  // function NavStatus({ loc }) {
-  //   let component;
-
-  //   switch (loc) {
-  //     case "adminHome":
-  //       component = <AdminNav />;
-  //       break;
-  //     case "stdHome":
-  //       component = <StdNav  />;
-  //       break;
-  //     case "tutorHome":
-  //       component = <TutorNav />;
-  //       break;
-  //     default:
-  //       component = <Nav/>;
-  //   }
-
-  //   return component;
-  // }
-
   return (
     <div className="layout">
       <header>
@@ -132,12 +112,6 @@ export default function Layout2() {
         {/* 페이지 별 헤더 변경 */}
         <HeaderStatus loc={navKind} />
 
-        {/* 0925 헤더 */}
-        {/* {fixedSn === myCoSn ?
-          <LmsHeader navKind={navKind} setNavToggle={setNavToggle} navToggle={navToggle} myCoSn={myCoSn} loc={loc}/>
-          :
-          <SuperHeader navKind={navKind}/>
-        } */}
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
