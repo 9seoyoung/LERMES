@@ -1,13 +1,19 @@
-import { useNavigate } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 import layoutStyles from "../../../styles/layout.module.css"
 import { useAccount } from "../../../auth/AuthContext";
 import Dropdown from "../../ui/Dropdown";
+import {useEffect} from "react";
 
 
-function SuperHeader() {
+function SuperHeader({setNavToggle}) {
   const navigate = useNavigate();
   const {user} = useAccount();
+  const {pathname} = useLocation();
+
+    useEffect(() => {
+        setNavToggle(false);
+    }, [pathname]);
 
   return (
     <div className="header_L" >

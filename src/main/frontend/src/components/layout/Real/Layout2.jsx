@@ -80,7 +80,7 @@ export default function Layout2() {
   }, [navKind]);
 
 // 헤더 종류 고르기
-  function HeaderStatus({ loc }) {
+  function HeaderStatus({ loc, setNavToggle }) {
     let component;
 
     switch (loc) {
@@ -99,7 +99,7 @@ export default function Layout2() {
         break;
 
       default:
-        component = <SuperHeader  />;
+        component = <SuperHeader setNavToggle = {setNavToggle}  />;
     }
 
     return component;
@@ -110,7 +110,7 @@ export default function Layout2() {
       <header>
       
         {/* 페이지 별 헤더 변경 */}
-        <HeaderStatus loc={navKind} />
+        <HeaderStatus loc={navKind} setNavToggle={setNavToggle} />
 
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?

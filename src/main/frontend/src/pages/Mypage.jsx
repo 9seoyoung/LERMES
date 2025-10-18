@@ -6,14 +6,18 @@ import UserProfile from '../components/layout/inho/UserProfile';
 import '../components/layout/inho/Mypage.css';
 import CompanyBigLogoUploader from '../components/layout/inho/CompanyBigLogoUploader';
 import CompanyInfoForm from '../components/layout/inho/CompanyInfoForm';
-import { useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import PasswordChangeModal from '../components/layout/inho/PasswordChangeModal';
+import {useLocation} from "react-router-dom";
 
 export default function Mypage() {
   const [infoEditToggle, setInfoEditToggle] = useState(false);
+  const {pathname} = useLocation();
+
+
 
   return (
-    <div>
+    <div >
       <header className="my-page-header">내 정보</header>
       <div className="my-page-div">
         <section

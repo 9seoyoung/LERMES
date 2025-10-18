@@ -101,7 +101,7 @@ const MyInfoForm = () => {
   };
 
   return (
-    <section className="myInfoSection myInfoSectionB">
+    <section >
       {/* ✅ 제목 전체를 클릭하면 토글 */}
       <h2
         className="myInfoTitle"
@@ -127,22 +127,57 @@ const MyInfoForm = () => {
 
           <div className="myInfoRow">
             <span className="myInfoLabel">주소</span>
-            <span noborder={"no"}>{form.address || "-"}</span>
+            <input
+              type="text"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              className="myDetailInfoInput"
+              placeholder="주소 검색 버튼 클릭"
+              readOnly
+            />
+            <button
+              type="button"
+              onClick={openPostcode}
+              className="myInfoAddressButton"
+              disabled={!scriptLoaded}
+            >
+              주소 검색
+            </button>
           </div>
 
           <div className="myInfoRow">
             <span className="myInfoLabel">상세 주소</span>
-            <span noborder={"no"}>{form.addressDetail || "-"}</span>
+            <input
+              type="text"
+              name="addressDetail"
+              value={form.addressDetail}
+              onChange={handleChange}
+              className="myDetailInfoInput"
+              placeholder="상세 주소 입력"
+            />
           </div>
 
           <div className="myInfoRow">
             <span className="myInfoLabel">전공</span>
-            <span noborder={"no"}>{form.major || "-"}</span>
+            <input
+              type="text"
+              name="major"
+              value={form.major}
+              onChange={handleChange}
+              className="myDetailInfoInput"
+            />
           </div>
 
           <div className="myInfoRow">
             <span className="myInfoLabel">보유자격</span>
-            <span noborder={"no"}>{form.cert || "-"}</span>
+            <input
+              type="text"
+              name="cert"
+              value={form.cert}
+              onChange={handleChange}
+              className="myDetailInfoInput"
+            />
           </div>
 
           <div className="myInfoRow">
