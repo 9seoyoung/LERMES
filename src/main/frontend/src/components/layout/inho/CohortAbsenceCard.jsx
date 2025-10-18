@@ -12,7 +12,20 @@ export default function CohortAbsenceCard() {
       .catch(() => setRows([]));
   }, []);
 
-  if (!rows.length) return null;
+  if (!rows.length) return (
+      <>
+      <div className="coh-card__head">
+          <h3 className="coh-card__title">교육 과정별 결석 현황</h3>
+          <span className="coh-card__period" noborder={"no"}>
+          {new Date().toLocaleDateString()}
+        </span>
+      </div>
+    <div className="coh-card__divider" />
+          <div className="coh-card__body">
+              등록된 과정이 없습니다.
+          </div>
+      </>
+  );
 
   return (
     <>

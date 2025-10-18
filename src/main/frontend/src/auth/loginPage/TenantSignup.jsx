@@ -107,7 +107,7 @@ export default function TenantSignup() {
   return (
     <div className="signup-inner">
       <div className="signup-title">비즈니스 회원가입</div>
-      <form className="signup-form" onSubmit={onSubmit} noValidate>
+      <form className="signup-form" onSubmit={onSubmit} noValidate autoComplete={"off"}>
         <input
           name="companyName"
           placeholder="상호명"
@@ -177,6 +177,7 @@ export default function TenantSignup() {
           placeholder="비밀번호"
           value={form.password}
           onChange={onChange}
+          autoComplete="new-password"
           required
         />
         <input
