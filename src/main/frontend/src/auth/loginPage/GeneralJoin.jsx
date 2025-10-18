@@ -24,10 +24,10 @@ const safePath = (p) => {
 export default function GeneralJoin() {
   const { signIn } = useAccount();
   const [form, setForm] = useState({
-    username: '',
+    userNm: '',
     email: '',
     verificationCode: '',
-    password: '',
+    userPwd: '',
     confirmPassword: '',
     phoneNumber: '',
   });
@@ -71,7 +71,7 @@ export default function GeneralJoin() {
     setMsg(null);
 
     const nameRegex = /^[가-힣]{2,5}$/;
-    if (!nameRegex.test(form.username.trim())) {
+    if (!nameRegex.test(form.userNm.trim())) {
       toast.error('이름은 한글 2~5자로 입력해주세요.');
       setLoading(false);
       return;
@@ -79,17 +79,17 @@ export default function GeneralJoin() {
 
     try {
       const payload = {
-        username: form.username.trim(),
+        username: form.userNm.trim(),
         email: form.email.trim().toLowerCase(),
         verificationCode: form.verificationCode.trim(),
-        password: form.password,
+        password: form.userPwd,
         confirmPassword: form.confirmPassword,
         phoneNumber: form.phoneNumber.trim(),
       };
 
       await signupGeneral(payload);
 
-      const loginPayload = { email: payload.email, password: payload.password };
+      const loginPayload = { email: payload.email, userPwd: payload.userPwd };
       const me = await signIn(loginPayload);
       toast.success('회원가입이 완료되었습니다!');
       navigate(safePath(me?.HOME_PATH) || '/', { replace: true });
@@ -102,10 +102,10 @@ export default function GeneralJoin() {
 
   // 모든 값이 채워졌는지 확인
   const isFormValid =
-    form.username.trim() &&
+    form.userNm.trim() &&
     form.email.trim() &&
     form.verificationCode.trim().length === 6 &&
-    form.password &&
+    form.userPwd &&
     form.confirmPassword &&
     form.phoneNumber.trim().length === 11;
 
@@ -114,14 +114,15 @@ export default function GeneralJoin() {
       <div className="signup-title">
         <b>회원가입</b>
       </div>
-      <form className="signup-form" onSubmit={onSubmit} noValidate>
+      <form className="signup-form" onSubmit={onSubmit} noValidate autoComplete={"off"}>
         <input
-          name="username"
+          name="userNm"
           minLength={2}
           maxLength={10}
           placeholder="이름(국문)"
-          value={form.username}
+          value={form.userNm}
           onChange={onChange}
+          autoComplete={"off"}
           required
         />
         <div className="input-with-btn">
@@ -154,16 +155,16 @@ export default function GeneralJoin() {
           required
         />
         <input
-          name="password"
-          type="password"
+          name="userPwd"
+          type="userPwd"
           placeholder="비밀번호"
-          value={form.password}
+          value={form.userPwd}
           onChange={onChange}
           required
         />
         <input
           name="confirmPassword"
-          type="password"
+          type="userPwd"
           placeholder="비밀번호 확인"
           value={form.confirmPassword}
           onChange={onChange}
