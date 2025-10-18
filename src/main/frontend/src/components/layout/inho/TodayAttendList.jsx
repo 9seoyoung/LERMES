@@ -48,7 +48,7 @@ export default function TodayAttendList({ cohortSn }) {
       </h4>
 
       {rows.length === 0 ? (
-        <div style={{ padding: 8, color: '#777' }}>오늘 데이터가 없습니다.</div>
+        <div style={{ padding: 8, color: 'var(--font-color-gray1)' }}>오늘 데이터가 없습니다.</div>
       ) : (
         <div
           style={{

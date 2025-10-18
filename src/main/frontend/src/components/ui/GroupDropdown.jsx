@@ -3,11 +3,13 @@ import { hortlistByCpSn } from "../../services/cohortService";
 import Dropdown from "./Dropdown";
 import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
 import styles from "../../styles/fontStyle.module.css";
+import {useNavigate} from "react-router-dom";
 
 function GroupDropdown({setCohortSn, setCohortStts}) {
   const { effectiveSn } = useSelectedCompany();
   const [hortlist, setHortList] = useState([]);
-  const [groupFilter, setGroupFilter] = useState(null)
+  const [groupFilter, setGroupFilter] = useState(null);
+  const navigate = useNavigate();
     console.log("그룹 변경")
 
 
@@ -33,8 +35,20 @@ function GroupDropdown({setCohortSn, setCohortStts}) {
         }
       })();
     }, [effectiveSn]);
+
+  if(!hortlist || hortlist.length === 0) return (
+      <div className="dropSet" style={{minWidth: "100px", maxWidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
+        <Dropdown className="dropset_dd" label={"과정 없음"} >
+          {/* <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p> */}
+              <p className="subMenuList" key={"nohort"} onClick={()=> navigate("/adminHome/groupSet/createGroup")} >
+                + 과정 등록
+              </p>
+        </Dropdown>
+      </div>
+  );
+
   return (
-    <div className="dropSet" style={{minWidth: "100px", maxwidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
+    <div className="dropSet" style={{minWidth: "100px", maxWidth:"100px", whiteSpace:"nowrap", textOverflow:"ellipsis"}}>
       <Dropdown className="dropset_dd" label={groupFilter || hortlist[0]?.cohortNm} >
         {/* <p className=".subMenuList" onClick={()=> {setGroupFilter("All"); setCohortSn(null)}} >All</p> */}
       { hortlist.map((hortlist, idx) => (

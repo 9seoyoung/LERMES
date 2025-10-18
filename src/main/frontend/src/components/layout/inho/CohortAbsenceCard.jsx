@@ -21,7 +21,7 @@ export default function CohortAbsenceCard() {
         </span>
       </div>
     <div className="coh-card__divider" />
-          <div className="coh-card__body">
+          <div className="coh-card__body" style={{ color: 'var(--font-color-gray1)' }}>
               등록된 과정이 없습니다.
           </div>
       </>
