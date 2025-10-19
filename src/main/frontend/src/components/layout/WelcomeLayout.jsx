@@ -11,7 +11,6 @@ import '../../styles/sj.css';
 // 컴포넌트
 
 function WelcomeLayout() {
-  const [, setAction] = useState('basic');
   const navigate = useNavigate();
 
   console.log(fetchMe);
@@ -38,21 +37,20 @@ function WelcomeLayout() {
                        width: "100%",
                    }}
               />
-              <button
-                  type="button"
-                  className="start-btn"
-                  onClick={() => {
-                      setAction('join');
-                      navigate('/welcome/generalJoin');
-                  }}
-                  style={{
-                      position:"absolute",
-                      left:"56px",
-                      bottom: "35%"
-                  }}
-              >
-                  시작하기
-              </button>
+              {/*<button*/}
+              {/*    type="button"*/}
+              {/*    className="start-btn"*/}
+              {/*    onClick={() => {*/}
+              {/*        navigate('/welcome/generalJoin');*/}
+              {/*    }}*/}
+              {/*    style={{*/}
+              {/*        position:"absolute",*/}
+              {/*        left:"56px",*/}
+              {/*        bottom: "35%"*/}
+              {/*    }}*/}
+              {/*>*/}
+              {/*    시작하기*/}
+              {/*</button>*/}
         </div>
           <div className="panel right-panel">
               <Outlet></Outlet>

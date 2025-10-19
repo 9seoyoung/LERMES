@@ -34,7 +34,7 @@ function SuperHeader({setNavToggle}) {
               <div className={layoutStyles.subMenuList}>메뉴 1</div>
               <div className={layoutStyles.subMenuList}>메뉴 2</div>
               <div className={layoutStyles.subMenuList}>메뉴 3</div>
-              <div className={layoutStyles.subMenuList} onClick={()=> navigate('/welcome/tenantjoin')}>비즈니스 가입</div>
+              <div className={layoutStyles.subMenuList} onClick={()=> navigate('/bizAd')}>비즈니스 가입</div>
             </Dropdown>
       </div>
     </div>

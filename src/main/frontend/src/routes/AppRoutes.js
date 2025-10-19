@@ -59,6 +59,7 @@ import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
 import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
 import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
 import SchedEdit2 from '../pages/LMS/readAndEdit/SchedRead2.jsx';
+import BizHongBo from "../pages/Super/BizHongBo";
 
 function AppRoutes() {
   return (
@@ -98,6 +99,7 @@ function AppRoutes() {
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
+        <Route path="/bizAd" element={<BizHongBo />} />
         <Route path="unknownHome" element={<UnknownHome />} />
         <Route path="/unknownHome/board/read/:postSn" element={<BoardRead2 />} />
 

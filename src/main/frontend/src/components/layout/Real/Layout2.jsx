@@ -169,7 +169,7 @@ export default function Layout2() {
           <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
           }
           <p className="testBox">
-            <div style={{fontSize: "1.4rem", color: "#444"}}>권한</div>
+            <div style={{fontSize: "1.4rem", color: "#444"}}></div>
             {(user?.USER_EML_ADDR === "hash@com") ? 
               testAuthLv.map((item, idx)=> 
                 <div
