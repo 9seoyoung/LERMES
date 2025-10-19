@@ -1,19 +1,27 @@
 .container{
     display: flex;
     flex-direction: column;
-    gap: 15rem;
+    gap: 8rem;
     align-items: center;
+    height: 100%;
 }
 
 .imgCont{
     display: flex;
-    height: 60rem;
+    height: 100%;
     align-items: center;
 }
-.imgCont div{
+.imgCont > div{
     position: relative;
     display: flex;
-    width: 50%;
+    width: 100%;
+    background: yellow;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.imgCont img{
+    width: 100%;
 }
 
 .detailBox {

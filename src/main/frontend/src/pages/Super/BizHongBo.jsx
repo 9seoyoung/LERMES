@@ -13,10 +13,6 @@ export default function BizHongBo() {
                     <img
                         src={process.env.PUBLIC_URL + '/img/loginBg.png'}
                         alt="bg"
-                        style={{
-                            objectFit: 'contain',
-                            width: "100%",
-                        }}
                     />
                     <button
                         type="button"
@@ -33,15 +29,12 @@ export default function BizHongBo() {
                         시작하기
                     </button>
                 </div>
-                    <img
-                        src={process.env.PUBLIC_URL + '/img/bgDetail.png'}
-                        alt="bgDetail"
-                        style={{
-                            objectFit: "cover",
-                            width: "50%",
-                            height: "100%",
-                        }}
-                    />
+                <div>
+                    {/*<img*/}
+                    {/*    src={process.env.PUBLIC_URL + '/img/bgDetail.png'}*/}
+                    {/*    alt="bgDetail"*/}
+                    {/*/>*/}
+                </div>
             </section>
             <h2>복잡한 교육 운영, 이제 한 플랫폼에서 관리하세요</h2>
             <div className={styles.detailContainer}>
@@ -70,6 +63,9 @@ export default function BizHongBo() {
                 </p>
             </section>
             </div>
+            <section style={{height:'10rem', width:'100%', display: "flex", justifyContent: "center", alignItems: "flex-start"}}>
+                <p style={{fontSize: "2rem", marginBottom: "2rem"}}><span style={{fontWeight:"bold", color:"var(--font-color-red1)"}} noborder={"no"}>LERMES</span>는 학습의 결과가 곧 브랜드가 되는 순간을 만듭니다.</p>
+            </section>
         </div>
     )
 }
