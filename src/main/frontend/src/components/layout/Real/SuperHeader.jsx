@@ -10,14 +10,17 @@ function SuperHeader({setNavToggle}) {
   const navigate = useNavigate();
   const {user} = useAccount();
   const {pathname} = useLocation();
+    const homePath = pathname.split("/").slice(1);
+
 
     useEffect(() => {
         setNavToggle(false);
     }, [pathname]);
 
+
   return (
     <div className="header_L" >
-      <button>
+      <button type={"button"} onClick={() => navigate("/")} className="button_L">
         <img src={process.env.PUBLIC_URL + '/img/logo.png'} alt="Logo" />
       </button>
       <div className={`header_R ${layoutStyles.menuContainer}`}>
