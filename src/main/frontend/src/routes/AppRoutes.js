@@ -60,6 +60,7 @@ import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
 import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
 import SchedEdit2 from '../pages/LMS/readAndEdit/SchedRead2.jsx';
 import BasicPost from '../domain/board/pages/BasicPost.jsx';
+import GridLayout from '../components/layout/Real/GridLayout.jsx';
 
 function AppRoutes() {
   return (
@@ -78,6 +79,7 @@ function AppRoutes() {
       <Route path="/testQuestion" element={<QuestionAdd />} />
       <Route path='/testBoardDTO' element={<BasicPost />} />
       <Route path="/files" element={<UploadDownloadDemo />} />
+      <Route path='/testLayout' element={<GridLayout />} />
 
       {/* 에러페이지 */}
       <Route path="/403" element={<NotAllowed />} />

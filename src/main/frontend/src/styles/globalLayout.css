@@ -1,0 +1,53 @@
+/* 전역 CSS / index.js에서 호출해서 전역으로 적용 */
+@import "./token.css";
+
+
+.layoutFrame {
+  width: 100%;
+  max-width: 1440px;
+  height: 100vh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header header"
+    "aside main"
+    "footer footer"
+  ;
+
+  transition: grid-template-columns 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.layoutFrame.isClosed {
+  grid-template-columns: 0px 1fr; /* or 0px 1fr */
+}
+
+.layoutFrame.isClosed > .aside {
+  pointer-events: none;
+}
+
+
+.layoutFrame > .header {
+  height: 100px;
+  grid-area: header;
+  width: 100%;
+}
+
+.layoutFrame > .aside {
+  min-width: 0px;
+  overflow: hidden;
+  grid-area: aside;
+  background-color: aqua;
+}
+
+.layoutFrame > .main {
+  grid-area: main;
+  background-color: plum;
+}
+
+.layoutFrame > .footer {
+  height: 150px;
+  grid-area: footer;
+  background-color: black;
+}
