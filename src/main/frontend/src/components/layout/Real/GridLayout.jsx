@@ -1,12 +1,13 @@
-import { DoorClosedLocked, DoorOpen, DoorOpenIcon, LogIn, LogInIcon, LogOut, LucideLogIn, Plus } from "lucide-react";
 import { useEffect, useState } from "react"
 import LmsHeader from "../../ui/headerModule/LmsHeader";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { StdHeader } from "./LmsHeader";
 import CompanySmallLogoUploader from "../inho/CompanySmallLogoUploader ";
 import MyInfo from "../../ui/MyInfo";
+import { Nav } from "../../ui/navModule/Nav";
+import LmsHeaderRF from "../../ui/headerModule/LmsHeaderRF";
 
 
 // LMS 전용 레이아웃임
@@ -23,7 +24,7 @@ function GridLayout() {
           <div className="logoBox" onClick={() => navigate('/lmsHomeIndex')}>
             <CompanySmallLogoUploader />
           </div>
-          <StdHeader></StdHeader>
+          <LmsHeaderRF></LmsHeaderRF>
           {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
@@ -58,8 +59,11 @@ function GridLayout() {
         }
         </header>
         <aside className={`aside ${openToggle ? "isClosed" : ""}`} onClick={() => setOpenToggle(!openToggle)} >
+          <Nav></Nav>
         </aside>
-        <main className="main">본문영역임</main>
+        <main className="main">
+          <Outlet></Outlet>
+        </main>
       </div>
   )
 }

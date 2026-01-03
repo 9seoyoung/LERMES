@@ -1,5 +1,5 @@
 :root {
-  --cell-gap: 4px;
+  --cell-gap: 2px;
   --cell-height: 84px;
   --bar-height: 10px;
   --bar-gap: 2px;
@@ -7,11 +7,16 @@
 }
 
 
-.cal { width: 100%; }
+.cal { width: 100%;
+}
 
 .monthNav {
-  display: flex; justify-content: space-between; align-items: center;
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  gap: 12px;
   padding: 4px 8px;
+  margin-bottom: 16px;
+  font-weight: 800;
 }
 
 .weekdayHeader {
@@ -31,6 +36,7 @@
   display: grid;
   grid-template-rows: repeat(auto-fit, var(--cell-height)); /* 행 높이 */
   gap: var(--cell-gap);
+  padding: 4px 0;
 }
 
 .rowGrid {
@@ -41,18 +47,22 @@
 
 .cell {
   position: relative;
-  background: #f7f7f7;
-  border-radius: 10px;
+  /* background: #f7f7f7; */
+  /* border-radius: 10px; */
+  border-top: 0.1rem solid var(--text-disabled);
   min-height: var(--cell-height);
   padding: 4px 6px;
-  box-shadow: inset 0 0 0 1px #00000010;
+  /* box-shadow: inset 0 0 0 1px #00000010; */
 }
 .cell.empty { background: transparent; box-shadow: none; }
 .selected {
   position: relative;
   color: var(--font-color-white);
   font-weight: 800;
+  
 }
+
+
 .selected::after {
   content: "";
   display: inline-block;    
@@ -65,8 +75,19 @@
   border-radius: 50%;     
   opacity: var(--opacity-25);   
 }
-.dateLabel { font-size: 12px; font-weight: 700;}
 
+.dateLabel { font-size: 12px; font-weight: 700; display: flex; flex: 1; justify-content: space-between;}
+
+.today {
+  font-weight: 500;
+  color: var(--color-accent);
+  /* text-shadow: 0 2px 0 rgba(0,0,0,0.08); */
+
+}
+
+.cell.selected {
+  border-top: 0.2rem solid var(--color-accent);
+}
 /* 오버레이 레이어: 셀 그리드와 동일한 7열 x N행 그리드 */
 .barsOverlay {
   position: absolute; inset: 30px 0;

@@ -3,7 +3,7 @@ import { useAccount } from '../../../auth/AuthContext';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import { useEffect } from 'react';
 
-export function Nav({ setNavToggle }) {
+export function Nav() {
   const { user, fetchedOnce } = useAccount();
   const { clearFixedSn, effectiveSn } = useSelectedCompany();
   const navigate = useNavigate();
@@ -203,7 +203,6 @@ export function Nav({ setNavToggle }) {
         className="goSuper"
         onClick={() => {
           navigate('/');
-          setNavToggle(false);
           clearFixedSn();
         }}
       >

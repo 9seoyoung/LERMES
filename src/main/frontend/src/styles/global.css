@@ -532,15 +532,18 @@ footer>div:hover {
 /* nav */
 .navCont{
   display: flex;
+  flex: 1;
   min-width: 0;
-  width: 216px;
-  height: calc(100vh - 112px);
-  max-height: 702px;
+  /* width: 216px; */
+  /* height: calc(100vh - 112px); */
+  /* max-height: 702px; */
   /* background-color: #f6f6f6; */
   /* box-shadow: 2px 2px 2px #00000025; */
-  background-color: var(--color-light-bg);
-  box-shadow: 2px 2px 2px var(--shadow-color);
-  padding: 8px;
+  /* background-color: var(--color-light-bg); */
+  /* box-shadow: 2px 2px 2px var(--shadow-color); */
+  /* padding: 8px; */
+  padding: 16px 12px;
+
   flex-direction: column;
   align-items: center;
   justify-content: space-between;

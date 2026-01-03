@@ -12,6 +12,20 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
   const {user} = useAccount();
 
   const [currentDate, setCurrentDate] = useState(new Date());
+  const year = currentDate.getFullYear();
+  const month0 = currentDate.getMonth();
+  const month = month0 + 1;
+  const day = currentDate.getDate();
+
+  const todayKey = useMemo(() => {
+    const t = new Date();
+    return `${t.getFullYear()}-${z2(t.getMonth() + 1)}-${z2(t.getDate())}`;
+  }, []);
+
+  const isViewingThisMonthOfToday = useMemo(() => {
+    const t = new Date();
+    return t.getFullYear() === year && (t.getMonth() + 1) === month;
+  }, [year, month]);
 
   useEffect(() => {
     if(user) {
@@ -20,11 +34,8 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
     const key = `${today.getFullYear()}-${z2(today.getMonth() + 1)}-${z2(today.getDate())}`;
     setSelectedDate?.(key);
     }
-  }, [setSelectedDate]);
+  }, []);
 
-  const year = currentDate.getFullYear();
-  const month0 = currentDate.getMonth();
-  const month = month0 + 1;
 
   // 셀 그리드용 week 행렬
   const weeks = useMemo(() => buildWeeks(year, month), [year, month]);
@@ -55,8 +66,9 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
       {/* 헤더 */}
       <div className={styles.monthNav}>
         <button onClick={prevMonth}>◀</button>
-        <h3>{year}년 {month}월</h3>
+        <div>{year}. {month >= 10 ? month : `0${month}`}</div>
         <button onClick={nextMonth}>▶</button>
+        <div></div>
       </div>
 
       {/* 요일 */}
@@ -75,14 +87,18 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
               {week.map((day, c) => {
                 const isNull = day === null;
                 const key = !isNull ? `${year}-${z2(month)}-${z2(day)}` : null;
+
                 const isSelected = key && key === selectedDate;
+                const isToday = isViewingThisMonthOfToday && key === todayKey;
+
                 return (
                   <div
                     key={key ?? makeKey("empty", year, month, r, c)}
-                    className={`${styles.cell} ${isSelected ? styles.selected : ""} ${isNull ? styles.empty : ""}`}
+                    className={`${styles.cell} ${isSelected ? styles.selected : ""} ${isNull ? styles.empty : ""}`
+                    }
                     onClick={() => onSelectDate(day)}
                   >
-                    <div className={styles.dateLabel}>{day || ""}</div>
+                    <div className={styles.dateLabel}>{isToday ? <>{day} <div className={styles.today}>today</div></> : day }</div>
                   </div>
                 );
               })}

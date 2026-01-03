@@ -97,6 +97,7 @@ function AppRoutes() {
       </Route>
 
       {/*기본 레이아웃*/}
+      {/* <Route path="/" element={<Layout2></Layout2>}> */}
       <Route path="/" element={<Layout2></Layout2>}>
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
@@ -111,7 +112,9 @@ function AppRoutes() {
           <Route path="/tableall" element={<TableAll />} />
           <Route path="myPage" element={<Mypage />} />
         </Route>
+      </Route>
 
+      <Route path='/' element={<GridLayout></GridLayout>}>
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
             <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
