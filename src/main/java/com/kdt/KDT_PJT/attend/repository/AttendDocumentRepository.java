@@ -1,5 +1,6 @@
 package com.kdt.KDT_PJT.attend.repository;
 
+import com.kdt.KDT_PJT.attend.entity.AprvSttsNm;
 import com.kdt.KDT_PJT.attend.entity.AttendDocument;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,4 +10,6 @@ public interface AttendDocumentRepository extends JpaRepository<AttendDocument, 
     Page<AttendDocument> findByUserSnOrderByAttendDcmntSnDesc(Long userSn, Pageable pageable);
 
     Page<AttendDocument> findByCoSn(Long companySn, Pageable pageable);
+
+    long countByCoSnAndAprvSttsNm(Long companySn, AprvSttsNm aprvSttsNm);
 }

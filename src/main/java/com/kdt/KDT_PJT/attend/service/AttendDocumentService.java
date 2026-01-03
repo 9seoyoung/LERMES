@@ -116,4 +116,15 @@ public class AttendDocumentService {
         doc.changeAprvStatus("Y".equals(status) ? AprvSttsNm.APPROVED : AprvSttsNm.REJECTED);
         attendDocumentRepository.save(doc);
     }
+
+    /**
+     * 회사번호와 관련된 출석인정요청 카운트
+     * 단, PENDING 상태인 것만
+     */
+    @Transactional(readOnly = true)
+    public long countRequestAbsence(Long effectiveSn) {
+        long coSn = effectiveSn;
+
+        return attendDocumentRepository.countByCoSnAndAprvSttsNm(coSn, AprvSttsNm.PENDING);
+    }
 }

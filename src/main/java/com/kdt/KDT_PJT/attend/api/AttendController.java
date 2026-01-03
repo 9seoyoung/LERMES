@@ -266,4 +266,20 @@ public class AttendController {
                 .message("상태 변경 완료")
                 .build();
     }
+
+    /**
+     * 관리자 출석인정 신규요청건수 조회
+     * - 기수 상관없음
+     * - PENDING 상태만
+     */
+    @GetMapping("/absence-requests/count")
+    public AbsenceCountsRes getPendingAbsenceCount(
+            @RequestHeader("X-Effective-Sn") Long effectiveSn
+    ){
+        long pendingCount = attendDocumentService.countRequestAbsence(effectiveSn);
+
+        return AbsenceCountsRes.builder()
+                .pendingCount(pendingCount)
+                .build();
+    }
 }

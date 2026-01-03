@@ -77,6 +77,7 @@ public class AuthSecurityConfig {
        ));
        c.setAllowCredentials(true);
        c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
+//       이거 헤더 "X-Effective-Sn", "Content-Type", "Authorization" 일단 사용
        c.setAllowedHeaders(List.of("*"));
        c.setExposedHeaders(List.of("Set-Cookie"));
 

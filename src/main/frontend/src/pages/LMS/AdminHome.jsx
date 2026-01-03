@@ -1,6 +1,7 @@
 import CohortAbsenceCard from '../../components/layout/inho/CohortAbsenceCard';
 import AttendAdjustAdminPage from '../../components/layout/inho/AttendAdjustAdminPage';
 import CalSched from '../../components/ui/CalSched';
+import AbsenceRequest from '../../components/module/attendance/AbsenceRequest';
 
 export default function AdminHome() {
   
@@ -19,6 +20,7 @@ export default function AdminHome() {
           <AttendAdjustAdminPage />
         </div>
       </div>
+      <AbsenceRequest></AbsenceRequest>
     </div>
   );
 }
