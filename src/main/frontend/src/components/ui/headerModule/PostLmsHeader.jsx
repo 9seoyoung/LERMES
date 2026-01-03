@@ -62,13 +62,13 @@ export default function LmsHeader({ loc ,navToggle, setNavToggle, myCoSn }) {
   return (
     <>
       <div className="header_L">
-        <button
+        {/* <button
           className="navBtn"
           type="button"
           onClick={() => setNavToggle(!navToggle)}
         >
           {navToggle ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
-        </button>
+        </button> */}
 
         {/* 회사 로고/이름 영역 */}
         <div

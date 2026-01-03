@@ -13,7 +13,7 @@
   margin: 0;
   padding: 0;
   /* color: #222; */
-  color: var(--color-text-main);
+  color: var(--text-primary);
 }
 
 html {
@@ -23,7 +23,8 @@ html {
     height: 100%;
     /* background-color: #d9d9d9; */
     /* color: #222; */
-    background-color: var(--color-main-bg);
+    /* background-color: var(--color-main-bg); */
+    background-color: #fff;
     color: var(--color-text-main);
 }
 
@@ -32,7 +33,8 @@ body {
   min-height: 100vh;
   /* background-color: #d9d9d9; */
   /* color: #222; */
-  background-color: var(--color-main-bg);
+  /* background-color: var(--color-main-bg); */
+  background-color: #fff;
   color: var(--color-text-main);
   padding: 0 24px;
 }
@@ -142,7 +144,7 @@ h4 {
   flex-direction: column;
 }
 
-.layout>header {
+.layout > header {
   width: 100%;
   height: 64px;
   /* background-color: #fff; */
