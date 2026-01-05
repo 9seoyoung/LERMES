@@ -8,6 +8,7 @@ import { StudySched_Tb } from "../../../components/module/TableAll";
 import InterviewEditPost from "../form/InterviewEditPost";
 import { SchedRead } from "./SchedRead";
 import InterviewMemoRead from "./InterviewMemoRead";
+import InterviewRead from "./InterviewRead";
 
 export default function AdminPostRead({whereTogo}){
     
@@ -18,6 +19,7 @@ export default function AdminPostRead({whereTogo}){
             <h2>게시물 관리</h2>
             <div className="formAreaRow">
                 <InterviewEditPost whereTogo={whereTogo}></InterviewEditPost>
+                {/* <InterviewRead></InterviewRead> */}
             </div>
         </div>
     );

@@ -122,8 +122,8 @@ export const CHANGE_ADMIN_PAGE_BY_POST_TYPE = {
   "QNA": "/adminHome/boardSet/read",
   "SURVEY": "/adminHome/boardSet/survey",
   "FAQ": "/adminHome/boardSet/read",
-  "면담신청": "/adminHome/boardSet/readInterview",
-  "면담확정": "/adminHome/boardSet/readInterview",
+  "면담 신청": "/adminHome/boardSet/readInterview",
+  // "면담확정": "/adminHome/boardSet/readInterview",
   "면담 기록": "/adminHome/boardSet/readItvMemo",
   "공식일정": "/adminHome/boardSet/readSchedule"
 }

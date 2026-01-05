@@ -27,6 +27,15 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
     return t.getFullYear() === year && (t.getMonth() + 1) === month;
   }, [year, month]);
 
+  // 셀 그리드용 week 행렬
+  const weeks = useMemo(() => buildWeeks(year, month), [year, month]);
+
+  // 오버레이 바(좌표/스팬/스택 인덱스) 생성
+  const { bars } = useMemo(
+    () => buildOverlayBars(Array.isArray(monthlyTodoRaw) ? monthlyTodoRaw : [], year, month),
+    [monthlyTodoRaw, year, month]
+  );
+
   useEffect(() => {
     if(user) {
     const today = new Date();
@@ -37,14 +46,6 @@ export default function MiniCal({ selectedDate, setSelectedDate, monthlyTodoRaw 
   }, []);
 
 
-  // 셀 그리드용 week 행렬
-  const weeks = useMemo(() => buildWeeks(year, month), [year, month]);
-
-  // 오버레이 바(좌표/스팬/스택 인덱스) 생성
-  const { bars } = useMemo(
-    () => buildOverlayBars(Array.isArray(monthlyTodoRaw) ? monthlyTodoRaw : [], year, month),
-    [monthlyTodoRaw, year, month]
-  );
 
   const prevMonth = () => {
     setCurrentDate(new Date(year, month0 - 1, 1));
