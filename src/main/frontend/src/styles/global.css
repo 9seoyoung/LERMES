@@ -362,8 +362,22 @@ footer>div:hover {
   border-radius: 1.6rem;
   /* box-shadow: 0 4px 4px #00000025; */
   /* background-color: #FCFEFF; */
-  box-shadow: 0 4px 4px var(--shadow-color);
-  background-color: var(--color-sec-bg);
+  box-shadow: var(--shadow-basic-card);
+  background-color: var(--color-white);
+  border: 1px solid #E5E7EB;
+  border-radius: 1.6rem;     
+  padding: 20px 24px;
+}
+
+.dashBoardAccent {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.6rem;
+  box-shadow: var(--shadow-accent-card);
+  background-color: var(--color-section-bg);
+  
+  /* box-shadow: 0 4px 4px var(--shadow-color); */
+  /* background-color: var(--color-sec-bg); */
   border-radius: 1.6rem;     
   padding: 20px 24px;
 }
@@ -1116,4 +1130,96 @@ footer>div:hover {
 
 #tableBg{
   background-color: var(--color-light-bg) !important;
+}
+
+/* 리팩토링 */
+/* 폰트 */
+.text-body {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+  font-weight: var(--fw-regular);
+}
+
+.text-meta {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-base);
+  color: var(--color-text-muted);
+}
+
+.card-title {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-tight);
+  font-weight: var(--fw-semibold);
+}
+
+.section-title {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-tight);
+  font-weight: var(--fw-semibold);
+}
+
+.page-title {
+  font-size: var(--fs-xxl);
+  line-height: var(--lh-tight);
+  font-weight: var(--fw-bold);
+}
+/* 폰트 강조 */
+.text-em-strong {
+  font-weight: var(--em-strong);
+  color: var(--em-color);
+}
+.text-em-strong-negative {
+    font-weight: var(--em-strong);
+    color: var(--em-color-negative);
+}
+
+
+/* 레이아웃용 그리드 */
+.gridSection-1col{
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.area3to1 {
+  grid-area: a3to1;
+}
+.area2to1 {
+  grid-area: a2to1;
+}
+
+/* 정렬용 플렉스 */
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 섹션배경 */
+.accentSection {
+  background-color: var(--color-section-bg);
+  border-radius: var(--radius-md);
+  padding: 16px 24px;
+}
+/* 카드배경 */
+.accentCard {
+  background-color: var(--color-accent-bg);
+  box-shadow: var(--shadow-accent-card);
+  border: var(--border-light);
+  padding: 16px 24px;
+  border-radius: var(--radius-sm);
+}
+.basicCard {
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-basic-card);
+  border: var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 16px 24px;
+}
+.grayCard {
+  background-color: var(--color-sec-bg);
+  box-shadow: var(--shadow-basic-card);
+  border: var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 16px 24px;
 }

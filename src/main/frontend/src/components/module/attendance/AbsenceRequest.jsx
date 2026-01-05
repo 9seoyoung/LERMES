@@ -31,10 +31,9 @@ function AbsenceRequest() {
   
 
   return (
-    <>
-      <div>미확인 출석 요청</div>
-    {counts}
-    </>
+    <a className="text-em-strong-negative card-title ">
+      {counts}건
+    </a>
   )
 }
 
