@@ -44,6 +44,7 @@
     --bg-color-red1: #E9623A;
     --bg-color-red2: #ffb5a0;
 
+
     /* 폰트 컬러 */
     --font-color-base: #222;
     --font-color-white: #fcfeff;
@@ -119,6 +120,13 @@
     --radius-sm: 8px;   /* 버튼, input */
     --radius-md: 12px;  /* 카드 */
     --radius-lg: 16px;  /* 큰 섹션 */
+
+/* pagination / indicator blue */
+    --pg-idle:   #D6E6FF; /* 기본(희미하지만 보임) */
+    --pg-hover:  #BFD6FF; /* 호버(확실히 보임) */
+    --pg-active: #4F86FF; /* 활성(가장 잘 보임, 너무 진하지 않게) */
+    --pg-ring:   rgba(79,134,255,0.28); /* 포커스/활성 링 */
+    --pg-shadow: rgba(0,0,0,0.06);      /* 흰 배경에서 떠 보이게 */
 }
 
 [titleType = "3"]{

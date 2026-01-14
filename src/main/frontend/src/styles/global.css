@@ -1223,3 +1223,58 @@ footer>div:hover {
   border-radius: var(--radius-sm);
   padding: 16px 24px;
 }
+
+/* 푸터용 */
+.footer-sm {
+  border-top: 1px solid var(--color-primary);
+}
+
+/* 인디케이터 */
+.indicator-right {
+  display: flex;
+  flex: 1;
+  justify-content: right;
+  gap: 4px;
+  cursor: auto;
+}
+.indicator-right li {
+  border-radius: 12px;
+  background-color: var(--indicator-dark);
+  padding: 0 12px;
+}
+.indicator-right li:hover {
+  background-color: var(--em-bg);
+}
+.indicator-right li.currentView {
+  background-color: var(--blue-500);
+  box-shadow: var(--shadow-accent-card);
+}
+
+.pageDot{
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--pg-idle);
+  box-shadow: 0 1px 2px var(--pg-shadow);
+  transition: background 160ms cubic-bezier(.22,1,.36,1),
+              transform 160ms cubic-bezier(.22,1,.36,1),
+              box-shadow 160ms cubic-bezier(.22,1,.36,1);
+}
+
+.pageDot.pageBar{
+  width: 60px;
+}
+
+.pageDot:hover{
+  background: var(--pg-hover);
+  transform: scale(1.08);
+}
+
+.pageDot.currentView{
+  background: var(--pg-active);
+  box-shadow: 0 0 0 3px var(--pg-ring), 0 2px 6px var(--pg-shadow);
+}
+
+.pageDot.currentView:hover{
+  transform: scale(1.12);
+}
