@@ -59,7 +59,8 @@ import SchedEditPost from '../pages/LMS/readAndEdit/SchedRead.jsx';
 import SurveyRead from '../pages/LMS/readAndEdit/SurveyRead.jsx';
 import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
 import SchedEdit2 from '../pages/LMS/readAndEdit/SchedRead2.jsx';
-import BizHongBo from "../pages/Super/BizHongBo";
+import BasicPost from '../domain/board/pages/BasicPost.jsx';
+import GridLayout from '../components/layout/Real/GridLayout.jsx';
 
 function AppRoutes() {
   return (
@@ -76,8 +77,9 @@ function AppRoutes() {
       <Route path="/schedlistpopup" element={<SchedListPopUp />} />
       <Route path="/calsched" element={<CalSched />} />
       <Route path="/testQuestion" element={<QuestionAdd />} />
-
+      <Route path='/testBoardDTO' element={<BasicPost />} />
       <Route path="/files" element={<UploadDownloadDemo />} />
+      <Route path='/testLayout' element={<GridLayout />} />
 
       {/* 에러페이지 */}
       <Route path="/403" element={<NotAllowed />} />
@@ -95,11 +97,11 @@ function AppRoutes() {
       </Route>
 
       {/*기본 레이아웃*/}
-      <Route path="/" element={<Layout2></Layout2>}>
+      {/* <Route path="/" element={<Layout2></Layout2>}> */}
+      <Route  element={<Layout2></Layout2>}>
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
-        <Route path="/bizAd" element={<BizHongBo />} />
         <Route path="unknownHome" element={<UnknownHome />} />
         <Route path="/unknownHome/board/read/:postSn" element={<BoardRead2 />} />
 
@@ -110,7 +112,9 @@ function AppRoutes() {
           <Route path="/tableall" element={<TableAll />} />
           <Route path="myPage" element={<Mypage />} />
         </Route>
+      </Route>
 
+      <Route path='/' element={<GridLayout></GridLayout>}>
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
             <Route element={<RoleRoute roles={[1, 2, 3, 4, 5, 6]} />}>
