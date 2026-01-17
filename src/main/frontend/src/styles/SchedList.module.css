@@ -27,7 +27,7 @@ font-size: 14px;
 
 .schedList {
   list-style-type: disc;
-  height: 120px;
+  /* height: 120px; */
   padding-left: 24px;
   flex: 1;
   overflow-y: scroll;

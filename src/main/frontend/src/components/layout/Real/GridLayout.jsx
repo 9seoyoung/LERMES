@@ -62,7 +62,9 @@ function GridLayout() {
           <Nav></Nav>
         </aside>
         <main className="main">
+          <div className="fade-blur-top" ></div>
           <Outlet></Outlet>
+          <div className="fade-blur-bottom" ></div>
         </main>
       </div>
   )

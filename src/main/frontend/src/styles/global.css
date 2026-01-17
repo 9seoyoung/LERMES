@@ -1227,10 +1227,13 @@ footer>div:hover {
 /* 푸터용 */
 .footer-sm {
   border-top: 1px solid var(--color-primary);
+  height: 120px;
+  margin-top: 16px;
 }
 
 /* 인디케이터 */
 .indicator-right {
+  grid-area: c;
   display: flex;
   flex: 1;
   justify-content: right;

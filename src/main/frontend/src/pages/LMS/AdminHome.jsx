@@ -8,8 +8,8 @@ export default function AdminHome() {
   const [viewMode, setViewMode] = useState("adminView")
   
   return (
-    <div className='dashboard-container' style={{gap: "32px"}}>
-      <div className="mainCont_Lms_Row">
+    <div className='dashboard-container' style={{gap: "16px"}}>
+      <div className="dashboard-content">
         <section className="gridSection-1col" style={{gridTemplateRows: "auto 3fr 1fr 1fr 5fr", gap: "16px"}} >
         {/* <AbsenceRequest></AbsenceRequest>
           <div className='accentSection' style={{ height: '232px' }}>
@@ -42,17 +42,15 @@ export default function AdminHome() {
             </div>
           </div>
         </section>
-        <div className="main_L" style={{ width: '40%', maxHeight: "702px" }}>
-            <div className='dashBoardModule' style={{display: "flex", flexDirection: "column", maxHeight: "702px"}}>
-              <CalSched></CalSched>
-            </div>
+          <div className='basicCard' >
+            <CalSched></CalSched>
+          </div>
+      </div>
+        <div className='indicator-right'>
+          <div className={`pageDot pageBar ${viewMode === "adminView" ? "currentView" : ""}`} onClick={() => setViewMode("adminView")}></div>
+          <div className={`pageDot pageBar ${viewMode === "visitorView" ? "currentView" : ""}`} onClick={() => setViewMode("visitorView")}></div>
         </div>
-      </div>
-      <div className='indicator-right'>
-        <div className={`pageDot pageBar ${viewMode === "adminView" ? "currentView" : ""}`} onClick={() => setViewMode("adminView")}></div>
-        <div className={`pageDot pageBar ${viewMode === "visitorView" ? "currentView" : ""}`} onClick={() => setViewMode("visitorView")}></div>
-      </div>
-      <footer className='footer-sm'>@Powered by LERMES</footer>
+        <footer className='footer-sm'>@Powered by LERMES</footer>
     </div>
   );
 }
