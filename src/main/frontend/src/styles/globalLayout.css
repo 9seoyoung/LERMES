@@ -78,6 +78,7 @@
 /* 본문 */
 .layoutFrame > .main {
   grid-area: main;
+  display: flex;
   width: 100%;
   padding: 16px 12px;
 }
@@ -112,4 +113,14 @@
     background: rgba(0,0,0,0.1);
   }
 
+}
+
+
+/* 대시보드 푸터 정렬용 */
+.dashboard-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto auto;
+  padding-bottom: 16px;
 }

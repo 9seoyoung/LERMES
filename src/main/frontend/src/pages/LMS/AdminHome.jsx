@@ -8,8 +8,8 @@ export default function AdminHome() {
   const [viewMode, setViewMode] = useState("adminView")
   
   return (
-    <div className='gridSection-1col' style={{gap: "32px"}}>
-      <div className="mainCont_Lms_Row" style={{height: "702px"}}>
+    <div className='dashboard-container' style={{gap: "32px"}}>
+      <div className="mainCont_Lms_Row">
         <section className="gridSection-1col" style={{gridTemplateRows: "auto 3fr 1fr 1fr 5fr", gap: "16px"}} >
         {/* <AbsenceRequest></AbsenceRequest>
           <div className='accentSection' style={{ height: '232px' }}>
