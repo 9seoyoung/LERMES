@@ -164,6 +164,9 @@ export function Nav() {
                       {/* <div onClick={() => navigate('/adminHome/docuSet')}>
                         서류 관리
                       </div> */}
+                      <div onClick={() => navigate('lms/docslayout')}>
+                        게시글 테스트
+                      </div>
                     </>
                   ) : (
                     <>

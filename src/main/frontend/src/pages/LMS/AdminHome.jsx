@@ -47,8 +47,8 @@ export default function AdminHome() {
           </div>
       </div>
         <div className='indicator-right'>
-          <div className={`pageDot pageBar ${viewMode === "adminView" ? "currentView" : ""}`} onClick={() => setViewMode("adminView")}></div>
-          <div className={`pageDot pageBar ${viewMode === "visitorView" ? "currentView" : ""}`} onClick={() => setViewMode("visitorView")}></div>
+          <div className={`pageDot  ${viewMode === "adminView" ? "currentView" : ""}`} onClick={() => setViewMode("adminView")}></div>
+          <div className={`pageDot  ${viewMode === "visitorView" ? "currentView" : ""}`} onClick={() => setViewMode("visitorView")}></div>
         </div>
         <footer className='footer-sm'>@Powered by LERMES</footer>
     </div>

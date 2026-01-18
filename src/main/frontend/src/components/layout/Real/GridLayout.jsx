@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import LmsHeader from "../../ui/headerModule/LmsHeader";
 import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
 import { useAccount } from "../../../auth/AuthContext";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { StdHeader } from "./LmsHeader";
 import CompanySmallLogoUploader from "../inho/CompanySmallLogoUploader ";
 import MyInfo from "../../ui/MyInfo";

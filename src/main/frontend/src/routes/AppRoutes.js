@@ -61,6 +61,8 @@ import InterviewMemoRead from '../pages/LMS/readAndEdit/InterviewMemoRead.jsx';
 import SchedEdit2 from '../pages/LMS/readAndEdit/SchedRead2.jsx';
 import BasicPost from '../domain/board/pages/BasicPost.jsx';
 import GridLayout from '../components/layout/Real/GridLayout.jsx';
+import DocumentPage from '../pages/LMS/post/DocumentPage.jsx';
+import { routeAddr } from './routeAddress.js';
 
 function AppRoutes() {
   return (
@@ -138,6 +140,7 @@ function AppRoutes() {
                 <Route path="adminHome/boardSet/readItvMemo/:itvRecordSn" element={<InterviewMemoRead />} />
                 <Route path="adminHome/accountSet" element={<AccountSet />} />
                 <Route path="adminHome/myPage" element={<AdminMypage />} />
+                <Route path='lms/docslayout' element={<DocumentPage></DocumentPage>} ></Route>
               </Route>
 
               {/* 강사 */}
