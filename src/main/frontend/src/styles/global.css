@@ -699,11 +699,14 @@ footer>div:hover {
   border-radius: 4px;
   /* background-color: #FCFEFF; */
   background-color: var(--color-sec-bg);
+  box-shadow: 0 1px 2px var(--pg-shadow);
   padding: 2px 6px;
+  border: var(--border);
 }
 
 .ftList_L li:hover {
   background: #ebeff4;
+  border: var(--border-hover);
   /* color: #333; */
   color: var(--color-text-sec);
 }

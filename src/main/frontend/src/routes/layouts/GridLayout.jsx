@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react"
-import LmsHeader from "../../ui/headerModule/LmsHeader";
-import { useSelectedCompany } from "../../../contexts/SelectedCompanyContext";
-import { useAccount } from "../../../auth/AuthContext";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { StdHeader } from "./LmsHeader";
-import CompanySmallLogoUploader from "../inho/CompanySmallLogoUploader ";
-import MyInfo from "../../ui/MyInfo";
-import { Nav } from "../../ui/navModule/Nav";
-import LmsHeaderRF from "../../ui/headerModule/LmsHeaderRF";
+import { useState } from "react"
+import { useSelectedCompany } from "../../contexts/SelectedCompanyContext";
+import { useAccount } from "../../auth/AuthContext";
+import { Outlet, useNavigate } from "react-router-dom";
+import CompanySmallLogoUploader from "../../components/layout/inho/CompanySmallLogoUploader ";
+import MyInfo from "../../components/ui/MyInfo";
+import { Nav } from "../../components/ui/navModule/Nav";
+import LmsHeaderRF from "../../components/ui/headerModule/LmsHeaderRF";
 
 
 // LMS 전용 레이아웃임

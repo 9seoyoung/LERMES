@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAccount } from '../../../auth/AuthContext';
 import { useSelectedCompany } from '../../../contexts/SelectedCompanyContext';
 import { useEffect } from 'react';
+import { routePath } from '../../../routes/routeAddress';
 
 export function Nav() {
   const { user, fetchedOnce } = useAccount();
@@ -167,6 +168,7 @@ export function Nav() {
                       <div onClick={() => navigate('lms/docslayout')}>
                         게시글 테스트
                       </div>
+                      <div onClick={() => navigate(routePath.lms.setting)}>lms 관리</div>
                     </>
                   ) : (
                     <>

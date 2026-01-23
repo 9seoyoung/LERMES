@@ -10,26 +10,25 @@ export default function StdHome() {
     // const [selectedDate, setSelectedDate] = useState(null); // 공유할 상태
   
   return (
-    <div className="mainCont_Lms_Row" style={{height:"702px"}}>
-      <div className="main_L" style={{ width: '40%', height: "100%" }}>
+    <div className='dashboard-container' style={{gap: "16px"}}>
+      <div className="dashboard-content-std">
         <div className='dashBoardModule' style={{ height: '100%' }}>
 
           <CalSched></CalSched>
           </div>
-      </div>
-      <div className="main_R" style={{ flex: '1', gap: '16px' }}>
-        <div className='max_height'>
-          <div className='dashBoardModule' style={{ height: '232px' }}>
+        <section className="gridSection-1col" style={{gridTemplateRows: "minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)", gap: "16px"}} >
+          <div className='dashBoardModule' >
             <NoticeList></NoticeList>
           </div>
-          <div className='dashBoardModule' style={{ height: '232px' }}>
+          <div className='dashBoardModule' >
             <MaterialList/>
           </div>
-          <div className='dashBoardModule' style={{ height: '232px' }}>
+          <div className='dashBoardModule' >
             <FAQList/>
           </div>
-        </div>
+          </section>
       </div>
+      <footer className='footer-sm'>@Powered by LERMES</footer>
     </div>
   );
 }

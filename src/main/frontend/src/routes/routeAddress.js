@@ -1,15 +1,16 @@
-export const routeAddr = {
+export const routePath = {
   super : {
-    main : "/",
+    landing : "/",
     join : {},
-    community : {}},
+    community : {},
+    myPage : "/myPage",
+  },
   lms : {
-    home : {
-      dashboard : "lms/home"
-    },
+    home : "/lms/home",
     post : {
-      create : "lms/docslayout"
+      create : "/lms/docslayout"
     },
+    setting: "/lms/settings"
 
   }
 }

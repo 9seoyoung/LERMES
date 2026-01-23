@@ -190,9 +190,26 @@
 }
 .dashboard-content {
   width: 100%;
+  min-height: calc(100dvh - 176px);
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows:   calc(100dvh - 176px);
+  grid-template-columns: minmax(0, 1fr) 0.5fr;
+  grid-template-rows:
+    minmax(0, auto) /* main (대시보드 콘텐츠) */
+    1fr    /* spacer (여백 존) */
+    ;  /* footer */
+  margin-top: 16px;
+  gap: 24px;
+}
+.dashboard-content-std {
+  width: 100%;
+  min-height: calc(100dvh - 176px);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows:
+    auto   /* header */
+    minmax(0, auto) /* main (대시보드 콘텐츠) */
+    1fr    /* spacer (여백 존) */
+    auto;  /* footer */
   margin-top: 16px;
   gap: 24px;
 }

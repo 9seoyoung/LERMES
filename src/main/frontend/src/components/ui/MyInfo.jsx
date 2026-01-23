@@ -5,7 +5,7 @@ import { User } from "lucide-react";
 
 const MyInfo = forwardRef(function MyInfo(
   {
-    trigger = "click", // "click" | "hover" | "both"
+    trigger = "click", // "click" | "hover" | "both" | "none"
     label = "MyInfo",
     children,
     className = "",
