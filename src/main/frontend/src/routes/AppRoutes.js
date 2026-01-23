@@ -99,6 +99,11 @@ function AppRoutes() {
         <Route path="oauth2-redirect" element={<OAuth2Redirect />} />
       </Route>
 
+{/* 
+      <Route element={<GridLayout></GridLayout>}>
+        <Route path="/unknownHome" element={<UnknownHome />} />
+      </Route> */}
+
       {/*기본 레이아웃*/}
       {/* <Route path="/" element={<Layout2></Layout2>}> */}
       <Route  element={<Layout2></Layout2>}>
@@ -118,13 +123,16 @@ function AppRoutes() {
       </Route>
 
 
+
+
       <Route element={<LmsAuth />}>
         <Route element={<LmsGuard />}>
           <Route element={<RoleRoute roles={[1, 2, 3]} />}>
-            <Route path={routePath.lms.setting} element={<TenantSettingLayout />} />
+            {/* <Route path={routePath.lms.setting} element={<TenantSettingLayout />} /> */}
           </Route>
         </Route>
       </Route>
+
       <Route path='/' element={<GridLayout></GridLayout>}>
         <Route element={<LmsAuth />}>
           <Route element={<LmsGuard />}>
