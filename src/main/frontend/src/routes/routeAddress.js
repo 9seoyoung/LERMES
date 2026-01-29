@@ -5,6 +5,17 @@
  * 이렇게 해야 라우팅 리팩토링 쉬움
  */
 
+const getCompanyNameWithcoSn = async (coSn) => {
+  
+  // const name = await ~~~~~~~~~~~~~~
+
+  return `${"axios로 받아온거"}`
+}
+
+const getCohortNameWithcohortSn = async (cohortSn) => {
+
+  return `${"axios로 받아온거"}`
+}
 
 export const seg = {
   // 루트임 ***********************************************************
@@ -23,10 +34,14 @@ export const seg = {
 
   // LMS 관련 ======================================================================
   LMS: "lms",// root, LMS용 레이아웃
+  // COMPANY: `${getCompanyNameWithcoSn(coSn)}`,
+  // COHORT: `${getCohortNameWithcohortSn(cohortSn)}`,
+  VISITOR: 'visitor',
+  ADMIN: 'admin',
+
+  // 게시물 관련 =====================================================================
+  POST: "post"
 };
-
-
-// pageSeg가 빈문자열이면 index인거임~~
 
 export const routePath = {
   root : "/",
@@ -36,7 +51,8 @@ export const routePath = {
   loginForgotPw: `/${seg.LOGIN}/${seg.FORGOTPW}`,
   welcomeBusiness: `/${seg.WELCOME}/${seg.BUSINESS}`,
   welcomeGeneral: `/${seg.WELCOME}/${seg.GENERAL}`,
-
+  lmsVisitor: `/${seg.LMS}/${seg.COMPANY}/${seg.VISITOR}`,
+  lmsAdmin: `/${seg.LMS}/${seg.COMPANY}/${seg.ADMIN}`,
   // -------------------------------------------과거
     // landing : "/", index
     welcome : {
