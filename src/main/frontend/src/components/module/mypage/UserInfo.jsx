@@ -4,7 +4,7 @@ import MyInfoForm from "../../layout/inho/MyInfoForm";
 import {UserCircle, UserCircle2, UserIcon, UserRound} from "lucide-react";
 import {useEffect, useState} from "react";
 
-export function UserInfo({formData, setInfoEditToggle, profile, authSn, previewUrl, formatBrNo }){
+export function UserInfo({formData, onEdit, profile, authSn, previewUrl, formatBrNo }){
     const [form, setForm] = useState({
         address: '',
         addressDetail: '',
@@ -16,7 +16,7 @@ export function UserInfo({formData, setInfoEditToggle, profile, authSn, previewU
     const [loading, setLoading] = useState(false);
     const [scriptLoaded, setScriptLoaded] = useState(false);
     const [open, setOpen] = useState(true);
-
+    
     useEffect(() => {
         if (window.daum && window.daum.Postcode) {
             setScriptLoaded(true);
@@ -24,17 +24,19 @@ export function UserInfo({formData, setInfoEditToggle, profile, authSn, previewU
         }
         const script = document.createElement('script');
         script.src =
-            '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+        '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
         script.async = true;
         script.onload = () => setScriptLoaded(true);
         document.body.appendChild(script);
     }, []);
+    
+    console.log('onEdit:', onEdit, typeof onEdit);
 
     return (
         <section className="myInfoSection" style={{background:"white"}}>
             <h2 className="myInfoTitle myInfoTitleA">
                 {profile.name} ({profile.status})
-                <button className="myInfoEditBtn gray" onClick={() => setInfoEditToggle(true)}>
+                <button className="myInfoEditBtn gray" onClick={() => onEdit(true)}>
                     Edit
                 </button>
             </h2>

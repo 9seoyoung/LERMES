@@ -9,7 +9,7 @@ import { useAccount } from '../../../auth/AuthContext';
 import { toast } from 'react-toastify';
 import PasswordChangeModal from "./PasswordChangeModal";
 import MyInfoForm from "./MyInfoForm";
-import {UserInfo} from "../../module/mypage/UserInfo";
+import { UserInfo } from '../../module/mypage/UserInfo';
 
 export default function UserProfile({ onAdminSave, infoEditToggle, setInfoEditToggle }) {
   const { user, patchUser } = useAccount();
@@ -277,7 +277,7 @@ export default function UserProfile({ onAdminSave, infoEditToggle, setInfoEditTo
       </div>
     </section>
             :
-            <UserInfo formData={formData} formatBrNo={formatBrNo} previewUrl={previewUrl} setInfoEditToggle={setInfoEditToggle} profile={profile} authSn={authSn}/>
+            <UserInfo formData={formData} formatBrNo={formatBrNo} previewUrl={previewUrl} onEdit={setInfoEditToggle} profile={profile} authSn={authSn}/>
         }
         </>
   );
