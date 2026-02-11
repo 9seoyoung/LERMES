@@ -1,21 +1,25 @@
 # LERMES
-LERMES는 LMS 템플릿을 제공하고, 랜딩페이지에서 홍보 + 소속 신청 기능을 포함한 멀티테넌트 서비스 입니다. 자체 구축과 운영이 어려운 중소규모 교육기관을 대상으로 제작했습니다.
+LERMES는 **멀티테넌트 기반 LMS SaaS 플랫폼**입니다.
+
+교육기관이 별도의 개발 없이 LMS를 생성하고,
+랜딩페이지를 통해 홍보 및 소속 신청을 받을 수 있도록 설계했습니다.
+
+중소 규모 교육기관을 대상으로,
+LMS 생성 → 구성원 관리 → 과정 운영 → 승인 기반 소속 변경
+흐름을 하나의 서비스로 통합했습니다.
 
 ## 기술 스택
 
-- **Frontend**
-  - React (CRA), JSX
-  - Context API, React Router
+| 영역 | 기술 |
+|------|------|
+| Frontend | React (CRA), Context API, React Router |
+| Backend | Java 21, Spring Boot 3.5 |
+| Security | Spring Security, JWT, OAuth2 |
+| Persistence | JPA, MyBatis, MySQL, HikariCP |
+| Logging | P6Spy |
+| Build | Gradle 8.x |
+| DevOps | Git, GitLab CI |
  
-- **Backend**
-  - Java 21, Spring Boot 3.5
-  - Spring Security, Spring Data JPA, MyBatis
-  - MySQL, HikariCP, P6Spy 
-
-- **Build & 기타**
-  - Gradle 8.x
-  - JWT / OAuth2 (Google, Kakao, Naver)
-  - Git, GitLab CI
 ---
 ## 주요 기능
 > 현재 소속이 있는 계정은 다른 소속에 가입 할 수 없습니다.
@@ -25,14 +29,16 @@ LERMES는 LMS 템플릿을 제공하고, 랜딩페이지에서 홍보 + 소속 �
 - **과정 등록** (과정 등록시 교육정보 + 모집설문을 등록하면 랜딩페이지에 노출 > 일반 계정 사용자의 신청을 받을 수 있습니다.)
 - **설문 폼 빌더**
 - **캘린더 일정 플로팅**
+
 ---
 ## 실행 방법
 
 ### 1) 환경 변수 설정
 
 루트 디렉토리에서:
-
-cp .env.example .env 또는 .env.example 파일을 복사하여 .env파일로 이름변경 후 
+```bash
+cp .env.example .env
+```
 .env 파일을 열어서 실제 값을 채웁니다.
 #### 환경 변수
 | KEY | 설명 |
