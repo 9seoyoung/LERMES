@@ -77,3 +77,9 @@ cd src/main/frontend
 npm install
 npm start
 ```
+
+---
+### 브랜치
+- DEV : "부트캠프 프로젝트 기간 내 프로젝트" v1.0.0
+- DEV-hotfix: DEV 오류 수정 v1.0.1
+- syPersonal: 라우팅 구조 및 화면 구성 변경 중인 리팩토링 브랜치 v2
