@@ -39,3 +39,8 @@ out/
 
 ### React ###
 /src/main/resources/static/
+
+### env
+.env
+.env/*
+!.env.example
