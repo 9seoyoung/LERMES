@@ -1,13 +1,8 @@
 .myInfoSection {
-    background: #f9f9f9;
     border-radius: 12px;
     padding: 0px;
     margin: 0 auto;
     width: 100%;
-}
-
-.myInfoSection.myInfoSectionB {
-    height: 360px;
 }
 
 /* 제목 영역 */
@@ -87,7 +82,6 @@
 .myInfoAddressButton {
     padding: 6px 12px;
     border-radius: 6px;
-    border: 1px solid #000;
     background: #000;
     /* color: #fff; */
     color: var(--color-text-primary);

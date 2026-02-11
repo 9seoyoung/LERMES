@@ -101,7 +101,7 @@ const MyInfoForm = () => {
   };
 
   return (
-    <section className="myInfoSection myInfoSectionB">
+    <section >
       {/* ✅ 제목 전체를 클릭하면 토글 */}
       <h2
         className="myInfoTitle"

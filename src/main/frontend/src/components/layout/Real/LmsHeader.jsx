@@ -54,9 +54,8 @@ export default function LmsHeader({ navToggle, setNavToggle }) {
         </button>
 
         {/* 회사 로고/이름 영역 */}
-        <div className="logoBox" onClick={() => navigate('/lmsHomeIndex')}>
           <CompanySmallLogoUploader />
-        </div>
+
       </div>
 
       <HeaderStatus loc={navKind} />

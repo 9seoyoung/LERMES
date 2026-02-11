@@ -80,7 +80,7 @@ export default function Layout2() {
   }, [navKind]);
 
 // 헤더 종류 고르기
-  function HeaderStatus({ loc }) {
+  function HeaderStatus({ loc, setNavToggle }) {
     let component;
 
     switch (loc) {
@@ -99,45 +99,19 @@ export default function Layout2() {
         break;
 
       default:
-        component = <SuperHeader  />;
+        component = <SuperHeader setNavToggle = {setNavToggle}  />;
     }
 
     return component;
   }
-
-  // function NavStatus({ loc }) {
-  //   let component;
-
-  //   switch (loc) {
-  //     case "adminHome":
-  //       component = <AdminNav />;
-  //       break;
-  //     case "stdHome":
-  //       component = <StdNav  />;
-  //       break;
-  //     case "tutorHome":
-  //       component = <TutorNav />;
-  //       break;
-  //     default:
-  //       component = <Nav/>;
-  //   }
-
-  //   return component;
-  // }
 
   return (
     <div className="layout">
       <header>
       
         {/* 페이지 별 헤더 변경 */}
-        <HeaderStatus loc={navKind} />
+        <HeaderStatus loc={navKind} setNavToggle={setNavToggle} />
 
-        {/* 0925 헤더 */}
-        {/* {fixedSn === myCoSn ?
-          <LmsHeader navKind={navKind} setNavToggle={setNavToggle} navToggle={navToggle} myCoSn={myCoSn} loc={loc}/>
-          :
-          <SuperHeader navKind={navKind}/>
-        } */}
         {/* 로그인 / 로그아웃 버튼 체인지 */}
         {user === null ?
         <button className="joinBtn" type="button" onClick={() => navigate('/welcome/login')}>Login →</button>
@@ -195,7 +169,7 @@ export default function Layout2() {
           <h2 onClick={() => {navigate('/'); setNavToggle(false);}} style={{cursor:"pointer"}}>LERMES</h2>
           }
           <p className="testBox">
-            <div style={{fontSize: "1.4rem", color: "#444"}}>권한</div>
+            <div style={{fontSize: "1.4rem", color: "#444"}}></div>
             {(user?.USER_EML_ADDR === "hash@com") ? 
               testAuthLv.map((item, idx)=> 
                 <div

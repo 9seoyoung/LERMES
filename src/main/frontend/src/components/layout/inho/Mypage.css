@@ -50,7 +50,6 @@
 
 .myInfoSection {
     padding: 0;
-    background: #f9f9f9;
     width: 100%;
     margin: 0 auto;
     border: none;
@@ -66,13 +65,28 @@
 
 .myInfoEditBtn {
     font-size: 12px;
-    background: black;
     margin-left: 5px;
-    color: #fff;
     border: none;
     border-radius: 4px;
     padding: 4px 10px;
     cursor: pointer;
+}
+
+.blue {
+    background: var(--bg-color-blue1);
+    color: var(--font-color-white);
+}
+.gray {
+    background: var(--bg-color-gray2);
+    color: var(--font-color-white);
+}
+
+.myInfoEditBtn.blue:hover {
+    background: var(--bg-color-blue2);
+}
+
+.myInfoEditBtn.gray:hover {
+    background: var(--bg-color-gray3);
 }
 
 .myInfoDivider {
@@ -84,6 +98,12 @@
 .myInfoContent {
     display: flex;
     gap: 20px;
+    flex-direction: column;
+}
+#userInfoCont{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
 }
 
 .myInfoPhoto {

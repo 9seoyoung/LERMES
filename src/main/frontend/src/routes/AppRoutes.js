@@ -64,6 +64,7 @@ import DocumentPage from '../pages/LMS/post/DocumentPage.jsx';
 import { routePath } from './routeAddress.js';
 import GridLayout from './layouts/GridLayout.jsx';
 import TenantSettingLayout from './layouts/TenantSettingLayout.jsx';
+import BizHongBo from "../pages/Super/BizHongBo";
 
 function AppRoutes() {
   return (
@@ -110,6 +111,7 @@ function AppRoutes() {
         {/* LMS 홈 인덱스 기본 Vistor 컴포넌트로, effectiveSn === 내 회사Sn 면 내 권한에서 맞는 페이지로 이동 */}
         {/* 기본 접근 루트 */}
         <Route index element={<SuperMain />} />
+        <Route path="/bizAd" element={<BizHongBo />} />
         <Route path="unknownHome" element={<UnknownHome />} />
         <Route path="/unknownHome/board/read/:postSn" element={<BoardRead2 />} />
 

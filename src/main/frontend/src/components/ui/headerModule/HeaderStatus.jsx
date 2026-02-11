@@ -248,7 +248,9 @@ export function TutorHeader() {
 
 export function AdminHeader() {
   // const { user } = useAccount();
-  return <div></div>;
+  return (
+      <>
+    </>);
 }
 
 export function VisitorHeader() {
